@@ -7,19 +7,15 @@
   <style>
     body { font-family: Arial, sans-serif; margin:0; padding:0; }
     header { background:#222; color:#fff; padding:1em; text-align:center; }
-    nav { background:#444; padding:.5em; text-align:center; }
-    nav a { color:#fff; margin:0 10px; text-decoration:none; font-weight:bold; padding:.5em; }
+    nav { background:#444; padding:0.8em; text-align:center; }
+    nav a { color:#fff; margin:0 12px; text-decoration:none; font-weight:bold; padding:0.8em 0.5em; display:inline-block; }
     nav a:hover { text-decoration:underline; }
     nav a.active { background:#22cc66; color:#0b1b0f; font-weight:bold; }
     main { padding:2em; }
     .card { background:#f6f7f8; border:1px solid #ddd; border-radius:8px; padding:1em; margin-bottom:1.5em; }
     ol { padding-left:1.2em; }
     li { margin-bottom:.7em; }
-    @media (prefers-color-scheme: dark) {
-      body { background:#0e1117; color:#e6e8eb; }
-      .card { background:#1a1f2a; border-color:#2a3140; }
-      li { color:#e6e8eb; }
-    }
+    footer { background:#222; color:#fff; text-align:center; padding:1em; margin-top:2em; }
   </style>
 </head>
 <body>
@@ -46,14 +42,8 @@
         <li>Captains submit results within 24 hours.</li>
       </ol>
     </div>
-
-    <div class="card">
-      <h3>Download Full Rulebook</h3>
-      <p><a href="docs/LeagueRules.pdf" target="_blank">Download League Rules (PDF)</a></p>
-      <p style="font-size:.95rem;color:#666;">(Upload a PDF into a <code>docs</code> folder with this name to enable the link.)</p>
-    </div>
   </main>
 
-  <footer style="text-align:center; padding:1em; margin-top:2em;">&copy; 2025 High Peak &amp; Marple Snooker League</footer>
+  <footer>&copy; 2025 High Peak &amp; Marple Snooker League</footer>
 </body>
 </html>
