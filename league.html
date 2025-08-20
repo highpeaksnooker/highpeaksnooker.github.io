@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>League Table — High Peak & Marple Snooker League</title>
+<style>
+  body { font-family: system-ui, Arial, sans-serif; margin:0; background:#f7f7f7; color:#111; }
+  header { background:#222; color:#fff; padding:1rem 1.25rem; }
+  main { max-width:900px; margin:1rem auto; padding:0 1rem 2rem; }
+  .table-wrap { overflow:auto; background:#fff; border:1px solid #e5e5e5; border-radius:.5rem; }
+  table { width:100%; border-collapse:collapse; min-width:680px; }
+  thead th { position:sticky; top:0; background:#fafafa; text-align:left; border-bottom:1px solid #eee; padding:.7rem; }
+  tbody td { padding:.6rem .7rem; border-bottom:1px solid #f1f1f1; }
+</style>
+</head>
+<body>
+<header><h1>League Table</h1></header>
+<main>
+  <div class="table-wrap">
+    <table id="leagueTable">
+      <thead>
+        <tr>
+          <th>#</th><th>Team</th>
+          <th title="Matches Played">P</th>
+          <th title="Wins">W</th>
+          <th title="Draws">D</th>
+          <th title="Losses">L</th>
+          <th title="Frames For">FF</th>
+          <th title="Frames Against">FA</th>
+          <th title="Frame Diff">FD</th>
+          <th title="Points">Pts</th>
+        </tr>
+      </thead>
+      <tbody id="leagueBody"></tbody>
+    </table>
+  </div>
+</main>
+<script>
+(async function(){
+  const [teams, matches] = await Promise.all([
+    fetch('data/teams.json').then(r=>r.json()),
+    fetch('data/matches.json').then(r=>r.json())
+  ]);
+
+  const table = {};
+  for (const t of teams) table[t.id] = { teamId:t.id, name:t.name, P:0, W:0, D:0, L:0, FF:0, FA:0, FD:0, Pts:0 };
+
+  // Adjust points rules here (2 for win, 1 draw, 0 loss by default)
+  const award = (homeFrames, awayFrames) => {
+    if (homeFrames > awayFrames) return [2,0];
+    if (homeFrames < awayFrames) return [0,2];
+    return [1,1];
+  };
+
+  for (const m of matches) {
+    if (!table[m.homeTeamId] || !table[m.awayTeamId]) continue;
+    const h = table[m.homeTeamId], a = table[m.awayTeamId];
+    h.P++; a.P++;
+    h.FF += m.homeFrames; h.FA += m.awayFrames;
+    a.FF += m.awayFrames; a.FA += m.homeFrames;
+    if (m.homeFrames > m.awayFrames) { h.W++; a.L++; }
+    else if (m.homeFrames < m.awayFrames) { a.W++; h.L++; }
+    else { h.D++; a.D++; }
+    const [hPts, aPts] = award(m.homeFrames, m.awayFrames);
+    h.Pts += hPts; a.Pts += aPts;
+  }
+
+  for (const t of Object.values(table)) t.FD = t.FF - t.FA;
+
+  const rows = Object.values(table)
+    .sort((x,y) => y.Pts - x.Pts || y.FD - x.FD || y.FF - x.FF || x.name.localeCompare(y.name));
+
+  const body = document.getElementById('leagueBody');
+  body.innerHTML = '';
+  rows.forEach((t, i) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${i+1}</td>
+      <td>${escapeHtml(t.name)}</td>
+      <td>${t.P}</td><td>${t.W}</td><td>${t.D}</td><td>${t.L}</td>
+      <td>${t.FF}</td><td>${t.FA}</td><td>${t.FD}</td><td>${t.Pts}</td>
+    `;
+    body.appendChild(tr);
+  });
+
+  function escapeHtml(str=''){ return str.replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+})();
+</script>
+</body>
+</html>
