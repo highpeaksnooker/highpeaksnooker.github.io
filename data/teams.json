@@ -1,0 +1,13 @@
+[
+  { "id": "alexashton",  "name": "AlexAshton" },
+  { "id": "hadfield",    "name": "Hadfield" },
+  { "id": "hayfield-1",  "name": "Hayfield 1" },
+  { "id": "hayfield-2",  "name": "Hayfield 2" },
+  { "id": "tintwistle1", "name": "Tintwistle1" },
+  { "id": "tintwistle2", "name": "Tintwistle2" },
+  { "id": "whaley-1",    "name": "Whaley 1" },
+  { "id": "whaley-2",    "name": "Whaley 2" },
+  { "id": "chinley",     "name": "Chinley" },
+  { "id": "marple",      "name": "Marple" },
+  { "id": "denton-lib",  "name": "Denton Lib." }
+]
