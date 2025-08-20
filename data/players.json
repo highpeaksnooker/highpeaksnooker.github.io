@@ -1,0 +1,1514 @@
+[
+  {
+    "id": "p-buckley-simon",
+    "name": "Buckley, Simon",
+    "teamId": "alexashton",
+    "P": 6,
+    "HCP": -14,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-cave-nigel",
+    "name": "Cave, Nigel",
+    "teamId": "alexashton",
+    "P": 15,
+    "HCP": 14,
+    "captain": false,
+    "change": "down"
+  },
+  {
+    "id": "p-dransfield-t",
+    "name": "Dransfield, T",
+    "teamId": "alexashton",
+    "P": 8,
+    "HCP": 28,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-etches-d",
+    "name": "Etches, D",
+    "teamId": "alexashton",
+    "P": 0,
+    "HCP": 21,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-garbett-a",
+    "name": "Garbett, A",
+    "teamId": "alexashton",
+    "P": 14,
+    "HCP": 14,
+    "captain": false,
+    "change": "down"
+  },
+  {
+    "id": "p-hall-lance",
+    "name": "Hall, Lance",
+    "teamId": "alexashton",
+    "P": 0,
+    "HCP": -28,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-hammond-m",
+    "name": "Hammond, M",
+    "teamId": "alexashton",
+    "P": 0,
+    "HCP": 14,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-harrison-adam",
+    "name": "Harrison, Adam",
+    "teamId": "alexashton",
+    "P": 0,
+    "HCP": 7,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-harrison-dave",
+    "name": "Harrison, Dave",
+    "teamId": "alexashton",
+    "P": 9,
+    "HCP": 28,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-harrop-d",
+    "name": "Harrop, D",
+    "teamId": "alexashton",
+    "P": 0,
+    "HCP": 21,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-pregnall-b",
+    "name": "Pregnall, B",
+    "teamId": "alexashton",
+    "P": 14,
+    "HCP": 21,
+    "captain": false,
+    "change": "up"
+  },
+  {
+    "id": "p-rayson-paul",
+    "name": "Rayson, Paul",
+    "teamId": "alexashton",
+    "P": 0,
+    "HCP": 0,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-shields-d",
+    "name": "Shields, D",
+    "teamId": "alexashton",
+    "P": 0,
+    "HCP": -28,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-sidebottom-f-captain",
+    "name": "Sidebottom, F CAPTAIN",
+    "teamId": "alexashton",
+    "P": 15,
+    "HCP": 0,
+    "captain": false,
+    "change": "up"
+  },
+  {
+    "id": "p-sigley-m",
+    "name": "Sigley, M",
+    "teamId": "alexashton",
+    "P": 0,
+    "HCP": 7,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-squire-aaron",
+    "name": "Squire, Aaron",
+    "teamId": "alexashton",
+    "P": 9,
+    "HCP": 21,
+    "captain": false,
+    "change": "up"
+  },
+  {
+    "id": "p-taylor-dean-captain",
+    "name": "Taylor, Dean CAPTAIN",
+    "teamId": "alexashton",
+    "P": 15,
+    "HCP": 14,
+    "captain": false,
+    "change": "down"
+  },
+  {
+    "id": "p-adamson-j-hayfield",
+    "name": "Adamson, J Hayfield",
+    "teamId": "chinley",
+    "P": 0,
+    "HCP": 14,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-allen-b-hayfield",
+    "name": "Allen, B Hayfield",
+    "teamId": "chinley",
+    "P": 1,
+    "HCP": 0,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-barnes-a-hayfield",
+    "name": "Barnes, A Hayfield",
+    "teamId": "chinley",
+    "P": 5,
+    "HCP": 0,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-benstead-l",
+    "name": "Benstead, L",
+    "teamId": "chinley",
+    "P": 0,
+    "HCP": 14,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-brooks-andy-hayfield",
+    "name": "Brooks, Andy Hayfield",
+    "teamId": "chinley",
+    "P": 1,
+    "HCP": 0,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-carr-a",
+    "name": "Carr, A",
+    "teamId": "chinley",
+    "P": 0,
+    "HCP": 14,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-carr-l",
+    "name": "Carr,L",
+    "teamId": "chinley",
+    "P": 18,
+    "HCP": -14,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-chetwood-m",
+    "name": "Chetwood, M",
+    "teamId": "chinley",
+    "P": 0,
+    "HCP": 7,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-doherty-b",
+    "name": "Doherty, B",
+    "teamId": "chinley",
+    "P": 18,
+    "HCP": 7,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-evans-d-hayfield",
+    "name": "Evans, D Hayfield",
+    "teamId": "chinley",
+    "P": 6,
+    "HCP": 7,
+    "captain": false,
+    "change": "up"
+  },
+  {
+    "id": "p-evans-n-hayfield",
+    "name": "Evans, N Hayfield",
+    "teamId": "chinley",
+    "P": 0,
+    "HCP": 0,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-fell-dan",
+    "name": "Fell, Dan",
+    "teamId": "chinley",
+    "P": 0,
+    "HCP": 14,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-foster-i",
+    "name": "Foster, I",
+    "teamId": "chinley",
+    "P": 0,
+    "HCP": 14,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-gordon-p",
+    "name": "Gordon, P",
+    "teamId": "chinley",
+    "P": 0,
+    "HCP": 21,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-harrison-s-hayfield",
+    "name": "Harrison, S Hayfield",
+    "teamId": "chinley",
+    "P": 0,
+    "HCP": -21,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-heath-j",
+    "name": "Heath, J",
+    "teamId": "chinley",
+    "P": 1,
+    "HCP": 14,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-lomas-p-captain",
+    "name": "Lomas, P CAPTAIN",
+    "teamId": "chinley",
+    "P": 18,
+    "HCP": -7,
+    "captain": false,
+    "change": "down"
+  },
+  {
+    "id": "p-lomas-sam-hayfield",
+    "name": "Lomas, Sam Hayfield",
+    "teamId": "chinley",
+    "P": 18,
+    "HCP": 21,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-lonsdale-b-hayfield",
+    "name": "Lonsdale, B Hayfield",
+    "teamId": "chinley",
+    "P": 15,
+    "HCP": 35,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-lund-s",
+    "name": "Lund, S",
+    "teamId": "chinley",
+    "P": 3,
+    "HCP": -14,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-rowland-d",
+    "name": "Rowland, D",
+    "teamId": "chinley",
+    "P": 16,
+    "HCP": -7,
+    "captain": false,
+    "change": "up"
+  },
+  {
+    "id": "p-thomas-d",
+    "name": "Thomas, D",
+    "teamId": "chinley",
+    "P": 17,
+    "HCP": 14,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-walker-g",
+    "name": "Walker, G",
+    "teamId": "chinley",
+    "P": 0,
+    "HCP": -7,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-winterbottom-d-hayfield",
+    "name": "Winterbottom, D Hayfield",
+    "teamId": "chinley",
+    "P": 3,
+    "HCP": 0,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-chandarana-r",
+    "name": "Chandarana, R",
+    "teamId": "denton-lib",
+    "P": 13,
+    "HCP": 7,
+    "captain": false,
+    "change": "up"
+  },
+  {
+    "id": "p-derbyshire-m",
+    "name": "Derbyshire, M",
+    "teamId": "denton-lib",
+    "P": 9,
+    "HCP": 0,
+    "captain": false,
+    "change": "down"
+  },
+  {
+    "id": "p-garside-ash",
+    "name": "Garside, Ash",
+    "teamId": "denton-lib",
+    "P": 12,
+    "HCP": -35,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-green-r",
+    "name": "Green, R",
+    "teamId": "denton-lib",
+    "P": 13,
+    "HCP": 0,
+    "captain": false,
+    "change": "down"
+  },
+  {
+    "id": "p-kwan-eric",
+    "name": "Kwan, Eric",
+    "teamId": "denton-lib",
+    "P": 15,
+    "HCP": -35,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-mistry-k",
+    "name": "Mistry, K",
+    "teamId": "denton-lib",
+    "P": 0,
+    "HCP": 21,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-mistry-s",
+    "name": "Mistry, S",
+    "teamId": "denton-lib",
+    "P": 10,
+    "HCP": 7,
+    "captain": false,
+    "change": "up"
+  },
+  {
+    "id": "p-patel-a-j",
+    "name": "Patel, A.J.",
+    "teamId": "denton-lib",
+    "P": 12,
+    "HCP": -21,
+    "captain": false,
+    "change": "up"
+  },
+  {
+    "id": "p-aspden-s",
+    "name": "Aspden, S",
+    "teamId": "hadfield",
+    "P": 14,
+    "HCP": 14,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-aspden-will",
+    "name": "Aspden, Will",
+    "teamId": "hadfield",
+    "P": 15,
+    "HCP": 35,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-daunt-n",
+    "name": "Daunt, N",
+    "teamId": "hadfield",
+    "P": 1,
+    "HCP": 0,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-dawson-m",
+    "name": "Dawson, M",
+    "teamId": "hadfield",
+    "P": 0,
+    "HCP": 28,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-flavell-d",
+    "name": "Flavell, D",
+    "teamId": "hadfield",
+    "P": 0,
+    "HCP": 28,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-flavell-g",
+    "name": "Flavell, G",
+    "teamId": "hadfield",
+    "P": 16,
+    "HCP": -14,
+    "captain": false,
+    "change": "up"
+  },
+  {
+    "id": "p-garnett-j",
+    "name": "Garnett, J",
+    "teamId": "hadfield",
+    "P": 0,
+    "HCP": -14,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-gresty-n",
+    "name": "Gresty, N",
+    "teamId": "hadfield",
+    "P": 11,
+    "HCP": 35,
+    "captain": false,
+    "change": "up"
+  },
+  {
+    "id": "p-ibbetson-d",
+    "name": "Ibbetson, D",
+    "teamId": "hadfield",
+    "P": 17,
+    "HCP": 21,
+    "captain": false,
+    "change": "up"
+  },
+  {
+    "id": "p-kenworthy-c",
+    "name": "Kenworthy, C",
+    "teamId": "hadfield",
+    "P": 0,
+    "HCP": 14,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-kingdom-a",
+    "name": "Kingdom, A",
+    "teamId": "hadfield",
+    "P": 0,
+    "HCP": 21,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-lowery-w",
+    "name": "Lowery, W",
+    "teamId": "hadfield",
+    "P": 0,
+    "HCP": 35,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-thompson-l",
+    "name": "Thompson, L",
+    "teamId": "hadfield",
+    "P": 0,
+    "HCP": 35,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-webster-a",
+    "name": "Webster, A",
+    "teamId": "hadfield",
+    "P": 1,
+    "HCP": 14,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-lee-c-captain",
+    "name": "Lee, C CAPTAIN",
+    "teamId": "hayfield-1",
+    "P": 13,
+    "HCP": 7,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-adam-elhasan",
+    "name": "Adam Elhasan",
+    "teamId": "hayfield-2",
+    "P": 0,
+    "HCP": 14,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-ashby-steve",
+    "name": "Ashby, Steve",
+    "teamId": "hayfield-2",
+    "P": 0,
+    "HCP": 14,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-bloomfield-d",
+    "name": "Bloomfield, D",
+    "teamId": "hayfield-2",
+    "P": 12,
+    "HCP": 21,
+    "captain": false,
+    "change": "down"
+  },
+  {
+    "id": "p-bowers-will",
+    "name": "Bowers, Will",
+    "teamId": "hayfield-2",
+    "P": 0,
+    "HCP": 14,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-crook-s-captain",
+    "name": "Crook, S CAPTAIN",
+    "teamId": "hayfield-2",
+    "P": 15,
+    "HCP": -28,
+    "captain": false,
+    "change": "down"
+  },
+  {
+    "id": "p-dawson-neil",
+    "name": "Dawson, Neil",
+    "teamId": "hayfield-2",
+    "P": 0,
+    "HCP": 14,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-edge-geoff",
+    "name": "Edge, Geoff",
+    "teamId": "hayfield-2",
+    "P": 0,
+    "HCP": 7,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-enright-mark",
+    "name": "Enright, Mark",
+    "teamId": "hayfield-2",
+    "P": 16,
+    "HCP": 35,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-glover-paul",
+    "name": "Glover, Paul",
+    "teamId": "hayfield-2",
+    "P": 16,
+    "HCP": 14,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-gresty-john",
+    "name": "Gresty, John",
+    "teamId": "hayfield-2",
+    "P": 0,
+    "HCP": 14,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-king-ian",
+    "name": "King, Ian",
+    "teamId": "hayfield-2",
+    "P": 0,
+    "HCP": 14,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-mcloughlan-kieron",
+    "name": "McLoughlan, Kieron",
+    "teamId": "hayfield-2",
+    "P": 0,
+    "HCP": 14,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-monaghan-b",
+    "name": "Monaghan, B",
+    "teamId": "hayfield-2",
+    "P": 14,
+    "HCP": 14,
+    "captain": false,
+    "change": "down"
+  },
+  {
+    "id": "p-nelson-sean",
+    "name": "Nelson, Sean",
+    "teamId": "hayfield-2",
+    "P": 0,
+    "HCP": 14,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-slack-dan",
+    "name": "Slack, Dan",
+    "teamId": "hayfield-2",
+    "P": 0,
+    "HCP": 28,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-snelling-mark",
+    "name": "Snelling, Mark",
+    "teamId": "hayfield-2",
+    "P": 15,
+    "HCP": 21,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-watkinson-tony",
+    "name": "Watkinson, Tony",
+    "teamId": "hayfield-2",
+    "P": 7,
+    "HCP": 35,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-alford-mike",
+    "name": "Alford, Mike",
+    "teamId": "marple",
+    "P": 6,
+    "HCP": 21,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-arnott-tony",
+    "name": "Arnott, Tony",
+    "teamId": "marple",
+    "P": 0,
+    "HCP": -14,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-brown-c",
+    "name": "Brown, C",
+    "teamId": "marple",
+    "P": 0,
+    "HCP": 21,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-burrows-d",
+    "name": "Burrows, D",
+    "teamId": "marple",
+    "P": 18,
+    "HCP": 35,
+    "captain": false,
+    "change": "up"
+  },
+  {
+    "id": "p-conway-lydon",
+    "name": "Conway, Lydon",
+    "teamId": "marple",
+    "P": 5,
+    "HCP": 21,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-evans-glynn",
+    "name": "Evans, Glynn",
+    "teamId": "marple",
+    "P": 16,
+    "HCP": 14,
+    "captain": false,
+    "change": "up"
+  },
+  {
+    "id": "p-fortune-d",
+    "name": "Fortune, D",
+    "teamId": "marple",
+    "P": 0,
+    "HCP": 35,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-knott-e",
+    "name": "Knott, E",
+    "teamId": "marple",
+    "P": 0,
+    "HCP": 35,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-lee-jackie",
+    "name": "Lee, Jackie",
+    "teamId": "marple",
+    "P": 0,
+    "HCP": 35,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-martin-dave",
+    "name": "Martin, Dave",
+    "teamId": "marple",
+    "P": 0,
+    "HCP": 0,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-massey-paul",
+    "name": "Massey, Paul",
+    "teamId": "marple",
+    "P": 0,
+    "HCP": 14,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-pennington-brian",
+    "name": "Pennington, Brian",
+    "teamId": "marple",
+    "P": 1,
+    "HCP": 28,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-riley-d",
+    "name": "Riley, D",
+    "teamId": "marple",
+    "P": 0,
+    "HCP": 7,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-ritchie-gareth",
+    "name": "Ritchie, Gareth",
+    "teamId": "marple",
+    "P": 8,
+    "HCP": 7,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-ritchie-ryan",
+    "name": "Ritchie, Ryan",
+    "teamId": "marple",
+    "P": 14,
+    "HCP": 35,
+    "captain": false,
+    "change": "down"
+  },
+  {
+    "id": "p-rushby-d-captain",
+    "name": "Rushby, D CAPTAIN",
+    "teamId": "marple",
+    "P": 9,
+    "HCP": 21,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-stone-frank",
+    "name": "Stone, Frank",
+    "teamId": "marple",
+    "P": 6,
+    "HCP": 21,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-taylor-p",
+    "name": "Taylor, P",
+    "teamId": "marple",
+    "P": 0,
+    "HCP": 14,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-walton-h",
+    "name": "Walton, H",
+    "teamId": "marple",
+    "P": 0,
+    "HCP": 35,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-wilbourne-nick",
+    "name": "Wilbourne, Nick",
+    "teamId": "marple",
+    "P": 3,
+    "HCP": 21,
+    "captain": false,
+    "change": "up"
+  },
+  {
+    "id": "p-brennan-joe",
+    "name": "Brennan, Joe",
+    "teamId": "tintwistle1",
+    "P": 17,
+    "HCP": -35,
+    "captain": false,
+    "change": "down"
+  },
+  {
+    "id": "p-clark-a",
+    "name": "Clark, A",
+    "teamId": "tintwistle1",
+    "P": 0,
+    "HCP": -7,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-harrison-d",
+    "name": "Harrison, D",
+    "teamId": "tintwistle1",
+    "P": 6,
+    "HCP": 21,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-heyes-c",
+    "name": "Heyes, C",
+    "teamId": "tintwistle1",
+    "P": 0,
+    "HCP": -28,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-ingham-mike-captain",
+    "name": "Ingham, Mike CAPTAIN",
+    "teamId": "tintwistle1",
+    "P": 3,
+    "HCP": 35,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-kershaw-a",
+    "name": "Kershaw, A",
+    "teamId": "tintwistle1",
+    "P": 0,
+    "HCP": 35,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-lawton-a",
+    "name": "Lawton, A",
+    "teamId": "tintwistle1",
+    "P": 16,
+    "HCP": 14,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-matthews-jon",
+    "name": "Matthews, Jon",
+    "teamId": "tintwistle1",
+    "P": 1,
+    "HCP": -7,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-osullivan-p",
+    "name": "OSullivan, P",
+    "teamId": "tintwistle1",
+    "P": 2,
+    "HCP": -28,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-smith-paul",
+    "name": "Smith, Paul",
+    "teamId": "tintwistle1",
+    "P": 17,
+    "HCP": -35,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-spencer-elliot",
+    "name": "Spencer, Elliot",
+    "teamId": "tintwistle1",
+    "P": 1,
+    "HCP": 14,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-walker-l",
+    "name": "Walker, L",
+    "teamId": "tintwistle1",
+    "P": 0,
+    "HCP": 28,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-wilson-n",
+    "name": "Wilson, N",
+    "teamId": "tintwistle1",
+    "P": 16,
+    "HCP": -21,
+    "captain": false,
+    "change": "up"
+  },
+  {
+    "id": "p-wright-a",
+    "name": "Wright,A",
+    "teamId": "tintwistle1",
+    "P": 5,
+    "HCP": 0,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-bailey-c-captain",
+    "name": "Bailey, C CAPTAIN",
+    "teamId": "tintwistle2",
+    "P": 6,
+    "HCP": -7,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-bardsley-d",
+    "name": "Bardsley, D",
+    "teamId": "tintwistle2",
+    "P": 0,
+    "HCP": 7,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-bethel-brian",
+    "name": "Bethel, Brian",
+    "teamId": "tintwistle2",
+    "P": 0,
+    "HCP": 21,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-bethel-chris",
+    "name": "Bethel, Chris",
+    "teamId": "tintwistle2",
+    "P": 0,
+    "HCP": 7,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-bethel-perri",
+    "name": "Bethel, Perri",
+    "teamId": "tintwistle2",
+    "P": 14,
+    "HCP": -7,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-coggins-c",
+    "name": "Coggins, C",
+    "teamId": "tintwistle2",
+    "P": 0,
+    "HCP": 21,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-corbally-dan",
+    "name": "Corbally, Dan",
+    "teamId": "tintwistle2",
+    "P": 13,
+    "HCP": -7,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-cutt-james",
+    "name": "Cutt, James",
+    "teamId": "tintwistle2",
+    "P": 1,
+    "HCP": -7,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-davis-g",
+    "name": "Davis, G",
+    "teamId": "tintwistle2",
+    "P": 14,
+    "HCP": 7,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-goddard-j",
+    "name": "Goddard, J",
+    "teamId": "tintwistle2",
+    "P": 0,
+    "HCP": 21,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-golpin-dan-captain",
+    "name": "Golpin, Dan CAPTAIN",
+    "teamId": "tintwistle2",
+    "P": 18,
+    "HCP": -28,
+    "captain": false,
+    "change": "down"
+  },
+  {
+    "id": "p-hall-elliot",
+    "name": "Hall, Elliot",
+    "teamId": "tintwistle2",
+    "P": 0,
+    "HCP": 28,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-hardman-k",
+    "name": "Hardman, K",
+    "teamId": "tintwistle2",
+    "P": 8,
+    "HCP": 0,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-harrison-d",
+    "name": "Harrison, D",
+    "teamId": "tintwistle2",
+    "P": 6,
+    "HCP": 21,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-irving-p",
+    "name": "Irving, P",
+    "teamId": "tintwistle2",
+    "P": 0,
+    "HCP": -14,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-lutener-ryan",
+    "name": "Lutener, Ryan",
+    "teamId": "tintwistle2",
+    "P": 0,
+    "HCP": 14,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-pennington-d",
+    "name": "Pennington, D",
+    "teamId": "tintwistle2",
+    "P": 0,
+    "HCP": 14,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-ray-jason",
+    "name": "Ray, Jason",
+    "teamId": "tintwistle2",
+    "P": 0,
+    "HCP": 28,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-small-nick",
+    "name": "Small, Nick",
+    "teamId": "tintwistle2",
+    "P": 14,
+    "HCP": 21,
+    "captain": false,
+    "change": "up"
+  },
+  {
+    "id": "p-thirsk-george",
+    "name": "Thirsk, George",
+    "teamId": "tintwistle2",
+    "P": 0,
+    "HCP": 35,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-wilkinson-r",
+    "name": "Wilkinson, R",
+    "teamId": "tintwistle2",
+    "P": 0,
+    "HCP": -14,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-wrigley-jack",
+    "name": "Wrigley, Jack",
+    "teamId": "tintwistle2",
+    "P": 11,
+    "HCP": 7,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-abell-s-hayfield",
+    "name": "Abell, S Hayfield",
+    "teamId": "whaley-1",
+    "P": 9,
+    "HCP": 28,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-ashton-brian",
+    "name": "Ashton, Brian",
+    "teamId": "whaley-1",
+    "P": 1,
+    "HCP": 14,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-bridden-callum",
+    "name": "Bridden, Callum",
+    "teamId": "whaley-1",
+    "P": 2,
+    "HCP": 28,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-candlin-todd",
+    "name": "Candlin, Todd",
+    "teamId": "whaley-1",
+    "P": 0,
+    "HCP": 14,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-chatterton-lee",
+    "name": "Chatterton, Lee",
+    "teamId": "whaley-1",
+    "P": 0,
+    "HCP": 21,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-golpin-james",
+    "name": "Golpin, James",
+    "teamId": "whaley-1",
+    "P": 7,
+    "HCP": 0,
+    "captain": false,
+    "change": "up"
+  },
+  {
+    "id": "p-golpin-john",
+    "name": "Golpin, John",
+    "teamId": "whaley-1",
+    "P": 8,
+    "HCP": -14,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-golpin-josh",
+    "name": "Golpin, Josh",
+    "teamId": "whaley-1",
+    "P": 2,
+    "HCP": 35,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-gregg-pete",
+    "name": "Gregg, Pete",
+    "teamId": "whaley-1",
+    "P": 0,
+    "HCP": 14,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-hallows-steve",
+    "name": "Hallows, Steve",
+    "teamId": "whaley-1",
+    "P": 5,
+    "HCP": -7,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-holland-i-captain",
+    "name": "Holland, I CAPTAIN",
+    "teamId": "whaley-1",
+    "P": 17,
+    "HCP": 0,
+    "captain": false,
+    "change": "up"
+  },
+  {
+    "id": "p-homer-danny",
+    "name": "Homer, Danny",
+    "teamId": "whaley-1",
+    "P": 0,
+    "HCP": 0,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-howard-jack",
+    "name": "Howard, Jack",
+    "teamId": "whaley-1",
+    "P": 0,
+    "HCP": 14,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-larkin-rob",
+    "name": "Larkin, Rob",
+    "teamId": "whaley-1",
+    "P": 15,
+    "HCP": -14,
+    "captain": false,
+    "change": "down"
+  },
+  {
+    "id": "p-lomas-scott-hayfield",
+    "name": "Lomas, Scott Hayfield",
+    "teamId": "whaley-1",
+    "P": 19,
+    "HCP": 7,
+    "captain": false,
+    "change": "down"
+  },
+  {
+    "id": "p-rogers-adam",
+    "name": "Rogers, Adam",
+    "teamId": "whaley-1",
+    "P": 15,
+    "HCP": 7,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-scowen-jack",
+    "name": "Scowen, Jack",
+    "teamId": "whaley-1",
+    "P": 17,
+    "HCP": 21,
+    "captain": false,
+    "change": "up"
+  },
+  {
+    "id": "p-sweet-alex",
+    "name": "Sweet, Alex",
+    "teamId": "whaley-1",
+    "P": 0,
+    "HCP": 21,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-thomas-mark",
+    "name": "Thomas, Mark",
+    "teamId": "whaley-1",
+    "P": 0,
+    "HCP": 14,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-wing-matt",
+    "name": "Wing, Matt",
+    "teamId": "whaley-1",
+    "P": 0,
+    "HCP": 21,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-barkess-j",
+    "name": "Barkess, J",
+    "teamId": "whaley-2",
+    "P": 0,
+    "HCP": 14,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-barnard-scott",
+    "name": "Barnard, Scott",
+    "teamId": "whaley-2",
+    "P": 11,
+    "HCP": -7,
+    "captain": false,
+    "change": "down"
+  },
+  {
+    "id": "p-gordon-john",
+    "name": "Gordon, John",
+    "teamId": "whaley-2",
+    "P": 11,
+    "HCP": 0,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-greaves-a",
+    "name": "Greaves, A",
+    "teamId": "whaley-2",
+    "P": 0,
+    "HCP": 14,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-lee-f",
+    "name": "Lee, F",
+    "teamId": "whaley-2",
+    "P": 16,
+    "HCP": 7,
+    "captain": false,
+    "change": "down"
+  },
+  {
+    "id": "p-leigh-p-captain",
+    "name": "Leigh, P CAPTAIN",
+    "teamId": "whaley-2",
+    "P": 15,
+    "HCP": 28,
+    "captain": false,
+    "change": "down"
+  },
+  {
+    "id": "p-nelson-s",
+    "name": "Nelson,S",
+    "teamId": "whaley-2",
+    "P": 0,
+    "HCP": 14,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-renshaw-s",
+    "name": "Renshaw, S",
+    "teamId": "whaley-2",
+    "P": 12,
+    "HCP": 0,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-tuppen-s",
+    "name": "Tuppen, S",
+    "teamId": "whaley-2",
+    "P": 7,
+    "HCP": 21,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-walker-b",
+    "name": "Walker, B",
+    "teamId": "whaley-2",
+    "P": 13,
+    "HCP": 7,
+    "captain": false,
+    "change": null
+  },
+  {
+    "id": "p-walker-p",
+    "name": "Walker, P",
+    "teamId": "whaley-2",
+    "P": 17,
+    "HCP": 7,
+    "captain": false,
+    "change": "down"
+  }
+]
