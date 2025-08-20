@@ -7,22 +7,12 @@
   <style>
     body { font-family: Arial, sans-serif; margin:0; padding:0; }
     header { background:#222; color:#fff; padding:1em; text-align:center; }
-    nav { background:#444; padding:.5em; text-align:center; }
-    nav a { color:#fff; margin:0 10px; text-decoration:none; font-weight:bold; padding:.5em; }
+    nav { background:#444; padding:0.8em; text-align:center; }
+    nav a { color:#fff; margin:0 12px; text-decoration:none; font-weight:bold; padding:0.8em 0.5em; display:inline-block; }
     nav a:hover { text-decoration:underline; }
     nav a.active { background:#22cc66; color:#0b1b0f; font-weight:bold; }
     main { padding:2em; }
-    .card { background:#f6f7f8; border:1px solid #ddd; border-radius:8px; padding:1em; }
-    ul { list-style:none; padding:0; margin:0; }
-    li { padding:.8em 0; border-bottom:1px solid #ddd; }
-    .name { font-weight:700; }
-    .addr { color:#555; }
-    @media (prefers-color-scheme: dark) {
-      body { background:#0e1117; color:#e6e8eb; }
-      .card { background:#1a1f2a; border-color:#2a3140; }
-      li { border-color:#2a3140; }
-      .addr { color:#9ba3af; }
-    }
+    footer { background:#222; color:#fff; text-align:center; padding:1em; margin-top:2em; }
   </style>
 </head>
 <body>
@@ -39,29 +29,10 @@
   </nav>
 
   <main>
-    <h2>Venues & Clubs</h2>
-    <div class="card">
-      <ul>
-        <li>
-          <div class="name">Marple Club</div>
-          <div class="addr">Church Ln, Marple, SK6</div>
-          <div><a href="https://maps.google.com/?q=Marple+Club+SK6" target="_blank">Open in Google Maps</a></div>
-        </li>
-        <li>
-          <div class="name">New Mills Working Men’s Club</div>
-          <div class="addr">Hyde Bank Rd, New Mills, SK22</div>
-          <div><a href="https://maps.google.com/?q=New+Mills+Working+Mens+Club+SK22" target="_blank">Open in Google Maps</a></div>
-        </li>
-        <li>
-          <div class="name">Glossop Conservative Club</div>
-          <div class="addr">Church St, Glossop, SK13</div>
-          <div><a href="https://maps.google.com/?q=Glossop+Conservative+Club+SK13" target="_blank">Open in Google Maps</a></div>
-        </li>
-      </ul>
-      <p style="margin-top:1em;">Add more venues by duplicating a full <code>&lt;li&gt;…&lt;/li&gt;</code> block.</p>
-    </div>
+    <h2>Venues</h2>
+    <p>Venue details will be displayed here.</p>
   </main>
 
-  <footer style="text-align:center; padding:1em; margin-top:2em;">&copy; 2025 High Peak &amp; Marple Snooker League</footer>
+  <footer>&copy; 2025 High Peak &amp; Marple Snooker League</footer>
 </body>
 </html>
