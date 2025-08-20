@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Fixtures - High Peak & Marple Snooker League</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin:0; padding:0; }
+    header { background:#222; color:#fff; padding:1em; text-align:center; }
+    nav { background:#444; padding:.5em; text-align:center; }
+    nav a { color:#fff; margin:0 10px; text-decoration:none; font-weight:700; }
+    nav a:hover { text-decoration:underline; }
+    main { padding:2em; }
+    .card { background:#f6f7f8; border:1px solid #ddd; border-radius:8px; padding:1em; }
+    table { width:100%; border-collapse:collapse; }
+    th, td { padding:.6em .8em; border-bottom:1px solid #ddd; text-align:left; }
+    th { background:#eee; }
+    @media (prefers-color-scheme: dark) {
+      body { background:#0e1117; color:#e6e8eb; }
+      .card { background:#1a1f2a; border-color:#2a3140; }
+      th, td { border-color:#2a3140; }
+      th { background:#0f1520; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>High Peak &amp; Marple Snooker League</h1>
+  </header>
+
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="history.html">History</a>
+    <a href="fixtures.html">Fixtures</a>
+    <a href="results.html">Results</a>
+    <a href="players.html">Players</a>
+    <a href="venues.html">Venues</a>
+    <a href="rules.html">Rules</a>
+  </nav>
+
+  <main>
+    <h2>Upcoming Fixtures</h2>
+
+    <div class="card">
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Home</th>
+            <th>Away</th>
+            <th>Venue</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- EXAMPLE ROWS — edit or add more -->
+          <tr>
+            <td>Thu 12 Sep 2025</td>
+            <td>19:30</td>
+            <td>Marple A</td>
+            <td>Glossop B</td>
+            <td>Marple Club</td>
+            <td>League Week 1</td>
+          </tr>
+          <tr>
+            <td>Thu 19 Sep 2025</td>
+            <td>19:30</td>
+            <td>New Mills</td>
+            <td>Disley</td>
+            <td>New Mills WMC</td>
+            <td>League Week 2</td>
+          </tr>
+          <!-- Add more <tr>…</tr> rows as needed -->
+        </tbody>
+      </table>
+    </div>
+
+    <p style="margin-top:1em;">
+      Want to add more fixtures? Duplicate a table row (`<tr>…</tr>`) and edit the cells.
+    </p>
+  </main>
+
+  <footer style="text-align:center; padding:1em; margin-top:2em;">
+    &copy; 2025 High Peak &amp; Marple Snooker League
+  </footer>
+</body>
+</html>
