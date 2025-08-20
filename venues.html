@@ -3,19 +3,20 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Venues - High Peak & Marple Snooker League</title>
+  <title>High Peak & Marple Snooker League - Venues</title>
   <style>
     body { font-family: Arial, sans-serif; margin:0; padding:0; }
     header { background:#222; color:#fff; padding:1em; text-align:center; }
     nav { background:#444; padding:.5em; text-align:center; }
-    nav a { color:#fff; margin:0 10px; text-decoration:none; font-weight:700; }
+    nav a { color:#fff; margin:0 10px; text-decoration:none; font-weight:bold; padding:.5em; }
     nav a:hover { text-decoration:underline; }
+    nav a.active { background:#22cc66; color:#0b1b0f; font-weight:bold; }
     main { padding:2em; }
     .card { background:#f6f7f8; border:1px solid #ddd; border-radius:8px; padding:1em; }
-    ul { list-style: none; padding: 0; margin: 0; }
-    li { padding: .8em 0; border-bottom: 1px solid #ddd; }
-    .name { font-weight: 700; }
-    .addr { color: #555; }
+    ul { list-style:none; padding:0; margin:0; }
+    li { padding:.8em 0; border-bottom:1px solid #ddd; }
+    .name { font-weight:700; }
+    .addr { color:#555; }
     @media (prefers-color-scheme: dark) {
       body { background:#0e1117; color:#e6e8eb; }
       .card { background:#1a1f2a; border-color:#2a3140; }
@@ -25,9 +26,7 @@
   </style>
 </head>
 <body>
-  <header>
-    <h1>High Peak &amp; Marple Snooker League</h1>
-  </header>
+  <header><h1>High Peak &amp; Marple Snooker League</h1></header>
 
   <nav>
     <a href="index.html">Home</a>
@@ -35,16 +34,14 @@
     <a href="fixtures.html">Fixtures</a>
     <a href="results.html">Results</a>
     <a href="players.html">Players</a>
-    <a href="venues.html">Venues</a>
+    <a href="venues.html" class="active">Venues</a>
     <a href="rules.html">Rules</a>
   </nav>
 
   <main>
     <h2>Venues & Clubs</h2>
-
     <div class="card">
       <ul>
-        <!-- EXAMPLES — replace with your clubs -->
         <li>
           <div class="name">Marple Club</div>
           <div class="addr">Church Ln, Marple, SK6</div>
@@ -61,12 +58,10 @@
           <div><a href="https://maps.google.com/?q=Glossop+Conservative+Club+SK13" target="_blank">Open in Google Maps</a></div>
         </li>
       </ul>
-      <p style="margin-top:1em;">Tip: duplicate a <code>&lt;li&gt;...&lt;/li&gt;</code> block for each club and update the name, address, and Google Maps link.</p>
+      <p style="margin-top:1em;">Add more venues by duplicating a full <code>&lt;li&gt;…&lt;/li&gt;</code> block.</p>
     </div>
   </main>
 
-  <footer style="text-align:center; padding:1em; margin-top:2em;">
-    &copy; 2025 High Peak &amp; Marple Snooker League
-  </footer>
+  <footer style="text-align:center; padding:1em; margin-top:2em;">&copy; 2025 High Peak &amp; Marple Snooker League</footer>
 </body>
 </html>
