@@ -3,13 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Results - High Peak & Marple Snooker League</title>
+  <title>High Peak & Marple Snooker League - Results</title>
   <style>
     body { font-family: Arial, sans-serif; margin:0; padding:0; }
     header { background:#222; color:#fff; padding:1em; text-align:center; }
     nav { background:#444; padding:.5em; text-align:center; }
-    nav a { color:#fff; margin:0 10px; text-decoration:none; font-weight:700; }
+    nav a { color:#fff; margin:0 10px; text-decoration:none; font-weight:700; padding:.5em; }
     nav a:hover { text-decoration:underline; }
+    nav a.active { background:#22cc66; color:#0b1b0f; font-weight:700; border-radius:4px; }
     main { padding:2em; }
     .card { background:#f6f7f8; border:1px solid #ddd; border-radius:8px; padding:1em; }
     table { width:100%; border-collapse:collapse; }
@@ -25,15 +26,13 @@
   </style>
 </head>
 <body>
-  <header>
-    <h1>High Peak &amp; Marple Snooker League</h1>
-  </header>
+  <header><h1>High Peak &amp; Marple Snooker League</h1></header>
 
   <nav>
     <a href="index.html">Home</a>
     <a href="history.html">History</a>
     <a href="fixtures.html">Fixtures</a>
-    <a href="results.html">Results</a>
+    <a href="results.html" class="active">Results</a>
     <a href="players.html">Players</a>
     <a href="venues.html">Venues</a>
     <a href="rules.html">Rules</a>
@@ -45,63 +44,16 @@
     <div class="card">
       <table>
         <thead>
-          <tr>
-            <th>Date</th>
-            <th>Home</th>
-            <th>Away</th>
-            <th>Score</th>
-            <th>Venue</th>
-            <th>Notes</th>
-          </tr>
+          <tr><th>Date</th><th>Home</th><th>Away</th><th>Score</th><th>Venue</th><th>Notes</th></tr>
         </thead>
         <tbody>
-          <!-- EXAMPLE ROWS — replace/add more -->
-          <tr>
-            <td>Thu 12 Sep 2025</td>
-            <td class="won">Marple A</td>
-            <td>Glossop B</td>
-            <td>4–2</td>
-            <td>Marple Club</td>
-            <td>League Week 1</td>
-          </tr>
-          <tr>
-            <td>Thu 19 Sep 2025</td>
-            <td>New Mills</td>
-            <td class="won">Disley</td>
-            <td>2–4</td>
-            <td>New Mills WMC</td>
-            <td>League Week 2</td>
-          </tr>
-          <!-- Add more <tr>…</tr> rows as needed -->
+          <tr><td>Thu 12 Sep 2025</td><td class="won">Marple A</td><td>Glossop B</td><td>4–2</td><td>Marple Club</td><td>Week 1</td></tr>
+          <tr><td>Thu 19 Sep 2025</td><td>New Mills</td><td class="won">Disley</td><td>2–4</td><td>New Mills WMC</td><td>Week 2</td></tr>
         </tbody>
       </table>
     </div>
 
-    <!-- Optional: per‑frame details block (add more sections as needed) -->
-    <div class="card">
-      <h3>Match Detail: Marple A 4–2 Glossop B (12 Sep 2025)</h3>
-      <table>
-        <thead>
-          <tr>
-            <th>Frame</th>
-            <th>Home Player</th>
-            <th>Away Player</th>
-            <th>Winner</th>
-            <th>Score / Breaks</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td>1</td><td>S. Jones</td><td>P. Smith</td><td>Jones</td><td>62–35 (32)</td></tr>
-          <tr><td>2</td><td>A. Brown</td><td>R. King</td><td>King</td><td>41–58</td></tr>
-          <tr><td>3</td><td>T. Clarke</td><td>M. Hall</td><td>Clarke</td><td>55–22</td></tr>
-          <tr><td>4</td><td>J. Reed</td><td>K. Shaw</td><td>Reed</td><td>47–39</td></tr>
-          <tr><td>5</td><td>D. Holt</td><td>S. Adams</td><td>Adams</td><td>36–61</td></tr>
-          <tr><td>6</td><td>P. Ward</td><td>G. Lane</td><td>Ward</td><td>71–44 (38)</td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <p style="margin-top:1em;">Tip: copy a table row (<code>&lt;tr&gt;...&lt;/tr&gt;</code>) to add more results. Use the <code>class="won"</code> helper on the winning team to bold it.</p>
+    <p style="margin-top:1em;">Tip: duplicate a table row (<code>&lt;tr&gt;…&lt;/tr&gt;</code>) to add more results.</p>
   </main>
 
   <footer style="text-align:center; padding:1em; margin-top:2em;">
