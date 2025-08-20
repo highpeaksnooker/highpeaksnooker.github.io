@@ -3,17 +3,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Rules - High Peak & Marple Snooker League</title>
+  <title>High Peak & Marple Snooker League - Rules</title>
   <style>
     body { font-family: Arial, sans-serif; margin:0; padding:0; }
     header { background:#222; color:#fff; padding:1em; text-align:center; }
     nav { background:#444; padding:.5em; text-align:center; }
-    nav a { color:#fff; margin:0 10px; text-decoration:none; font-weight:700; }
+    nav a { color:#fff; margin:0 10px; text-decoration:none; font-weight:bold; padding:.5em; }
     nav a:hover { text-decoration:underline; }
+    nav a.active { background:#22cc66; color:#0b1b0f; font-weight:bold; }
     main { padding:2em; }
     .card { background:#f6f7f8; border:1px solid #ddd; border-radius:8px; padding:1em; margin-bottom:1.5em; }
-    ol { padding-left: 1.2em; }
-    li { margin-bottom: .7em; }
+    ol { padding-left:1.2em; }
+    li { margin-bottom:.7em; }
     @media (prefers-color-scheme: dark) {
       body { background:#0e1117; color:#e6e8eb; }
       .card { background:#1a1f2a; border-color:#2a3140; }
@@ -22,9 +23,7 @@
   </style>
 </head>
 <body>
-  <header>
-    <h1>High Peak &amp; Marple Snooker League</h1>
-  </header>
+  <header><h1>High Peak &amp; Marple Snooker League</h1></header>
 
   <nav>
     <a href="index.html">Home</a>
@@ -33,32 +32,28 @@
     <a href="results.html">Results</a>
     <a href="players.html">Players</a>
     <a href="venues.html">Venues</a>
-    <a href="rules.html">Rules</a>
+    <a href="rules.html" class="active">Rules</a>
   </nav>
 
   <main>
     <h2>League Rules</h2>
-
     <div class="card">
       <ol>
-        <!-- Example rules — replace with your own -->
-        <li>Matches will consist of 6 frames, each played between two nominated players.</li>
-        <li>Players must adhere to the official WPBSA snooker rules unless otherwise specified here.</li>
-        <li>Matches are to start no later than 7:30pm unless agreed by both captains.</li>
-        <li>Mobile phones must be on silent during play.</li>
-        <li>Captains are responsible for submitting results within 24 hours of a match.</li>
+        <li>Matches consist of 6 frames unless otherwise agreed by captains.</li>
+        <li>Standard WPBSA snooker rules apply unless stated here.</li>
+        <li>Start time is 7:30pm unless mutually agreed in advance.</li>
+        <li>Phones must be silent during play.</li>
+        <li>Captains submit results within 24 hours.</li>
       </ol>
     </div>
 
     <div class="card">
       <h3>Download Full Rulebook</h3>
-      <p>You can also download the complete rulebook as a PDF:</p>
       <p><a href="docs/LeagueRules.pdf" target="_blank">Download League Rules (PDF)</a></p>
+      <p style="font-size:.95rem;color:#666;">(Upload a PDF into a <code>docs</code> folder with this name to enable the link.)</p>
     </div>
   </main>
 
-  <footer style="text-align:center; padding:1em; margin-top:2em;">
-    &copy; 2025 High Peak &amp; Marple Snooker League
-  </footer>
+  <footer style="text-align:center; padding:1em; margin-top:2em;">&copy; 2025 High Peak &amp; Marple Snooker League</footer>
 </body>
 </html>
