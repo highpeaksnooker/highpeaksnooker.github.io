@@ -1,1 +1,18 @@
-[]
+[
+  {
+    "id": "m-2025-09-02-hadfield-v-hayfield1",
+    "date": "2025-09-02",
+    "homeTeamId": "hadfield",
+    "awayTeamId": "hayfield-1",
+    "homeFrames": 4,
+    "awayFrames": 2,
+    "frames": [
+      {"homePlayerId":"p-harrison-dave","awayPlayerId":"p-lomas-sam","winner":"home"},
+      {"homePlayerId":"p-gresty-n","awayPlayerId":"p-lomas-scott","winner":"home"},
+      {"homePlayerId":"p-ibbetson-d","awayPlayerId":"p-lonsdale-b","winner":"home"},
+      {"homePlayerId":"p-kingdom-a","awayPlayerId":"p-lomas-p","winner":"away"},
+      {"homePlayerId":"p-flavell-g","awayPlayerId":"p-evans-d","winner":"away"},
+      {"homePlayerId":"p-aspden-will","awayPlayerId":"p-abell-s","winner":"home"}
+    ]
+  }
+]
