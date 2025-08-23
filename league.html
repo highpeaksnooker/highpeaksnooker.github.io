@@ -46,11 +46,11 @@
   const table = {};
   for (const t of teams) table[t.id] = { teamId:t.id, name:t.name, P:0, W:0, D:0, L:0, FF:0, FA:0, FD:0, Pts:0 };
 
-  // Adjust points rules here (2 for win, 1 draw, 0 loss by default)
-  const award = (homeFrames, awayFrames) => {
-    if (homeFrames > awayFrames) return [2,0];
-    if (homeFrames < awayFrames) return [0,2];
-    return [1,1];
+  // Revised points system with away win bonus
+  const award = (homeFrames, awayFrames, isAwayWin) => {
+    if (homeFrames > awayFrames) return [2, 0];                         // Home win
+    if (homeFrames < awayFrames) return [0, isAwayWin ? 3 : 2];         // Away win (+1 bonus)
+    return [1, 1];                                                       // Draw
   };
 
   for (const m of matches) {
@@ -59,10 +59,14 @@
     h.P++; a.P++;
     h.FF += m.homeFrames; h.FA += m.awayFrames;
     a.FF += m.awayFrames; a.FA += m.homeFrames;
+
+    const isAwayWin = m.awayFrames > m.homeFrames;
+
     if (m.homeFrames > m.awayFrames) { h.W++; a.L++; }
     else if (m.homeFrames < m.awayFrames) { a.W++; h.L++; }
     else { h.D++; a.D++; }
-    const [hPts, aPts] = award(m.homeFrames, m.awayFrames);
+
+    const [hPts, aPts] = award(m.homeFrames, m.awayFrames, isAwayWin);
     h.Pts += hPts; a.Pts += aPts;
   }
 
