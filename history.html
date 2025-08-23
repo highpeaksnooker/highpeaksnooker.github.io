@@ -5,136 +5,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>High Peak & Marple Snooker League - History</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background: #f7f7f7;
-      color: #111;
-    }
-
-    header {
-      background: #222;
-      color: #fff;
-      padding: 1rem;
-      text-align: center;
-    }
-
-    #announcement-banner {
-      background-color: #fffbcc;
-      border-bottom: 2px solid #f0c000;
-      color: #333;
-      font-weight: bold;
-      padding: 1rem;
-      text-align: center;
-      overflow: hidden;
-      position: relative;
-      height: 2.2em;
-    }
-
-    #announcement-text {
-      position: absolute;
-      white-space: nowrap;
-      animation: scroll-left 12s linear infinite;
-    }
-
-    @keyframes scroll-left {
-      0%   { left: 100%; }
-      100% { left: -100%; }
-    }
-
-    nav {
-      background: #444;
-      padding: 0.8rem;
-      text-align: center;
-    }
-
-    nav a {
-      color: #fff;
-      margin: 0 12px;
-      text-decoration: none;
-      font-weight: bold;
-      padding: 0.8em 0.5em;
-      display: inline-block;
-    }
-
-    nav a:hover {
-      text-decoration: underline;
-    }
-
-    nav a.active {
-      background: #22cc66;
-      color: #0b1b0f;
-      border-radius: 4px;
-    }
-
-    main {
-      padding: 2em;
-      max-width: 1000px;
-      margin: auto;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 2em;
-    }
-
-    th, td {
-      border: 1px solid #ccc;
-      padding: 0.6em;
-      text-align: left;
-    }
-
-    th {
-      background: #eee;
-    }
-
-    .jump-links {
-      margin: 1em 0 2em;
-      padding: 1em;
-      background: #f0f0f0;
-      border-radius: 6px;
-      text-align: center;
-    }
-
-    .jump-links a {
-      margin: 0 10px;
-      font-weight: bold;
-      color: #0044cc;
-    }
-
-    .jump-links a:hover {
-      text-decoration: underline;
-    }
-
-    footer {
-      background: #222;
-      color: #fff;
-      text-align: center;
-      padding: 1em;
-      margin-top: 2em;
-    }
-
-    @media (prefers-color-scheme: dark) {
-      body { background:#0e1117; color:#e6e8eb; }
-      header, footer { background:#111; }
-      nav { background:#1e293b; }
-      th { background:#0f1520; }
-      th, td { border-color:#2a3140; }
-      .jump-links { background:#1a1f2a; }
-      .jump-links a { color:#60a5fa; }
-    }
+    body { font-family: Arial, sans-serif; margin:0; padding:0; background:#f7f7f7; color:#111; }
+    header { background:#222; color:#fff; padding:1em; text-align:center; }
+    nav { background:#444; padding:.8em; text-align:center; }
+    nav a { color:#fff; margin:0 12px; text-decoration:none; font-weight:bold; padding:0.8em 0.5em; display:inline-block; }
+    nav a:hover { text-decoration:underline; }
+    nav a.active { background:#22cc66; color:#0b1b0f; font-weight:bold; border-radius:4px; }
+    main { padding:2em; max-width:1000px; margin:auto; }
+    footer { background:#222; color:#fff; text-align:center; padding:1em; margin-top:2em; }
+    table { width:100%; border-collapse:collapse; margin-bottom:2em; }
+    th, td { border:1px solid #ccc; padding:0.6em; text-align:left; }
+    th { background:#eee; }
+    .jump-links { margin:1em 0 2em; padding:1em; background:#f0f0f0; border-radius:6px; text-align:center; }
+    .jump-links a { margin:0 10px; font-weight:bold; color:#0044cc; }
+    .jump-links a:hover { text-decoration:underline; }
   </style>
 </head>
 <body>
   <header>
     <h1>High Peak &amp; Marple Snooker League</h1>
   </header>
-
-  <div id="announcement-banner" style="display:none;">
-    <span id="announcement-text"></span>
-  </div>
 
   <nav>
     <a href="index.html">Home</a>
@@ -151,7 +41,6 @@
   <main>
     <h2>Honours List</h2>
 
-    <!-- Jump-to navigation -->
     <div class="jump-links">
       Jump to:
       <a href="#league-handicaps">League Handicaps</a> ·
@@ -162,27 +51,9 @@
       <a href="#captains-cup">Captains’ Cup</a>
     </div>
 
-    <!-- [Your tables go here as they currently are — no change needed] -->
-    <!-- Simply paste all the tables from your existing code in this space -->
-
-  </main>
-
-  <footer>&copy; 2025 High Peak &amp; Marple Snooker League</footer>
-
-  <script>
-    fetch('data/announcement.json')
-      .then(response => response.json())
-      .then(data => {
-        if (data.message && data.message.trim()) {
-          const banner = document.getElementById('announcement-banner');
-          const text = document.getElementById('announcement-text');
-          text.textContent = data.message;
-          banner.style.display = 'block';
-        }
-      })
-      .catch(err => {
-        console.warn('Announcement could not be loaded:', err);
-      });
-  </script>
-</body>
-</html>
+    <h3 id="league-handicaps">League Handicaps 2003–2023</h3>
+    <table>
+      <thead><tr><th>Year</th><th>Winner</th></tr></thead>
+      <tbody>
+        <tr><td>2003</td><td>Glossop 1</td></tr>
+        <
