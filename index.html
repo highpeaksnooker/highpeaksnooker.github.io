@@ -20,41 +20,31 @@
       text-align: center;
     }
 
+    /* 🎯 ANIMATED ANNOUNCEMENT BANNER */
     #announcement-banner {
-      overflow: hidden;
       background-color: #fffbcc;
       border-bottom: 2px solid #f0c000;
-      padding: 1rem 0;
-      position: relative;
-      height: 2em;
-    }
-
-    #announcement-banner p {
-      position: absolute;
-      white-space: nowrap;
-      font-weight: bold;
-      font-size: 1rem;
       color: #333;
-      animation: slide-left-right 12s linear infinite;
+      font-weight: bold;
+      padding: 1rem;
+      white-space: nowrap;
+      overflow: hidden;
+      position: relative;
+      height: 2.5rem;
     }
 
-    @keyframes slide-left-right {
-      0% {
-        left: -100%;
-        opacity: 0;
-      }
-      10% {
-        left: 0%;
-        opacity: 1;
-      }
-      90% {
-        left: 100%;
-        opacity: 0;
-      }
-      100% {
-        left: 100%;
-        opacity: 0;
-      }
+    #announcement-banner span {
+      position: absolute;
+      display: inline-block;
+      white-space: nowrap;
+      animation: slideMessage 10s linear infinite;
+    }
+
+    @keyframes slideMessage {
+      0%   { left: 100%; opacity: 0; }
+      10%  { left: 50%; opacity: 1; }
+      90%  { left: -100%; opacity: 0; }
+      100% { left: -100%; opacity: 0; }
     }
 
     nav {
@@ -102,12 +92,14 @@
     <h1>High Peak &amp; Marple Snooker League</h1>
   </header>
 
-  <div id="announcement-banner"><p id="announcement-text"></p></div>
+  <!-- Animated announcement banner -->
+  <div id="announcement-banner"><span id="announcement-text"></span></div>
 
+  <!-- 🧭 NAVIGATION MENU — "League Table" now after "History" -->
   <nav>
     <a href="index.html" class="active">Home</a>
-    <a href="league.html">League Table</a>
     <a href="history.html">History</a>
+    <a href="league.html">League Table</a>
     <a href="fixtures.html">Fixtures</a>
     <a href="results.html">Results</a>
     <a href="players.html">Players</a>
@@ -123,14 +115,15 @@
 
   <footer>&copy; 2025 High Peak &amp; Marple Snooker League</footer>
 
+  <!-- 🧠 Load announcement message from JSON and insert into animation span -->
   <script>
     fetch('data/announcement.json')
       .then(response => response.json())
       .then(data => {
         if (data.message && data.message.trim()) {
           const banner = document.getElementById('announcement-banner');
-          const text = document.getElementById('announcement-text');
-          text.textContent = data.message;
+          const span = document.getElementById('announcement-text');
+          span.textContent = data.message;
           banner.style.display = 'block';
         }
       })
