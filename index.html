@@ -3,30 +3,80 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>High Peak &  Marple Snooker League - Home</title>
+  <title>High Peak & Marple Snooker League - Home</title>
   <style>
-    body { font-family: Arial, sans-serif; margin:0; padding:0; }
-    header { background:#222; color:#fff; padding:1em; text-align:center; }
-    <div id="announcement-banner" style="
-  background-color: #fffbcc;
-  border-bottom: 2px solid #f0c000;
-  color: #333;
-  font-weight: bold;
-  padding: 1rem;
-  text-align: center;
-  display: none;
-"></div>
-    nav { background:#444; padding:0.8em; text-align:center; }
-    nav a { color:#fff; margin:0 12px; text-decoration:none; font-weight:bold; padding:0.8em 0.5em; display:inline-block; }
-    nav a:hover { text-decoration:underline; }
-    nav a.active { background:#22cc66; color:#0b1b0f; font-weight:bold; }
-    main { padding:2em; }
-    footer { background:#222; color:#fff; text-align:center; padding:1em; margin-top:2em; }
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f7f7f7;
+      color: #111;
+    }
+
+    header {
+      background: #222;
+      color: #fff;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    #announcement-banner {
+      background-color: #fffbcc;
+      border-bottom: 2px solid #f0c000;
+      color: #333;
+      font-weight: bold;
+      padding: 1rem;
+      text-align: center;
+      display: none;
+    }
+
+    nav {
+      background: #444;
+      padding: 0.8rem;
+      text-align: center;
+    }
+
+    nav a {
+      color: #fff;
+      margin: 0 12px;
+      text-decoration: none;
+      font-weight: bold;
+      padding: 0.8em 0.5em;
+      display: inline-block;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    nav a.active {
+      background: #22cc66;
+      color: #0b1b0f;
+      border-radius: 4px;
+    }
+
+    main {
+      padding: 2em;
+      max-width: 900px;
+      margin: auto;
+    }
+
+    footer {
+      background: #222;
+      color: #fff;
+      text-align: center;
+      padding: 1em;
+      margin-top: 2em;
+    }
   </style>
 </head>
 <body>
-  <header><h1>High Peak &amp; Marple Snooker League</h1></header>
-<!-- force rebuild -->
+  <header>
+    <h1>High Peak &amp; Marple Snooker League</h1>
+  </header>
+
+  <div id="announcement-banner"></div>
+
   <nav>
     <a href="index.html" class="active">Home</a>
     <a href="history.html">History</a>
@@ -43,5 +93,20 @@
   </main>
 
   <footer>&copy; 2025 High Peak &amp; Marple Snooker League</footer>
+
+  <script>
+    fetch('data/announcement.json')
+      .then(response => response.json())
+      .then(data => {
+        if (data.message && data.message.trim()) {
+          const banner = document.getElementById('announcement-banner');
+          banner.textContent = data.message;
+          banner.style.display = 'block';
+        }
+      })
+      .catch(err => {
+        console.warn('Announcement could not be loaded:', err);
+      });
+  </script>
 </body>
 </html>
