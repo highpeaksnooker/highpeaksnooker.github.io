@@ -21,13 +21,40 @@
     }
 
     #announcement-banner {
+      overflow: hidden;
       background-color: #fffbcc;
       border-bottom: 2px solid #f0c000;
-      color: #333;
+      padding: 1rem 0;
+      position: relative;
+      height: 2em;
+    }
+
+    #announcement-banner p {
+      position: absolute;
+      white-space: nowrap;
       font-weight: bold;
-      padding: 1rem;
-      text-align: center;
-      display: none;
+      font-size: 1rem;
+      color: #333;
+      animation: slide-left-right 12s linear infinite;
+    }
+
+    @keyframes slide-left-right {
+      0% {
+        left: -100%;
+        opacity: 0;
+      }
+      10% {
+        left: 0%;
+        opacity: 1;
+      }
+      90% {
+        left: 100%;
+        opacity: 0;
+      }
+      100% {
+        left: 100%;
+        opacity: 0;
+      }
     }
 
     nav {
@@ -75,7 +102,7 @@
     <h1>High Peak &amp; Marple Snooker League</h1>
   </header>
 
-  <div id="announcement-banner"></div>
+  <div id="announcement-banner"><p id="announcement-text"></p></div>
 
   <nav>
     <a href="index.html" class="active">Home</a>
@@ -101,7 +128,8 @@
       .then(data => {
         if (data.message && data.message.trim()) {
           const banner = document.getElementById('announcement-banner');
-          banner.textContent = data.message;
+          const text = document.getElementById('announcement-text');
+          text.textContent = data.message;
           banner.style.display = 'block';
         }
       })
