@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Player Merit Table — High Peak & Marple Snooker League</title>
+  <style>
+    body { font-family: system-ui, Arial, sans-serif; margin:0; background:#f7f7f7; color:#111; }
+    header { background:#222; color:#fff; padding:1rem 1.25rem; }
+    main { max-width:1000px; margin:1rem auto; padding:1rem; }
+    .table-wrap { overflow:auto; background:#fff; border:1px solid #e5e5e5; border-radius:.5rem; }
+    table { width:100%; border-collapse:collapse; min-width:880px; }
+    thead th { position:sticky; top:0; background:#fafafa; text-align:left; border-bottom:1px solid #eee; padding:.7rem; }
+    tbody td { padding:.6rem .7rem; border-bottom:1px solid #f1f1f1; font-size:0.95em; }
+  </style>
+</head>
+<body>
+<header><h1>Player Merit Table</h1></header>
+<main>
+  <div class="table-wrap">
+    <table id="meritTable">
+      <thead>
+        <tr>
+          <th>#</th><th>Player</th><th>Team</th>
+          <th>Start HCP</th>
+          <th>Played</th><th>Wins</th><th>Losses</th><th>W–L</th>
+          <th>25+ Breaks</th><th>Highest Break</th>
+        </tr>
+      </thead>
+      <tbody id="meritBody"></tbody>
+    </table>
+  </div>
+</main>
+<script>
+(async function(){
+  const [players, teams, matches] = await Promise.all([
+    fetch('data/players.json').then(r=>r.json()),
+    fetch('data/teams.json').then(r=>r.json()),
+    fetch('data/matches.json').then(r=>r.json())
+  ]);
+
+  const teamName = id => (teams.find(t => t.id === id) || {}).name || '';
+  const playerMap = Object.fromEntries(players.map(p => [p.id, {
+    ...p, teamName: teamName(p.teamId), played: 0, wins: 0, losses: 0, breaks: [], highestBreak: 0
+  }]));
+
+  for (const match of matches) {
+    for (const f of match.frames) {
+      const home = playerMap[f.homePlayerId];
+      const away = playerMap[f.awayPlayerId];
+      if (!home || !away) continue;
+
+      home.played++; away.played++;
+      if (f.winner === 'home') { home.wins++; away.losses++; }
+      else if (f.winner === 'away') { away.wins++; home.losses++; }
+    }
+  }
+
+  const rows = Object.values(playerMap)
+    .filter(p => p.played > 0)
+    .sort((a,b) => (b.wins - b.losses) - (a.wins - a.losses) || b.wins - a.wins || a.name.localeCompare(b.name));
+
+  const body = document.getElementById('meritBody');
+  body.innerHTML = '';
+  rows.forEach((p, i) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${i+1}</td>
+      <td>${escapeHtml(p.name)}</td>
+      <td>${escapeHtml(p.teamName)}</td>
+      <td>${p.hcp}</td>
+      <td>${p.played}</td>
+      <td>${p.wins}</td>
+      <td>${p.losses}</td>
+      <td>${p.wins - p.losses}</td>
+      <td>${p.breaks.length}</td>
+      <td>${p.highestBreak || '-'}</td>
+    `;
+    body.appendChild(tr);
+  });
+
+  function escapeHtml(str=''){ return str.replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+})();
+</script>
+</body>
+</html>
