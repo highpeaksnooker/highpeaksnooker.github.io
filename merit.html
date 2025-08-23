@@ -7,6 +7,10 @@
   <style>
     body { font-family: system-ui, Arial, sans-serif; margin:0; background:#f7f7f7; color:#111; }
     header { background:#222; color:#fff; padding:1rem 1.25rem; }
+    nav { background:#444; padding:.8rem; text-align:center; }
+    nav a { color:#fff; margin:0 12px; text-decoration:none; font-weight:bold; padding:0.8em 0.5em; display:inline-block; }
+    nav a:hover { text-decoration:underline; }
+    nav a.active { background:#22cc66; color:#0b1b0f; font-weight:bold; border-radius:4px; }
     main { max-width:1000px; margin:1rem auto; padding:1rem; }
     .table-wrap { overflow:auto; background:#fff; border:1px solid #e5e5e5; border-radius:.5rem; }
     table { width:100%; border-collapse:collapse; min-width:880px; }
@@ -16,6 +20,20 @@
 </head>
 <body>
 <header><h1>Player Merit Table</h1></header>
+
+<nav>
+  <a href="index.html">Home</a>
+  <a href="history.html">History</a>
+  <a href="fixtures.html">Fixtures</a>
+  <a href="results.html">Results</a>
+  <a href="players.html">Players</a>
+  <a href="venues.html">Venues</a>
+  <a href="rules.html">Rules</a>
+  <a href="league.html">League</a>
+  <a href="merit.html" class="active">Merit</a>
+  <a href="diag-players.html">Diag</a>
+</nav>
+
 <main>
   <div class="table-wrap">
     <table id="meritTable">
@@ -31,6 +49,7 @@
     </table>
   </div>
 </main>
+
 <script>
 (async function(){
   const [players, teams, matches] = await Promise.all([
