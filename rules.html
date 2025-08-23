@@ -5,14 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>High Peak & Marple Snooker League - Rules</title>
   <style>
-    body { font-family: Arial, sans-serif; margin:0; padding:0; }
+    body { font-family: Arial, sans-serif; margin:0; padding:0; background:#f7f7f7; color:#111; }
     header { background:#222; color:#fff; padding:1em; text-align:center; }
     nav { background:#444; padding:0.8em; text-align:center; }
-    nav a { color:#fff; margin:0 12px; text-decoration:none; font-weight:bold; padding:0.8em 0.5em; display:inline-block; }
-    nav a:hover { text-decoration:underline; }
+    nav a { color:#fff; margin:0 12px; text-decoration:none; font-weight:bold; padding:0.8em 0.5em; display:inline-block; border-radius:5px; }
+    nav a:hover { background:#555; }
     nav a.active { background:#22cc66; color:#0b1b0f; font-weight:bold; }
-    main { padding:2em; }
-    .card { background:#f6f7f8; border:1px solid #ddd; border-radius:8px; padding:1em; margin-bottom:1.5em; }
+    main { max-width:900px; margin:auto; padding:2em; }
+    .card { background:#fff; border:1px solid #ddd; border-radius:8px; padding:1em; margin-bottom:1.5em; }
     ol { padding-left:1.2em; }
     li { margin-bottom:.7em; }
     footer { background:#222; color:#fff; text-align:center; padding:1em; margin-top:2em; }
@@ -21,12 +21,13 @@
 <body>
   <header><h1>High Peak &amp; Marple Snooker League</h1></header>
 
-  <nav>
+  <nav id="mainNav">
     <a href="index.html">Home</a>
     <a href="history.html">History</a>
     <a href="fixtures.html">Fixtures</a>
     <a href="results.html">Results</a>
     <a href="players.html">Players</a>
+    <a href="league.html">League Table</a>
     <a href="venues.html">Venues</a>
     <a href="rules.html" class="active">Rules</a>
   </nav>
@@ -39,11 +40,21 @@
         <li>Standard WPBSA snooker rules apply unless stated here.</li>
         <li>Start time is 7:30pm unless mutually agreed in advance.</li>
         <li>Phones must be silent during play.</li>
-        <li>Captains submit results within 24 hours.</li>
+        <li>Captains must submit results within 24 hours of the match ending.</li>
       </ol>
     </div>
   </main>
 
   <footer>&copy; 2025 High Peak &amp; Marple Snooker League</footer>
+
+  <script>
+    // Automatically highlight current nav link
+    (function () {
+      const path = location.pathname.replace(/\/+$/, '') || '/index.html';
+      document.querySelectorAll('#mainNav a').forEach(a => {
+        if (a.getAttribute('href') === path) a.classList.add('active');
+      });
+    })();
+  </script>
 </body>
 </html>
