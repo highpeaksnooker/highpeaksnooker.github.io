@@ -20,31 +20,27 @@
       text-align: center;
     }
 
-    /* 🎯 ANIMATED ANNOUNCEMENT BANNER */
+    /* ✅ Animated banner */
     #announcement-banner {
       background-color: #fffbcc;
       border-bottom: 2px solid #f0c000;
-      color: #333;
-      font-weight: bold;
-      padding: 1rem;
-      white-space: nowrap;
       overflow: hidden;
       position: relative;
       height: 2.5rem;
+      display: none;
     }
 
     #announcement-banner span {
       position: absolute;
-      display: inline-block;
       white-space: nowrap;
-      animation: slideMessage 10s linear infinite;
+      font-weight: bold;
+      color: #333;
+      animation: scroll-left 12s linear infinite;
     }
 
-    @keyframes slideMessage {
-      0%   { left: 100%; opacity: 0; }
-      10%  { left: 50%; opacity: 1; }
-      90%  { left: -100%; opacity: 0; }
-      100% { left: -100%; opacity: 0; }
+    @keyframes scroll-left {
+      0%   { left: 100%; }
+      100% { left: -100%; }
     }
 
     nav {
@@ -92,10 +88,9 @@
     <h1>High Peak &amp; Marple Snooker League</h1>
   </header>
 
-  <!-- Animated announcement banner -->
+  <!-- ✅ Animated Announcement Banner -->
   <div id="announcement-banner"><span id="announcement-text"></span></div>
 
-  <!-- 🧭 NAVIGATION MENU — "League Table" now after "History" -->
   <nav>
     <a href="index.html" class="active">Home</a>
     <a href="history.html">History</a>
@@ -115,15 +110,15 @@
 
   <footer>&copy; 2025 High Peak &amp; Marple Snooker League</footer>
 
-  <!-- 🧠 Load announcement message from JSON and insert into animation span -->
+  <!-- ✅ Script to load announcement -->
   <script>
     fetch('data/announcement.json')
       .then(response => response.json())
       .then(data => {
         if (data.message && data.message.trim()) {
           const banner = document.getElementById('announcement-banner');
-          const span = document.getElementById('announcement-text');
-          span.textContent = data.message;
+          const text = document.getElementById('announcement-text');
+          text.textContent = data.message;
           banner.style.display = 'block';
         }
       })
