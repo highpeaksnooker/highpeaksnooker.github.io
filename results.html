@@ -5,34 +5,81 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>High Peak & Marple Snooker League - Results</title>
   <style>
-    body { font-family: Arial, sans-serif; margin:0; padding:0; }
+    body { font-family: Arial, sans-serif; margin:0; padding:0; background:#f7f7f7; color:#111; }
     header { background:#222; color:#fff; padding:1em; text-align:center; }
     nav { background:#444; padding:0.8em; text-align:center; }
     nav a { color:#fff; margin:0 12px; text-decoration:none; font-weight:bold; padding:0.8em 0.5em; display:inline-block; }
     nav a:hover { text-decoration:underline; }
     nav a.active { background:#22cc66; color:#0b1b0f; font-weight:bold; }
-    main { padding:2em; }
+    main { padding:2em; max-width:900px; margin:auto; }
+    .result { background:#fff; border:1px solid #ddd; border-radius:6px; padding:1em; margin-bottom:1em; }
+    .result h3 { margin:.2em 0 .5em; }
+    .result p { margin:.2em 0; font-size:0.95em; }
     footer { background:#222; color:#fff; text-align:center; padding:1em; margin-top:2em; }
   </style>
 </head>
 <body>
   <header><h1>High Peak &amp; Marple Snooker League</h1></header>
 
-  <nav>
+  <nav id="mainNav">
     <a href="index.html">Home</a>
     <a href="history.html">History</a>
     <a href="fixtures.html">Fixtures</a>
     <a href="results.html" class="active">Results</a>
     <a href="players.html">Players</a>
+    <a href="league.html">League Table</a>
     <a href="venues.html">Venues</a>
     <a href="rules.html">Rules</a>
   </nav>
 
   <main>
-    <h2>Results</h2>
-    <p>Match results will appear here.</p>
+    <h2>Recent Results</h2>
+    <div id="resultsContainer">Loading results...</div>
   </main>
 
   <footer>&copy; 2025 High Peak &amp; Marple Snooker League</footer>
+
+  <script>
+    // Auto-highlight current nav link
+    (function () {
+      const path = location.pathname.replace(/\/+$/, '') || '/index.html';
+      document.querySelectorAll('#mainNav a').forEach(function (a) {
+        if (a.getAttribute('href') === path) a.classList.add('active');
+      });
+    })();
+
+    // Load and display results
+    (async function() {
+      const [teams, matches] = await Promise.all([
+        fetch('data/teams.json').then(r => r.json()),
+        fetch('data/matches.json').then(r => r.json())
+      ]);
+
+      const teamMap = Object.fromEntries(teams.map(t => [t.id, t.name]));
+      const container = document.getElementById('resultsContainer');
+      container.innerHTML = '';
+
+      if (!matches.length) {
+        container.textContent = 'No match results yet.';
+        return;
+      }
+
+      const sorted = [...matches].sort((a,b) => new Date(b.date) - new Date(a.date));
+      for (const match of sorted) {
+        const home = teamMap[match.homeTeamId] || match.homeTeamId;
+        const away = teamMap[match.awayTeamId] || match.awayTeamId;
+        const date = new Date(match.date).toLocaleDateString('en-GB', { year: 'numeric', month: 'short', day: 'numeric' });
+
+        const el = document.createElement('div');
+        el.className = 'result';
+        el.innerHTML = `
+          <h3>${home} vs ${away}</h3>
+          <p><strong>Date:</strong> ${date}</p>
+          <p><strong>Frames:</strong> ${home} ${match.homeFrames} – ${match.awayFrames} ${away}</p>
+        `;
+        container.appendChild(el);
+      }
+    })();
+  </script>
 </body>
 </html>
