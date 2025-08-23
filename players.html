@@ -4,29 +4,19 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Players — High Peak & Marple Snooker League</title>
-
-  <!-- ✅ All styles live in the <head> -->
   <style>
     body { font-family: Arial, sans-serif; margin:0; padding:0; background:#f7f7f7; color:#111; }
-
-    /* Page header bar (nav background wrapper) */
-    .page-header { background:#222; color:#fff; }
-
-    /* Navigation bar */
+    header { background:#222; color:#fff; padding:0; }
     .site-nav { display:flex; flex-wrap:wrap; gap:.25rem; background:#444; padding:.6rem .8rem; justify-content:center; }
     .site-nav a { color:#fff; text-decoration:none; padding:.45rem .6rem; border-radius:.35rem; }
     .site-nav a:hover { background:#555; }
     .site-nav a.active { background:#22cc66; color:#0b1b0f; font-weight:700; }
 
-    /* Page main content */
     main { max-width:1100px; margin:1rem auto; padding:0 1rem 2rem; }
-
-    /* Tabs for teams */
     .tabs { display:flex; flex-wrap:wrap; gap:.5rem; margin:1rem 0; }
     .tab-btn { border:1px solid #ccc; background:#fff; padding:.5rem .75rem; border-radius:.5rem; cursor:pointer; }
     .tab-btn.active { background:#22cc66; color:#0b1b0f; border-color:transparent; font-weight:700; }
 
-    /* Players table */
     .table-wrap { overflow:auto; background:#fff; border:1px solid #e5e5e5; border-radius:.5rem; }
     table { width:100%; border-collapse:collapse; min-width:820px; }
     caption { text-align:left; padding:.75rem 1rem; font-weight:700; }
@@ -37,8 +27,8 @@
 </head>
 <body>
 
-  <!-- ✅ Nav bar goes right after <body> -->
-  <header class="page-header">
+  <!-- ✅ Header with Navigation -->
+  <header>
     <nav class="site-nav" id="mainNav">
       <a href="/index.html">Home</a>
       <a href="/history.html">History</a>
@@ -51,7 +41,6 @@
     </nav>
   </header>
 
-  <!-- ✅ Main page content -->
   <main>
     <h1>Players</h1>
     <p>Toggle a team to view its players. Handicaps and captains come from the official list; stats recalc from results on page load.</p>
@@ -79,16 +68,15 @@
     </div>
   </main>
 
-  <!-- ✅ Scripts always just before </body> -->
   <script>
-  // Highlight the current nav link automatically
-  (function () {
-    var path = location.pathname.replace(/\/+$/, '');
-    if (path === '' || path === '/') path = '/index.html';
-    document.querySelectorAll('#mainNav a').forEach(function (a) {
-      if (a.getAttribute('href') === path) a.classList.add('active');
-    });
-  })();
+    // Auto-highlight current page in nav
+    (function () {
+      var path = location.pathname.replace(/\/+$/, '');
+      if (path === '' || path === '/') path = '/index.html';
+      document.querySelectorAll('#mainNav a').forEach(function (a) {
+        if (a.getAttribute('href') === path) a.classList.add('active');
+      });
+    })();
   </script>
 
   <script>
@@ -110,7 +98,7 @@
       };
     }
 
-    // compute from matches.json
+    // compute stats from matches.json
     for (const m of matches) {
       if (!Array.isArray(m.frames)) continue;
       for (const fr of m.frames) {
@@ -142,7 +130,7 @@
       btn.click();
     })();
 
-    // Optional: sort by name
+    // Optional: sort by name toggle
     document.querySelector('th[data-sort="name"]').addEventListener('click', ()=>{
       const current = localStorage.getItem('playersSortAsc') === 'true';
       localStorage.setItem('playersSortAsc', (!current).toString());
