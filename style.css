@@ -22,6 +22,12 @@ header {
   font-weight: bold;
   text-align: center;
   border-bottom: 1px solid #eee3b2;
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
 }
 
 /* Navigation bar */
