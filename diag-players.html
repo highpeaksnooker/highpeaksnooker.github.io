@@ -4,39 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Players Diag — High Peak & Marple Snooker League</title>
-  <style>
-    body { font-family: system-ui, Arial, sans-serif; margin:0; background:#f7f7f7; color:#111; }
-    header { background:#222; color:#fff; padding:1rem 1.25rem; text-align:center; }
-    nav {
-      background: #444;
-      padding: 0.8em;
-      text-align: center;
-    }
-    nav a {
-      color: #fff;
-      margin: 0 12px;
-      text-decoration: none;
-      font-weight: bold;
-      padding: 0.8em 0.5em;
-      display: inline-block;
-    }
-    nav a:hover { text-decoration: underline; }
-    nav a.active {
-      background: #22cc66;
-      color: #0b1b0f;
-      font-weight: bold;
-      border-radius: 4px;
-    }
-    main {
-      max-width: 900px;
-      margin: 2rem auto;
-      padding: 1rem;
-      white-space: pre-wrap;
-      background: #fff;
-      border: 1px solid #ddd;
-      border-radius: 0.5rem;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <header><h1>Players Diagnostic</h1></header>
@@ -51,11 +19,12 @@
     <a href="venues.html">Venues</a>
     <a href="rules.html">Rules</a>
     <a href="merit.html">Merit</a>
-    <a href="league.html">League</a>
     <a href="diag-players.html" class="active">Diag</a>
   </nav>
 
   <main id="out">Loading…</main>
+
+  <footer>&copy; 2025 High Peak &amp; Marple Snooker League</footer>
 
   <script>
     (async () => {
