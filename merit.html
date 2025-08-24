@@ -5,13 +5,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Player Merit Table — High Peak & Marple Snooker League</title>
   <link rel="stylesheet" href="style.css" />
+  <style>
+    .team-colour-HADFIELD      { background-color: #f5e9e9; }
+    .team-colour-HAYFIELD1     { background-color: #e9f5ea; }
+    .team-colour-HAYFIELD2     { background-color: #e9ecf5; }
+    .team-colour-GLOSSOP1      { background-color: #f5f2e9; }
+    .team-colour-GLOSSOP2      { background-color: #f0e9f5; }
+    .team-colour-GLOSSOP3      { background-color: #e9f5f3; }
+    .team-colour-WOODFORD      { background-color: #f5e9f0; }
+    .team-colour-NEWMILLS      { background-color: #f0f5e9; }
+  </style>
 </head>
 <body>
   <header>
     <h1>High Peak &amp; Marple Snooker League</h1>
   </header>
 
-  <!-- ✅ Animated Announcement Banner -->
+  <!-- ✅ Announcement Banner -->
   <div id="announcement-banner"><span id="announcement-text"></span></div>
 
   <nav>
@@ -44,7 +54,7 @@
 
   <footer>&copy; 2025 High Peak &amp; Marple Snooker League</footer>
 
-  <!-- ✅ Announcement banner script -->
+  <!-- ✅ Announcement Script -->
   <script>
     fetch('data/announcement.json')
       .then(response => response.json())
@@ -61,7 +71,7 @@
       });
   </script>
 
-  <!-- ✅ Merit table logic -->
+  <!-- ✅ Merit Table Script -->
   <script>
     (async function(){
       const [players, teams, matches] = await Promise.all([
@@ -70,9 +80,11 @@
         fetch('data/matches.json').then(r=>r.json())
       ]);
 
-      const teamName = id => (teams.find(t => t.id === id) || {}).name || '';
+      const teamById = Object.fromEntries(teams.map(t => [t.id, t]));
       const playerMap = Object.fromEntries(players.map(p => [p.id, {
-        ...p, teamName: teamName(p.teamId), played: 0, wins: 0, losses: 0, breaks: [], highestBreak: 0
+        ...p,
+        team: teamById[p.teamId],
+        played: 0, wins: 0, losses: 0, breaks: [], highestBreak: 0
       }]));
 
       for (const match of matches) {
@@ -100,16 +112,18 @@
 
       const rows = Object.values(playerMap)
         .filter(p => p.played > 0)
-        .sort((a,b) => (b.wins - b.losses) - (a.wins - a.losses) || b.wins - a.wins || a.name.localeCompare(b.name));
+        .sort((a, b) => (b.wins - b.losses) - (a.wins - a.losses) || b.wins - a.wins || a.name.localeCompare(b.name));
 
       const body = document.getElementById('meritBody');
       body.innerHTML = '';
       rows.forEach((p, i) => {
+        const colourClass = p.team?.name?.toUpperCase().replace(/\s+/g, '').replace(/[^\w]/g, '');
         const tr = document.createElement('tr');
+        tr.className = `team-colour-${colourClass}`;
         tr.innerHTML = `
           <td>${i+1}</td>
           <td>${escapeHtml(p.name)}</td>
-          <td>${escapeHtml(p.teamName)}</td>
+          <td>${escapeHtml(p.team?.name || '')}</td>
           <td>${p.hcp}</td>
           <td>${p.played}</td>
           <td>${p.wins}</td>
@@ -121,7 +135,11 @@
         body.appendChild(tr);
       });
 
-      function escapeHtml(str=''){ return str.replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+      function escapeHtml(str = '') {
+        return str.replace(/[&<>"']/g, c => ({
+          '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+        }[c]));
+      }
     })();
   </script>
 </body>
