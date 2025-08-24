@@ -5,6 +5,39 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Players — High Peak & Marple Snooker League</title>
   <link rel="stylesheet" href="style.css" />
+  <style>
+    .tab-btn {
+      margin: 0.2em;
+      padding: 0.4em 0.8em;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .tab-btn.active {
+      box-shadow: 0 0 0 2px #333 inset;
+    }
+    tr.team-color-0 { background-color: #e6f4ff; }
+    tr.team-color-1 { background-color: #e6ffe6; }
+    tr.team-color-2 { background-color: #fff0e6; }
+    tr.team-color-3 { background-color: #f9e6ff; }
+    tr.team-color-4 { background-color: #fffde6; }
+    tr.team-color-5 { background-color: #f0f0ff; }
+    tr.team-color-6 { background-color: #e6fff2; }
+    tr.team-color-7 { background-color: #ffe6f0; }
+    tr.team-color-8 { background-color: #f6f6f6; }
+    tr.team-color-9 { background-color: #e0f7fa; }
+    .tab-btn.color-0 { background: #cce8ff; color: #000; }
+    .tab-btn.color-1 { background: #bfffbf; color: #000; }
+    .tab-btn.color-2 { background: #ffd4b3; color: #000; }
+    .tab-btn.color-3 { background: #ebccff; color: #000; }
+    .tab-btn.color-4 { background: #fff9b3; color: #000; }
+    .tab-btn.color-5 { background: #d6d6ff; color: #000; }
+    .tab-btn.color-6 { background: #b3ffe0; color: #000; }
+    .tab-btn.color-7 { background: #ffcce0; color: #000; }
+    .tab-btn.color-8 { background: #dddddd; color: #000; }
+    .tab-btn.color-9 { background: #b2ebf2; color: #000; }
+  </style>
 </head>
 <body>
 
@@ -12,10 +45,8 @@
     <h1>High Peak &amp; Marple Snooker League</h1>
   </header>
 
-  <!-- ✅ Announcement Banner -->
   <div id="announcement-banner"><span id="announcement-text"></span></div>
 
-  <!-- ✅ Main Navigation -->
   <nav>
     <a href="index.html">Home</a>
     <a href="history.html">History</a>
@@ -30,7 +61,7 @@
 
   <main>
     <h2>Players</h2>
-    <p>Toggle a team to view its players. Handicaps and captains come from the official list; stats recalc from results on page load.</p>
+    <p>Toggle a team to view its players. Team colour will match row highlight. Data recalculated from results automatically.</p>
 
     <div class="tabs" id="teamTabs"></div>
 
@@ -57,7 +88,6 @@
 
   <footer>&copy; 2025 High Peak &amp; Marple Snooker League</footer>
 
-  <!-- ✅ Banner Script -->
   <script>
     fetch('data/announcement.json')
       .then(response => response.json())
@@ -69,21 +99,24 @@
           banner.style.display = 'block';
         }
       })
-      .catch(err => {
-        console.warn('Announcement could not be loaded:', err);
-      });
+      .catch(err => console.warn('Banner error:', err));
   </script>
 
-  <!-- ✅ Players Script -->
   <script>
-  (async function(){
+  (async function() {
     const [teams, players, matches] = await Promise.all([
       fetch('data/teams.json').then(r=>r.json()),
       fetch('data/players.json').then(r=>r.json()),
       fetch('data/matches.json').then(r=>r.json())
     ]);
 
-    const teamById = Object.fromEntries(teams.map(t => [t.id, t]));
+    const teamById = {};
+    const teamColorClass = {};
+    teams.forEach((t, i) => {
+      teamById[t.id] = t;
+      teamColorClass[t.id] = i % 10;
+    });
+
     const stats = {};
     for (const p of players) {
       stats[p.id] = {
@@ -112,9 +145,10 @@
 
     const tabs = document.getElementById('teamTabs');
     const ALL = '__all__';
-    const mk = (id, label) => {
+
+    const mk = (id, label, colorClass) => {
       const b = document.createElement('button');
-      b.className = 'tab-btn';
+      b.className = 'tab-btn' + (colorClass !== null ? ` color-${colorClass}` : '');
       b.dataset.teamId = id;
       b.textContent = label;
       b.onclick = () => {
@@ -125,13 +159,15 @@
       };
       return b;
     };
-    tabs.appendChild(mk(ALL, 'All Teams'));
-    teams.forEach(t => tabs.appendChild(mk(t.id, t.name)));
-    (() => {
-      const last = localStorage.getItem('playersTeamFilter') || ALL;
-      const btn = [...tabs.children].find(b => b.dataset.teamId === last) || tabs.firstChild;
-      btn.click();
-    })();
+
+    tabs.appendChild(mk(ALL, 'All Teams', null));
+    teams.forEach((t, i) => {
+      tabs.appendChild(mk(t.id, t.name, teamColorClass[t.id]));
+    });
+
+    const last = localStorage.getItem('playersTeamFilter') || ALL;
+    const btn = [...tabs.children].find(b => b.dataset.teamId === last) || tabs.firstChild;
+    btn.click();
 
     document.querySelector('th[data-sort="name"]').addEventListener('click', () => {
       const current = localStorage.getItem('playersSortAsc') === 'true';
@@ -145,16 +181,15 @@
       tb.innerHTML = '';
       const rows = Object.values(stats)
         .filter(s => teamId === ALL || s.teamId === teamId)
-        .sort((a, b) => {
-          const z = (b.WinPct - a.WinPct) || (b.FW - a.FW) || a.name.localeCompare(b.name);
-          return z;
-        });
+        .sort((a, b) => (b.WinPct - a.WinPct) || (b.FW - a.FW) || a.name.localeCompare(b.name));
       if (asc) rows.sort((a, b) => a.name.localeCompare(b.name));
 
       for (const s of rows) {
         const tag = s.captain ? ' (C)' : '';
         const bump = s.change === 'up' ? ' C+' : (s.change === 'down' ? ' C-' : '');
         const tr = document.createElement('tr');
+        const teamClass = `team-color-${teamColorClass[s.teamId]}`;
+        tr.className = teamClass;
         tr.innerHTML = `
           <td>${escapeHtml(s.name + tag)}</td>
           <td>${escapeHtml(teamById[s.teamId]?.name || '')}</td>
