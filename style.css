@@ -13,7 +13,7 @@ header {
   text-align: center;
 }
 
-/* Announcement banner (scrolling animation) */
+/* Announcement banner (scrolling full text off-screen, looping) */
 #announcement-banner {
   overflow: hidden;
   background: #fffae6;
@@ -28,8 +28,9 @@ header {
 #announcement-text {
   display: inline-block;
   white-space: nowrap;
-  padding-left: 100%;
-  animation: scrollBanner 12s linear infinite;
+  animation: scrollBanner 20s linear infinite;
+  position: absolute;
+  left: 100%;
 }
 
 @keyframes scrollBanner {
@@ -39,6 +40,7 @@ header {
   100% {
     transform: translateX(-100%);
   }
+  
 }
 
 /* Navigation bar */
