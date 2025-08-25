@@ -20,9 +20,9 @@ header {
   font-weight: bold;
   border-bottom: 1px solid #eee3b2;
   overflow: hidden;
-  height: 2.2em; /* ensures enough vertical space for the message */
+  height: 2.2em;
   position: relative;
-  display: none; /* stays hidden until JS loads message */
+  display: none;
 }
 
 #announcement-inner {
@@ -37,7 +37,7 @@ header {
   padding-left: 100%;
   position: absolute;
   animation: scrollBanner 20s linear infinite;
-  line-height: 2.2em; /* vertically center text */
+  line-height: 2.2em;
 }
 
 @keyframes scrollBanner {
@@ -47,8 +47,6 @@ header {
   100% {
     transform: translateX(-100%);
   }
-}
-  
 }
 
 /* Navigation bar */
@@ -125,11 +123,19 @@ footer {
   margin-top: 2em;
 }
 
-/* Responsive tweaks */
+/* Responsive tweaks (Option 2: clean horizontal wrap) */
 @media (max-width: 600px) {
+  nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
   nav a {
-    display: block;
-    margin: 0.3em 0;
+    flex: 1 1 30%;
+    min-width: 100px;
+    text-align: center;
+    margin: 5px;
   }
 }
 
