@@ -13,21 +13,32 @@ header {
   text-align: center;
 }
 
-/* Announcement banner */
+/* Announcement banner (scrolling animation) */
 #announcement-banner {
-  display: none;
+  overflow: hidden;
   background: #fffae6;
   color: #665c00;
-  padding: 0.75em 1em;
+  padding: 0.75em 0;
   font-weight: bold;
-  text-align: center;
+  text-align: left;
   border-bottom: 1px solid #eee3b2;
-  animation: bounce 2s infinite;
+  position: relative;
 }
 
-@keyframes bounce {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-5px); }
+#announcement-text {
+  display: inline-block;
+  white-space: nowrap;
+  padding-left: 100%;
+  animation: scrollBanner 12s linear infinite;
+}
+
+@keyframes scrollBanner {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
 }
 
 /* Navigation bar */
