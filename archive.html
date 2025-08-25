@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>High Peak & Marple Snooker League - Archive</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>High Peak &amp; Marple Snooker League</h1>
+  </header>
+
+  <div id="announcement-banner">
+    <div id="announcement-inner">
+      <span id="announcement-text"></span>
+    </div>
+  </div>
+
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="history.html">History</a>
+    <a href="league.html">League Table</a>
+    <a href="fixtures.html">Fixtures</a>
+    <a href="results.html">Results</a>
+    <a href="players.html">Players</a>
+    <a href="venues.html">Venues</a>
+    <a href="rules.html">Rules</a>
+    <a href="merit.html">Merit</a>
+    <a href="archive.html" class="active">Archive</a>
+  </nav>
+
+  <main>
+    <h2>Archived Seasons</h2>
+    <p>Below are downloadable PDFs from previous seasons.</p>
+
+    <ul>
+      <li><a href="pdfs/2023-24_Final_Standings.pdf" target="_blank">2023–24 Final Standings</a></li>
+      <li><a href="pdfs/2023-24_Merit_Table.pdf" target="_blank">2023–24 Merit Table</a></li>
+      <li><a href="pdfs/2022-23_Final_Standings.pdf" target="_blank">2022–23 Final Standings</a></li>
+      <li><a href="pdfs/2022-23_Merit_Table.pdf" target="_blank">2022–23 Merit Table</a></li>
+      <!-- Add more as needed -->
+    </ul>
+  </main>
+
+  <footer>&copy; 2025 High Peak &amp; Marple Snooker League</footer>
+
+  <script>
+    fetch('data/announcement.json')
+      .then(response => response.json())
+      .then(data => {
+        if (data.message && data.message.trim()) {
+          const banner = document.getElementById('announcement-banner');
+          const text = document.getElementById('announcement-text');
+          text.textContent = data.message;
+          banner.style.display = 'block';
+        }
+      })
+      .catch(err => {
+        console.warn('Announcement could not be loaded:', err);
+      });
+  </script>
+</body>
+</html>
