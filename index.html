@@ -13,15 +13,15 @@
 
   <!-- Animated Announcement Banner -->
   <div id="announcement-banner">
-  <div id="announcement-inner">
-    <span id="announcement-text"></span>
+    <div id="announcement-inner">
+      <span id="announcement-text"></span>
+    </div>
   </div>
-</div>
 
   <nav>
     <a href="index.html" class="active">Home</a>
     <a href="history.html">History</a>
-    <a href="league.html">League Table</a>
+    <!-- League tab removed -->
     <a href="fixtures.html">Fixtures</a>
     <a href="results.html">Results</a>
     <a href="players.html">Players</a>
@@ -34,10 +34,31 @@
   <main>
     <h2>Welcome</h2>
     <p>This is the official site for the High Peak &amp; Marple Snooker League. Use the menu above to navigate.</p>
+
+    <h2>Current League Table</h2>
+    <div class="table-wrap">
+      <table id="leagueTable">
+        <thead>
+          <tr>
+            <th>#</th><th>Team</th>
+            <th title="Matches Played">P</th>
+            <th title="Wins">W</th>
+            <th title="Draws">D</th>
+            <th title="Losses">L</th>
+            <th title="Frames For">FF</th>
+            <th title="Frames Against">FA</th>
+            <th title="Frame Diff">FD</th>
+            <th title="Points">Pts</th>
+          </tr>
+        </thead>
+        <tbody id="leagueBody"></tbody>
+      </table>
+    </div>
   </main>
 
   <footer>&copy; 2025 High Peak &amp; Marple Snooker League</footer>
 
+  <!-- Announcement banner script -->
   <script>
     fetch('data/announcement.json')
       .then(response => response.json())
@@ -52,6 +73,66 @@
       .catch(err => {
         console.warn('Announcement could not be loaded:', err);
       });
+  </script>
+
+  <!-- League table script -->
+  <script>
+    (async function(){
+      const [teams, matches] = await Promise.all([
+        fetch('data/teams.json').then(r => r.json()),
+        fetch('data/matches.json').then(r => r.json())
+      ]);
+
+      const table = {};
+      for (const t of teams) table[t.id] = { teamId: t.id, name: t.name, P: 0, W: 0, D: 0, L: 0, FF: 0, FA: 0, FD: 0, Pts: 0 };
+
+      const award = (homeFrames, awayFrames, isAwayWin) => {
+        if (homeFrames > awayFrames) return [2, 0];
+        if (homeFrames < awayFrames) return [0, isAwayWin ? 3 : 2];
+        return [1, 1];
+      };
+
+      for (const m of matches) {
+        if (!table[m.homeTeamId] || !table[m.awayTeamId]) continue;
+        const h = table[m.homeTeamId], a = table[m.awayTeamId];
+        h.P++; a.P++;
+        h.FF += m.homeFrames; h.FA += m.awayFrames;
+        a.FF += m.awayFrames; a.FA += m.homeFrames;
+
+        const isAwayWin = m.awayFrames > m.homeFrames;
+
+        if (m.homeFrames > m.awayFrames) { h.W++; a.L++; }
+        else if (m.homeFrames < m.awayFrames) { a.W++; h.L++; }
+        else { h.D++; a.D++; }
+
+        const [hPts, aPts] = award(m.homeFrames, m.awayFrames, isAwayWin);
+        h.Pts += hPts; a.Pts += aPts;
+      }
+
+      for (const t of Object.values(table)) t.FD = t.FF - t.FA;
+
+      const rows = Object.values(table)
+        .sort((x, y) => y.Pts - x.Pts || y.FD - x.FD || y.FF - x.FF || x.name.localeCompare(y.name));
+
+      const body = document.getElementById('leagueBody');
+      body.innerHTML = '';
+      rows.forEach((t, i) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${i + 1}</td>
+          <td>${escapeHtml(t.name)}</td>
+          <td>${t.P}</td><td>${t.W}</td><td>${t.D}</td><td>${t.L}</td>
+          <td>${t.FF}</td><td>${t.FA}</td><td>${t.FD}</td><td>${t.Pts}</td>
+        `;
+        body.appendChild(tr);
+      });
+
+      function escapeHtml(str = '') {
+        return str.replace(/[&<>"']/g, c => ({
+          '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+        }[c]));
+      }
+    })();
   </script>
 </body>
 </html>
