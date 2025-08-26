@@ -6,22 +6,26 @@
   <title>High Peak & Marple Snooker League - Home</title>
   <link rel="stylesheet" href="style.css" />
   <style>
-    .logo {
+    header img.logo {
       display: block;
-      margin: 1.5em auto 1em auto;
+      margin: 0 auto;
       max-width: 250px;
       width: 80%;
       height: auto;
     }
+    header {
+      background-color: #000; /* Use a matching dark color */
+      text-align: center;
+      padding: 1em;
+    }
   </style>
 </head>
 <body>
-<header style="background-color: #000; text-align: center; padding: 1em;">
-  <img src="high-peak-marple-snooker-league-logo.PNG" alt="League Logo" style="max-width: 100%; height: auto;" />
-</header>
 
-  <!-- Logo Section -->
-  <img src="high-peak-marple-snooker-league-logo.PNG" alt="League Logo" class="logo" />
+  <!-- Header with logo only -->
+  <header>
+    <img src="high-peak-marple-snooker-league-logo.PNG" alt="League Logo" class="logo" />
+  </header>
 
   <!-- Animated Announcement Banner -->
   <div id="announcement-banner">
@@ -32,7 +36,6 @@
 
   <nav>
     <a href="index.html" class="active">Home</a>
-    <!-- League tab removed -->
     <a href="fixtures.html">Fixtures</a>
     <a href="results.html">Results</a>
     <a href="players.html">Players</a>
