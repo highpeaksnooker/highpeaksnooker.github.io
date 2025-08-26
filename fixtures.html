@@ -7,11 +7,14 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="announcement-banner">
-    ⚠️ Fixtures for this week have been updated – check your team schedule!
-  </div>
-
   <header><h1>High Peak &amp; Marple Snooker League</h1></header>
+
+  <!-- Animated Announcement Banner -->
+  <div id="announcement-banner">
+    <div id="announcement-inner">
+      <span id="announcement-text"></span>
+    </div>
+  </div>
 
   <nav>
     <a href="index.html">Home</a>
@@ -32,5 +35,21 @@
   </main>
 
   <footer>&copy; 2025 High Peak &amp; Marple Snooker League</footer>
+
+  <script>
+    fetch('data/announcement.json')
+      .then(response => response.json())
+      .then(data => {
+        if (data.message && data.message.trim()) {
+          const banner = document.getElementById('announcement-banner');
+          const text = document.getElementById('announcement-text');
+          text.textContent = data.message;
+          banner.style.display = 'block';
+        }
+      })
+      .catch(err => {
+        console.warn('Announcement could not be loaded:', err);
+      });
+  </script>
 </body>
 </html>
