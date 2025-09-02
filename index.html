@@ -9,159 +9,126 @@
   <link rel="icon" type="image/png" href="/logo.PNG" sizes="192x192">
   <link rel="apple-touch-icon" href="/logo.PNG">
 
-  <!-- Social share (WhatsApp/FB/Slack previews) -->
+  <!-- Social share -->
   <meta property="og:title" content="High Peak & Marple Snooker League">
   <meta property="og:description" content="Official site for fixtures, results, merit table, venues and league rules.">
   <meta property="og:image" content="https://highpeakandmarplesnookerleague.co.uk/logo.PNG">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://highpeakandmarplesnookerleague.co.uk/">
 
-  <!-- Preload crest for instant header render -->
-  <link rel="preload" as="image" href="/logo.PNG" imagesizes="(max-width:600px) 80vw, 240px">
+  <!-- Preload crest -->
+  <link rel="preload" as="image" href="/logo.PNG" imagesizes="(max-width:600px) 64px, 96px">
 
-  <!-- Site-wide stylesheet -->
   <link rel="stylesheet" href="style.css" />
 
-  <!-- Page-specific polish -->
   <style>
-    /* Layout containers */
+    /* ===== Layout helpers ===== */
     .container { max-width:1100px; margin:0 auto; padding:0 12px; }
 
-    /* Header + crest */
-    header {
-      background-color:#0c3d33;   /* blends with logo background */
-      text-align:center;
-      padding:.5rem 0;            /* tightened */
+    /* ===== Header (logo left, nav right) ===== */
+    header.site-header{
+      background:#0c3d33;              /* matches crest background */
+      color:#fff;
       box-shadow:0 2px 14px rgba(0,0,0,.35);
     }
-    header .logo {
-      display:block;
-      margin:0 auto;
-      max-width:240px;            /* adjust as desired */
-      width:80%;
-      height:auto;
-
-      /* Hide the square image background – show only a perfect circle */
-      -webkit-clip-path: circle(47% at 50% 50%);
-      clip-path: circle(47% at 50% 50%);
-
-      /* subtle lift */
-      filter: drop-shadow(0 0 12px rgba(0,0,0,.35));
-      transition:max-width .2s ease;
-    }
-    @media (max-width:480px){
-      header .logo { max-width:150px; }   /* smaller on small phones */
-    }
-    /* Optional: shrink crest after scrolling a bit */
-    header.shrink .logo { max-width:160px; }
-
-    /* Announcement banner — slim & sticky */
-    #announcement-banner{
-      position:sticky; top:0; z-index:50;
-      display:none;                 /* shown via JS */
-      background:#1f1f1f;
-      color:#fff;
-      font-weight:600;
-      font-size:.95rem;
-      padding:.5rem .75rem;
-      border-bottom:1px solid #333;
-    }
-    #announcement-inner{ letter-spacing:.2px; }
-
-    /* Nav bar */
-    nav{
-      background:#3a3a3a;
-      padding:.6rem 0;
-      border-top:2px solid #222;   /* subtle separation */
-      border-bottom:2px solid #222;
-    }
-    nav .container { display:flex; flex-wrap:wrap; gap:.4rem .6rem; justify-content:center; }
-    nav a{
-      display:inline-block;
-      color:#fff;
-      font-weight:700;
-      text-decoration:none;
-      padding:.55rem .9rem;
-      border-radius:.5rem;
-    }
-    nav a:hover{ background:#2c2c2c; }
-    nav a.active{ background:#19d36b; color:#0b1b0f; }
-
-    /* Main area */
-    main.container{
-      background:#f9f9f9;        /* gentle panel behind content */
-      padding:1.5rem 12px 2rem;
-      border-radius:6px;
-      margin-top:1rem;
+    .site-header .bar{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:12px; padding:.5rem 0;
     }
 
-    /* League table */
-    .table-wrap{ overflow-x:auto; -webkit-overflow-scrolling:touch; }
-    table#leagueTable{
-      width:100%;
-      border-collapse:collapse;
-      border:1px solid #ddd;
-      border-radius:6px;
-      overflow:hidden;
+    /* Brand (crest + short name) */
+    .brand{ display:flex; align-items:center; gap:.75rem; flex:0 0 auto; }
+    .brand .logo{
+      width:64px; height:64px; object-fit:cover;
+      /* show only the circular badge from the PNG */
+      -webkit-clip-path:circle(50% at 50% 50%); clip-path:circle(50% at 50% 50%);
+      filter: drop-shadow(0 0 8px rgba(0,0,0,.35));
     }
-    table#leagueTable thead th{
-      position:sticky; top:0; z-index:1;
-      background:#eaeaea;
-      font-weight:700;
-    }
-    table#leagueTable th, table#leagueTable td{
-      padding:.6rem .5rem;
-      border-bottom:1px solid #e6e6e6;
-      text-align:center;
+    .brand .name{
+      font-weight:800; line-height:1.1; letter-spacing:.2px;
       white-space:nowrap;
     }
-    table#leagueTable th:first-child,
-    table#leagueTable td:first-child{ text-align:right; }
-    table#leagueTable th:nth-child(2),
-    table#leagueTable td:nth-child(2){ text-align:left; white-space:normal; }
+    /* Hide long name on narrow phones to save space */
+    @media (max-width:520px){ .brand .name{ display:none; } }
+
+    /* Nav */
+    nav.primary{
+      flex:1 1 auto;
+      display:flex; flex-wrap:wrap; justify-content:flex-end; gap:.4rem .6rem;
+    }
+    nav.primary a{
+      color:#fff; text-decoration:none; font-weight:700;
+      padding:.45rem .75rem; border-radius:.5rem;
+    }
+    nav.primary a:hover{ background:rgba(255,255,255,.08); }
+    nav.primary a.active{ background:#19d36b; color:#0b1b0f; }
+
+    /* Stack nicely on small screens */
+    @media (max-width:760px){
+      .site-header .bar{ flex-wrap:wrap; justify-content:center; gap:.5rem; }
+      nav.primary{ justify-content:center; }
+    }
+
+    /* ===== Announcement (slim, sticky) ===== */
+    #announcement-banner{
+      position:sticky; top:0; z-index:50;
+      display:none;
+      background:#1f1f1f; color:#fff; font-weight:600; font-size:.95rem;
+      padding:.5rem .75rem; border-top:1px solid rgba(255,255,255,.06); border-bottom:1px solid #333;
+    }
+
+    /* ===== Main area ===== */
+    main.container{
+      background:#f9f9f9; padding:1.25rem 12px 2rem; border-radius:6px; margin-top:1rem;
+    }
+
+    /* ===== League table ===== */
+    .table-wrap{ overflow-x:auto; -webkit-overflow-scrolling:touch; }
+    table#leagueTable{ width:100%; border-collapse:collapse; border:1px solid #ddd; border-radius:6px; overflow:hidden; }
+    table#leagueTable thead th{ position:sticky; top:0; z-index:1; background:#eaeaea; font-weight:700; }
+    table#leagueTable th, table#leagueTable td{ padding:.6rem .5rem; border-bottom:1px solid #e6e6e6; text-align:center; white-space:nowrap; }
+    table#leagueTable th:first-child, table#leagueTable td:first-child{ text-align:right; }
+    table#leagueTable th:nth-child(2), table#leagueTable td:nth-child(2){ text-align:left; white-space:normal; }
     #leagueTable tbody tr:nth-child(even){ background:#fafafa; }
     #leagueTable tbody tr:hover{ background:#f1f7ff; }
 
-    /* Footer */
-    footer{
-      text-align:center;
-      padding:2rem 1rem;
-      color:#777;
-    }
+    /* ===== Footer ===== */
+    footer{ text-align:center; padding:2rem 1rem; color:#777; }
 
-    /* Accessibility focus */
-    nav a:focus{ outline:2px solid #19d36b; outline-offset:2px; }
+    /* Accessibility */
+    nav.primary a:focus{ outline:2px solid #19d36b; outline-offset:2px; }
   </style>
 </head>
 <body>
 
-  <!-- Header with crest -->
-  <header id="site-header">
-    <!-- cache-bust (?v=2) ensures phones load the latest image -->
-    <img src="logo.PNG?v=2" alt="High Peak & Marple Snooker League Logo" class="logo" loading="eager" />
+  <!-- Header: crest + nav in one compact bar -->
+  <header class="site-header" id="site-header">
+    <div class="container bar">
+      <div class="brand">
+        <img src="logo.PNG?v=2" alt="League crest" class="logo">
+        <div class="name">High Peak &amp; Marple</div>
+      </div>
+
+      <nav class="primary" aria-label="Primary">
+        <a href="index.html" class="active">Home</a>
+        <a href="fixtures.html">Fixtures</a>
+        <a href="results.html">Results</a>
+        <a href="players.html">Players</a>
+        <a href="venues.html">Venues</a>
+        <a href="rules.html">Rules</a>
+        <a href="merit.html">Merit</a>
+        <a href="history.html">Honours List</a>
+        <a href="archive.html">Archive</a>
+      </nav>
+    </div>
   </header>
 
-  <!-- Announcement banner (content comes from data/announcement.json) -->
+  <!-- Announcement -->
   <div id="announcement-banner">
     <div id="announcement-inner" class="container">
       <span id="announcement-text"></span>
     </div>
   </div>
-
-  <!-- Primary navigation -->
-  <nav aria-label="Primary">
-    <div class="container">
-      <a href="index.html" class="active">Home</a>
-      <a href="fixtures.html">Fixtures</a>
-      <a href="results.html">Results</a>
-      <a href="players.html">Players</a>
-      <a href="venues.html">Venues</a>
-      <a href="rules.html">Rules</a>
-      <a href="merit.html">Merit</a>
-      <a href="history.html">Honours List</a>
-      <a href="archive.html">Archive</a>
-    </div>
-  </nav>
 
   <main class="container">
     <h2>Welcome</h2>
@@ -190,7 +157,7 @@
 
   <footer>&copy; 2025 High Peak &amp; Marple Snooker League</footer>
 
-  <!-- Announcement banner script -->
+  <!-- Announcement script -->
   <script>
     fetch('data/announcement.json', { cache: 'no-store' })
       .then(r => r.json())
@@ -200,10 +167,10 @@
           document.getElementById('announcement-banner').style.display = 'block';
         }
       })
-      .catch(() => {/* silent fail */});
+      .catch(()=>{});
   </script>
 
-  <!-- League table script (with away win extra bonus) -->
+  <!-- League table script -->
   <script>
     (async function () {
       try {
@@ -217,10 +184,10 @@
           table[t.id] = { teamId:t.id, name:t.name, P:0, W:0, D:0, L:0, FF:0, FA:0, FD:0, Pts:0 };
         }
 
-        // 2 match points for winner; draw = 1/1; away-win bonus +1
-        const award = (homeFrames, awayFrames, isAwayWin) => {
-          if (homeFrames > awayFrames) return [2, 0];
-          if (homeFrames < awayFrames) return [0, isAwayWin ? 3 : 2];
+        // 2 for win; 1/1 draw; away win bonus +1
+        const award = (hf, af, awayWin) => {
+          if (hf > af) return [2, 0];
+          if (hf < af) return [0, awayWin ? 3 : 2];
           return [1, 1];
         };
 
@@ -236,48 +203,30 @@
           else if (m.homeFrames < m.awayFrames) { a.W++; h.L++; }
           else { h.D++; a.D++; }
 
-          const [hPts, aPts] = award(m.homeFrames, m.awayFrames, m.awayFrames > m.homeFrames);
-          h.Pts += hPts; a.Pts += aPts;
+          const [hp, ap] = award(m.homeFrames, m.awayFrames, m.awayFrames > m.homeFrames);
+          h.Pts += hp; a.Pts += ap;
         }
 
         for (const t of Object.values(table)) t.FD = t.FF - t.FA;
 
         const rows = Object.values(table)
-          .sort((x, y) => (y.Pts - x.Pts) || (y.FD - x.FD) || (y.FF - x.FF) || x.name.localeCompare(y.name));
+          .sort((x,y)=> (y.Pts-x.Pts) || (y.FD-x.FD) || (y.FF-x.FF) || x.name.localeCompare(y.name));
 
         const body = document.getElementById('leagueBody');
         body.innerHTML = '';
-        rows.forEach((t, i) => {
+        rows.forEach((t,i)=>{
           const tr = document.createElement('tr');
           tr.innerHTML = `
-            <td>${i + 1}</td>
-            <td>${escapeHtml(t.name)}</td>
+            <td>${i+1}</td>
+            <td>${esc(t.name)}</td>
             <td>${t.P}</td><td>${t.W}</td><td>${t.D}</td><td>${t.L}</td>
-            <td>${t.FF}</td><td>${t.FA}</td><td>${t.FD}</td><td>${t.Pts}</td>
-          `;
+            <td>${t.FF}</td><td>${t.FA}</td><td>${t.FD}</td><td>${t.Pts}</td>`;
           body.appendChild(tr);
         });
 
-        function escapeHtml(str='') {
-          return str.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-        }
-      } catch (e) {
-        console.warn('League table load failed:', e);
-      }
+        function esc(s=''){return s.replace(/[&<>"']/g,c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+      } catch(e) { console.warn('League table load failed:', e); }
     })();
   </script>
-
-  <!-- Optional: shrink crest on scroll -->
-  <script>
-    const H = document.getElementById('site-header');
-    let shrunk = false;
-    window.addEventListener('scroll', () => {
-      const y = window.scrollY || 0;
-      if (y > 24 && !shrunk) { H.classList.add('shrink'); shrunk = true; }
-      else if (y <= 24 && shrunk) { H.classList.remove('shrink'); shrunk = false; }
-    });
-  </script>
-
-  <noscript>This site uses a little JavaScript to load announcements and the live table.</noscript>
 </body>
 </html>
