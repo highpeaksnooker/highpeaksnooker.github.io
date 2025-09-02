@@ -22,104 +22,115 @@
   <link rel="stylesheet" href="style.css" />
 
   <style>
-    /* General layout */
+    /* ===== Utilities ===== */
     .container { max-width:1100px; margin:0 auto; padding:0 12px; }
 
-    /* Header background (behind nav) */
+    /* ===== Header background (nav sits on top, transparent) ===== */
     header {
-      background:#0c3d33; /* same as logo background */
-      text-align:center;
-      padding:.5rem 0 0;
+      background:#0c3d33;   /* same tone as your crest background */
+      padding:.4rem 0 .2rem;
+      box-shadow:0 2px 14px rgba(0,0,0,.35);
     }
 
-    /* Navigation bar */
+    /* ===== Perfectly centered crest nav =====
+       Grid keeps the logo exactly centered: [left links][logo][right links] */
     nav.primary {
-      display:flex;
+      display:grid;
+      grid-template-columns: 1fr auto 1fr; /* left | logo | right */
       align-items:center;
-      justify-content:center;
-      flex-wrap:wrap;
-      gap:1rem;
-      background:transparent; /* transparent so header bg shows through */
-      padding:.6rem 0;
-      position:relative;
+      gap:.75rem 1rem;
+      background:transparent;               /* let header green show */
+      padding:.5rem 0;
+      max-width:1100px;
+      margin:0 auto;
     }
 
-    nav.primary a {
-      color:#fff;
-      font-weight:700;
-      text-decoration:none;
-      padding:.45rem .75rem;
-      border-radius:.5rem;
+    .nav-left, .nav-right {
+      display:flex; gap:.6rem .75rem; flex-wrap:wrap; align-items:center;
+    }
+    .nav-left   { justify-content:flex-start; }
+    .nav-right  { justify-content:flex-end; }
+
+    nav.primary a{
+      color:#fff; text-decoration:none; font-weight:700;
+      padding:.45rem .75rem; border-radius:.5rem;
     }
     nav.primary a:hover { background:rgba(255,255,255,.08); }
-    nav.primary a.active { background:#19d36b; color:#0b1b0f; }
+    nav.primary a.active{ background:#19d36b; color:#0b1b0f; }
 
-    /* Logo in centre of nav */
-    nav.primary .logo {
-      height:80px; /* adjust size here */
-      width:auto;
-      margin:0 1rem;
+    /* Center logo cell */
+    .nav-logo{
+      display:flex; align-items:center; justify-content:center;
+      min-width:120px;
+    }
+    .nav-logo .logo{
+      height:96px; width:auto; display:block;
+      /* show circular badge only (hide square PNG bg) */
+      -webkit-clip-path:circle(50% at 50% 50%); clip-path:circle(50% at 50% 50%);
       filter: drop-shadow(0 0 10px rgba(0,0,0,.5));
     }
 
-    /* Announcement banner */
-    #announcement-banner {
+    /* ===== Announcement (sticky) ===== */
+    #announcement-banner{
       position:sticky; top:0; z-index:50;
-      display:none;
-      background:#1f1f1f; color:#fff;
-      font-weight:600; font-size:.95rem;
-      padding:.5rem .75rem;
-      border-top:1px solid rgba(255,255,255,.06);
-      border-bottom:1px solid #333;
+      display:none; background:#1f1f1f; color:#fff;
+      font-weight:600; font-size:.95rem; padding:.5rem .75rem;
+      border-top:1px solid rgba(255,255,255,.06); border-bottom:1px solid #333;
     }
 
-    /* Main area */
-    main.container {
-      background:#f9f9f9;
-      padding:1.25rem 12px 2rem;
-      border-radius:6px;
-      margin-top:1rem;
-    }
+    /* ===== Main ===== */
+    main.container{ background:#f9f9f9; padding:1.25rem 12px 2rem; border-radius:6px; margin-top:1rem; }
 
-    /* League table */
-    .table-wrap { overflow-x:auto; -webkit-overflow-scrolling:touch; }
-    table#leagueTable {
-      width:100%; border-collapse:collapse;
-      border:1px solid #ddd; border-radius:6px; overflow:hidden;
-    }
-    table#leagueTable thead th {
-      position:sticky; top:0; z-index:1;
-      background:#eaeaea; font-weight:700;
-    }
-    table#leagueTable th, table#leagueTable td {
-      padding:.6rem .5rem;
-      border-bottom:1px solid #e6e6e6;
-      text-align:center;
-      white-space:nowrap;
-    }
-    table#leagueTable th:first-child, table#leagueTable td:first-child { text-align:right; }
-    table#leagueTable th:nth-child(2), table#leagueTable td:nth-child(2) { text-align:left; white-space:normal; }
-    #leagueTable tbody tr:nth-child(even) { background:#fafafa; }
-    #leagueTable tbody tr:hover { background:#f1f7ff; }
+    /* ===== League table ===== */
+    .table-wrap{ overflow-x:auto; -webkit-overflow-scrolling:touch; }
+    table#leagueTable{ width:100%; border-collapse:collapse; border:1px solid #ddd; border-radius:6px; overflow:hidden; }
+    table#leagueTable thead th{ position:sticky; top:0; z-index:1; background:#eaeaea; font-weight:700; }
+    table#leagueTable th, table#leagueTable td{ padding:.6rem .5rem; border-bottom:1px solid #e6e6e6; text-align:center; white-space:nowrap; }
+    table#leagueTable th:first-child, table#leagueTable td:first-child{ text-align:right; }
+    table#leagueTable th:nth-child(2), table#leagueTable td:nth-child(2){ text-align:left; white-space:normal; }
+    #leagueTable tbody tr:nth-child(even){ background:#fafafa; }
+    #leagueTable tbody tr:hover{ background:#f1f7ff; }
 
-    footer { text-align:center; padding:2rem 1rem; color:#777; }
+    footer{ text-align:center; padding:2rem 1rem; color:#777; }
+
+    /* ===== Mobile behaviour ===== */
+    @media (max-width:820px){
+      .nav-logo .logo{ height:84px; }
+    }
+    @media (max-width:680px){
+      nav.primary{
+        grid-template-columns: 1fr;       /* stack */
+        gap:.4rem;
+      }
+      .nav-left, .nav-right{ justify-content:center; }
+      .nav-logo{ order:-1; }              /* logo on top */
+      .nav-logo .logo{ height:78px; }
+    }
   </style>
 </head>
 <body>
 
   <header>
-    <!-- Navigation with logo centred -->
+    <!-- Navigation with logo perfectly centered -->
     <nav class="primary" aria-label="Primary">
-      <a href="index.html" class="active">Home</a>
-      <a href="fixtures.html">Fixtures</a>
-      <a href="results.html">Results</a>
-      <img src="logo.PNG" alt="League Logo" class="logo">
-      <a href="players.html">Players</a>
-      <a href="venues.html">Venues</a>
-      <a href="rules.html">Rules</a>
-      <a href="merit.html">Merit</a>
-      <a href="history.html">Honours List</a>
-      <a href="archive.html">Archive</a>
+      <div class="nav-left">
+        <a href="index.html" class="active">Home</a>
+        <a href="fixtures.html">Fixtures</a>
+        <a href="results.html">Results</a>
+      </div>
+
+      <div class="nav-logo">
+        <img src="logo.PNG?v=2" alt="League Logo" class="logo">
+      </div>
+
+      <div class="nav-right">
+        <a href="players.html">Players</a>
+        <a href="venues.html">Venues</a>
+        <a href="rules.html">Rules</a>
+        <a href="merit.html">Merit</a>
+        <a href="history.html">Honours List</a>
+        <a href="archive.html">Archive</a>
+      </div>
     </nav>
   </header>
 
