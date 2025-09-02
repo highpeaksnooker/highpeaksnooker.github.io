@@ -5,102 +5,144 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>High Peak & Marple Snooker League - Home</title>
 
-  <!-- Your site-wide stylesheet -->
+  <!-- Favicon / Touch icon (uses your crest file) -->
+  <link rel="icon" type="image/png" href="/logo.PNG" sizes="192x192">
+  <link rel="apple-touch-icon" href="/logo.PNG">
+
+  <!-- Social share (WhatsApp/FB/Slack previews) -->
+  <meta property="og:title" content="High Peak & Marple Snooker League">
+  <meta property="og:description" content="Official site for fixtures, results, merit table, venues and league rules.">
+  <meta property="og:image" content="https://highpeakan dmarplesnookerleague.co.uk/logo.PNG">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://highpeakan dmarplesnookerleague.co.uk/">
+
+  <!-- Preload crest for instant header render -->
+  <link rel="preload" as="image" href="/logo.PNG" imagesizes="(max-width:600px) 80vw, 240px">
+
+  <!-- Site-wide stylesheet -->
   <link rel="stylesheet" href="style.css" />
 
-  <!-- Page-specific tweaks (safe to keep inline) -->
+  <!-- Page-specific polish -->
   <style>
-    /* Header + logo */
+    /* Layout containers */
+    .container { max-width:1100px; margin:0 auto; padding:0 12px; }
+
+    /* Header + crest */
     header {
-      background-color: #0b3d2e;  /* dark green sampled from your logo */
-      text-align: center;
-      padding: 1rem 0 0.5rem;
+      background-color:#0b3d2e; /* matches logo background */
+      text-align:center;
+      padding:.75rem 0 .5rem;    /* slightly tighter */
+      box-shadow:0 2px 14px rgba(0,0,0,.35);
     }
     header .logo {
-      display: block;
-      margin: 0 auto;
-      max-width: 240px;  /* adjust size as needed */
-      width: 80%;
-      height: auto;
-      box-shadow: 0 0 12px rgba(0,0,0,0.4); /* optional polish */
+      display:block;
+      margin:0 auto;
+      max-width:240px;           /* adjust as desired */
+      width:80%;
+      height:auto;
+      box-shadow:0 0 12px rgba(0,0,0,.4); /* subtle lift */
+      transition:max-width .2s ease;
     }
+    @media (max-width:480px){
+      header .logo { max-width:180px; }
+    }
+    /* Optional: shrink crest after scrolling a bit */
+    header.shrink .logo { max-width:160px; }
 
-    /* Announcement banner (fixed content; not dismissible) */
-    #announcement-banner {
-      display: none;         /* shown by JS if message exists */
-      background: #222;
-      color: #fff;
-      font-weight: 600;
-      padding: .65rem 1rem;
-      border-top: 1px solid #333;
-      border-bottom: 1px solid #333;
+    /* Announcement banner — slim & sticky */
+    #announcement-banner{
+      position:sticky; top:0; z-index:50;
+      display:none;                 /* shown via JS */
+      background:#1f1f1f;
+      color:#fff;
+      font-weight:600;
+      font-size:.95rem;
+      padding:.5rem .75rem;
+      border-bottom:1px solid #333;
     }
-    #announcement-inner { 
-      max-width: 1100px; 
-      margin: 0 auto; 
-      text-align: center; 
-      letter-spacing: .2px;
-    }
+    #announcement-inner{ letter-spacing:.2px; }
 
-    /* Simple table wrapper so it doesn’t overflow on phones */
-    .table-wrap { 
-      overflow-x: auto; 
-      -webkit-overflow-scrolling: touch; 
+    /* Nav bar */
+    nav{
+      background:#3a3a3a;
+      padding:.6rem 0;
     }
-    table#leagueTable {
-      width: 100%;
-      border-collapse: collapse;
+    nav .container { display:flex; flex-wrap:wrap; gap:.4rem .6rem; justify-content:center; }
+    nav a{
+      display:inline-block;
+      color:#fff;
+      font-weight:700;
+      text-decoration:none;
+      padding:.55rem .9rem;
+      border-radius:.5rem;
     }
-    table#leagueTable th, table#leagueTable td {
-      padding: .6rem .5rem;
-      border-bottom: 1px solid #ddd;
-      text-align: center;
-      white-space: nowrap;
+    nav a:hover{ background:#2c2c2c; }
+    nav a.active{ background:#19d36b; color:#0b1b0f; }
+
+    /* Main area */
+    main.container{ padding:1rem 0 2rem; }
+
+    /* League table */
+    .table-wrap{ overflow-x:auto; -webkit-overflow-scrolling:touch; }
+    table#leagueTable{ width:100%; border-collapse:collapse; }
+    table#leagueTable thead th{
+      position:sticky; top:0; z-index:1;
+      background:#f7f7f7;
+    }
+    table#leagueTable th, table#leagueTable td{
+      padding:.6rem .5rem;
+      border-bottom:1px solid #e6e6e6;
+      text-align:center;
+      white-space:nowrap;
     }
     table#leagueTable th:first-child,
-    table#leagueTable td:first-child { text-align: right; }
+    table#leagueTable td:first-child{ text-align:right; }
     table#leagueTable th:nth-child(2),
-    table#leagueTable td:nth-child(2) {
-      text-align: left; 
-      white-space: normal;
+    table#leagueTable td:nth-child(2){ text-align:left; white-space:normal; }
+    #leagueTable tbody tr:nth-child(even){ background:#fafafa; }
+    #leagueTable tbody tr:hover{ background:#f1f7ff; }
+
+    /* Footer */
+    footer{
+      text-align:center;
+      padding:2rem 1rem;
+      color:#777;
     }
 
-    footer {
-      text-align: center;
-      padding: 2rem 1rem;
-      color: #777;
-    }
+    /* Accessibility focus */
+    nav a:focus{ outline:2px solid #19d36b; outline-offset:2px; }
   </style>
 </head>
 <body>
 
-  <!-- Header with logo only -->
-  <header>
-    <!-- IMPORTANT: case-sensitive path. Your file is logo.PNG -->
+  <!-- Header with crest -->
+  <header id="site-header">
     <img src="logo.PNG" alt="High Peak & Marple Snooker League Logo" class="logo" loading="eager" />
   </header>
 
-  <!-- Announcement Banner (content comes from data/announcement.json) -->
+  <!-- Announcement banner (content comes from data/announcement.json) -->
   <div id="announcement-banner">
-    <div id="announcement-inner">
+    <div id="announcement-inner" class="container">
       <span id="announcement-text"></span>
     </div>
   </div>
 
-  <!-- Main nav (links already exist in your repo) -->
-  <nav>
-    <a href="index.html" class="active">Home</a>
-    <a href="fixtures.html">Fixtures</a>
-    <a href="results.html">Results</a>
-    <a href="players.html">Players</a>
-    <a href="venues.html">Venues</a>
-    <a href="rules.html">Rules</a>
-    <a href="merit.html">Merit</a>
-    <a href="history.html">Honours List</a>
-    <a href="archive.html">Archive</a>
+  <!-- Primary navigation -->
+  <nav aria-label="Primary">
+    <div class="container">
+      <a href="index.html" class="active">Home</a>
+      <a href="fixtures.html">Fixtures</a>
+      <a href="results.html">Results</a>
+      <a href="players.html">Players</a>
+      <a href="venues.html">Venues</a>
+      <a href="rules.html">Rules</a>
+      <a href="merit.html">Merit</a>
+      <a href="history.html">Honours List</a>
+      <a href="archive.html">Archive</a>
+    </div>
   </nav>
 
-  <main>
+  <main class="container">
     <h2>Welcome</h2>
     <p>This is the official site for the High Peak &amp; Marple Snooker League. Use the menu above to navigate.</p>
 
@@ -127,7 +169,7 @@
 
   <footer>&copy; 2025 High Peak &amp; Marple Snooker League</footer>
 
-  <!-- Announcement banner script (fixed; not dismissible) -->
+  <!-- Announcement banner script -->
   <script>
     fetch('data/announcement.json', { cache: 'no-store' })
       .then(r => r.json())
@@ -137,10 +179,10 @@
           document.getElementById('announcement-banner').style.display = 'block';
         }
       })
-      .catch(() => {/* fail silent */});
+      .catch(() => {/* silent fail */});
   </script>
 
-  <!-- League table script (includes away win extra bonus) -->
+  <!-- League table script (with away win extra bonus) -->
   <script>
     (async function () {
       try {
@@ -149,17 +191,16 @@
           fetch('data/matches.json', { cache: 'no-store' }).then(r => r.json())
         ]);
 
-        // Seed table
         const table = {};
         for (const t of teams) {
           table[t.id] = { teamId:t.id, name:t.name, P:0, W:0, D:0, L:0, FF:0, FA:0, FD:0, Pts:0 };
         }
 
-        // Points: 2 bonus to match winner + frames for; away win rule = extra +1
+        // 2 match points for winner; draw = 1/1; away-win bonus +1
         const award = (homeFrames, awayFrames, isAwayWin) => {
           if (homeFrames > awayFrames) return [2, 0];
-          if (homeFrames < awayFrames) return [0, isAwayWin ? 3 : 2]; // away win bonus
-          return [1, 1]; // draw
+          if (homeFrames < awayFrames) return [0, isAwayWin ? 3 : 2];
+          return [1, 1];
         };
 
         for (const m of matches) {
@@ -199,10 +240,21 @@
         function escapeHtml(str='') {
           return str.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
         }
-      } catch(e) {
+      } catch (e) {
         console.warn('League table load failed:', e);
       }
     })();
+  </script>
+
+  <!-- Optional: shrink crest on scroll -->
+  <script>
+    const H = document.getElementById('site-header');
+    let shrunk = false;
+    window.addEventListener('scroll', () => {
+      const y = window.scrollY || 0;
+      if (y > 24 && !shrunk) { H.classList.add('shrink'); shrunk = true; }
+      else if (y <= 24 && shrunk) { H.classList.remove('shrink'); shrunk = false; }
+    });
   </script>
 
   <noscript>This site uses a little JavaScript to load announcements and the live table.</noscript>
