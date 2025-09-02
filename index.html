@@ -5,16 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>High Peak & Marple Snooker League - Home</title>
 
-  <!-- Favicon / Touch icon (uses your crest file) -->
+  <!-- Favicon / Touch icon -->
   <link rel="icon" type="image/png" href="/logo.PNG" sizes="192x192">
   <link rel="apple-touch-icon" href="/logo.PNG">
 
   <!-- Social share (WhatsApp/FB/Slack previews) -->
   <meta property="og:title" content="High Peak & Marple Snooker League">
   <meta property="og:description" content="Official site for fixtures, results, merit table, venues and league rules.">
-  <meta property="og:image" content="https://highpeakan dmarplesnookerleague.co.uk/logo.PNG">
+  <meta property="og:image" content="https://highpeakandmarplesnookerleague.co.uk/logo.PNG">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://highpeakan dmarplesnookerleague.co.uk/">
+  <meta property="og:url" content="https://highpeakandmarplesnookerleague.co.uk/">
 
   <!-- Preload crest for instant header render -->
   <link rel="preload" as="image" href="/logo.PNG" imagesizes="(max-width:600px) 80vw, 240px">
@@ -29,22 +29,22 @@
 
     /* Header + crest */
     header {
-      background-color:#0b3d2e; /* matches logo background */
+      background-color:#0b3d2e; /* blends with logo background */
       text-align:center;
-      padding:.75rem 0 .5rem;    /* slightly tighter */
+      padding:.5rem 0;          /* tightened */
       box-shadow:0 2px 14px rgba(0,0,0,.35);
     }
     header .logo {
       display:block;
       margin:0 auto;
-      max-width:240px;           /* adjust as desired */
+      max-width:240px;          /* adjust as desired */
       width:80%;
       height:auto;
       box-shadow:0 0 12px rgba(0,0,0,.4); /* subtle lift */
       transition:max-width .2s ease;
     }
     @media (max-width:480px){
-      header .logo { max-width:180px; }
+      header .logo { max-width:150px; }   /* smaller on small phones */
     }
     /* Optional: shrink crest after scrolling a bit */
     header.shrink .logo { max-width:160px; }
@@ -66,6 +66,8 @@
     nav{
       background:#3a3a3a;
       padding:.6rem 0;
+      border-top:2px solid #222;   /* subtle separation */
+      border-bottom:2px solid #222;
     }
     nav .container { display:flex; flex-wrap:wrap; gap:.4rem .6rem; justify-content:center; }
     nav a{
@@ -80,14 +82,26 @@
     nav a.active{ background:#19d36b; color:#0b1b0f; }
 
     /* Main area */
-    main.container{ padding:1rem 0 2rem; }
+    main.container{
+      background:#f9f9f9;        /* gentle panel behind content */
+      padding:1.5rem 12px 2rem;
+      border-radius:6px;
+      margin-top:1rem;
+    }
 
     /* League table */
     .table-wrap{ overflow-x:auto; -webkit-overflow-scrolling:touch; }
-    table#leagueTable{ width:100%; border-collapse:collapse; }
+    table#leagueTable{
+      width:100%;
+      border-collapse:collapse;
+      border:1px solid #ddd;
+      border-radius:6px;
+      overflow:hidden;
+    }
     table#leagueTable thead th{
       position:sticky; top:0; z-index:1;
-      background:#f7f7f7;
+      background:#eaeaea;
+      font-weight:700;
     }
     table#leagueTable th, table#leagueTable td{
       padding:.6rem .5rem;
