@@ -4,19 +4,70 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>High Peak & Marple Snooker League - Home</title>
+
+  <!-- Your site-wide stylesheet -->
   <link rel="stylesheet" href="style.css" />
+
+  <!-- Page-specific tweaks (safe to keep inline) -->
   <style>
-    header img.logo {
-      display: block;
-      margin: 0 auto;
-      max-width: 250px;
-      width: 80%;
-      height: auto;
-    }
+    /* Header + logo */
     header {
-      background-color: #000; /* Use a matching dark color */
-      text-align: center;
-      padding: 1em;
+      background:#000;
+      text-align:center;
+      padding:1rem 0 0.5rem;
+    }
+    header .logo {
+      display:block;
+      margin:0 auto;
+      max-width:240px;      /* Adjust to taste */
+      width:80%;
+      height:auto;
+    }
+
+    /* Announcement banner (fixed content; not dismissible) */
+    #announcement-banner {
+      display:none;         /* shown by JS if message exists */
+      background:#222;
+      color:#fff;
+      font-weight:600;
+      padding:.65rem 1rem;
+      border-top:1px solid #333;
+      border-bottom:1px solid #333;
+    }
+    #announcement-inner { 
+      max-width:1100px; 
+      margin:0 auto; 
+      text-align:center; 
+      letter-spacing:.2px;
+    }
+
+    /* Simple table wrapper so it doesn’t overflow on phones */
+    .table-wrap { 
+      overflow-x:auto; 
+      -webkit-overflow-scrolling:touch; 
+    }
+    table#leagueTable {
+      width:100%;
+      border-collapse:collapse;
+    }
+    table#leagueTable th, table#leagueTable td {
+      padding:.6rem .5rem;
+      border-bottom:1px solid #ddd;
+      text-align:center;
+      white-space:nowrap;
+    }
+    table#leagueTable th:first-child,
+    table#leagueTable td:first-child { text-align:right; }
+    table#leagueTable th:nth-child(2),
+    table#leagueTable td:nth-child(2) {
+      text-align:left; 
+      white-space:normal;
+    }
+
+    footer {
+      text-align:center;
+      padding:2rem 1rem;
+      color:#777;
     }
   </style>
 </head>
@@ -24,16 +75,18 @@
 
   <!-- Header with logo only -->
   <header>
-    <img src="high-peak-marple-snooker-league-logo.PNG" alt="League Logo" class="logo" />
+    <!-- IMPORTANT: case-sensitive path. Your file is logo.PNG -->
+    <img src="logo.PNG" alt="High Peak & Marple Snooker League Logo" class="logo" loading="eager" />
   </header>
 
-  <!-- Animated Announcement Banner -->
+  <!-- Announcement Banner (content comes from data/announcement.json) -->
   <div id="announcement-banner">
     <div id="announcement-inner">
       <span id="announcement-text"></span>
     </div>
   </div>
 
+  <!-- Main nav (links already exist in your repo) -->
   <nav>
     <a href="index.html" class="active">Home</a>
     <a href="fixtures.html">Fixtures</a>
@@ -52,7 +105,7 @@
 
     <h2>Current League Table</h2>
     <div class="table-wrap">
-      <table id="leagueTable">
+      <table id="leagueTable" aria-describedby="League table showing standings">
         <thead>
           <tr>
             <th>#</th><th>Team</th>
@@ -62,7 +115,7 @@
             <th title="Losses">L</th>
             <th title="Frames For">FF</th>
             <th title="Frames Against">FA</th>
-            <th title="Frame Diff">FD</th>
+            <th title="Frame Difference">FD</th>
             <th title="Points">Pts</th>
           </tr>
         </thead>
@@ -73,81 +126,84 @@
 
   <footer>&copy; 2025 High Peak &amp; Marple Snooker League</footer>
 
-  <!-- Announcement banner script -->
+  <!-- Announcement banner script (fixed; not dismissible) -->
   <script>
-    fetch('data/announcement.json')
-      .then(response => response.json())
+    fetch('data/announcement.json', { cache: 'no-store' })
+      .then(r => r.json())
       .then(data => {
-        if (data.message && data.message.trim()) {
-          const banner = document.getElementById('announcement-banner');
-          const text = document.getElementById('announcement-text');
-          text.textContent = data.message;
-          banner.style.display = 'block';
+        if (data && data.message && data.message.trim()) {
+          document.getElementById('announcement-text').textContent = data.message.trim();
+          document.getElementById('announcement-banner').style.display = 'block';
         }
       })
-      .catch(err => {
-        console.warn('Announcement could not be loaded:', err);
-      });
+      .catch(() => {/* fail silent */});
   </script>
 
-  <!-- League table script -->
+  <!-- League table script (includes away win extra bonus) -->
   <script>
-    (async function(){
-      const [teams, matches] = await Promise.all([
-        fetch('data/teams.json').then(r => r.json()),
-        fetch('data/matches.json').then(r => r.json())
-      ]);
+    (async function () {
+      try {
+        const [teams, matches] = await Promise.all([
+          fetch('data/teams.json',   { cache: 'no-store' }).then(r => r.json()),
+          fetch('data/matches.json', { cache: 'no-store' }).then(r => r.json())
+        ]);
 
-      const table = {};
-      for (const t of teams) table[t.id] = { teamId: t.id, name: t.name, P: 0, W: 0, D: 0, L: 0, FF: 0, FA: 0, FD: 0, Pts: 0 };
+        // Seed table
+        const table = {};
+        for (const t of teams) {
+          table[t.id] = { teamId:t.id, name:t.name, P:0, W:0, D:0, L:0, FF:0, FA:0, FD:0, Pts:0 };
+        }
 
-      const award = (homeFrames, awayFrames, isAwayWin) => {
-        if (homeFrames > awayFrames) return [2, 0];
-        if (homeFrames < awayFrames) return [0, isAwayWin ? 3 : 2];
-        return [1, 1];
-      };
+        // Points: 2 bonus to match winner + frames for; away win rule = extra +1
+        const award = (homeFrames, awayFrames, isAwayWin) => {
+          if (homeFrames > awayFrames) return [2, 0];
+          if (homeFrames < awayFrames) return [0, isAwayWin ? 3 : 2]; // away win bonus
+          return [1, 1]; // draw
+        };
 
-      for (const m of matches) {
-        if (!table[m.homeTeamId] || !table[m.awayTeamId]) continue;
-        const h = table[m.homeTeamId], a = table[m.awayTeamId];
-        h.P++; a.P++;
-        h.FF += m.homeFrames; h.FA += m.awayFrames;
-        a.FF += m.awayFrames; a.FA += m.homeFrames;
+        for (const m of matches) {
+          const h = table[m.homeTeamId], a = table[m.awayTeamId];
+          if (!h || !a) continue;
 
-        const isAwayWin = m.awayFrames > m.homeFrames;
+          h.P++; a.P++;
+          h.FF += m.homeFrames; h.FA += m.awayFrames;
+          a.FF += m.awayFrames; a.FA += m.homeFrames;
 
-        if (m.homeFrames > m.awayFrames) { h.W++; a.L++; }
-        else if (m.homeFrames < m.awayFrames) { a.W++; h.L++; }
-        else { h.D++; a.D++; }
+          if (m.homeFrames > m.awayFrames) { h.W++; a.L++; }
+          else if (m.homeFrames < m.awayFrames) { a.W++; h.L++; }
+          else { h.D++; a.D++; }
 
-        const [hPts, aPts] = award(m.homeFrames, m.awayFrames, isAwayWin);
-        h.Pts += hPts; a.Pts += aPts;
-      }
+          const [hPts, aPts] = award(m.homeFrames, m.awayFrames, m.awayFrames > m.homeFrames);
+          h.Pts += hPts; a.Pts += aPts;
+        }
 
-      for (const t of Object.values(table)) t.FD = t.FF - t.FA;
+        for (const t of Object.values(table)) t.FD = t.FF - t.FA;
 
-      const rows = Object.values(table)
-        .sort((x, y) => y.Pts - x.Pts || y.FD - x.FD || y.FF - x.FF || x.name.localeCompare(y.name));
+        const rows = Object.values(table)
+          .sort((x, y) => (y.Pts - x.Pts) || (y.FD - x.FD) || (y.FF - x.FF) || x.name.localeCompare(y.name));
 
-      const body = document.getElementById('leagueBody');
-      body.innerHTML = '';
-      rows.forEach((t, i) => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>${i + 1}</td>
-          <td>${escapeHtml(t.name)}</td>
-          <td>${t.P}</td><td>${t.W}</td><td>${t.D}</td><td>${t.L}</td>
-          <td>${t.FF}</td><td>${t.FA}</td><td>${t.FD}</td><td>${t.Pts}</td>
-        `;
-        body.appendChild(tr);
-      });
+        const body = document.getElementById('leagueBody');
+        body.innerHTML = '';
+        rows.forEach((t, i) => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${i + 1}</td>
+            <td>${escapeHtml(t.name)}</td>
+            <td>${t.P}</td><td>${t.W}</td><td>${t.D}</td><td>${t.L}</td>
+            <td>${t.FF}</td><td>${t.FA}</td><td>${t.FD}</td><td>${t.Pts}</td>
+          `;
+          body.appendChild(tr);
+        });
 
-      function escapeHtml(str = '') {
-        return str.replace(/[&<>"']/g, c => ({
-          '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
-        }[c]));
+        function escapeHtml(str='') {
+          return str.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+        }
+      } catch(e) {
+        console.warn('League table load failed:', e);
       }
     })();
   </script>
+
+  <noscript>This site uses a little JavaScript to load announcements and the live table.</noscript>
 </body>
 </html>
