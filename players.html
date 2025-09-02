@@ -14,9 +14,8 @@
       font-weight: bold;
       cursor: pointer;
     }
-    .tab-btn.active {
-      box-shadow: 0 0 0 2px #333 inset;
-    }
+    .tab-btn.active { box-shadow: 0 0 0 2px #333 inset; }
+
     tr.team-color-0 { background-color: #e6f4ff; }
     tr.team-color-1 { background-color: #e6ffe6; }
     tr.team-color-2 { background-color: #fff0e6; }
@@ -27,6 +26,7 @@
     tr.team-color-7 { background-color: #ffe6f0; }
     tr.team-color-8 { background-color: #f6f6f6; }
     tr.team-color-9 { background-color: #e0f7fa; }
+
     .tab-btn.color-0 { background: #cce8ff; color: #000; }
     .tab-btn.color-1 { background: #bfffbf; color: #000; }
     .tab-btn.color-2 { background: #ffd4b3; color: #000; }
@@ -37,6 +37,12 @@
     .tab-btn.color-7 { background: #ffcce0; color: #000; }
     .tab-btn.color-8 { background: #dddddd; color: #000; }
     .tab-btn.color-9 { background: #b2ebf2; color: #000; }
+
+    .table-wrap { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+    table { width:100%; border-collapse:collapse; }
+    thead th { background:#eaeaea; position:sticky; top:0; z-index:1; }
+    th, td { padding:.55rem .5rem; border-bottom:1px solid #e6e6e6; text-align:center; white-space:nowrap; }
+    th:nth-child(1), td:nth-child(1) { text-align:left; white-space:normal; }
   </style>
 </head>
 <body>
@@ -89,14 +95,13 @@
   <footer>&copy; 2025 High Peak &amp; Marple Snooker League</footer>
 
   <script>
+    // Announcement
     fetch('data/announcement.json')
-      .then(response => response.json())
+      .then(r => r.json())
       .then(data => {
         if (data.message && data.message.trim()) {
-          const banner = document.getElementById('announcement-banner');
-          const text = document.getElementById('announcement-text');
-          text.textContent = data.message;
-          banner.style.display = 'block';
+          document.getElementById('announcement-text').textContent = data.message;
+          document.getElementById('announcement-banner').style.display = 'block';
         }
       })
       .catch(err => console.warn('Banner error:', err));
@@ -105,11 +110,12 @@
   <script>
   (async function() {
     const [teams, players, matches] = await Promise.all([
-      fetch('data/teams.json').then(r=>r.json()),
-      fetch('data/players.json').then(r=>r.json()),
-      fetch('data/matches.json').then(r=>r.json())
+      fetch('data/teams.json',   {cache:'no-store'}).then(r=>r.json()),
+      fetch('data/players.json', {cache:'no-store'}).then(r=>r.json()),
+      fetch('data/matches.json', {cache:'no-store'}).then(r=>r.json())
     ]);
 
+    // Maps and colour classes
     const teamById = {};
     const teamColorClass = {};
     teams.forEach((t, i) => {
@@ -117,6 +123,7 @@
       teamColorClass[t.id] = i % 10;
     });
 
+    // Seed player stats object
     const stats = {};
     for (const p of players) {
       stats[p.id] = {
@@ -127,6 +134,7 @@
       };
     }
 
+    // Compute frame stats from matches.frames[]
     for (const m of matches) {
       if (!Array.isArray(m.frames)) continue;
       for (const fr of m.frames) {
@@ -143,32 +151,38 @@
       s.WinPct = s.FP ? (100 * s.FW / s.FP) : 0;
     }
 
+    // Tabs
     const tabs = document.getElementById('teamTabs');
     const ALL = '__all__';
 
-    const mk = (id, label, colorClass) => {
+    const mkBtn = (id, label, colorClass) => {
       const b = document.createElement('button');
+      b.type = 'button';
       b.className = 'tab-btn' + (colorClass !== null ? ` color-${colorClass}` : '');
       b.dataset.teamId = id;
       b.textContent = label;
-      b.onclick = () => {
+      b.addEventListener('click', () => {
         document.querySelectorAll('.tab-btn').forEach(x => x.classList.remove('active'));
         b.classList.add('active');
         render(id);
         localStorage.setItem('playersTeamFilter', id);
-      };
+        const newUrl = id && id !== ALL ? `?team=${encodeURIComponent(id)}` : location.pathname;
+        history.replaceState(null, '', newUrl);
+      });
       return b;
     };
 
-    tabs.appendChild(mk(ALL, 'All Teams', null));
-    teams.forEach((t, i) => {
-      tabs.appendChild(mk(t.id, t.name, teamColorClass[t.id]));
-    });
+    tabs.appendChild(mkBtn(ALL, 'All Teams', null));
+    teams.forEach((t) => tabs.appendChild(mkBtn(t.id, t.name, teamColorClass[t.id])));
 
-    const last = localStorage.getItem('playersTeamFilter') || ALL;
-    const btn = [...tabs.children].find(b => b.dataset.teamId === last) || tabs.firstChild;
-    btn.click();
+    // >>> Deep-link support: ?team=<teamId> takes priority <<<
+    const urlTeam = new URLSearchParams(location.search).get('team');
+    const stored  = localStorage.getItem('playersTeamFilter');
+    const startId = (urlTeam && teamById[urlTeam]) ? urlTeam : (stored && teamById[stored] ? stored : ALL);
+    const startBtn = [...tabs.children].find(b => b.dataset.teamId === startId) || tabs.firstChild;
+    startBtn.click();
 
+    // Click on "Player" header toggles sort-name ascending
     document.querySelector('th[data-sort="name"]').addEventListener('click', () => {
       const current = localStorage.getItem('playersSortAsc') === 'true';
       localStorage.setItem('playersSortAsc', (!current).toString());
@@ -179,32 +193,39 @@
       const asc = localStorage.getItem('playersSortAsc') === 'true';
       const tb = document.getElementById('playersTbody');
       tb.innerHTML = '';
+
       const rows = Object.values(stats)
         .filter(s => teamId === ALL || s.teamId === teamId)
         .sort((a, b) => (b.WinPct - a.WinPct) || (b.FW - a.FW) || a.name.localeCompare(b.name));
+
       if (asc) rows.sort((a, b) => a.name.localeCompare(b.name));
 
       for (const s of rows) {
         const tag = s.captain ? ' (C)' : '';
         const bump = s.change === 'up' ? ' C+' : (s.change === 'down' ? ' C-' : '');
         const tr = document.createElement('tr');
-        const teamClass = `team-color-${teamColorClass[s.teamId]}`;
-        tr.className = teamClass;
+        tr.className = `team-color-${teamColorClass[s.teamId]}`;
         tr.innerHTML = `
           <td>${escapeHtml(s.name + tag)}</td>
           <td>${escapeHtml(teamById[s.teamId]?.name || '')}</td>
           <td>${s.HCP}${bump}</td>
           <td>${s.Pstart}</td>
-          <td>${s.FP}</td><td>${s.FW}</td><td>${s.FL}</td><td>${s.FD}</td>
+          <td>${s.FP}</td>
+          <td>${s.FW}</td>
+          <td>${s.FL}</td>
+          <td>${s.FD}</td>
           <td>${s.WinPct.toFixed(1)}%</td>`;
         tb.appendChild(tr);
       }
+
+      // Optional: reflect team name in document title
+      document.title = teamId !== ALL && teamById[teamId]
+        ? `Players — ${teamById[teamId].name} — High Peak & Marple`
+        : 'Players — High Peak & Marple Snooker League';
     }
 
-    function escapeHtml(str = '') {
-      return str.replace(/[&<>"']/g, c => ({
-        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
-      }[c]));
+    function escapeHtml(str=''){
+      return str.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
     }
   })();
   </script>
