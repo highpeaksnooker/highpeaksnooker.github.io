@@ -221,7 +221,6 @@
       document.body.removeChild(meas);
     }
 
-    // Simple debounce for resize
     function debounce(fn, wait){ let t; return () => { clearTimeout(t); t = setTimeout(fn, wait); }; }
 
     window.addEventListener('load', balanceNav);
@@ -274,11 +273,15 @@
           const tr = document.createElement('tr');
           tr.innerHTML = `
             <td>${i+1}</td>
-            <td>${t.name}</td>
+            <td><a href="players.html?team=${encodeURIComponent(t.teamId)}">${escapeHtml(t.name)}</a></td>
             <td>${t.P}</td><td>${t.W}</td><td>${t.D}</td><td>${t.L}</td>
             <td>${t.FF}</td><td>${t.FA}</td><td>${t.FD}</td><td>${t.Pts}</td>`;
           body.appendChild(tr);
         });
+
+        function escapeHtml(str=''){
+          return str.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+        }
       } catch(e) { console.warn('League table load failed:', e); }
     })();
   </script>
