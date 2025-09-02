@@ -17,110 +17,110 @@
   <meta property="og:url" content="https://highpeakandmarplesnookerleague.co.uk/">
 
   <!-- Preload crest -->
-  <link rel="preload" as="image" href="/logo.PNG" imagesizes="(max-width:600px) 64px, 96px">
+  <link rel="preload" as="image" href="/logo.PNG">
 
   <link rel="stylesheet" href="style.css" />
 
   <style>
-    /* ===== Layout helpers ===== */
+    /* General layout */
     .container { max-width:1100px; margin:0 auto; padding:0 12px; }
 
-    /* ===== Header (logo left, nav right) ===== */
-    header.site-header{
-      background:#0c3d33;              /* matches crest background */
+    /* Header background (behind nav) */
+    header {
+      background:#0c3d33; /* same as logo background */
+      text-align:center;
+      padding:.5rem 0 0;
+    }
+
+    /* Navigation bar */
+    nav.primary {
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex-wrap:wrap;
+      gap:1rem;
+      background:transparent; /* transparent so header bg shows through */
+      padding:.6rem 0;
+      position:relative;
+    }
+
+    nav.primary a {
       color:#fff;
-      box-shadow:0 2px 14px rgba(0,0,0,.35);
+      font-weight:700;
+      text-decoration:none;
+      padding:.45rem .75rem;
+      border-radius:.5rem;
     }
-    .site-header .bar{
-      display:flex; align-items:center; justify-content:space-between;
-      gap:12px; padding:.5rem 0;
+    nav.primary a:hover { background:rgba(255,255,255,.08); }
+    nav.primary a.active { background:#19d36b; color:#0b1b0f; }
+
+    /* Logo in centre of nav */
+    nav.primary .logo {
+      height:80px; /* adjust size here */
+      width:auto;
+      margin:0 1rem;
+      filter: drop-shadow(0 0 10px rgba(0,0,0,.5));
     }
 
-    /* Brand (crest + short name) */
-    .brand{ display:flex; align-items:center; gap:.75rem; flex:0 0 auto; }
-    .brand .logo{
-      width:64px; height:64px; object-fit:cover;
-      /* show only the circular badge from the PNG */
-      -webkit-clip-path:circle(50% at 50% 50%); clip-path:circle(50% at 50% 50%);
-      filter: drop-shadow(0 0 8px rgba(0,0,0,.35));
-    }
-    .brand .name{
-      font-weight:800; line-height:1.1; letter-spacing:.2px;
-      white-space:nowrap;
-    }
-    /* Hide long name on narrow phones to save space */
-    @media (max-width:520px){ .brand .name{ display:none; } }
-
-    /* Nav */
-    nav.primary{
-      flex:1 1 auto;
-      display:flex; flex-wrap:wrap; justify-content:flex-end; gap:.4rem .6rem;
-    }
-    nav.primary a{
-      color:#fff; text-decoration:none; font-weight:700;
-      padding:.45rem .75rem; border-radius:.5rem;
-    }
-    nav.primary a:hover{ background:rgba(255,255,255,.08); }
-    nav.primary a.active{ background:#19d36b; color:#0b1b0f; }
-
-    /* Stack nicely on small screens */
-    @media (max-width:760px){
-      .site-header .bar{ flex-wrap:wrap; justify-content:center; gap:.5rem; }
-      nav.primary{ justify-content:center; }
-    }
-
-    /* ===== Announcement (slim, sticky) ===== */
-    #announcement-banner{
+    /* Announcement banner */
+    #announcement-banner {
       position:sticky; top:0; z-index:50;
       display:none;
-      background:#1f1f1f; color:#fff; font-weight:600; font-size:.95rem;
-      padding:.5rem .75rem; border-top:1px solid rgba(255,255,255,.06); border-bottom:1px solid #333;
+      background:#1f1f1f; color:#fff;
+      font-weight:600; font-size:.95rem;
+      padding:.5rem .75rem;
+      border-top:1px solid rgba(255,255,255,.06);
+      border-bottom:1px solid #333;
     }
 
-    /* ===== Main area ===== */
-    main.container{
-      background:#f9f9f9; padding:1.25rem 12px 2rem; border-radius:6px; margin-top:1rem;
+    /* Main area */
+    main.container {
+      background:#f9f9f9;
+      padding:1.25rem 12px 2rem;
+      border-radius:6px;
+      margin-top:1rem;
     }
 
-    /* ===== League table ===== */
-    .table-wrap{ overflow-x:auto; -webkit-overflow-scrolling:touch; }
-    table#leagueTable{ width:100%; border-collapse:collapse; border:1px solid #ddd; border-radius:6px; overflow:hidden; }
-    table#leagueTable thead th{ position:sticky; top:0; z-index:1; background:#eaeaea; font-weight:700; }
-    table#leagueTable th, table#leagueTable td{ padding:.6rem .5rem; border-bottom:1px solid #e6e6e6; text-align:center; white-space:nowrap; }
-    table#leagueTable th:first-child, table#leagueTable td:first-child{ text-align:right; }
-    table#leagueTable th:nth-child(2), table#leagueTable td:nth-child(2){ text-align:left; white-space:normal; }
-    #leagueTable tbody tr:nth-child(even){ background:#fafafa; }
-    #leagueTable tbody tr:hover{ background:#f1f7ff; }
+    /* League table */
+    .table-wrap { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+    table#leagueTable {
+      width:100%; border-collapse:collapse;
+      border:1px solid #ddd; border-radius:6px; overflow:hidden;
+    }
+    table#leagueTable thead th {
+      position:sticky; top:0; z-index:1;
+      background:#eaeaea; font-weight:700;
+    }
+    table#leagueTable th, table#leagueTable td {
+      padding:.6rem .5rem;
+      border-bottom:1px solid #e6e6e6;
+      text-align:center;
+      white-space:nowrap;
+    }
+    table#leagueTable th:first-child, table#leagueTable td:first-child { text-align:right; }
+    table#leagueTable th:nth-child(2), table#leagueTable td:nth-child(2) { text-align:left; white-space:normal; }
+    #leagueTable tbody tr:nth-child(even) { background:#fafafa; }
+    #leagueTable tbody tr:hover { background:#f1f7ff; }
 
-    /* ===== Footer ===== */
-    footer{ text-align:center; padding:2rem 1rem; color:#777; }
-
-    /* Accessibility */
-    nav.primary a:focus{ outline:2px solid #19d36b; outline-offset:2px; }
+    footer { text-align:center; padding:2rem 1rem; color:#777; }
   </style>
 </head>
 <body>
 
-  <!-- Header: crest + nav in one compact bar -->
-  <header class="site-header" id="site-header">
-    <div class="container bar">
-      <div class="brand">
-        <img src="logo.PNG?v=2" alt="League crest" class="logo">
-        <div class="name">High Peak &amp; Marple</div>
-      </div>
-
-      <nav class="primary" aria-label="Primary">
-        <a href="index.html" class="active">Home</a>
-        <a href="fixtures.html">Fixtures</a>
-        <a href="results.html">Results</a>
-        <a href="players.html">Players</a>
-        <a href="venues.html">Venues</a>
-        <a href="rules.html">Rules</a>
-        <a href="merit.html">Merit</a>
-        <a href="history.html">Honours List</a>
-        <a href="archive.html">Archive</a>
-      </nav>
-    </div>
+  <header>
+    <!-- Navigation with logo centred -->
+    <nav class="primary" aria-label="Primary">
+      <a href="index.html" class="active">Home</a>
+      <a href="fixtures.html">Fixtures</a>
+      <a href="results.html">Results</a>
+      <img src="logo.PNG" alt="League Logo" class="logo">
+      <a href="players.html">Players</a>
+      <a href="venues.html">Venues</a>
+      <a href="rules.html">Rules</a>
+      <a href="merit.html">Merit</a>
+      <a href="history.html">Honours List</a>
+      <a href="archive.html">Archive</a>
+    </nav>
   </header>
 
   <!-- Announcement -->
@@ -175,8 +175,8 @@
     (async function () {
       try {
         const [teams, matches] = await Promise.all([
-          fetch('data/teams.json',   { cache: 'no-store' }).then(r => r.json()),
-          fetch('data/matches.json', { cache: 'no-store' }).then(r => r.json())
+          fetch('data/teams.json').then(r => r.json()),
+          fetch('data/matches.json').then(r => r.json())
         ]);
 
         const table = {};
@@ -184,7 +184,6 @@
           table[t.id] = { teamId:t.id, name:t.name, P:0, W:0, D:0, L:0, FF:0, FA:0, FD:0, Pts:0 };
         }
 
-        // 2 for win; 1/1 draw; away win bonus +1
         const award = (hf, af, awayWin) => {
           if (hf > af) return [2, 0];
           if (hf < af) return [0, awayWin ? 3 : 2];
@@ -194,7 +193,6 @@
         for (const m of matches) {
           const h = table[m.homeTeamId], a = table[m.awayTeamId];
           if (!h || !a) continue;
-
           h.P++; a.P++;
           h.FF += m.homeFrames; h.FA += m.awayFrames;
           a.FF += m.awayFrames; a.FA += m.homeFrames;
@@ -218,13 +216,11 @@
           const tr = document.createElement('tr');
           tr.innerHTML = `
             <td>${i+1}</td>
-            <td>${esc(t.name)}</td>
+            <td>${t.name}</td>
             <td>${t.P}</td><td>${t.W}</td><td>${t.D}</td><td>${t.L}</td>
             <td>${t.FF}</td><td>${t.FA}</td><td>${t.FD}</td><td>${t.Pts}</td>`;
           body.appendChild(tr);
         });
-
-        function esc(s=''){return s.replace(/[&<>"']/g,c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
       } catch(e) { console.warn('League table load failed:', e); }
     })();
   </script>
