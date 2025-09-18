@@ -118,6 +118,41 @@
       margin-top: 48px;
       border-top: 1px solid #e6e6e6;
     }
+
+    /* =========================
+       FIXTURES TABLE
+       ========================= */
+    section.fixture-day {
+      margin-bottom: 2rem;
+    }
+    section.fixture-day h3 {
+      margin: 0 0 .5rem;
+      color: #0f172a;
+      border-bottom: 2px solid #22cc66;
+      padding-bottom: 4px;
+    }
+    .fixtures-table {
+      width: 100%;
+      border-collapse: collapse;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .fixtures-table th, .fixtures-table td {
+      padding: .6rem .5rem;
+      border-bottom: 1px solid #e6e6e6;
+      text-align: left;
+    }
+    .fixtures-table thead th {
+      background: #eaeaea;
+      font-weight: 700;
+    }
+    .fixtures-table tbody tr:nth-child(even) {
+      background: #fafafa;
+    }
+    .fixtures-table tbody tr:hover {
+      background: #f1f7ff;
+    }
   </style>
 </head>
 <body>
@@ -152,7 +187,7 @@
 
   <main>
     <h2>Fixtures</h2>
-    <p>Fixture list coming soon.</p>
+    <div id="fixtures">Loading fixtures…</div>
   </main>
 
   <footer>&copy; 2025 High Peak &amp; Marple Snooker League</footer>
@@ -195,6 +230,43 @@
       })
       .catch(err => {
         console.warn('Announcement could not be loaded:', err);
+      });
+
+    // Fixtures loader
+    fetch('data/fixtures.json')
+      .then(r => r.json())
+      .then(fixtures => {
+        const grouped = {};
+        fixtures.forEach(f => {
+          if (!grouped[f.date]) grouped[f.date] = [];
+          grouped[f.date].push(f);
+        });
+
+        const container = document.getElementById('fixtures');
+        container.innerHTML = '';
+
+        for (const [date, games] of Object.entries(grouped)) {
+          const section = document.createElement('section');
+          section.className = 'fixture-day';
+          section.innerHTML = `<h3>${new Date(date).toLocaleDateString('en-GB', {
+            weekday: 'short', day: '2-digit', month: 'short', year: 'numeric'
+          })}</h3>`;
+
+          const table = document.createElement('table');
+          table.className = 'fixtures-table';
+          table.innerHTML = `
+            <thead>
+              <tr><th>Home</th><th>Away</th></tr>
+            </thead>
+            <tbody>
+              ${games.map(g => `<tr><td>${g.home}</td><td>${g.away}</td></tr>`).join('')}
+            </tbody>`;
+          section.appendChild(table);
+          container.appendChild(section);
+        }
+      })
+      .catch(err => {
+        document.getElementById('fixtures').textContent = 'Error loading fixtures: ' + err.message;
       });
   </script>
 </body>
