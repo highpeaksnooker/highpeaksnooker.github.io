@@ -10,7 +10,7 @@
 
   <style>
     :root{
-      --brand-green: #0c3d33;     
+      --brand-green: #0c3d33;
       --banner-height: 180px;
       --crest-zoom: 1.18;
       --banner-pad: 12px;
@@ -39,17 +39,17 @@
     .menu-toggle{ width:100%; background:#111827; color:#fff; padding:12px 14px; border:none; border-radius:10px; font-weight:800; font-size:1.05rem; cursor:pointer; }
     .menu-toggle:focus-visible{ outline:3px solid var(--accent); outline-offset:2px; }
 
-    /* === Transparent overlay menu === */
+    /* === Transparent overlay menu (does not push layout) === */
     nav.site-nav{
       position:absolute;
       left:12px; right:12px;
       top:calc(100% + 8px);
-      background: var(--overlay-bg);  /* semi-transparent */
+      background: var(--overlay-bg);
       border-radius:12px;
       box-shadow:0 20px 40px rgba(0,0,0,.45);
       padding:8px;
       z-index:120;
-      backdrop-filter: blur(6px); /* adds frosted-glass effect */
+      backdrop-filter: blur(6px);
     }
     [hidden]{ display:none !important; }
     nav.site-nav a{ display:block; color:#e5e7eb; text-decoration:none; font-weight:700; padding:12px 10px; border-radius:10px; }
@@ -58,6 +58,16 @@
 
     /* === Main card === */
     main.container{ background:#fff; padding:1.25rem 12px 2rem; border-radius:12px; margin-top:14px; box-shadow:0 1px 2px rgba(0,0,0,.06); position:relative; z-index:1; }
+
+    /* === League table === */
+    .table-wrap{ overflow-x:auto; -webkit-overflow-scrolling:touch; margin-top:.5rem; }
+    table#leagueTable{ width:100%; border-collapse:collapse; border:1px solid #ddd; border-radius:12px; overflow:hidden; }
+    table#leagueTable thead th{ position:sticky; top:0; z-index:1; background:#eaeaea; font-weight:700; }
+    table#leagueTable th, table#leagueTable td{ padding:.6rem .5rem; border-bottom:1px solid #e6e6e6; text-align:center; white-space:nowrap; }
+    table#leagueTable th:first-child, table#leagueTable td:first-child{ text-align:right; }
+    table#leagueTable th:nth-child(2), table#leagueTable td:nth-child(2){ text-align:left; white-space:normal; }
+    #leagueTable tbody tr:nth-child(even){ background:#fafafa; }
+    #leagueTable tbody tr:hover{ background:#f1f7ff; }
 
     footer{ text-align:center; padding:2rem 1rem; color:#777; }
 
@@ -73,7 +83,9 @@
   </header>
 
   <!-- Announcement -->
-  <div id="announcement-banner"><div id="announcement-inner" class="container"><span id="announcement-text"></span></div></div>
+  <div id="announcement-banner">
+    <div id="announcement-inner" class="container"><span id="announcement-text"></span></div>
+  </div>
 
   <!-- Menu -->
   <div class="menu-bar"><div class="menu-inner">
@@ -95,27 +107,115 @@
   <main class="container">
     <h2>Welcome</h2>
     <p>This is the official site for the High Peak &amp; Marple Snooker League. Use the menu above to navigate.</p>
+
+    <h2>Current League Table</h2>
+    <div class="table-wrap">
+      <table id="leagueTable" aria-describedby="League table showing standings">
+        <thead>
+          <tr>
+            <th>#</th><th>Team</th>
+            <th title="Matches Played">P</th>
+            <th title="Wins">W</th>
+            <th title="Draws">D</th>
+            <th title="Losses">L</th>
+            <th title="Frames For">FF</th>
+            <th title="Frames Against">FA</th>
+            <th title="Frame Difference">FD</th>
+            <th title="Points">Pts</th>
+          </tr>
+        </thead>
+        <tbody id="leagueBody"></tbody>
+      </table>
+    </div>
   </main>
 
   <footer>&copy; 2025 High Peak &amp; Marple Snooker League</footer>
 
   <script>
-    // Toggle dropdown
+    // Toggle dropdown (overlay, no layout shift)
     (function(){
-      const btn=document.getElementById('menuToggle'),nav=document.getElementById('siteNav');
-      function closeNav(){nav.hidden=true;btn.setAttribute('aria-expanded','false');}
-      btn.addEventListener('click',()=>{const ex=btn.getAttribute('aria-expanded')==='true';btn.setAttribute('aria-expanded',String(!ex));nav.hidden=ex;});
-      document.addEventListener('click',(e)=>{if(!nav.hidden && !nav.contains(e.target) && e.target!==btn){closeNav();}});
-      document.addEventListener('keydown',(e)=>{if(e.key==='Escape')closeNav();});
+      const btn=document.getElementById('menuToggle');
+      const nav=document.getElementById('siteNav');
+      function closeNav(){ nav.hidden=true; btn.setAttribute('aria-expanded','false'); }
+      btn.addEventListener('click',()=>{
+        const ex=btn.getAttribute('aria-expanded')==='true';
+        btn.setAttribute('aria-expanded',String(!ex));
+        nav.hidden=ex;
+      });
+      document.addEventListener('click',(e)=>{
+        if(!nav.hidden && !nav.contains(e.target) && e.target!==btn && !btn.contains(e.target)){ closeNav(); }
+      });
+      document.addEventListener('keydown',(e)=>{ if(e.key==='Escape') closeNav(); });
     })();
 
     // Announcement loader
     fetch('data/announcement.json').then(r=>r.json()).then(d=>{
-      if(d.message&&d.message.trim()){
+      if(d && d.message && d.message.trim()){
         document.getElementById('announcement-text').textContent=d.message.trim();
         document.getElementById('announcement-banner').style.display='block';
       }
-    });
+    }).catch(()=>{});
+
+    // League table script (restored)
+    (async function () {
+      try {
+        const [teams, matches] = await Promise.all([
+          fetch('data/teams.json').then(r => r.json()),
+          fetch('data/matches.json').then(r => r.json())
+        ]);
+
+        const table = {};
+        for (const t of teams) {
+          table[t.id] = { teamId:t.id, name:t.name, P:0, W:0, D:0, L:0, FF:0, FA:0, FD:0, Pts:0 };
+        }
+
+        // Points: 2 for match win; draw 1–1; away win bonus +1 (total 3)
+        const award = (hf, af, awayWin) => {
+          if (hf > af) return [2, 0];
+          if (hf < af) return [0, awayWin ? 3 : 2];
+          return [1, 1];
+        };
+
+        for (const m of matches) {
+          const h = table[m.homeTeamId], a = table[m.awayTeamId];
+          if (!h || !a) continue;
+
+          h.P++; a.P++;
+          h.FF += m.homeFrames; h.FA += m.awayFrames;
+          a.FF += m.awayFrames; a.FA += m.homeFrames;
+
+          if (m.homeFrames > m.awayFrames) { h.W++; a.L++; }
+          else if (m.homeFrames < m.awayFrames) { a.W++; h.L++; }
+          else { h.D++; a.D++; }
+
+          const [hp, ap] = award(m.homeFrames, m.awayFrames, m.awayFrames > m.homeFrames);
+          h.Pts += hp; a.Pts += ap;
+        }
+
+        for (const t of Object.values(table)) t.FD = t.FF - t.FA;
+
+        const rows = Object.values(table)
+          .sort((x,y)=> (y.Pts-x.Pts) || (y.FD-x.FD) || (y.FF-x.FF) || x.name.localeCompare(y.name));
+
+        const body = document.getElementById('leagueBody');
+        body.innerHTML = '';
+        rows.forEach((t,i)=>{
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${i+1}</td>
+            <td><a href="players.html?team=${encodeURIComponent(t.teamId)}">${escapeHtml(t.name)}</a></td>
+            <td>${t.P}</td><td>${t.W}</td><td>${t.D}</td><td>${t.L}</td>
+            <td>${t.FF}</td><td>${t.FA}</td><td>${t.FD}</td><td>${t.Pts}</td>`;
+          body.appendChild(tr);
+        });
+
+        function escapeHtml(str=''){
+          return str.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+        }
+      } catch(e) {
+        console.warn('League table load failed:', e);
+      }
+    })();
   </script>
 </body>
 </html>
