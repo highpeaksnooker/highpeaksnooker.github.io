@@ -22,79 +22,97 @@
   <link rel="stylesheet" href="style.css" />
 
   <style>
-    /* ===== Utilities ===== */
-    .container { max-width:1100px; margin:0 auto; padding:0 12px; }
-
-    /* ===== Header band (kept to anchor the nav visually) ===== */
-    header{
-      background:#0c3d33;
-      box-shadow:0 2px 14px rgba(0,0,0,.35);
-      padding:.35rem 0 .25rem;
+    :root{
+      /* Change once to set the crest/banner size across ALL pages */
+      --banner-height: 150px;      /* consistent green bar height */
+      --banner-pad: 10px;          /* inner breathing room */
+      --brand-green: #0c3d33;      /* your header green */
+      --accent: #19d36b;
+      --text: #0b1220;
+      --page-max: 1100px;
     }
 
-    /* ===== Centre-crest nav (3-column grid) ===== */
-    nav.primary{
-      display:grid;
-      grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);
-      align-items:center;
-      column-gap:1rem;
-      row-gap:.4rem;
-      background:transparent; /* show header green through */
-      max-width:1100px;
-      margin:0 auto;
-      padding:.55rem 12px;
+    /* ===== Base ===== */
+    html,body{ margin:0; }
+    body{
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background:#f9f9f9; color:var(--text);
+    }
+    .container{ max-width:var(--page-max); margin:0 auto; padding:0 12px; }
+
+    /* ===== BIG LOGO BANNER ===== */
+    header.logo-header{
+      background: var(--brand-green);
+      box-shadow: 0 2px 14px rgba(0,0,0,.35);
+    }
+    .logo-banner{
+      height: var(--banner-height);
+      display:flex; align-items:center; justify-content:center;
+      padding: var(--banner-pad);
+    }
+    .logo-banner img{
+      display:block; height: calc(var(--banner-height) - 2*var(--banner-pad));
+      width:auto;
+      /* keep perfectly round and crisp */
+      -webkit-clip-path: circle(50% at 50% 50%);
+      clip-path: circle(50% at 50% 50%);
+      filter: drop-shadow(0 0 10px rgba(0,0,0,.5));
     }
 
-    .nav-left,.nav-right{
-      display:flex; flex-wrap:wrap; align-items:center;
-      gap:.45rem .65rem;
-    }
-    .nav-left  { justify-content:flex-end; }   /* hug the logo */
-    .nav-right { justify-content:flex-start; } /* hug the logo */
-
-    nav.primary a{
-      color:#fff; font-weight:700; text-decoration:none;
-      padding:.45rem .75rem; border-radius:.5rem; line-height:1;
-      white-space:nowrap;
-    }
-    nav.primary a:hover  { background:rgba(255,255,255,.08); }
-    nav.primary a.active { background:#19d36b; color:#0b1b0f; }
-
-    .nav-logo{ display:flex; align-items:center; justify-content:center; }
-    .nav-logo .logo{
-      height:110px; width:auto; display:block;
-      -webkit-clip-path:circle(50% at 50% 50%);
-      clip-path:circle(50% at 50% 50%);
-      filter:drop-shadow(0 0 10px rgba(0,0,0,.5));
-    }
-
-    /* Hidden pool for measuring link widths */
-    .nav-pool{
-      position:absolute; visibility:hidden; height:0; overflow:hidden;
-      white-space:nowrap;
-    }
-
-    /* ===== Announcement ===== */
+    /* ===== Announcement (sticky) ===== */
     #announcement-banner{
-      position:sticky; top:0; z-index:50;
+      position: sticky; top: 0; z-index: 50;
       display:none; background:#1f1f1f; color:#fff;
-      font-weight:600; font-size:.95rem; padding:.5rem .75rem;
+      font-weight:600; font-size:.95rem; padding:.55rem 0;
       border-top:1px solid rgba(255,255,255,.06); border-bottom:1px solid #333;
     }
+    #announcement-inner{ max-width:var(--page-max); margin:0 auto; padding:0 12px; }
+    #announcement-text{ display:inline-block; }
+
+    /* ===== MENU BUTTON + DROPDOWN (sits UNDER announcement) ===== */
+    .menu-wrap{ background:#0b2d27; }
+    .menu-inner{ max-width:var(--page-max); margin:0 auto; padding: 0 12px 10px; }
+
+    .menu-toggle{
+      width:100%; display:block;
+      background:#111827; color:#fff;
+      padding:12px 14px; border:none; border-radius:8px;
+      font-weight:800; font-size:1.05rem; letter-spacing:.2px;
+      cursor:pointer; margin:10px 0 0;
+    }
+    .menu-toggle:focus-visible{ outline:3px solid var(--accent); outline-offset:2px; }
+
+    nav.site-nav{
+      margin-top:8px;
+      background:#0b1220;
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:10px;
+      box-shadow:0 16px 30px -18px rgba(0,0,0,.45);
+      padding:8px;
+    }
+    nav.site-nav a{
+      display:block;
+      color:#e5e7eb; text-decoration:none; font-weight:700;
+      padding:12px 10px; border-radius:8px;
+    }
+    nav.site-nav a:hover{ background:rgba(255,255,255,.06); color:#fff; }
+    nav.site-nav a.active{ background:var(--accent); color:#0b1b0f; }
 
     /* ===== Main ===== */
     main.container{
-      background:#f9f9f9; padding:1.25rem 12px 2rem;
-      border-radius:6px; margin-top:1rem;
+      background:#fff; padding:1.25rem 12px 2rem;
+      border-radius:10px; margin-top:14px; box-shadow:0 1px 2px rgba(0,0,0,.06);
     }
 
     /* ===== League table ===== */
     .table-wrap{ overflow-x:auto; -webkit-overflow-scrolling:touch; }
     table#leagueTable{
       width:100%; border-collapse:collapse;
-      border:1px solid #ddd; border-radius:6px; overflow:hidden;
+      border:1px solid #ddd; border-radius:10px; overflow:hidden;
     }
-    table#leagueTable thead th{ position:sticky; top:0; z-index:1; background:#eaeaea; font-weight:700; }
+    table#leagueTable thead th{
+      position:sticky; top:0; z-index:1; background:#eaeaea; font-weight:700;
+    }
     table#leagueTable th, table#leagueTable td{
       padding:.6rem .5rem; border-bottom:1px solid #e6e6e6;
       text-align:center; white-space:nowrap;
@@ -106,28 +124,34 @@
 
     footer{ text-align:center; padding:2rem 1rem; color:#777; }
 
-    /* Tweak sizes slightly on very narrow phones */
+    /* Small phones */
     @media (max-width:420px){
-      nav.primary a{ padding:.4rem .6rem; font-size:.95rem; }
-      .nav-logo .logo{ height:88px; }
+      .menu-toggle{ font-size:1rem; padding:11px 12px; }
     }
   </style>
 </head>
 <body>
 
-  <header>
-    <!-- Nav: links are auto-balanced left/right around centre crest -->
-    <nav class="primary" aria-label="Primary">
-      <div class="nav-left"  id="nav-left"></div>
+  <!-- BIG LOGO BANNER (consistent on every page) -->
+  <header class="logo-header" role="banner">
+    <div class="logo-banner">
+      <!-- Same file + same CSS keeps the size identical everywhere -->
+      <img src="logo.PNG?v=3" alt="High Peak &amp; Marple Snooker League crest">
+    </div>
+  </header>
 
-      <div class="nav-logo">
-        <img src="logo.PNG?v=2" alt="League Logo" class="logo">
-      </div>
+  <!-- Announcement (appears when message exists) -->
+  <div id="announcement-banner" role="status" aria-live="polite">
+    <div id="announcement-inner" class="container">
+      <span id="announcement-text"></span>
+    </div>
+  </div>
 
-      <div class="nav-right" id="nav-right"></div>
-
-      <!-- Pool of all links (kept hidden). JS will balance them. -->
-      <div class="nav-pool" id="nav-pool" aria-hidden="true">
+  <!-- MENU BUTTON + DROPDOWN UNDER ANNOUNCEMENT -->
+  <div class="menu-wrap">
+    <div class="menu-inner">
+      <button class="menu-toggle" id="menuToggle" aria-expanded="false" aria-controls="siteNav">☰ Menu</button>
+      <nav id="siteNav" class="site-nav" hidden>
         <a href="index.html"   class="active">Home</a>
         <a href="fixtures.html">Fixtures</a>
         <a href="results.html">Results</a>
@@ -137,14 +161,7 @@
         <a href="merit.html">Merit</a>
         <a href="history.html">Honours List</a>
         <a href="archive.html">Archive</a>
-      </div>
-    </nav>
-  </header>
-
-  <!-- Announcement -->
-  <div id="announcement-banner">
-    <div id="announcement-inner" class="container">
-      <span id="announcement-text"></span>
+      </nav>
     </div>
   </div>
 
@@ -175,6 +192,35 @@
 
   <footer>&copy; 2025 High Peak &amp; Marple Snooker League</footer>
 
+  <!-- Dropdown Menu logic -->
+  <script>
+    (function () {
+      const btn = document.getElementById('menuToggle');
+      const nav = document.getElementById('siteNav');
+      if (!btn || !nav) return;
+
+      function closeNav(){
+        nav.hidden = true;
+        btn.setAttribute('aria-expanded','false');
+      }
+      btn.addEventListener('click', () => {
+        const expanded = btn.getAttribute('aria-expanded') === 'true';
+        btn.setAttribute('aria-expanded', String(!expanded));
+        nav.hidden = expanded;
+      });
+      // Click outside closes
+      document.addEventListener('click', (e)=>{
+        if (!nav.hidden && !nav.contains(e.target) && e.target !== btn && !btn.contains(e.target)) {
+          closeNav();
+        }
+      });
+      // Escape closes
+      document.addEventListener('keydown', (e)=>{
+        if (e.key === 'Escape') closeNav();
+      });
+    })();
+  </script>
+
   <!-- Announcement script -->
   <script>
     fetch('data/announcement.json', { cache: 'no-store' })
@@ -186,45 +232,6 @@
         }
       })
       .catch(()=>{});
-  </script>
-
-  <!-- Auto-balance nav tabs around the crest -->
-  <script>
-    function balanceNav(){
-      const left  = document.getElementById('nav-left');
-      const right = document.getElementById('nav-right');
-      const pool  = Array.from(document.querySelectorAll('#nav-pool a'));
-
-      left.innerHTML = '';
-      right.innerHTML = '';
-
-      // Temporary measurer
-      const meas = document.createElement('div');
-      meas.style.position = 'absolute';
-      meas.style.visibility = 'hidden';
-      meas.style.whiteSpace = 'nowrap';
-      document.body.appendChild(meas);
-
-      let L = 0, R = 0;
-      const GAP = 12; // approximate gap between links
-
-      pool.forEach(link => {
-        const clone = link.cloneNode(true);
-        meas.appendChild(clone);
-        const w = clone.getBoundingClientRect().width + GAP;
-        meas.removeChild(clone);
-
-        if (L <= R) { left.appendChild(link.cloneNode(true)); L += w; }
-        else        { right.appendChild(link.cloneNode(true)); R += w; }
-      });
-
-      document.body.removeChild(meas);
-    }
-
-    function debounce(fn, wait){ let t; return () => { clearTimeout(t); t = setTimeout(fn, wait); }; }
-
-    window.addEventListener('load', balanceNav);
-    window.addEventListener('resize', debounce(balanceNav, 150));
   </script>
 
   <!-- League table script -->
@@ -243,7 +250,7 @@
 
         const award = (hf, af, awayWin) => {
           if (hf > af) return [2, 0];
-          if (hf < af) return [0, awayWin ? 3 : 2];
+          if (hf < af) return [0, awayWin ? 3 : 2]; // +1 away-win bonus
           return [1, 1];
         };
 
