@@ -4,316 +4,118 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>High Peak & Marple Snooker League - Home</title>
-
-  <!-- Icons -->
   <link rel="icon" type="image/png" href="/logo.PNG" sizes="192x192">
   <link rel="apple-touch-icon" href="/logo.PNG">
-
-  <!-- Social -->
-  <meta property="og:title" content="High Peak & Marple Snooker League">
-  <meta property="og:description" content="Official site for fixtures, results, merit table, venues and league rules.">
-  <meta property="og:image" content="https://highpeakandmarplesnookerleague.co.uk/logo.PNG">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://highpeakandmarplesnookerleague.co.uk/">
-
-  <!-- Preload crest -->
-  <link rel="preload" as="image" href="/logo.PNG">
-
   <link rel="stylesheet" href="style.css" />
 
   <style>
     :root{
-      /* ONE PLACE to keep header consistent across all pages */
-      --brand-green: #0c3d33;      /* banner colour (matches your crest background) */
-      --banner-height: 180px;      /* height of the green band */
-      --crest-zoom: 1.18;          /* >1 zooms the logo in slightly */
+      --brand-green: #0c3d33;     
+      --banner-height: 180px;
+      --crest-zoom: 1.18;
       --banner-pad: 12px;
       --page-max: 1100px;
       --accent: #19d36b;
-      --overlay-bg: #0b1220;
+      --overlay-bg: rgba(15,17,22,0.85); /* transparent overlay */
+      --bar-dark: #1f1f1f;              /* matches announcement bar */
     }
 
-    html, body { margin:0; }
-    body{
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      background:#f6f7f9; color:#0b1220;
-    }
+    body{ margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; background:#f6f7f9; color:#0b1220; }
     .container{ max-width:var(--page-max); margin:0 auto; padding:0 12px; }
 
-    /* === BIG CREST BANNER (blends with same green) === */
-    header.logo-header{
-      background: var(--brand-green);
-      box-shadow: 0 2px 14px rgba(0,0,0,.35);
-      position: relative;
-      z-index: 60; /* above page but below the dropdown menu we overlay later */
-    }
-    .logo-banner{
-      height: var(--banner-height);
-      display:flex; align-items:center; justify-content:center;
-      padding: var(--banner-pad);
-    }
-    .logo-banner .crest-wrap{
-      /* crop container so we can "zoom" the PNG without spilling */
-      height: calc(var(--banner-height) - 2*var(--banner-pad));
-      width: calc(var(--banner-height) - 2*var(--banner-pad));
-      overflow: hidden;
-      border-radius: 999px;               /* perfect circle crop */
-      display:flex; align-items:center; justify-content:center;
-      filter: drop-shadow(0 0 10px rgba(0,0,0,.5));
-    }
-    .logo-banner img{
-      height: 100%;
-      width: auto;
-      transform: scale(var(--crest-zoom)); /* makes the logo look more zoomed-in */
-      transform-origin: center center;
-      display:block;
-    }
+    /* === Banner with big logo === */
+    header.logo-header{ background: var(--brand-green); box-shadow: 0 2px 14px rgba(0,0,0,.35); }
+    .logo-banner{ height: var(--banner-height); display:flex; align-items:center; justify-content:center; padding: var(--banner-pad); }
+    .crest-wrap{ height: calc(var(--banner-height) - 2*var(--banner-pad)); width: calc(var(--banner-height) - 2*var(--banner-pad)); overflow:hidden; border-radius:50%; display:flex; align-items:center; justify-content:center; filter:drop-shadow(0 0 10px rgba(0,0,0,.5)); }
+    .logo-banner img{ height:100%; width:auto; transform:scale(var(--crest-zoom)); }
 
-    /* === Announcement (sticky) === */
-    #announcement-banner{
-      position: sticky; top: 0; z-index: 100;
-      display:none; background:#1f1f1f; color:#fff;
-      font-weight:600; font-size:.95rem; padding:.55rem 0;
-      border-top:1px solid rgba(255,255,255,.06); border-bottom:1px solid #333;
-    }
+    /* === Announcement === */
+    #announcement-banner{ position:sticky; top:0; z-index:100; display:none; background:var(--bar-dark); color:#fff; font-weight:600; font-size:.95rem; padding:.55rem 0; border-top:1px solid rgba(255,255,255,.06); border-bottom:1px solid #333; }
     #announcement-inner{ max-width:var(--page-max); margin:0 auto; padding:0 12px; }
 
-    /* === MENU TOGGLE + OVERLAY DROPDOWN (does NOT push layout) === */
-    .menu-bar{
-      background: var(--brand-green);
-      padding: 10px 0 14px; /* space under banner / over main */
-      position: relative;
-      z-index: 110; /* above banner + announcement */
-    }
-    .menu-inner{ max-width:var(--page-max); margin:0 auto; padding:0 12px; position: relative; }
-
-    .menu-toggle{
-      width:100%; display:block;
-      background:#111827; color:#fff;
-      padding:12px 14px; border:none; border-radius:10px;
-      font-weight:800; font-size:1.05rem; letter-spacing:.2px;
-      cursor:pointer;
-    }
+    /* === Menu bar (same colour as announcement) === */
+    .menu-bar{ background: var(--bar-dark); padding:10px 0 14px; position:relative; z-index:110; }
+    .menu-inner{ max-width:var(--page-max); margin:0 auto; padding:0 12px; position:relative; }
+    .menu-toggle{ width:100%; background:#111827; color:#fff; padding:12px 14px; border:none; border-radius:10px; font-weight:800; font-size:1.05rem; cursor:pointer; }
     .menu-toggle:focus-visible{ outline:3px solid var(--accent); outline-offset:2px; }
 
-    /* ABSOLUTE overlay: positioned under the button, over page; hidden by default */
+    /* === Transparent overlay menu === */
     nav.site-nav{
-      position: absolute;
-      left: 12px; right: 12px;
-      top: calc(100% + 8px); /* just below the button */
-      background: var(--overlay-bg);
-      border:1px solid rgba(255,255,255,.08);
+      position:absolute;
+      left:12px; right:12px;
+      top:calc(100% + 8px);
+      background: var(--overlay-bg);  /* semi-transparent */
       border-radius:12px;
-      box-shadow: 0 20px 40px rgba(0,0,0,.45);
+      box-shadow:0 20px 40px rgba(0,0,0,.45);
       padding:8px;
-      z-index: 120;          /* on top of everything */
+      z-index:120;
+      backdrop-filter: blur(6px); /* adds frosted-glass effect */
     }
-    [hidden] { display:none !important; } /* hide when not open */
-
-    nav.site-nav a{
-      display:block;
-      color:#e5e7eb; text-decoration:none; font-weight:700;
-      padding:12px 10px; border-radius:10px;
-    }
-    nav.site-nav a:hover{ background:rgba(255,255,255,.06); color:#fff; }
+    [hidden]{ display:none !important; }
+    nav.site-nav a{ display:block; color:#e5e7eb; text-decoration:none; font-weight:700; padding:12px 10px; border-radius:10px; }
+    nav.site-nav a:hover{ background:rgba(255,255,255,.1); }
     nav.site-nav a.active{ background:var(--accent); color:#0b1b0f; }
 
     /* === Main card === */
-    main.container{
-      background:#fff; padding:1.25rem 12px 2rem;
-      border-radius:12px; margin-top:14px;
-      box-shadow:0 1px 2px rgba(0,0,0,.06);
-      position: relative; z-index: 1;
-    }
-
-    /* === League table === */
-    .table-wrap{ overflow-x:auto; -webkit-overflow-scrolling:touch; }
-    table#leagueTable{
-      width:100%; border-collapse:collapse;
-      border:1px solid #ddd; border-radius:12px; overflow:hidden;
-    }
-    table#leagueTable thead th{
-      position:sticky; top:0; z-index:1; background:#eaeaea; font-weight:700;
-    }
-    table#leagueTable th, table#leagueTable td{
-      padding:.6rem .5rem; border-bottom:1px solid #e6e6e6;
-      text-align:center; white-space:nowrap;
-    }
-    table#leagueTable th:first-child, table#leagueTable td:first-child{ text-align:right; }
-    table#leagueTable th:nth-child(2),  table#leagueTable td:nth-child(2){ text-align:left; white-space:normal; }
-    #leagueTable tbody tr:nth-child(even){ background:#fafafa; }
-    #leagueTable tbody tr:hover{ background:#f1f7ff; }
+    main.container{ background:#fff; padding:1.25rem 12px 2rem; border-radius:12px; margin-top:14px; box-shadow:0 1px 2px rgba(0,0,0,.06); position:relative; z-index:1; }
 
     footer{ text-align:center; padding:2rem 1rem; color:#777; }
 
-    @media (max-width:420px){
-      .menu-toggle{ font-size:1rem; padding:11px 12px; }
-      :root{ --banner-height: 170px; } /* mild tweak for tiny phones */
-    }
+    @media(max-width:420px){ .menu-toggle{ font-size:1rem; padding:11px 12px; } }
   </style>
 </head>
 <body>
-
-  <!-- BIG CREST BANNER (same size & position on every page) -->
-  <header class="logo-header" role="banner">
+  <!-- Banner with crest -->
+  <header class="logo-header">
     <div class="logo-banner">
-      <div class="crest-wrap">
-        <!-- same asset everywhere; zoom controlled by --crest-zoom -->
-        <img src="logo.PNG?v=4" alt="High Peak &amp; Marple Snooker League crest">
-      </div>
+      <div class="crest-wrap"><img src="logo.PNG" alt="League crest"></div>
     </div>
   </header>
 
-  <!-- Announcement (appears when message exists) -->
-  <div id="announcement-banner" role="status" aria-live="polite">
-    <div id="announcement-inner" class="container">
-      <span id="announcement-text"></span>
-    </div>
-  </div>
+  <!-- Announcement -->
+  <div id="announcement-banner"><div id="announcement-inner" class="container"><span id="announcement-text"></span></div></div>
 
-  <!-- MENU TOGGLE (tabs hidden until opened). Overlay dropdown sits on top. -->
-  <div class="menu-bar">
-    <div class="menu-inner">
-      <button class="menu-toggle" id="menuToggle" aria-expanded="false" aria-controls="siteNav">☰ Menu</button>
-      <nav id="siteNav" class="site-nav" hidden>
-        <a href="index.html"   class="active">Home</a>
-        <a href="fixtures.html">Fixtures</a>
-        <a href="results.html">Results</a>
-        <a href="players.html">Players</a>
-        <a href="venues.html">Venues</a>
-        <a href="rules.html">Rules</a>
-        <a href="merit.html">Merit</a>
-        <a href="history.html">Honours List</a>
-        <a href="archive.html">Archive</a>
-      </nav>
-    </div>
-  </div>
+  <!-- Menu -->
+  <div class="menu-bar"><div class="menu-inner">
+    <button class="menu-toggle" id="menuToggle" aria-expanded="false" aria-controls="siteNav">☰ Menu</button>
+    <nav id="siteNav" class="site-nav" hidden>
+      <a href="index.html" class="active">Home</a>
+      <a href="fixtures.html">Fixtures</a>
+      <a href="results.html">Results</a>
+      <a href="players.html">Players</a>
+      <a href="venues.html">Venues</a>
+      <a href="rules.html">Rules</a>
+      <a href="merit.html">Merit</a>
+      <a href="history.html">Honours List</a>
+      <a href="archive.html">Archive</a>
+    </nav>
+  </div></div>
 
+  <!-- Content -->
   <main class="container">
     <h2>Welcome</h2>
     <p>This is the official site for the High Peak &amp; Marple Snooker League. Use the menu above to navigate.</p>
-
-    <h2>Current League Table</h2>
-    <div class="table-wrap">
-      <table id="leagueTable" aria-describedby="League table showing standings">
-        <thead>
-          <tr>
-            <th>#</th><th>Team</th>
-            <th title="Matches Played">P</th>
-            <th title="Wins">W</th>
-            <th title="Draws">D</th>
-            <th title="Losses">L</th>
-            <th title="Frames For">FF</th>
-            <th title="Frames Against">FA</th>
-            <th title="Frame Difference">FD</th>
-            <th title="Points">Pts</th>
-          </tr>
-        </thead>
-        <tbody id="leagueBody"></tbody>
-      </table>
-    </div>
   </main>
 
   <footer>&copy; 2025 High Peak &amp; Marple Snooker League</footer>
 
-  <!-- MENU logic (overlay, no layout shift) -->
   <script>
-    (function () {
-      const btn = document.getElementById('menuToggle');
-      const nav = document.getElementById('siteNav');
+    // Toggle dropdown
+    (function(){
+      const btn=document.getElementById('menuToggle'),nav=document.getElementById('siteNav');
+      function closeNav(){nav.hidden=true;btn.setAttribute('aria-expanded','false');}
+      btn.addEventListener('click',()=>{const ex=btn.getAttribute('aria-expanded')==='true';btn.setAttribute('aria-expanded',String(!ex));nav.hidden=ex;});
+      document.addEventListener('click',(e)=>{if(!nav.hidden && !nav.contains(e.target) && e.target!==btn){closeNav();}});
+      document.addEventListener('keydown',(e)=>{if(e.key==='Escape')closeNav();});
+    })();
 
-      function closeNav(){
-        nav.hidden = true;
-        btn.setAttribute('aria-expanded','false');
+    // Announcement loader
+    fetch('data/announcement.json').then(r=>r.json()).then(d=>{
+      if(d.message&&d.message.trim()){
+        document.getElementById('announcement-text').textContent=d.message.trim();
+        document.getElementById('announcement-banner').style.display='block';
       }
-      btn.addEventListener('click', () => {
-        const expanded = btn.getAttribute('aria-expanded') === 'true';
-        btn.setAttribute('aria-expanded', String(!expanded));
-        nav.hidden = expanded;
-      });
-      // Click outside closes
-      document.addEventListener('click', (e)=>{
-        if (!nav.hidden && !nav.contains(e.target) && e.target !== btn && !btn.contains(e.target)) {
-          closeNav();
-        }
-      });
-      // Escape closes
-      document.addEventListener('keydown', (e)=>{
-        if (e.key === 'Escape') closeNav();
-      });
-    })();
-  </script>
-
-  <!-- Announcement script -->
-  <script>
-    fetch('data/announcement.json', { cache: 'no-store' })
-      .then(r => r.json())
-      .then(d => {
-        if (d && d.message && d.message.trim()) {
-          document.getElementById('announcement-text').textContent = d.message.trim();
-          document.getElementById('announcement-banner').style.display = 'block';
-        }
-      })
-      .catch(()=>{});
-  </script>
-
-  <!-- League table script -->
-  <script>
-    (async function () {
-      try {
-        const [teams, matches] = await Promise.all([
-          fetch('data/teams.json').then(r => r.json()),
-          fetch('data/matches.json').then(r => r.json())
-        ]);
-
-        const table = {};
-        for (const t of teams) {
-          table[t.id] = { teamId:t.id, name:t.name, P:0, W:0, D:0, L:0, FF:0, FA:0, FD:0, Pts:0 };
-        }
-
-        const award = (hf, af, awayWin) => {
-          if (hf > af) return [2, 0];
-          if (hf < af) return [0, awayWin ? 3 : 2]; // +1 away-win bonus
-          return [1, 1];
-        };
-
-        for (const m of matches) {
-          const h = table[m.homeTeamId], a = table[m.awayTeamId];
-          if (!h || !a) continue;
-          h.P++; a.P++;
-          h.FF += m.homeFrames; h.FA += m.awayFrames;
-          a.FF += m.awayFrames; a.FA += m.homeFrames;
-
-          if (m.homeFrames > m.awayFrames) { h.W++; a.L++; }
-          else if (m.homeFrames < m.awayFrames) { a.W++; h.L++; }
-          else { h.D++; a.D++; }
-
-          const [hp, ap] = award(m.homeFrames, m.awayFrames, m.awayFrames > m.homeFrames);
-          h.Pts += hp; a.Pts += ap;
-        }
-
-        for (const t of Object.values(table)) t.FD = t.FF - t.FA;
-
-        const rows = Object.values(table)
-          .sort((x,y)=> (y.Pts-x.Pts) || (y.FD-x.FD) || (y.FF-x.FF) || x.name.localeCompare(y.name));
-
-        const body = document.getElementById('leagueBody');
-        body.innerHTML = '';
-        rows.forEach((t,i)=>{
-          const tr = document.createElement('tr');
-          tr.innerHTML = `
-            <td>${i+1}</td>
-            <td><a href="players.html?team=${encodeURIComponent(t.teamId)}">${escapeHtml(t.name)}</a></td>
-            <td>${t.P}</td><td>${t.W}</td><td>${t.D}</td><td>${t.L}</td>
-            <td>${t.FF}</td><td>${t.FA}</td><td>${t.FD}</td><td>${t.Pts}</td>`;
-          body.appendChild(tr);
-        });
-
-        function escapeHtml(str=''){
-          return str.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-        }
-      } catch(e) { console.warn('League table load failed:', e); }
-    })();
+    });
   </script>
 </body>
 </html>
