@@ -6,6 +6,9 @@
   <title>High Peak & Marple Snooker League - Fixtures</title>
   <link rel="stylesheet" href="style.css" />
   <style>
+    /* ===== Page container (keeps content inside page width) ===== */
+    .container { max-width: 980px; margin: 0 auto; padding: 0 14px; }
+
     /* =========================
        HEADER + DROPDOWN NAV
        ========================= */
@@ -80,7 +83,7 @@
     }
 
     /* =========================
-       ANNOUNCEMENT BANNER
+       ANNOUNCEMENT
        ========================= */
     #announcement-banner {
       display: none;
@@ -89,12 +92,7 @@
       font-weight: 800;
       width: 100%;
     }
-    #announcement-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 10px 16px;
-      text-align: center;
-    }
+    #announcement-inner { max-width: 980px; margin: 0 auto; padding: 10px 14px; text-align: center; }
 
     /* =========================
        PAGE LAYOUT
@@ -105,53 +103,67 @@
       background: #f7f8fb;
       color: #0b1220;
     }
-    main {
-      max-width: 1100px;
-      margin: 24px auto 48px;
-      padding: 0 16px;
+    main { padding: 20px 0 48px; }
+    h2 {
+      margin: 0 0 14px;
+      font-size: clamp(1.2rem, 2.2vw, 1.6rem);
     }
     footer {
       background: #0f172a;
       color: #fff;
       text-align: center;
       padding: 16px;
-      margin-top: 48px;
       border-top: 1px solid #e6e6e6;
     }
 
     /* =========================
-       FIXTURES TABLE
+       FIXTURES (professional style, no overflow)
        ========================= */
-    section.fixture-day {
-      margin-bottom: 2rem;
-    }
-    section.fixture-day h3 {
-      margin: 0 0 .5rem;
+    .fixture-day { margin: 22px 0 26px; }
+    .fixture-date {
+      margin: 0 0 10px;
+      font-weight: 800;
       color: #0f172a;
+      font-size: 1.05rem;
+      padding-bottom: 6px;
       border-bottom: 2px solid #22cc66;
-      padding-bottom: 4px;
     }
-    .fixtures-table {
+
+    .table-wrap {
+      overflow-x: auto;            /* enables scroll ONLY if needed */
+      -webkit-overflow-scrolling: touch;
+      border-radius: 8px;
+      box-shadow: 0 1px 2px rgba(0,0,0,.06);
+      background: #fff;
+    }
+
+    table.fixtures {
       width: 100%;
       border-collapse: collapse;
-      border: 1px solid #ddd;
-      border-radius: 6px;
-      overflow: hidden;
+      table-layout: fixed;         /* prevents cells from growing wider than container */
+      min-width: 520px;            /* keeps columns readable on tiny phones */
     }
-    .fixtures-table th, .fixtures-table td {
-      padding: .6rem .5rem;
-      border-bottom: 1px solid #e6e6e6;
+    .fixtures th, .fixtures td {
+      padding: .6rem .75rem;
+      border-bottom: 1px solid #e9e9e9;
       text-align: left;
+      white-space: nowrap;         /* tidy single-line entries */
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
-    .fixtures-table thead th {
-      background: #eaeaea;
+    .fixtures thead th {
+      background: #eef1f5;
+      color: #0f172a;
       font-weight: 700;
+      font-size: .95rem;
     }
-    .fixtures-table tbody tr:nth-child(even) {
-      background: #fafafa;
-    }
-    .fixtures-table tbody tr:hover {
-      background: #f1f7ff;
+    .fixtures tbody tr:nth-child(even) { background: #fafafa; }
+    .fixtures tbody tr:hover { background: #f1f7ff; }
+
+    /* small-device polish */
+    @media (max-width: 420px) {
+      .fixtures th, .fixtures td { padding: .55rem .6rem; }
+      .fixture-date { font-size: 1rem; }
     }
   </style>
 </head>
@@ -162,9 +174,7 @@
       <img class="banner-logo" src="images/logo-crest.png" alt="High Peak &amp; Marple Snooker League logo" />
       <h1 class="banner-title">High Peak &amp; Marple Snooker League</h1>
     </div>
-    <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav">
-      ☰ Menu
-    </button>
+    <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav">☰ Menu</button>
     <nav id="site-nav" class="dropdown" hidden>
       <a href="index.html">Home</a>
       <a href="fixtures.html" class="active">Fixtures</a>
@@ -185,7 +195,7 @@
     </div>
   </div>
 
-  <main>
+  <main class="container">
     <h2>Fixtures</h2>
     <div id="fixtures">Loading fixtures…</div>
   </main>
@@ -228,41 +238,51 @@
           banner.style.display = 'block';
         }
       })
-      .catch(err => {
-        console.warn('Announcement could not be loaded:', err);
-      });
+      .catch(err => console.warn('Announcement could not be loaded:', err));
 
-    // Fixtures loader
+    // Fixtures loader (groups by date, keeps within container)
     fetch('data/fixtures.json')
       .then(r => r.json())
       .then(fixtures => {
+        // Order by date to be safe
+        fixtures.sort((a,b) => new Date(a.date) - new Date(b.date));
+
+        // Group
         const grouped = {};
         fixtures.forEach(f => {
-          if (!grouped[f.date]) grouped[f.date] = [];
-          grouped[f.date].push(f);
+          (grouped[f.date] ||= []).push(f);
         });
 
         const container = document.getElementById('fixtures');
         container.innerHTML = '';
 
         for (const [date, games] of Object.entries(grouped)) {
-          const section = document.createElement('section');
-          section.className = 'fixture-day';
-          section.innerHTML = `<h3>${new Date(date).toLocaleDateString('en-GB', {
+          const day = document.createElement('section');
+          day.className = 'fixture-day';
+
+          const h = document.createElement('h3');
+          h.className = 'fixture-date';
+          h.textContent = new Date(date).toLocaleDateString('en-GB', {
             weekday: 'short', day: '2-digit', month: 'short', year: 'numeric'
-          })}</h3>`;
+          });
+          day.appendChild(h);
+
+          const wrap = document.createElement('div');
+          wrap.className = 'table-wrap';
 
           const table = document.createElement('table');
-          table.className = 'fixtures-table';
+          table.className = 'fixtures';
           table.innerHTML = `
             <thead>
               <tr><th>Home</th><th>Away</th></tr>
             </thead>
             <tbody>
               ${games.map(g => `<tr><td>${g.home}</td><td>${g.away}</td></tr>`).join('')}
-            </tbody>`;
-          section.appendChild(table);
-          container.appendChild(section);
+            </tbody>
+          `;
+          wrap.appendChild(table);
+          day.appendChild(wrap);
+          container.appendChild(day);
         }
       })
       .catch(err => {
