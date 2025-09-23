@@ -4,63 +4,174 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Venues — High Peak & Marple Snooker League</title>
+  <link rel="icon" type="image/png" href="/logo.PNG" sizes="192x192">
+  <link rel="apple-touch-icon" href="/logo.PNG">
+  <link rel="preload" as="image" href="/logo.PNG">
   <link rel="stylesheet" href="style.css" />
+
+  <style>
+    :root{
+      --brand-green:#002b19;   /* match crest green */
+      --banner-height:140px;   /* desktop logo height */
+      --page-max:1100px;
+      --accent:#19d36b;
+
+      --bar-dark:#1f1f1f;      /* announcement + menu colour */
+      --bar-border:#2a2a2a;
+      --overlay-bg:rgba(15,17,22,.85);
+    }
+
+    html,body{margin:0}
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#f7f8fb;color:#0b1220}
+    .container{max-width:var(--page-max);margin:0 auto;padding:0 12px}
+
+    /* ===== Crest banner ===== */
+    header.logo-header{
+      background:var(--brand-green);
+      box-shadow:0 2px 10px rgba(0,0,0,.25);
+      height:var(--banner-height);
+      display:flex;align-items:center;justify-content:center;
+    }
+    .logo-banner{height:100%;display:flex;align-items:center;justify-content:center}
+    .logo-banner img{height:100%;width:auto;object-fit:contain;display:block;filter:drop-shadow(0 0 6px rgba(0,0,0,.4))}
+
+    /* ===== Announcement bar (slimmer) ===== */
+    #announcement-banner{
+      position:sticky;top:0;z-index:100;display:none;background:var(--bar-dark);color:#fff;
+      font-weight:600;font-size:.85rem;padding:.35rem 0;border-top:1px solid rgba(255,255,255,.06);
+      border-bottom:1px solid var(--bar-border)
+    }
+    #announcement-inner{max-width:var(--page-max);margin:0 auto;padding:0 12px;text-align:center}
+
+    /* ===== Menu bar ===== */
+    .menu-bar{background:var(--bar-dark);padding:8px 0 10px;position:relative;z-index:110;border-bottom:1px solid var(--bar-border)}
+    .menu-inner{max-width:var(--page-max);margin:0 auto;padding:0 12px;position:relative}
+    .menu-toggle{
+      width:100%;background:var(--bar-dark);color:#fff;padding:10px 12px;border:1px solid var(--bar-border);
+      border-radius:10px;font-weight:800;font-size:1rem;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,.25) inset
+    }
+    .menu-toggle:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+    nav.site-nav{
+      position:absolute;left:12px;right:12px;top:calc(100% + 6px);background:var(--overlay-bg);backdrop-filter:blur(6px);
+      border:1px solid rgba(255,255,255,.08);border-radius:10px;box-shadow:0 18px 36px rgba(0,0,0,.45);padding:6px;z-index:120
+    }
+    [hidden]{display:none!important}
+    nav.site-nav a{
+      display:block;color:#e5e7eb;text-decoration:none;font-weight:700;padding:10px 10px;border-radius:8px
+    }
+    nav.site-nav a:hover{background:rgba(255,255,255,.1)}
+    nav.site-nav a.active{background:var(--accent);color:#0b1b0f}
+
+    /* ===== Page content ===== */
+    main.container{background:#fff;padding:1rem 12px 1.5rem;border-radius:10px;margin-top:10px;box-shadow:0 1px 2px rgba(0,0,0,.06)}
+    h2{margin:.25rem 0 .5rem 0}
+    p{margin:.25rem 0 1rem 0}
+    .venue-list{display:grid;gap:12px}
+    .venue{background:#fff;border:1px solid #e6e6e6;border-radius:10px;padding:12px}
+    .venue h3{margin:.2rem 0 .3rem 0}
+    .venue .meta{color:#555;font-size:.95rem}
+
+    footer{text-align:center;padding:1.5rem 1rem;color:#777}
+
+    @media (max-width:480px){
+      :root{--banner-height:110px}
+      .menu-toggle{font-size:.95rem;padding:9px 11px}
+    }
+  </style>
 </head>
 <body>
 
-  <header>
-    <h1>High Peak &amp; Marple Snooker League</h1>
+  <!-- Crest banner -->
+  <header class="logo-header" role="banner">
+    <div class="logo-banner">
+      <img src="logo.PNG?v=13" alt="High Peak &amp; Marple Snooker League crest">
+    </div>
   </header>
 
-  <!-- Announcement banner -->
-  <div id="announcement-banner"><span id="announcement-text"></span></div>
+  <!-- Announcement bar -->
+  <div id="announcement-banner" role="status" aria-live="polite">
+    <div id="announcement-inner" class="container">
+      <span id="announcement-text"></span>
+    </div>
+  </div>
 
-  <!-- Navigation -->
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="fixtures.html">Fixtures</a>
-    <a href="results.html">Results</a>
-    <a href="players.html">Players</a>
-    <a href="venues.html" class="active">Venues</a>
-    <a href="rules.html">Rules</a>
-    <a href="merit.html">Merit</a>
-    <a href="history.html">Honours List</a>
-    <a href="archive.html">Archive</a>
-  </nav>
+  <!-- Menu bar -->
+  <div class="menu-bar">
+    <div class="menu-inner">
+      <button class="menu-toggle" id="menuToggle" aria-expanded="false" aria-controls="siteNav">☰ Menu</button>
+      <nav id="siteNav" class="site-nav" hidden>
+        <a href="index.html">Home</a>
+        <a href="fixtures.html">Fixtures</a>
+        <a href="results.html">Results</a>
+        <a href="players.html">Players</a>
+        <a href="venues.html" class="active">Venues</a>
+        <a href="rules.html">Rules</a>
+        <a href="merit.html">Merit</a>
+        <a href="history.html">Honours List</a>
+        <a href="archive.html">Archive</a>
+      </nav>
+    </div>
+  </div>
 
-  <main>
+  <main class="container">
     <h2>Venues</h2>
     <p>Venue details will be displayed here.</p>
+
+    <!-- Example structure (optional; replace with real data) -->
+    <div class="venue-list" id="venueList"></div>
   </main>
 
   <footer>&copy; 2025 High Peak &amp; Marple Snooker League</footer>
 
-  <!-- Announcement loader -->
+  <!-- Menu logic -->
   <script>
-    fetch('data/announcement.json')
-      .then(response => response.json())
-      .then(data => {
-        if (data.message && data.message.trim()) {
-          const banner = document.getElementById('announcement-banner');
-          const text = document.getElementById('announcement-text');
-          text.textContent = data.message;
-          banner.style.display = 'block';
-        }
-      })
-      .catch(err => console.warn('Announcement failed to load:', err));
-  </script>
-
-  <!-- Active nav highlighter -->
-  <script>
-    (function () {
-      const path = location.pathname.replace(/\/+$/, '') || '/index.html';
-      document.querySelectorAll('nav a').forEach(a => {
-        if (a.getAttribute('href') === path) {
-          a.classList.add('active');
-        }
-      });
+    (function(){
+      const btn=document.getElementById('menuToggle');
+      const nav=document.getElementById('siteNav');
+      function closeNav(){nav.hidden=true;btn.setAttribute('aria-expanded','false')}
+      btn.addEventListener('click',()=>{const ex=btn.getAttribute('aria-expanded')==='true';btn.setAttribute('aria-expanded',String(!ex));nav.hidden=ex});
+      document.addEventListener('click',(e)=>{if(!nav.hidden&&!nav.contains(e.target)&&e.target!==btn&&!btn.contains(e.target)){closeNav()}});
+      document.addEventListener('keydown',(e)=>{if(e.key==='Escape')closeNav()});
     })();
   </script>
 
+  <!-- Announcement -->
+  <script>
+    fetch('data/announcement.json',{cache:'no-store'})
+      .then(r=>r.json())
+      .then(d=>{
+        if(d&&d.message&&d.message.trim()){
+          document.getElementById('announcement-text').textContent=d.message.trim();
+          document.getElementById('announcement-banner').style.display='block';
+        }
+      })
+      .catch(()=>{});
+  </script>
+
+  <!-- Optional: load venues from JSON (if you have data/venues.json) -->
+  <script>
+    // If you have a venues JSON file, uncomment and shape as needed.
+    /*
+    fetch('data/venues.json',{cache:'no-store'})
+      .then(r=>r.json())
+      .then(venues=>{
+        const list=document.getElementById('venueList');
+        list.innerHTML='';
+        venues.forEach(v=>{
+          const card=document.createElement('div');
+          card.className='venue';
+          card.innerHTML=`
+            <h3>${v.name}</h3>
+            <div class="meta">${v.address || ''}</div>
+            <div class="meta">${v.postcode || ''}</div>
+            ${v.tables ? `<div class="meta">Tables: ${v.tables}</div>`:''}
+            ${v.notes ? `<p>${v.notes}</p>`:''}
+          `;
+          list.appendChild(card);
+        });
+      })
+      .catch(()=>{});
+    */
+  </script>
 </body>
 </html>
