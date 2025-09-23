@@ -12,15 +12,16 @@
   <style>
     :root{
       --brand-green:#0c3d33;
-      /* ↓ Shrink banner & crest */
-      --banner-height:120px;
-      --crest-zoom:1.0;
-      --banner-pad:8px;
 
+      /* Banner size stays the same */
+      --banner-height:120px;
+
+      /* crest now fills the banner height */
+      --crest-zoom:1;
       --page-max:1100px;
       --accent:#19d36b;
 
-      /* Announcement + menu colours (kept in sync) */
+      /* Announcement + menu (kept in sync) */
       --bar-dark:#1f1f1f;
       --bar-border:#2a2a2a;
 
@@ -34,19 +35,28 @@
     }
     .container{max-width:var(--page-max);margin:0 auto;padding:0 12px}
 
-    /* ===== Crest banner (smaller) ===== */
+    /* ===== Crest banner (logo = banner height) ===== */
     header.logo-header{background:var(--brand-green);box-shadow:0 2px 10px rgba(0,0,0,.25)}
     .logo-banner{
-      height:var(--banner-height);display:flex;align-items:center;justify-content:center;
-      padding:var(--banner-pad)
+      height:var(--banner-height);
+      display:flex;align-items:center;justify-content:center;
+      padding:0; /* no inner padding so crest can be full height */
     }
     .crest-wrap{
-      height:calc(var(--banner-height) - 2*var(--banner-pad));
-      width:calc(var(--banner-height) - 2*var(--banner-pad));
-      overflow:hidden;border-radius:999px;display:flex;align-items:center;justify-content:center;
-      filter:drop-shadow(0 0 6px rgba(0,0,0,.4))
+      width:var(--banner-height);
+      height:var(--banner-height);
+      border-radius:50%;
+      display:flex;align-items:center;justify-content:center;
+      overflow:hidden;
+      filter:drop-shadow(0 0 6px rgba(0,0,0,.4));
     }
-    .logo-banner img{height:100%;width:auto;transform:scale(var(--crest-zoom));display:block}
+    /* Make the image fill the circle without changing banner height */
+    .logo-banner img{
+      width:100%;height:100%;
+      object-fit:contain; /* keep proportions */
+      transform:scale(var(--crest-zoom));
+      display:block;
+    }
 
     /* ===== Announcement bar ===== */
     #announcement-banner{
@@ -103,7 +113,7 @@
 
     /* ===== Mobile tweaks ===== */
     @media (max-width:480px){
-      :root{--banner-height:100px}
+      :root{--banner-height:100px} /* banner height stays fixed, crest scales with it */
       .menu-toggle{font-size:.95rem;padding:9px 11px}
       table#leagueTable{font-size:.9rem}
       table#leagueTable th,table#leagueTable td{padding:.45rem .4rem}
@@ -116,7 +126,7 @@
   <header class="logo-header" role="banner">
     <div class="logo-banner">
       <div class="crest-wrap">
-        <img src="logo.PNG?v=6" alt="High Peak &amp; Marple Snooker League crest">
+        <img src="logo.PNG?v=7" alt="High Peak &amp; Marple Snooker League crest">
       </div>
     </div>
   </header>
