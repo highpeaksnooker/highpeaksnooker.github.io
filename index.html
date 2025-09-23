@@ -11,79 +11,117 @@
 
   <style>
     :root{
-      --brand-green: #0c3d33;      /* green banner behind logo */
-      --banner-height: 200px;      /* make crest area nice & tall */
-      --crest-zoom: 1.22;          /* zoom the crest slightly */
-      --banner-pad: 12px;
-      --page-max: 1100px;
-      --accent: #19d36b;
+      --brand-green:#0c3d33;
+      /* ↓ Shrink banner & crest */
+      --banner-height:120px;
+      --crest-zoom:1.0;
+      --banner-pad:8px;
 
-      --bar-dark: #1f1f1f;         /* announcement + menu bar colour */
-      --overlay-bg: rgba(15,17,22,.85); /* dropdown transparency */
+      --page-max:1100px;
+      --accent:#19d36b;
+
+      /* Announcement + menu colours (kept in sync) */
+      --bar-dark:#1f1f1f;
+      --bar-border:#2a2a2a;
+
+      --overlay-bg:rgba(15,17,22,.85);
     }
 
     html,body{margin:0}
-    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#f6f7f9;color:#0b1220}
+    body{
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      background:#f6f7f9;color:#0b1220
+    }
     .container{max-width:var(--page-max);margin:0 auto;padding:0 12px}
 
-    /* ==== BIG CREST BANNER (visible) ==== */
-    header.logo-header{background:var(--brand-green);box-shadow:0 2px 14px rgba(0,0,0,.35)}
-    .logo-banner{height:var(--banner-height);display:flex;align-items:center;justify-content:center;padding:var(--banner-pad)}
-    .crest-wrap{height:calc(var(--banner-height) - 2*var(--banner-pad));width:calc(var(--banner-height) - 2*var(--banner-pad));
-      overflow:hidden;border-radius:999px;display:flex;align-items:center;justify-content:center;filter:drop-shadow(0 0 10px rgba(0,0,0,.5))}
+    /* ===== Crest banner (smaller) ===== */
+    header.logo-header{background:var(--brand-green);box-shadow:0 2px 10px rgba(0,0,0,.25)}
+    .logo-banner{
+      height:var(--banner-height);display:flex;align-items:center;justify-content:center;
+      padding:var(--banner-pad)
+    }
+    .crest-wrap{
+      height:calc(var(--banner-height) - 2*var(--banner-pad));
+      width:calc(var(--banner-height) - 2*var(--banner-pad));
+      overflow:hidden;border-radius:999px;display:flex;align-items:center;justify-content:center;
+      filter:drop-shadow(0 0 6px rgba(0,0,0,.4))
+    }
     .logo-banner img{height:100%;width:auto;transform:scale(var(--crest-zoom));display:block}
 
-    /* ==== Announcement (original dark bar) ==== */
-    #announcement-banner{position:sticky;top:0;z-index:100;display:none;background:var(--bar-dark);color:#fff;
-      font-weight:700;font-size:.95rem;padding:.6rem 0;border-top:1px solid rgba(255,255,255,.06);border-bottom:1px solid #333}
+    /* ===== Announcement bar ===== */
+    #announcement-banner{
+      position:sticky;top:0;z-index:100;display:none;background:var(--bar-dark);color:#fff;
+      font-weight:700;font-size:.95rem;padding:.5rem 0;border-top:1px solid rgba(255,255,255,.06);
+      border-bottom:1px solid var(--bar-border)
+    }
     #announcement-inner{max-width:var(--page-max);margin:0 auto;padding:0 12px}
 
-    /* ==== Menu bar (same colour as announcement) ==== */
-    .menu-bar{background:var(--bar-dark);padding:12px 0 16px;position:relative;z-index:110}
+    /* ===== Menu bar (same colour as announcement) ===== */
+    .menu-bar{background:var(--bar-dark);padding:8px 0 10px;position:relative;z-index:110;border-bottom:1px solid var(--bar-border)}
     .menu-inner{max-width:var(--page-max);margin:0 auto;padding:0 12px;position:relative}
-    .menu-toggle{width:100%;background:#111827;color:#fff;padding:12px 14px;border:none;border-radius:10px;font-weight:800;
-      font-size:1.05rem;cursor:pointer}
+    .menu-toggle{
+      width:100%;background:var(--bar-dark);color:#fff;padding:10px 12px;border:1px solid var(--bar-border);
+      border-radius:10px;font-weight:800;font-size:1rem;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,.25) inset
+    }
     .menu-toggle:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 
-    /* Overlay dropdown (transparent, no layout shift) */
-    nav.site-nav{position:absolute;left:12px;right:12px;top:calc(100% + 8px);background:var(--overlay-bg);backdrop-filter:blur(6px);
-      border:1px solid rgba(255,255,255,.08);border-radius:12px;box-shadow:0 20px 40px rgba(0,0,0,.45);padding:8px;z-index:120}
+    /* Overlay dropdown */
+    nav.site-nav{
+      position:absolute;left:12px;right:12px;top:calc(100% + 6px);background:var(--overlay-bg);backdrop-filter:blur(6px);
+      border:1px solid rgba(255,255,255,.08);border-radius:10px;box-shadow:0 18px 36px rgba(0,0,0,.45);padding:6px;z-index:120
+    }
     [hidden]{display:none!important}
-    nav.site-nav a{display:block;color:#e5e7eb;text-decoration:none;font-weight:700;padding:12px 10px;border-radius:10px}
+    nav.site-nav a{
+      display:block;color:#e5e7eb;text-decoration:none;font-weight:700;padding:10px 10px;border-radius:8px
+    }
     nav.site-nav a:hover{background:rgba(255,255,255,.1)}
     nav.site-nav a.active{background:var(--accent);color:#0b1b0f}
 
-    /* ==== Main card & league table ==== */
-    main.container{background:#fff;padding:1.25rem 12px 2rem;border-radius:12px;margin-top:14px;box-shadow:0 1px 2px rgba(0,0,0,.06)}
+    /* ===== Main card & league table (tighter) ===== */
+    main.container{
+      background:#fff;padding:1rem 12px 1.5rem;border-radius:10px;margin-top:10px;
+      box-shadow:0 1px 2px rgba(0,0,0,.06)
+    }
+    main h2{margin:.25rem 0 .5rem 0}
     .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
-    table#leagueTable{width:100%;border-collapse:collapse;border:1px solid #ddd;border-radius:12px;overflow:hidden}
-    table#leagueTable thead th{position:sticky;top:0;background:#eaeaea;font-weight:700}
-    table#leagueTable th,table#leagueTable td{padding:.6rem .5rem;border-bottom:1px solid #e6e6e6;text-align:center;white-space:nowrap}
-    table#leagueTable th:first-child,table#leagueTable td:first-child{text-align:right}
-    table#leagueTable th:nth-child(2),table#leagueTable td:nth-child(2){text-align:left;white-space:normal}
+    table#leagueTable{
+      width:100%;border-collapse:collapse;border:1px solid #ddd;border-radius:10px;overflow:hidden;font-size:.95rem
+    }
+    table#leagueTable thead th{
+      position:sticky;top:0;background:#eaeaea;font-weight:700
+    }
+    table#leagueTable th,table#leagueTable td{
+      padding:.5rem .45rem;border-bottom:1px solid #e6e6e6;text-align:center;white-space:nowrap
+    }
+    table#leagueTable th:nth-child(2),table#leagueTable td:nth-child(2){
+      text-align:left;white-space:normal
+    }
     #leagueTable tbody tr:nth-child(even){background:#fafafa}
     #leagueTable tbody tr:hover{background:#f1f7ff}
 
-    footer{text-align:center;padding:2rem 1rem;color:#777}
+    footer{text-align:center;padding:1.5rem 1rem;color:#777}
 
-    @media (max-width:420px){
-      .menu-toggle{font-size:1rem;padding:11px 12px}
-      :root{--banner-height:190px}
+    /* ===== Mobile tweaks ===== */
+    @media (max-width:480px){
+      :root{--banner-height:100px}
+      .menu-toggle{font-size:.95rem;padding:9px 11px}
+      table#leagueTable{font-size:.9rem}
+      table#leagueTable th,table#leagueTable td{padding:.45rem .4rem}
     }
   </style>
 </head>
 <body>
 
-  <!-- Crest banner (visible) -->
+  <!-- Crest banner -->
   <header class="logo-header" role="banner">
     <div class="logo-banner">
       <div class="crest-wrap">
-        <img src="logo.PNG?v=5" alt="High Peak &amp; Marple Snooker League crest">
+        <img src="logo.PNG?v=6" alt="High Peak &amp; Marple Snooker League crest">
       </div>
     </div>
   </header>
 
-  <!-- Announcement bar (unchanged style) -->
+  <!-- Announcement bar -->
   <div id="announcement-banner" role="status" aria-live="polite">
     <div id="announcement-inner" class="container">
       <span id="announcement-text"></span>
