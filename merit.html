@@ -62,24 +62,39 @@
     nav.site-nav a:hover{background:rgba(255,255,255,.1)}
     nav.site-nav a.active{background:var(--accent);color:#0b1b0f}
 
-    /* ===== Page content ===== */
+    /* ===== Main card ===== */
     main.container{background:#fff;padding:1rem 12px 1.5rem;border-radius:10px;margin-top:10px;box-shadow:0 1px 2px rgba(0,0,0,.06)}
     h2{margin:.25rem 0 1rem 0}
 
-    .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
-    table#meritTable{width:100%;border-collapse:collapse;border:1px solid #ddd;border-radius:10px;overflow:hidden;font-size:.95rem}
-    table#meritTable thead th{position:sticky;top:0;background:#eaeaea;font-weight:700}
-    table#meritTable th,table#meritTable td{padding:.5rem .45rem;border-bottom:1px solid #e6e6e6;text-align:center;white-space:nowrap}
-    table#meritTable th:nth-child(2),table#meritTable td:nth-child(2){text-align:left;white-space:normal}
-    #meritTable tbody tr:nth-child(even){background:#fafafa}
-    #meritTable tbody tr:hover{background:#f1f7ff}
+    /* ===== Heatmap table (Merit) ===== */
+    .table-scroller{overflow-x:auto;-webkit-overflow-scrolling:touch}
+    .player-grid{
+      width:max(980px,100%);
+      border-collapse:collapse;background:#fff;font-size:.95rem;table-layout:fixed
+    }
+    .player-grid th,.player-grid td{
+      border:1px solid #e4e4e4;padding:6px 8px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis
+    }
+    .player-grid thead th{background:#f0f0f0;font-weight:700}
+
+    /* sticky identity columns */
+    .player-grid th.sticky,.player-grid td.sticky{position:sticky;left:0;background:#fff;z-index:3}
+    .player-grid th.sticky-2,.player-grid td.sticky-2{position:sticky;left:220px;background:#fff;z-index:3}
+    .player-grid th.sticky-3,.player-grid td.sticky-3{position:sticky;left:420px;background:#fff;z-index:3}
+
+    /* result colours */
+    .cell-w{background:#19c67a;color:#083;font-weight:700}
+    .cell-l{background:#f6903d;color:#5a2a00;font-weight:700}
+    .cell-na{background:#111;color:#fff}
+    .cell-blank{background:#fff}
 
     footer{text-align:center;padding:1.5rem 1rem;color:#777}
 
     @media (max-width:480px){
       :root{--banner-height:110px}
       .menu-toggle{font-size:.95rem;padding:9px 11px}
-      table#meritTable{font-size:.9rem}
+      .player-grid{font-size:.9rem}
+      .player-grid th,.player-grid td{padding:5px 6px}
     }
   </style>
 </head>
@@ -119,18 +134,12 @@
 
   <main class="container">
     <h2>Player Merit Table</h2>
-    <div class="table-wrap">
-      <table id="meritTable">
-        <thead>
-          <tr>
-            <th>#</th><th>Player</th><th>Team</th>
-            <th>Start HCP</th><th>Played</th><th>Wins</th><th>Losses</th><th>W–L</th>
-            <th>25+ Breaks</th><th>Highest Break</th>
-          </tr>
-        </thead>
-        <tbody id="meritBody"></tbody>
-      </table>
+    <div class="table-scroller">
+      <table id="meritGrid" class="player-grid" aria-describedby="meritHeatmap"></table>
     </div>
+    <p id="meritHeatmap" class="visually-hidden">
+      Merit grid with weekly wins/losses by date and totals.
+    </p>
   </main>
 
   <footer>&copy; 2025 High Peak &amp; Marple Snooker League</footer>
@@ -160,73 +169,174 @@
       .catch(()=>{});
   </script>
 
-  <!-- Merit table logic -->
+  <!-- Merit heatmap logic (auto-confirm weeks from matches only) -->
   <script>
-    (async function(){
-      const [players, teams, matches] = await Promise.all([
-        fetch('data/players.json').then(r=>r.json()),
-        fetch('data/teams.json').then(r=>r.json()),
-        fetch('data/matches.json').then(r=>r.json())
-      ]);
+  (async function () {
+    const [teams, players, fixtures, matches] = await Promise.all([
+      fetch('data/teams.json',{cache:'no-store'}).then(r=>r.json()),
+      fetch('data/players.json',{cache:'no-store'}).then(r=>r.json()),
+      fetch('data/fixtures.json',{cache:'no-store'}).then(r=>r.json()),
+      fetch('data/matches.json',{cache:'no-store'}).then(r=>r.json())
+    ]);
 
-      const teamName = id => (teams.find(t => t.id === id) || {}).name || '';
-      const playerMap = Object.fromEntries(players.map(p => [p.id, {
-        ...p, teamName: teamName(p.teamId), played: 0, wins: 0, losses: 0, breaks: [], highestBreak: 0
-      }]));
+    const teamById = Object.fromEntries(teams.map(t => [t.id, t]));
 
-      for (const match of matches) {
-        for (const f of match.frames) {
-          const home = playerMap[f.homePlayerId];
-          const away = playerMap[f.awayPlayerId];
-          if (!home || !away) continue;
+    // --- Index fixtures by date ---
+    const fixturesByDate = {};
+    for (const f of fixtures) (fixturesByDate[f.date] ||= []).push(f);
 
-          home.played++; away.played++;
-          if (f.winner === 'home') { home.wins++; away.losses++; }
-          else if (f.winner === 'away') { away.wins++; home.losses++; }
+    // --- Index matches by date+pair ---
+    const mKey = m => `${m.date}|${m.homeTeamId}|${m.awayTeamId}`;
+    const matchesByKey = new Map(matches.map(m => [mKey(m), m]));
 
-          if (f.breaks) {
-            if (f.breaks.home && f.breaks.home >= 25) {
-              home.breaks.push(f.breaks.home);
-              home.highestBreak = Math.max(home.highestBreak, f.breaks.home);
-            }
-            if (f.breaks.away && f.breaks.away >= 25) {
-              away.breaks.push(f.breaks.away);
-              away.highestBreak = Math.max(away.highestBreak, f.breaks.away);
-            }
-          }
+    // A match is "complete" if it has results or is explicitly postponed/void
+    function isComplete(m){
+      if (!m) return false;
+      if (m.status === 'postponed' || m.status === 'void') return true;
+      if (typeof m.homeFrames === 'number' && typeof m.awayFrames === 'number') return true;
+      if (Array.isArray(m.frames) && m.frames.some(fr => fr.winner==='home' || fr.winner==='away')) return true;
+      return false;
+    }
+
+    // --- Confirmed dates: only dates where ALL fixtures are complete ---
+    const confirmedDates = Object.keys(fixturesByDate)
+      .filter(d => fixturesByDate[d].every(f => isComplete(matchesByKey.get(`${d}|${f.homeTeamId}|${f.awayTeamId}`))))
+      .sort((a,b)=> new Date(a)-new Date(b));
+
+    // --- Did a team have a fixture on date? ---
+    const teamHasFixture = {};
+    for (const d of confirmedDates){
+      teamHasFixture[d] = {};
+      for (const t of teams) teamHasFixture[d][t.id] = false;
+      for (const f of fixturesByDate[d]) {
+        teamHasFixture[d][f.homeTeamId] = true;
+        teamHasFixture[d][f.awayTeamId] = true;
+      }
+    }
+
+    // --- Seed per-player rows
+    const P = {};
+    for (const p of players){
+      P[p.id] = {
+        name: p.name,
+        teamId: p.teamId,
+        teamName: teamById[p.teamId]?.name || '',
+        HCP: p.HCP ?? p.hcp ?? 0,
+        perDate: Object.fromEntries(confirmedDates.map(d => [d,'blank'])),
+        totals: {played:0,won:0,lost:0,diff:0,break25:0,high:0,winPct:0}
+      };
+    }
+
+    // Pre-mark black cells (no team fixture)
+    for (const p of players){
+      for (const d of confirmedDates){
+        if (!teamHasFixture[d][p.teamId]) P[p.id].perDate[d] = 'na';
+      }
+    }
+
+    // Record a frame into player row
+    function recordFrame(frame, isHome, date){
+      const pid = isHome ? frame.homePlayerId : frame.awayPlayerId;
+      const row = P[pid];
+      if (!row || !confirmedDates.includes(date)) return;
+
+      if (row.perDate[date] !== 'na') {
+        const win = frame.winner === 'home' ? isHome
+                  : frame.winner === 'away' ? !isHome
+                  : null;
+        if (win === true)  { row.perDate[date] = 'W'; row.totals.played++; row.totals.won++; }
+        if (win === false) { row.perDate[date] = 'L'; row.totals.played++; row.totals.lost++; }
+      }
+
+      // Breaks ≥25
+      const b = frame.breaks;
+      const myBreak = isHome ? b?.home : b?.away;
+      if (typeof myBreak === 'number' && myBreak >= 25){
+        row.totals.break25++;
+        row.totals.high = Math.max(row.totals.high, myBreak);
+      }
+    }
+
+    // Apply frames for confirmed dates only
+    for (const d of confirmedDates){
+      for (const f of fixturesByDate[d]){
+        const m = matchesByKey.get(`${d}|${f.homeTeamId}|${f.awayTeamId}`);
+        if (!m || !Array.isArray(m.frames)) continue;
+        for (const fr of m.frames){
+          recordFrame(fr, true,  d);
+          recordFrame(fr, false, d);
         }
       }
+    }
 
-      const rows = Object.values(playerMap)
-        .filter(p => p.played > 0)
-        .sort((a,b) => (b.wins - b.losses) - (a.wins - a.losses) || b.wins - a.wins || a.name.localeCompare(b.name));
+    // Final totals
+    for (const row of Object.values(P)){
+      row.totals.diff   = row.totals.won - row.totals.lost;
+      row.totals.winPct = row.totals.played ? (row.totals.won / row.totals.played) : 0;
+    }
 
-      const body = document.getElementById('meritBody');
-      body.innerHTML = '';
-      rows.forEach((p, i) => {
-        const tr = document.createElement('tr');
-        tr.dataset.teamId = p.teamId;
-        tr.innerHTML = `
-          <td>${i+1}</td>
-          <td>${escapeHtml(p.name)}</td>
-          <td>${escapeHtml(p.teamName)}</td>
-          <td>${p.hcp}</td>
-          <td>${p.played}</td>
-          <td>${p.wins}</td>
-          <td>${p.losses}</td>
-          <td>${p.wins - p.losses}</td>
-          <td>${p.breaks.length}</td>
-          <td>${p.highestBreak || '-'}</td>
-        `;
-        body.appendChild(tr);
-      });
+    /* Merit ordering you specified:
+       Most wins first,
+       then fewer games (higher win%),
+       then most 25+ breaks,
+       then name A–Z.
+    */
+    const rows = Object.values(P).sort((a,b) =>
+      (b.totals.won - a.totals.won) ||
+      (a.totals.played - b.totals.played) ||
+      (b.totals.winPct - a.totals.winPct) ||
+      (b.totals.break25 - a.totals.break25) ||
+      a.name.localeCompare(b.name)
+    );
 
-      function escapeHtml(str='') {
-        return str.replace(/[&<>"']/g, c => ({
-          '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
-        }[c]));
+    // ----- Render table -----
+    const tbl = document.getElementById('meritGrid');
+    const thead = document.createElement('thead');
+    const thRow = document.createElement('tr');
+    thRow.innerHTML =
+     `<th class="sticky"  style="min-width:220px; left:0">Player</th>
+      <th class="sticky-2" style="min-width:200px;">Team</th>
+      <th class="sticky-3" style="min-width:110px;">Start HCP</th>`;
+
+    for (const d of confirmedDates){
+      const th = document.createElement('th');
+      th.textContent = new Date(d).toLocaleDateString('en-GB',{day:'2-digit',month:'2-digit',year:'2-digit'});
+      thRow.appendChild(th);
+    }
+    for (const label of ['Played','Wins','Losses','W–L','25+','Highest Break']) {
+      const th = document.createElement('th'); th.textContent = label; thRow.appendChild(th);
+    }
+    thead.appendChild(thRow);
+
+    const tbody = document.createElement('tbody');
+    let rank = 0;
+    for (const r of rows){
+      rank++;
+      const tr = document.createElement('tr');
+      tr.innerHTML =
+       `<td class="sticky"  style="left:0;text-align:left">${escapeHtml(r.name)}</td>
+        <td class="sticky-2" style="text-align:left">${escapeHtml(r.teamName)}</td>
+        <td class="sticky-3">${r.HCP}</td>`;
+
+      for (const d of confirmedDates){
+        const v = r.perDate[d];
+        let cls='cell-blank', text='';
+        if (v==='W') { cls='cell-w'; text='W'; }
+        else if (v==='L') { cls='cell-l'; text='L'; }
+        else if (v==='na'){ cls='cell-na'; }
+        const td=document.createElement('td'); td.className=cls; td.textContent=text; tr.appendChild(td);
       }
-    })();
+      const T=r.totals;
+      tr.insertAdjacentHTML('beforeend',
+        `<td>${T.played}</td><td>${T.won}</td><td>${T.lost}</td>
+         <td>${T.won - T.lost}</td><td>${T.break25}</td><td>${T.high || 0}</td>`);
+      tbody.appendChild(tr);
+    }
+
+    tbl.replaceChildren(thead, tbody);
+
+    function escapeHtml(s=''){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+  })();
   </script>
 </body>
 </html>
