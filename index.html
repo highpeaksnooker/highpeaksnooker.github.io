@@ -12,13 +12,7 @@
   <style>
     :root{
       --brand-green:#0c3d33;
-
-      /* Banner size stays the same */
-      --banner-height:120px;
-
-      /* overscan crest to fill banner */
-      --crest-overscan:1.34;
-
+      --banner-height:120px;  /* Banner stays the same height */
       --page-max:1100px;
       --accent:#19d36b;
 
@@ -36,7 +30,7 @@
     }
     .container{max-width:var(--page-max);margin:0 auto;padding:0 12px}
 
-    /* ===== Crest banner (logo overscanned to fill) ===== */
+    /* ===== Crest banner (reset to original, no zoom) ===== */
     header.logo-header{background:var(--brand-green);box-shadow:0 2px 10px rgba(0,0,0,.25)}
     .logo-banner{
       height:var(--banner-height);
@@ -53,9 +47,8 @@
     }
     .logo-banner img{
       width:100%;height:100%;
-      object-fit:contain;
-      transform:scale(var(--crest-overscan));
-      transform-origin:center;
+      object-fit:contain; /* show whole crest, no crop */
+      transform:none;     /* no zoom */
       display:block;
     }
 
@@ -127,7 +120,7 @@
   <header class="logo-header" role="banner">
     <div class="logo-banner">
       <div class="crest-wrap">
-        <img src="logo.PNG?v=8" alt="High Peak &amp; Marple Snooker League crest">
+        <img src="logo.PNG?v=9" alt="High Peak &amp; Marple Snooker League crest">
       </div>
     </div>
   </header>
