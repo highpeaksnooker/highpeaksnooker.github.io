@@ -12,11 +12,10 @@
   <style>
     :root{
       --brand-green:#0c3d33;
-      --banner-height:120px;  /* Banner stays the same height */
+      --banner-height:140px;  /* banner taller so crest is bigger */
       --page-max:1100px;
       --accent:#19d36b;
 
-      /* Announcement + menu (kept in sync) */
       --bar-dark:#1f1f1f;
       --bar-border:#2a2a2a;
 
@@ -30,7 +29,7 @@
     }
     .container{max-width:var(--page-max);margin:0 auto;padding:0 12px}
 
-    /* ===== Crest banner (reset to original, no zoom) ===== */
+    /* ===== Crest banner ===== */
     header.logo-header{background:var(--brand-green);box-shadow:0 2px 10px rgba(0,0,0,.25)}
     .logo-banner{
       height:var(--banner-height);
@@ -47,8 +46,7 @@
     }
     .logo-banner img{
       width:100%;height:100%;
-      object-fit:contain; /* show whole crest, no crop */
-      transform:none;     /* no zoom */
+      object-fit:contain;
       display:block;
     }
 
@@ -60,7 +58,7 @@
     }
     #announcement-inner{max-width:var(--page-max);margin:0 auto;padding:0 12px}
 
-    /* ===== Menu bar (same colour as announcement) ===== */
+    /* ===== Menu bar ===== */
     .menu-bar{background:var(--bar-dark);padding:8px 0 10px;position:relative;z-index:110;border-bottom:1px solid var(--bar-border)}
     .menu-inner{max-width:var(--page-max);margin:0 auto;padding:0 12px;position:relative}
     .menu-toggle{
@@ -69,7 +67,6 @@
     }
     .menu-toggle:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 
-    /* Overlay dropdown */
     nav.site-nav{
       position:absolute;left:12px;right:12px;top:calc(100% + 6px);background:var(--overlay-bg);backdrop-filter:blur(6px);
       border:1px solid rgba(255,255,255,.08);border-radius:10px;box-shadow:0 18px 36px rgba(0,0,0,.45);padding:6px;z-index:120
@@ -81,7 +78,7 @@
     nav.site-nav a:hover{background:rgba(255,255,255,.1)}
     nav.site-nav a.active{background:var(--accent);color:#0b1b0f}
 
-    /* ===== Main card & league table (tighter) ===== */
+    /* ===== Main card & league table ===== */
     main.container{
       background:#fff;padding:1rem 12px 1.5rem;border-radius:10px;margin-top:10px;
       box-shadow:0 1px 2px rgba(0,0,0,.06)
@@ -107,7 +104,7 @@
 
     /* ===== Mobile tweaks ===== */
     @media (max-width:480px){
-      :root{--banner-height:100px}
+      :root{--banner-height:110px} /* slightly smaller on mobile */
       .menu-toggle{font-size:.95rem;padding:9px 11px}
       table#leagueTable{font-size:.9rem}
       table#leagueTable th,table#leagueTable td{padding:.45rem .4rem}
@@ -120,7 +117,7 @@
   <header class="logo-header" role="banner">
     <div class="logo-banner">
       <div class="crest-wrap">
-        <img src="logo.PNG?v=9" alt="High Peak &amp; Marple Snooker League crest">
+        <img src="logo.PNG?v=10" alt="High Peak &amp; Marple Snooker League crest">
       </div>
     </div>
   </header>
