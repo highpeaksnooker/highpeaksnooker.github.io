@@ -216,8 +216,8 @@
     (async function () {
       try {
         const [teams, matches] = await Promise.all([
-          fetch('data/teams.json').then(r => r.json()),
-          fetch('data/matches.json').then(r => r.json())
+          fetch('data/teams.json',   {cache:'no-store'}).then(r => r.json()),
+          fetch('data/matches.json', {cache:'no-store'}).then(r => r.json())
         ]);
 
         const table = {};
@@ -225,32 +225,43 @@
           table[t.id] = { teamId:t.id, name:t.name, P:0, W:0, D:0, L:0, FF:0, FA:0, FD:0, Pts:0 };
         }
 
-        const award = (hf, af, awayWin) => {
-          if (hf > af) return [2, 0];
-          if (hf < af) return [0, awayWin ? 3 : 2];
-          return [1, 1];
-        };
-
+        // --- Points model: frames count + bonus (home win +2, away win +3, draw +1 each)
         for (const m of matches) {
           const h = table[m.homeTeamId], a = table[m.awayTeamId];
-          if (!h || !a) continue;
+          if (!h || !a) continue;                    // unknown team id → skip
+          if (typeof m.homeFrames !== 'number' || typeof m.awayFrames !== 'number') continue; // ignore unplayed
+
           h.P++; a.P++;
+
+          // Frames for/against (also our base points)
           h.FF += m.homeFrames; h.FA += m.awayFrames;
           a.FF += m.awayFrames; a.FA += m.homeFrames;
 
-          if (m.homeFrames > m.awayFrames) { h.W++; a.L++; }
-          else if (m.homeFrames < m.awayFrames) { a.W++; h.L++; }
-          else { h.D++; a.D++; }
+          // Base league points = frames won
+          h.Pts += m.homeFrames;
+          a.Pts += m.awayFrames;
 
-          const [hp, ap] = award(m.homeFrames, m.awayFrames, m.awayFrames > m.homeFrames);
-          h.Pts += hp; a.Pts += ap;
+          // Result columns + bonus points
+          if (m.homeFrames > m.awayFrames) {
+            h.W++; a.L++;
+            h.Pts += 2;                 // home win bonus
+          } else if (m.homeFrames < m.awayFrames) {
+            a.W++; h.L++;
+            a.Pts += 3;                 // away win bonus
+          } else {
+            h.D++; a.D++;
+            h.Pts += 1; a.Pts += 1;     // draw bonus
+          }
         }
 
+        // Frame diff
         for (const t of Object.values(table)) t.FD = t.FF - t.FA;
 
+        // Sort: Points, FD, FF, Name
         const rows = Object.values(table)
           .sort((x,y)=> (y.Pts-x.Pts) || (y.FD-x.FD) || (y.FF-x.FF) || x.name.localeCompare(y.name));
 
+        // Render
         const body = document.getElementById('leagueBody');
         body.innerHTML = '';
         rows.forEach((t,i)=>{
