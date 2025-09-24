@@ -20,10 +20,7 @@
     }
 
     html,body{margin:0}
-    body{
-      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-      background:#f6f7f9;color:#0b1220
-    }
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#f6f7f9;color:#0b1220}
     .container{max-width:var(--page-max);margin:0 auto;padding:0 12px}
 
     /* ===== Crest banner ===== */
@@ -34,10 +31,7 @@
       display:flex;align-items:center;justify-content:center;
     }
     .logo-banner{height:100%;display:flex;align-items:center;justify-content:center}
-    .logo-banner img{
-      height:100%;width:auto;object-fit:contain;display:block;
-      filter:drop-shadow(0 0 6px rgba(0,0,0,.4));
-    }
+    .logo-banner img{height:100%;width:auto;object-fit:contain;display:block;filter:drop-shadow(0 0 6px rgba(0,0,0,.4))}
 
     /* ===== Announcement bar ===== */
     #announcement-banner{
@@ -82,13 +76,14 @@
     #leagueTable tbody tr:nth-child(even){background:#fafafa}
     #leagueTable tbody tr:hover{background:#f1f7ff}
 
-    /* Travellers badge */
+    /* Travellers badge (gold "T") */
     .travellers-badge{
-      display:inline-block;margin-left:.4rem;padding:.15rem .4rem;border-radius:999px;
-      font-size:.75em;font-weight:700;background:#ffe08a;color:#000;border:1px solid #e6c159;vertical-align:middle
+      display:inline-block;margin-left:.3rem;padding:0 .35rem;border-radius:50%;
+      font-size:.8em;font-weight:800;background:#ffe08a;color:#000;border:1px solid #e6c159;
     }
-    /* small note above table */
-    #travellers-note{margin:.5rem 0 0.75rem;color:#333;font-weight:600}
+
+    /* small key below table */
+    #travellers-key{margin:.5rem 0 0.75rem;color:#333;font-size:.9em}
 
     footer{text-align:center;padding:1.5rem 1rem;color:#777}
 
@@ -139,8 +134,6 @@
     <p>This is the official site for the High Peak &amp; Marple Snooker League. Use the menu above to navigate.</p>
 
     <h2>Current League Table</h2>
-    <div id="travellers-note" aria-live="polite"></div>
-
     <div class="table-wrap">
       <table id="leagueTable" aria-describedby="League table showing standings">
         <thead>
@@ -159,6 +152,7 @@
         <tbody id="leagueBody"></tbody>
       </table>
     </div>
+    <div id="travellers-key"><span class="travellers-badge">T</span> = Travellers’ Prize holders</div>
   </main>
 
   <footer>&copy; 2025 High Peak &amp; Marple Snooker League</footer>
@@ -166,31 +160,23 @@
   <!-- Menu logic -->
   <script>
     (function(){
-      const btn = document.getElementById('menuToggle');
-      const nav = document.getElementById('siteNav');
-      function closeNav(){ nav.hidden = true; btn.setAttribute('aria-expanded','false'); }
-      btn.addEventListener('click', () => {
-        const ex = btn.getAttribute('aria-expanded') === 'true';
-        btn.setAttribute('aria-expanded', String(!ex));
-        nav.hidden = ex;
-      });
-      document.addEventListener('click', (e) => {
-        if (!nav.hidden && !nav.contains(e.target) && e.target !== btn && !btn.contains(e.target)) {
-          closeNav();
-        }
-      });
-      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeNav(); });
+      const btn=document.getElementById('menuToggle');
+      const nav=document.getElementById('siteNav');
+      function closeNav(){nav.hidden=true;btn.setAttribute('aria-expanded','false')}
+      btn.addEventListener('click',()=>{const ex=btn.getAttribute('aria-expanded')==='true';btn.setAttribute('aria-expanded',String(!ex));nav.hidden=ex});
+      document.addEventListener('click',(e)=>{if(!nav.hidden&&!nav.contains(e.target)&&e.target!==btn&&!btn.contains(e.target)){closeNav()}});
+      document.addEventListener('keydown',(e)=>{if(e.key==='Escape')closeNav()});
     })();
   </script>
 
   <!-- Announcement -->
   <script>
-    fetch('data/announcement.json', { cache: 'no-store' })
-      .then(r => r.json())
-      .then(d => {
-        if (d && d.message && d.message.trim()) {
-          document.getElementById('announcement-text').textContent = d.message.trim();
-          document.getElementById('announcement-banner').style.display = 'block';
+    fetch('data/announcement.json',{cache:'no-store'})
+      .then(r=>r.json())
+      .then(d=>{
+        if(d&&d.message&&d.message.trim()){
+          document.getElementById('announcement-text').textContent=d.message.trim();
+          document.getElementById('announcement-banner').style.display='block';
         }
       })
       .catch(()=>{});
@@ -200,124 +186,91 @@
   <script>
     function computeTravellersHolder({ teams, matches, initialHolder, sinceDate=null }) {
       const teamById = Object.fromEntries(teams.map(t => [t.id, t]));
-
-      function matchWinner(m) {
-        if (m?.status === 'void' || m?.status === 'postponed') return null;
-
-        if (typeof m.homeFrames === 'number' && typeof m.awayFrames === 'number') {
-          if (m.homeFrames > m.awayFrames) return 'home';
-          if (m.awayFrames > m.homeFrames) return 'away';
+      function matchWinner(m){
+        if (m?.status==='void'||m?.status==='postponed') return null;
+        if (typeof m.homeFrames==='number'&&typeof m.awayFrames==='number'){
+          if (m.homeFrames>m.awayFrames) return 'home';
+          if (m.awayFrames>m.homeFrames) return 'away';
           return null;
         }
-
-        if (Array.isArray(m.frames) && m.frames.length) {
-          let home = 0, away = 0;
-          for (const fr of m.frames) {
-            if (fr?.winner === 'home') home++;
-            else if (fr?.winner === 'away') away++;
+        if (Array.isArray(m.frames)&&m.frames.length){
+          let h=0,a=0;
+          for (const fr of m.frames){
+            if (fr?.winner==='home') h++;
+            else if (fr?.winner==='away') a++;
           }
-          if (home > away) return 'home';
-          if (away > home) return 'away';
-          return null;
+          if (h>a) return 'home';
+          if (a>h) return 'away';
         }
-
         return null;
       }
-
-      const sorted = matches
-        .filter(m => !sinceDate || new Date(m.date) >= new Date(sinceDate))
-        .sort((a,b) => new Date(a.date) - new Date(b.date));
-
-      let holder = initialHolder;
-
-      for (const m of sorted) {
-        if (m.homeTeamId !== holder && m.awayTeamId !== holder) continue;
-        const winnerSide = matchWinner(m);
-        if (!winnerSide) continue;
-        const winnerId = (winnerSide === 'home') ? m.homeTeamId : m.awayTeamId;
-        if (winnerId !== holder) holder = winnerId; // transfer only if holder lost
+      const sorted=matches.filter(m=>!sinceDate||new Date(m.date)>=new Date(sinceDate))
+        .sort((a,b)=>new Date(a.date)-new Date(b.date));
+      let holder=initialHolder;
+      for(const m of sorted){
+        if(m.homeTeamId!==holder&&m.awayTeamId!==holder) continue;
+        const winner=matchWinner(m);
+        if(!winner) continue;
+        const winnerId=(winner==='home')?m.homeTeamId:m.awayTeamId;
+        if(winnerId!==holder) holder=winnerId;
       }
-
-      return holder && teamById[holder] ? holder : initialHolder;
+      return holder&&teamById[holder]?holder:initialHolder;
     }
   </script>
 
-  <!-- League table + Travellers integration -->
+  <!-- League table -->
   <script>
     (async function () {
       try {
-        const [teams, matches, travellers] = await Promise.all([
-          fetch('data/teams.json',      {cache:'no-store'}).then(r => r.json()),
-          fetch('data/matches.json',    {cache:'no-store'}).then(r => r.json()).catch(()=>[]),
-          fetch('data/travellers.json', {cache:'no-store'}).then(r => r.json()).catch(()=>({}))
+        const [teams,matches,travellers]=await Promise.all([
+          fetch('data/teams.json',{cache:'no-store'}).then(r=>r.json()),
+          fetch('data/matches.json',{cache:'no-store'}).then(r=>r.json()).catch(()=>[]),
+          fetch('data/travellers.json',{cache:'no-store'}).then(r=>r.json()).catch(()=>({}))
         ]);
 
-        // ---- Compute Travellers holder
-        const initialHolder = travellers.initialHolder || 'tintwistle1';
-        const sinceDate     = travellers.since || null;
-        const holderId = computeTravellersHolder({ teams, matches, initialHolder, sinceDate });
+        const initialHolder=travellers.initialHolder||'tintwistle1';
+        const sinceDate=travellers.since||null;
+        const holderId=computeTravellersHolder({teams,matches,initialHolder,sinceDate});
 
-        // ---- Build league table (same model as before)
-        const table = {};
-        for (const t of teams) {
-          table[t.id] = { teamId:t.id, name:t.name, P:0, W:0, D:0, L:0, FF:0, FA:0, FD:0, Pts:0 };
+        const table={};
+        for(const t of teams){
+          table[t.id]={teamId:t.id,name:t.name,P:0,W:0,D:0,L:0,FF:0,FA:0,FD:0,Pts:0};
         }
 
-        for (const m of matches) {
-          const h = table[m.homeTeamId], a = table[m.awayTeamId];
-          if (!h || !a) continue;
-          if (typeof m.homeFrames !== 'number' || typeof m.awayFrames !== 'number') continue;
-
-          h.P++; a.P++;
-
-          h.FF += m.homeFrames; h.FA += m.awayFrames;
-          a.FF += m.awayFrames; a.FA += m.homeFrames;
-
-          h.Pts += m.homeFrames;
-          a.Pts += m.awayFrames;
-
-          if (m.homeFrames > m.awayFrames) {
-            h.W++; a.L++; h.Pts += 2;      // home win bonus
-          } else if (m.homeFrames < m.awayFrames) {
-            a.W++; h.L++; a.Pts += 3;      // away win bonus
-          } else {
-            h.D++; a.D++; h.Pts += 1; a.Pts += 1; // draw bonus
-          }
+        for(const m of matches){
+          const h=table[m.homeTeamId],a=table[m.awayTeamId];
+          if(!h||!a) continue;
+          if(typeof m.homeFrames!=='number'||typeof m.awayFrames!=='number') continue;
+          h.P++;a.P++;
+          h.FF+=m.homeFrames;h.FA+=m.awayFrames;
+          a.FF+=m.awayFrames;a.FA+=m.homeFrames;
+          h.Pts+=m.homeFrames;a.Pts+=m.awayFrames;
+          if(m.homeFrames>m.awayFrames){h.W++;a.L++;h.Pts+=2;}
+          else if(m.homeFrames<m.awayFrames){a.W++;h.L++;a.Pts+=3;}
+          else{h.D++;a.D++;h.Pts+=1;a.Pts+=1;}
         }
 
-        for (const t of Object.values(table)) t.FD = t.FF - t.FA;
+        for(const t of Object.values(table)) t.FD=t.FF-t.FA;
 
-        const rows = Object.values(table)
-          .sort((x,y)=> (y.Pts-x.Pts) || (y.FD-x.FD) || (y.FF-x.FF) || x.name.localeCompare(y.name));
+        const rows=Object.values(table).sort((x,y)=> (y.Pts-x.Pts)||(y.FD-x.FD)||(y.FF-x.FF)||x.name.localeCompare(y.name));
 
-        // ---- Render Travellers note
-        const holderName = teams.find(t => t.id === holderId)?.name || '';
-        const note = document.getElementById('travellers-note');
-        if (note) note.textContent = holderName ? `Travellers’ Prize holders: ${holderName}` : '';
-
-        // ---- Render table
-        const body = document.getElementById('leagueBody');
-        body.innerHTML = '';
+        const body=document.getElementById('leagueBody');
+        body.innerHTML='';
         rows.forEach((t,i)=>{
-          const isHolder = (t.teamId === holderId);
-          const tr = document.createElement('tr');
-          tr.innerHTML = `
+          const isHolder=(t.teamId===holderId);
+          const tr=document.createElement('tr');
+          tr.innerHTML=`
             <td>${i+1}</td>
-            <td>
-              <a href="merit.html?team=${encodeURIComponent(t.teamId)}">${escapeHtml(t.name)}</a>
-              ${isHolder ? '<span class="travellers-badge" title="Travellers’ Prize">Travellers</span>' : ''}
+            <td><a href="merit.html?team=${encodeURIComponent(t.teamId)}">${escapeHtml(t.name)}</a>
+              ${isHolder?'<span class="travellers-badge" title="Travellers’ Prize">T</span>':''}
             </td>
             <td>${t.P}</td><td>${t.W}</td><td>${t.D}</td><td>${t.L}</td>
             <td>${t.FF}</td><td>${t.FA}</td><td>${t.FD}</td><td>${t.Pts}</td>`;
           body.appendChild(tr);
         });
 
-        function escapeHtml(str=''){
-          return str.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-        }
-      } catch(e) {
-        console.warn('League table load failed:', e);
-      }
+        function escapeHtml(str=''){return str.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+      } catch(e){console.warn('League table load failed:',e);}
     })();
   </script>
 </body>
