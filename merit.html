@@ -157,7 +157,7 @@
 
   <main class="container">
     <h2>Merit</h2>
-    <p>Filter by team or view all players. If no results are confirmed yet, all totals show as 0.</p>
+    <p>Filter by team or view all players. Weeks appear as soon as any fixture that date is confirmed.</p>
 
     <div class="tabs" id="teamTabs"></div>
 
@@ -196,7 +196,7 @@
       .catch(()=>{});
   </script>
 
-  <!-- Merit grid logic (same data logic as before) -->
+  <!-- Merit grid logic (updated: partial weeks + All Teams only players who've played) -->
   <script>
   (async function () {
     const [teams, players, fixtures, matches] = await Promise.all([
@@ -227,8 +227,10 @@
     }
 
     const allDates = Object.keys(fixturesByDate).sort((a,b)=>new Date(a)-new Date(b));
+
+    // NEW: include date if at least one fixture that day is complete
     const confirmedDates = allDates.filter(d =>
-      fixturesByDate[d].every(f => isComplete(matchesByKey.get(`${d}|${f.homeTeamId}|${f.awayTeamId}`)))
+      fixturesByDate[d].some(f => isComplete(matchesByKey.get(`${d}|${f.homeTeamId}|${f.awayTeamId}`)))
     );
 
     // Team had fixture on date?
@@ -242,7 +244,7 @@
       }
     }
 
-    // Seed per-player rows (always include every player)
+    // Seed per-player rows (include everyone; we'll filter at render)
     const P = {};
     for (const p of players){
       P[p.id] = {
@@ -360,7 +362,14 @@
 
       const tbody = document.createElement('tbody');
       let rows = Object.values(P);
-      if (teamFilter && teamFilter !== ALL) rows = rows.filter(r=>r.teamId===teamFilter);
+
+      // NEW: All Teams -> only players who've played; Team tab -> everyone from that team
+      if (!teamFilter || teamFilter === ALL) {
+        rows = rows.filter(r => r.totals.played > 0);
+      } else {
+        rows = rows.filter(r => r.teamId === teamFilter);
+      }
+
       rows = sortRows(rows);
 
       for (const r of rows){
