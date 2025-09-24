@@ -139,15 +139,33 @@ footer {
   }
 }
 
-/* Team colours (bold version) */
-.tab-btn[data-team-id="alexashton"], tr[data-team-id="alexashton"] { background: #228be6; color: #fff; }
-.tab-btn[data-team-id="hadfield"], tr[data-team-id="hadfield"] { background: #d6336c; color: #fff; }
-.tab-btn[data-team-id="hayfield-1"], tr[data-team-id="hayfield-1"] { background: #20c997; color: #fff; }
-.tab-btn[data-team-id="hayfield-2"], tr[data-team-id="hayfield-2"] { background: #9c36b5; color: #fff; }
-.tab-btn[data-team-id="tintwistle1"], tr[data-team-id="tintwistle1"] { background: #fab005; color: #000; }
-.tab-btn[data-team-id="tintwistle2"], tr[data-team-id="tintwistle2"] { background: #fd7e14; color: #000; }
-.tab-btn[data-team-id="whaley-1"], tr[data-team-id="whaley-1"] { background: #2f9e44; color: #fff; }
-.tab-btn[data-team-id="whaley-2"], tr[data-team-id="whaley-2"] { background: #e67700; color: #000; }
-.tab-btn[data-team-id="chinley"], tr[data-team-id="chinley"] { background: #be4bdb; color: #fff; }
-.tab-btn[data-team-id="marple"], tr[data-team-id="marple"] { background: #15aabf; color: #fff; }
-.tab-btn[data-team-id="denton-lib"], tr[data-team-id="denton-lib"] { background: #868e96; color: #fff; }
+/* Team colours (backgrounds only, always black text) */
+
+/* Tabs */
+.tab-btn[data-team-id="alexashton"]   { background:#228be6; }
+.tab-btn[data-team-id="hadfield"]     { background:#d6336c; }
+.tab-btn[data-team-id="hayfield-1"]   { background:#20c997; }
+.tab-btn[data-team-id="hayfield-2"]   { background:#9c36b5; }
+.tab-btn[data-team-id="tintwistle1"]  { background:#fab005; }
+.tab-btn[data-team-id="tintwistle2"]  { background:#fd7e14; }
+.tab-btn[data-team-id="whaley-1"]     { background:#2f9e44; }
+.tab-btn[data-team-id="whaley-2"]     { background:#e67700; }
+.tab-btn[data-team-id="chinley"]      { background:#be4bdb; }
+.tab-btn[data-team-id="marple"]       { background:#15aabf; }
+.tab-btn[data-team-id="denton-lib"]   { background:#868e96; }
+
+/* Force black text on all tab buttons */
+.tabs .tab-btn { color:#000 !important; }
+
+/* Table rows */
+tr[data-team-id="alexashton"]   { background:#228be6; color:#000; }
+tr[data-team-id="hadfield"]     { background:#d6336c; color:#000; }
+tr[data-team-id="hayfield-1"]   { background:#20c997; color:#000; }
+tr[data-team-id="hayfield-2"]   { background:#9c36b5; color:#000; }
+tr[data-team-id="tintwistle1"]  { background:#fab005; color:#000; }
+tr[data-team-id="tintwistle2"]  { background:#fd7e14; color:#000; }
+tr[data-team-id="whaley-1"]     { background:#2f9e44; color:#000; }
+tr[data-team-id="whaley-2"]     { background:#e67700; color:#000; }
+tr[data-team-id="chinley"]      { background:#be4bdb; color:#000; }
+tr[data-team-id="marple"]       { background:#15aabf; color:#000; }
+tr[data-team-id="denton-lib"]   { background:#868e96; color:#000; }
