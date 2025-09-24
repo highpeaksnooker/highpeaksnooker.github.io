@@ -33,7 +33,7 @@
     .logo-banner{height:100%;display:flex;align-items:center;justify-content:center}
     .logo-banner img{height:100%;width:auto;object-fit:contain;display:block;filter:drop-shadow(0 0 6px rgba(0,0,0,.4))}
 
-    /* ===== Announcement bar (slimmer) ===== */
+    /* ===== Announcement bar ===== */
     #announcement-banner{
       position:sticky;top:0;z-index:100;display:none;background:var(--bar-dark);color:#fff;
       font-weight:600;font-size:.85rem;padding:.35rem 0;border-top:1px solid rgba(255,255,255,.06);
@@ -54,28 +54,51 @@
       border:1px solid rgba(255,255,255,.08);border-radius:10px;box-shadow:0 18px 36px rgba(0,0,0,.45);padding:6px;z-index:120
     }
     [hidden]{display:none!important}
-    nav.site-nav a{
-      display:block;color:#e5e7eb;text-decoration:none;font-weight:700;padding:10px 10px;border-radius:8px
-    }
+    nav.site-nav a{display:block;color:#e5e7eb;text-decoration:none;font-weight:700;padding:10px 10px;border-radius:8px}
     nav.site-nav a:hover{background:rgba(255,255,255,.1)}
     nav.site-nav a.active{background:var(--accent);color:#0b1b0f}
+
+    /* ===== Honours Switcher (dropdown) ===== */
+    .switcher-bar{display:flex;gap:.5rem;align-items:center;margin:.25rem 0 1rem}
+    .switcher-label{font-weight:800}
+    .switcher{
+      position:relative;display:inline-block
+    }
+    .switcher button{
+      background:#fff;border:1px solid #d6d6d6;border-radius:10px;padding:.55rem .9rem;font-weight:800;
+      cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,.06);min-width:220px;text-align:left
+    }
+    .switcher button:after{content:'▾';float:right}
+    .switcher-menu{
+      position:absolute;left:0;top:calc(100% + 6px);background:#fff;border:1px solid #e6e6e6;border-radius:10px;
+      box-shadow:0 18px 36px rgba(0,0,0,.12);min-width:220px;z-index:50;padding:6px;display:none
+    }
+    .switcher-menu[aria-hidden="false"]{display:block}
+    .switcher-menu a{
+      display:block;padding:.5rem .6rem;border-radius:8px;text-decoration:none;color:#0b1220;font-weight:700
+    }
+    .switcher-menu a:hover{background:#f3f4f6}
 
     /* ===== Page content ===== */
     main.container{background:#fff;padding:1rem 12px 2rem;border-radius:10px;margin-top:10px;box-shadow:0 1px 2px rgba(0,0,0,.06)}
     h2{margin:.25rem 0 1rem 0}
-    h3{margin-top:28px}
-    table{width:100%;border-collapse:collapse;margin-bottom:2rem;background:#fff}
+    h3{margin:18px 0 10px}
+    section.honour{display:none}
+    section.honour[aria-hidden="false"]{display:block}
+
+    table{width:100%;border-collapse:collapse;margin:0 0 1.5rem;background:#fff}
     th,td{border:1px solid #ddd;padding:6px 8px;text-align:left}
     th{background:#f0f0f0}
-    .jump-links{margin:0 0 1.5rem}
-    .jump-links a{margin-right:.5rem}
-    [id]{scroll-margin-top:100px} /* stop sticky header covering anchors */
+
+    [id]{scroll-margin-top:100px}
 
     footer{text-align:center;padding:1.5rem 1rem;color:#777}
 
     @media (max-width:480px){
       :root{--banner-height:110px}
       .menu-toggle{font-size:.95rem;padding:9px 11px}
+      .switcher button{min-width:unset;width:100%}
+      .switcher-menu{min-width:unset;width:100%}
     }
   </style>
 </head>
@@ -115,218 +138,239 @@
   <main class="container">
     <h2>Honours List</h2>
 
-    <div class="jump-links">
-      Jump to:
-      <a href="#merit">Merit</a> ·
-      <a href="#sonya-lee">Sonya Lee</a> ·
-      <a href="#league-handicaps">League Winners</a> ·
-      <a href="#singles-winners">Handicap Singles</a> ·
-      <a href="#doubles-winners">Doubles</a> ·
-      <a href="#team-ko">Team KO</a> ·
-      <a href="#highest-break">Highest Break</a> ·
-      <a href="#captains-cup">Captains’ Cup</a>
+    <!-- Switcher -->
+    <div class="switcher-bar">
+      <span class="switcher-label">Showing:</span>
+      <div class="switcher">
+        <button id="honoursToggle" aria-haspopup="true" aria-expanded="false">League Winners</button>
+        <div id="honoursMenu" class="switcher-menu" role="menu" aria-hidden="true">
+          <a href="#league-winners" role="menuitem">League Winners</a>
+          <a href="#merit" role="menuitem">Merit</a>
+          <a href="#sonya-lee" role="menuitem">Sonya Lee</a>
+          <a href="#singles-winners" role="menuitem">Handicap Singles</a>
+          <a href="#doubles-winners" role="menuitem">Doubles</a>
+          <a href="#team-ko" role="menuitem">Team KO</a>
+          <a href="#highest-break" role="menuitem">Highest Break</a>
+          <a href="#captains-cup" role="menuitem">Captains’ Cup</a>
+        </div>
+      </div>
     </div>
 
+    <!-- League Winners (default visible) -->
+    <section id="league-winners" class="honour" aria-hidden="false">
+      <h3>League Winners (2003–2025)</h3>
+      <table>
+        <thead><tr><th>Year</th><th>Winner</th></tr></thead>
+        <tbody>
+          <tr><td>2003</td><td>Glossop 1</td></tr>
+          <tr><td>2004</td><td>Glossop 1</td></tr>
+          <tr><td>2005</td><td>Hyde S.C.</td></tr>
+          <tr><td>2006</td><td>Hyde 1</td></tr>
+          <tr><td>2007</td><td>Hyde 1</td></tr>
+          <tr><td>2008</td><td>Glossop</td></tr>
+          <tr><td>2009</td><td>Stalyvegas</td></tr>
+          <tr><td>2010</td><td>Glossop</td></tr>
+          <tr><td>2011</td><td>Mellor</td></tr>
+          <tr><td>2012</td><td>Chinley</td></tr>
+          <tr><td>2013</td><td>Tintwistle</td></tr>
+          <tr><td>2014</td><td>No.71 Club</td></tr>
+          <tr><td>2015</td><td>Stalybridge L.C.</td></tr>
+          <tr><td>2016</td><td>Hadfield 1</td></tr>
+          <tr><td>2017</td><td>Hadfield 2</td></tr>
+          <tr><td>2018</td><td>Tintwistle</td></tr>
+          <tr><td>2019</td><td>Chinley</td></tr>
+          <tr><td>2020</td><td>Tintwistle 1</td></tr>
+          <tr><td>2021</td><td>Covid (no competition)</td></tr>
+          <tr><td>2022</td><td>Tintwistle 1</td></tr>
+          <tr><td>2023</td><td>Tintwistle 1</td></tr>
+          <tr><td>2024</td><td>Tintwistle 1</td></tr>
+          <tr><td>2025</td><td>Whaley 2</td></tr>
+        </tbody>
+      </table>
+    </section>
+
     <!-- Merit -->
-    <h3 id="merit">Merit (2005–2024)</h3>
-    <table>
-      <thead><tr><th>Year</th><th>Winner</th></tr></thead>
-      <tbody>
-        <tr><td>2005</td><td>P. Smith</td></tr>
-        <tr><td>2006</td><td>J. Harrower</td></tr>
-        <tr><td>2007</td><td>M. Carrington</td></tr>
-        <tr><td>2008</td><td>P. Lomas</td></tr>
-        <tr><td>2009</td><td>S. Williams</td></tr>
-        <tr><td>2010</td><td>F. Sidebottom</td></tr>
-        <tr><td>2011</td><td>D. Mulryan</td></tr>
-        <tr><td>2012</td><td>S. Lund</td></tr>
-        <tr><td>2013</td><td>M. Carrington</td></tr>
-        <tr><td>2014</td><td>A.J. Patel</td></tr>
-        <tr><td>2015</td><td>A.J. Patel</td></tr>
-        <tr><td>2016</td><td>S. Crook</td></tr>
-        <tr><td>2017</td><td>M. Straw</td></tr>
-        <tr><td>2018</td><td>S. Crook</td></tr>
-        <tr><td>2019</td><td>G. Flavell</td></tr>
-        <tr><td>2020</td><td>N. Daunt</td></tr>
-        <tr><td>2021</td><td><em>covid</em></td></tr>
-        <tr><td>2022</td><td>A.J. Patel</td></tr>
-        <tr><td>2023</td><td>S. Crook</td></tr>
-        <tr><td>2024</td><td>S. Crook</td></tr>
-      </tbody>
-    </table>
+    <section id="merit" class="honour" aria-hidden="true">
+      <h3>Merit (2005–2024)</h3>
+      <table>
+        <thead><tr><th>Year</th><th>Winner</th></tr></thead>
+        <tbody>
+          <tr><td>2005</td><td>P. Smith</td></tr>
+          <tr><td>2006</td><td>J. Harrower</td></tr>
+          <tr><td>2007</td><td>M. Carrington</td></tr>
+          <tr><td>2008</td><td>P. Lomas</td></tr>
+          <tr><td>2009</td><td>S. Williams</td></tr>
+          <tr><td>2010</td><td>F. Sidebottom</td></tr>
+          <tr><td>2011</td><td>D. Mulryan</td></tr>
+          <tr><td>2012</td><td>S. Lund</td></tr>
+          <tr><td>2013</td><td>M. Carrington</td></tr>
+          <tr><td>2014</td><td>A.J. Patel</td></tr>
+          <tr><td>2015</td><td>A.J. Patel</td></tr>
+          <tr><td>2016</td><td>S. Crook</td></tr>
+          <tr><td>2017</td><td>M. Straw</td></tr>
+          <tr><td>2018</td><td>S. Crook</td></tr>
+          <tr><td>2019</td><td>G. Flavell</td></tr>
+          <tr><td>2020</td><td>N. Daunt</td></tr>
+          <tr><td>2021</td><td><em>covid</em></td></tr>
+          <tr><td>2022</td><td>A.J. Patel</td></tr>
+          <tr><td>2023</td><td>S. Crook</td></tr>
+          <tr><td>2024</td><td>S. Crook</td></tr>
+        </tbody>
+      </table>
+    </section>
 
     <!-- Sonya Lee -->
-    <h3 id="sonya-lee">Sonya Lee (2004–2023)</h3>
-    <table>
-      <thead><tr><th>Year</th><th>Winner</th></tr></thead>
-      <tbody>
-        <tr><td>2004</td><td>S. Crook</td></tr>
-        <tr><td>2005</td><td>P. Smith</td></tr>
-        <tr><td>2006</td><td>J. Harrower</td></tr>
-        <tr><td>2007</td><td>P. Smith</td></tr>
-        <tr><td>2008</td><td>P. Smith</td></tr>
-        <tr><td>2009</td><td>P. Smith</td></tr>
-        <tr><td>2010</td><td>S. Crook</td></tr>
-        <tr><td>2011</td><td>S. Crook</td></tr>
-        <tr><td>2012</td><td>S. Crook</td></tr>
-        <tr><td>2013</td><td>A.J. Patel</td></tr>
-        <tr><td>2014</td><td>S. Crook</td></tr>
-        <tr><td>2015</td><td>J. Garnett</td></tr>
-        <tr><td>2016</td><td>L. Carr</td></tr>
-        <tr><td>2017</td><td>A. Longley</td></tr>
-        <tr><td>2018</td><td>S. Crook</td></tr>
-        <tr><td>2019</td><td>S. Crook</td></tr>
-        <tr><td>2020</td><td>S. Crook</td></tr>
-        <tr><td>2021</td><td><em>covid</em></td></tr>
-        <tr><td>2022</td><td>S. Crook</td></tr>
-        <tr><td>2023</td><td>J. Brennan</td></tr>
-        <!-- 2024 / 2025 shown blank in source images -->
-        <tr><td>2024</td><td></td></tr>
-        <tr><td>2025</td><td></td></tr>
-      </tbody>
-    </table>
+    <section id="sonya-lee" class="honour" aria-hidden="true">
+      <h3>Sonya Lee (2004–2025)</h3>
+      <table>
+        <thead><tr><th>Year</th><th>Winner</th></tr></thead>
+        <tbody>
+          <tr><td>2004</td><td>S. Crook</td></tr>
+          <tr><td>2005</td><td>P. Smith</td></tr>
+          <tr><td>2006</td><td>J. Harrower</td></tr>
+          <tr><td>2007</td><td>P. Smith</td></tr>
+          <tr><td>2008</td><td>P. Smith</td></tr>
+          <tr><td>2009</td><td>P. Smith</td></tr>
+          <tr><td>2010</td><td>S. Crook</td></tr>
+          <tr><td>2011</td><td>S. Crook</td></tr>
+          <tr><td>2012</td><td>S. Crook</td></tr>
+          <tr><td>2013</td><td>A.J. Patel</td></tr>
+          <tr><td>2014</td><td>S. Crook</td></tr>
+          <tr><td>2015</td><td>J. Garnett</td></tr>
+          <tr><td>2016</td><td>L. Carr</td></tr>
+          <tr><td>2017</td><td>A. Longley</td></tr>
+          <tr><td>2018</td><td>S. Crook</td></tr>
+          <tr><td>2019</td><td>S. Crook</td></tr>
+          <tr><td>2020</td><td>S. Crook</td></tr>
+          <tr><td>2021</td><td><em>covid</em></td></tr>
+          <tr><td>2022</td><td>S. Crook</td></tr>
+          <tr><td>2023</td><td>J. Brennan</td></tr>
+          <tr><td>2024</td><td></td></tr>
+          <tr><td>2025</td><td></td></tr>
+        </tbody>
+      </table>
+    </section>
 
-    <!-- League Handicaps -->
-    <h3 id="league-handicaps">League Handicaps 2003–2023</h3>
-    <table>
-      <thead><tr><th>Year</th><th>Winner</th></tr></thead>
-      <tbody>
-        <tr><td>2003</td><td>Glossop 1</td></tr>
-        <tr><td>2004</td><td>Glossop 1</td></tr>
-        <tr><td>2005</td><td>Hyde S.C.</td></tr>
-        <tr><td>2006</td><td>Hyde 1</td></tr>
-        <tr><td>2007</td><td>Hyde 1</td></tr>
-        <tr><td>2008</td><td>Glossop</td></tr>
-        <tr><td>2009</td><td>Stalyvegas</td></tr>
-        <tr><td>2010</td><td>Glossop</td></tr>
-        <tr><td>2011</td><td>Mellor</td></tr>
-        <tr><td>2012</td><td>Chinley</td></tr>
-        <tr><td>2013</td><td>Tintwistle</td></tr>
-        <tr><td>2014</td><td>No.71 Club</td></tr>
-        <tr><td>2015</td><td>Stalybridge L.C.</td></tr>
-        <tr><td>2016</td><td>Hadfield 1</td></tr>
-        <tr><td>2017</td><td>Hadfield 2</td></tr>
-        <tr><td>2018</td><td>Tintwistle</td></tr>
-        <tr><td>2019</td><td>Chinley</td></tr>
-        <tr><td>2020</td><td>Tintwistle 1</td></tr>
-        <tr><td>2021</td><td>Covid (no competition)</td></tr>
-        <tr><td>2022</td><td>Tintwistle 1</td></tr>
-        <tr><td>2023</td><td>Tintwistle 1</td></tr>
-        <tr><td>2024</td><td>Tintwistle 1</td></tr>
-        <tr><td>2025</td><td>Whaley 2</td></tr>
-      </tbody>
-    </table>
+    <!-- Handicap Singles -->
+    <section id="singles-winners" class="honour" aria-hidden="true">
+      <h3>Handicap Singles (1971–2025)</h3>
+      <table>
+        <thead><tr><th>Year</th><th>Winner</th></tr></thead>
+        <tbody>
+          <tr><td>1971</td><td>P. Fox</td></tr>
+          <tr><td>1972</td><td>F. Shaw</td></tr>
+          <tr><td>1973</td><td>N. Ashton</td></tr>
+          <tr><td>1974</td><td>R.J. Harrop</td></tr>
+          <tr><td>1975</td><td>P. Fox</td></tr>
+          <tr><td>1976</td><td>T. Gover</td></tr>
+          <tr><td>1977</td><td>P. Fox</td></tr>
+          <tr><td>1978</td><td>R. Holmes</td></tr>
+          <tr><td>1979</td><td>L.S. Morris</td></tr>
+          <tr><td>1980</td><td>R. Arrowsmith</td></tr>
+          <tr><td>1981</td><td>P. O’Hagan</td></tr>
+          <tr><td>1982</td><td>D. Mellor</td></tr>
+          <tr><td>1983</td><td>J. Garnett</td></tr>
+          <tr><td>1984</td><td>D. Eastham</td></tr>
+          <tr><td>1985</td><td>A. Butler</td></tr>
+          <tr><td>1986</td><td>L.S. Morris</td></tr>
+          <tr><td>1987</td><td>L. Brierley</td></tr>
+          <tr><td>1988</td><td>J. Renshaw</td></tr>
+          <tr><td>1989</td><td>L. Brierley</td></tr>
+          <tr><td>1990</td><td>S. Wilson</td></tr>
+          <tr><td>1991</td><td>S. Wilson</td></tr>
+          <tr><td>1992</td><td>S. Roberts</td></tr>
+          <tr><td>1993</td><td>A. Sykes</td></tr>
+          <tr><td>1994</td><td>P. Smith</td></tr>
+          <tr><td>1995</td><td>P. Smith</td></tr>
+          <tr><td>1996</td><td>C. Deakin</td></tr>
+          <tr><td>1997</td><td>I. Revell</td></tr>
+          <tr><td>1998</td><td>A. Cowap</td></tr>
+          <tr><td>1999</td><td>P. O’Sullivan</td></tr>
+          <tr><td>2000</td><td>J. Harrower</td></tr>
+          <tr><td>2001</td><td>S. Dickson</td></tr>
+          <tr><td>2002</td><td>P. O’Sullivan</td></tr>
+          <tr><td>2003</td><td>P. Smith</td></tr>
+          <tr><td>2004</td><td>C. Bailey</td></tr>
+          <tr><td>2005</td><td>D. Winterbottom</td></tr>
+          <tr><td>2006</td><td>T. Ashurst</td></tr>
+          <tr><td>2007</td><td>N. Evans</td></tr>
+          <tr><td>2008</td><td>P. Smith</td></tr>
+          <tr><td>2009</td><td>C. Egerton</td></tr>
+          <tr><td>2010</td><td>G. Flavell</td></tr>
+          <tr><td>2011</td><td>P. Lomas</td></tr>
+          <tr><td>2012</td><td>T. Kershaw</td></tr>
+          <tr><td>2013</td><td>T. Ashurst</td></tr>
+          <tr><td>2014</td><td>S. Gallagher</td></tr>
+          <tr><td>2015</td><td>P. Lomas</td></tr>
+          <tr><td>2016</td><td>A. Harrison</td></tr>
+          <tr><td>2017</td><td>J. Garnett</td></tr>
+          <tr><td>2018</td><td>A. Longley</td></tr>
+          <tr><td>2019</td><td>S. Mistry</td></tr>
+          <tr><td>2020</td><td>M. Carrington</td></tr>
+          <tr><td>2021</td><td>Covid</td></tr>
+          <tr><td>2022</td><td>B. Doherty</td></tr>
+          <tr><td>2023</td><td>J. Brennan</td></tr>
+          <tr><td>2024</td><td>A. Garside</td></tr>
+          <tr><td>2025</td><td>P. Bethell</td></tr>
+        </tbody>
+      </table>
+    </section>
 
-    <!-- Singles Winners -->
-    <h3 id="singles-winners">Singles Winners (1971–2025)</h3>
-    <table>
-      <thead><tr><th>Year</th><th>Winner</th></tr></thead>
-      <tbody>
-        <tr><td>1971</td><td>P. Fox</td></tr>
-        <tr><td>1972</td><td>F. Shaw</td></tr>
-        <tr><td>1973</td><td>N. Ashton</td></tr>
-        <tr><td>1974</td><td>R.J. Harrop</td></tr>
-        <tr><td>1975</td><td>P. Fox</td></tr>
-        <tr><td>1976</td><td>T. Gover</td></tr>
-        <tr><td>1977</td><td>P. Fox</td></tr>
-        <tr><td>1978</td><td>R. Holmes</td></tr>
-        <tr><td>1979</td><td>L.S. Morris</td></tr>
-        <tr><td>1980</td><td>R. Arrowsmith</td></tr>
-        <tr><td>1981</td><td>P. O’Hagan</td></tr>
-        <tr><td>1982</td><td>D. Mellor</td></tr>
-        <tr><td>1983</td><td>J. Garnett</td></tr>
-        <tr><td>1984</td><td>D. Eastham</td></tr>
-        <tr><td>1985</td><td>A. Butler</td></tr>
-        <tr><td>1986</td><td>L.S. Morris</td></tr>
-        <tr><td>1987</td><td>L. Brierley</td></tr>
-        <tr><td>1988</td><td>J. Renshaw</td></tr>
-        <tr><td>1989</td><td>L. Brierley</td></tr>
-        <tr><td>1990</td><td>S. Wilson</td></tr>
-        <tr><td>1991</td><td>S. Wilson</td></tr>
-        <tr><td>1992</td><td>S. Roberts</td></tr>
-        <tr><td>1993</td><td>A. Sykes</td></tr>
-        <tr><td>1994</td><td>P. Smith</td></tr>
-        <tr><td>1995</td><td>P. Smith</td></tr>
-        <tr><td>1996</td><td>C. Deakin</td></tr>
-        <tr><td>1997</td><td>I. Revell</td></tr>
-        <tr><td>1998</td><td>A. Cowap</td></tr>
-        <tr><td>1999</td><td>P. O’Sullivan</td></tr>
-        <tr><td>2000</td><td>J. Harrower</td></tr>
-        <tr><td>2001</td><td>S. Dickson</td></tr>
-        <tr><td>2002</td><td>P. O’Sullivan</td></tr>
-        <tr><td>2003</td><td>P. Smith</td></tr>
-        <tr><td>2004</td><td>C. Bailey</td></tr>
-        <tr><td>2005</td><td>D. Winterbottom</td></tr>
-        <tr><td>2006</td><td>T. Ashurst</td></tr>
-        <tr><td>2007</td><td>N. Evans</td></tr>
-        <tr><td>2008</td><td>P. Smith</td></tr>
-        <tr><td>2009</td><td>C. Egerton</td></tr>
-        <tr><td>2010</td><td>G. Flavell</td></tr>
-        <tr><td>2011</td><td>P. Lomas</td></tr>
-        <tr><td>2012</td><td>T. Kershaw</td></tr>
-        <tr><td>2013</td><td>T. Ashurst</td></tr>
-        <tr><td>2014</td><td>S. Gallagher</td></tr>
-        <tr><td>2015</td><td>P. Lomas</td></tr>
-        <tr><td>2016</td><td>A. Harrison</td></tr>
-        <tr><td>2017</td><td>J. Garnett</td></tr>
-        <tr><td>2018</td><td>A. Longley</td></tr>
-        <tr><td>2019</td><td>S. Mistry</td></tr>
-        <tr><td>2020</td><td>M. Carrington</td></tr>
-        <tr><td>2021</td><td>Covid</td></tr>
-        <tr><td>2022</td><td>B. Doherty</td></tr>
-        <tr><td>2023</td><td>J. Brennan</td></tr>
-        <tr><td>2024</td><td>A. Garside</td></tr>
-        <tr><td>2025</td><td>P. Bethell</td></tr>
-      </tbody>
-    </table>
+    <!-- Doubles -->
+    <section id="doubles-winners" class="honour" aria-hidden="true">
+      <h3>Doubles Winners</h3>
+      <table>
+        <thead><tr><th>Year</th><th>Winners</th><th>Club / Team</th></tr></thead>
+        <tbody>
+          <tr><td>2024</td><td>Scott Lomas &amp; Sam Lomas</td><td>Hayfield 1</td></tr>
+          <tr><td>2023</td><td>J. Matthews &amp; N. Cave</td><td>Tintwistle</td></tr>
+          <tr><td>2022</td><td>G. Flavell &amp; M. Dawson</td><td>Hadfield</td></tr>
+          <tr><td>2020</td><td>L. Hall &amp; B. Pregnall</td><td>Glossop</td></tr>
+          <tr><td>2019</td><td>P. Lomas &amp; S. Lomas</td><td>Tintwistle</td></tr>
+        </tbody>
+      </table>
+    </section>
 
-    <!-- Doubles Winners -->
-    <h3 id="doubles-winners">Doubles Winners</h3>
-    <table>
-      <thead><tr><th>Year</th><th>Winners</th><th>Club / Team</th></tr></thead>
-      <tbody>
-        <tr><td>2024</td><td>Scott Lomas &amp; Sam Lomas</td><td>Hayfield 1</td></tr>
-        <tr><td>2023</td><td>J. Matthews &amp; N. Cave</td><td>Tintwistle</td></tr>
-        <tr><td>2022</td><td>G. Flavell &amp; M. Dawson</td><td>Hadfield</td></tr>
-        <tr><td>2020</td><td>L. Hall &amp; B. Pregnall</td><td>Glossop</td></tr>
-        <tr><td>2019</td><td>P. Lomas &amp; S. Lomas</td><td>Tintwistle</td></tr>
-      </tbody>
-    </table>
-
-    <!-- Team Knockout -->
-    <h3 id="team-ko">Team Knockout Winners</h3>
-    <table>
-      <thead><tr><th>Year</th><th>Winner</th></tr></thead>
-      <tbody>
-        <tr><td>2023</td><td>Tintwistle 1</td></tr>
-        <tr><td>2022</td><td>Stalyvegas</td></tr>
-        <tr><td>2020</td><td>Hadfield 1</td></tr>
-        <tr><td>2019</td><td>Marple</td></tr>
-      </tbody>
-    </table>
+    <!-- Team KO -->
+    <section id="team-ko" class="honour" aria-hidden="true">
+      <h3>Team Knockout Winners</h3>
+      <table>
+        <thead><tr><th>Year</th><th>Winner</th></tr></thead>
+        <tbody>
+          <tr><td>2023</td><td>Tintwistle 1</td></tr>
+          <tr><td>2022</td><td>Stalyvegas</td></tr>
+          <tr><td>2020</td><td>Hadfield 1</td></tr>
+          <tr><td>2019</td><td>Marple</td></tr>
+        </tbody>
+      </table>
+    </section>
 
     <!-- Highest Break -->
-    <h3 id="highest-break">Highest Breaks (Recent Seasons)</h3>
-    <table>
-      <thead><tr><th>Season</th><th>Player</th><th>Break</th></tr></thead>
-      <tbody>
-        <tr><td>2023</td><td>R. Green</td><td>69</td></tr>
-        <tr><td>2022</td><td>M. Carrington</td><td>77</td></tr>
-        <tr><td>2020</td><td>M. Carrington</td><td>110</td></tr>
-        <tr><td>2019</td><td>S. Crook</td><td>51</td></tr>
-      </tbody>
-    </table>
+    <section id="highest-break" class="honour" aria-hidden="true">
+      <h3>Highest Breaks (Recent Seasons)</h3>
+      <table>
+        <thead><tr><th>Season</th><th>Player</th><th>Break</th></tr></thead>
+        <tbody>
+          <tr><td>2023</td><td>R. Green</td><td>69</td></tr>
+          <tr><td>2022</td><td>M. Carrington</td><td>77</td></tr>
+          <tr><td>2020</td><td>M. Carrington</td><td>110</td></tr>
+          <tr><td>2019</td><td>S. Crook</td><td>51</td></tr>
+        </tbody>
+      </table>
+    </section>
 
     <!-- Captains’ Cup -->
-    <h3 id="captains-cup">Captains’ Cup</h3>
-    <table>
-      <thead><tr><th>Year</th><th>Winner</th></tr></thead>
-      <tbody>
-        <tr><td>2015</td><td>J. Garnett</td></tr>
-        <tr><td>2014</td><td>A.J. Patel</td></tr>
-        <tr><td>2013</td><td>A.J. Patel</td></tr>
-      </tbody>
-    </table>
+    <section id="captains-cup" class="honour" aria-hidden="true">
+      <h3>Captains’ Cup</h3>
+      <table>
+        <thead><tr><th>Year</th><th>Winner</th></tr></thead>
+        <tbody>
+          <tr><td>2015</td><td>J. Garnett</td></tr>
+          <tr><td>2014</td><td>A.J. Patel</td></tr>
+          <tr><td>2013</td><td>A.J. Patel</td></tr>
+        </tbody>
+      </table>
+    </section>
   </main>
 
   <footer>&copy; 2025 High Peak &amp; Marple Snooker League</footer>
@@ -354,6 +398,57 @@
         }
       })
       .catch(()=>{});
+  </script>
+
+  <!-- Honours switcher logic -->
+  <script>
+    (function(){
+      const toggle = document.getElementById('honoursToggle');
+      const menu   = document.getElementById('honoursMenu');
+
+      function openMenu(){ menu.setAttribute('aria-hidden','false'); toggle.setAttribute('aria-expanded','true'); }
+      function closeMenu(){ menu.setAttribute('aria-hidden','true');  toggle.setAttribute('aria-expanded','false'); }
+
+      toggle.addEventListener('click', (e)=>{
+        const open = menu.getAttribute('aria-hidden')==='false';
+        open ? closeMenu() : openMenu();
+      });
+
+      document.addEventListener('click', (e)=>{
+        if (!menu.contains(e.target) && e.target!==toggle) closeMenu();
+      });
+      document.addEventListener('keydown', (e)=>{ if (e.key==='Escape') closeMenu(); });
+
+      // Show/hide sections
+      function showSection(id){
+        const sections = document.querySelectorAll('section.honour');
+        sections.forEach(sec => sec.setAttribute('aria-hidden', String('#'+sec.id !== id)));
+        // Update button label
+        const link = menu.querySelector(`a[href="${id}"]`);
+        if (link) toggle.textContent = link.textContent;
+      }
+
+      // Handle clicks on menu items
+      menu.addEventListener('click', (e)=>{
+        const a = e.target.closest('a[href^="#"]');
+        if (!a) return;
+        e.preventDefault();
+        const id = a.getAttribute('href');
+        showSection(id);
+        history.replaceState(null,'',id); // update URL hash
+        closeMenu();
+      });
+
+      // Initial section: from hash or default to league winners
+      function initFromHash(){
+        const id = location.hash && document.querySelector(location.hash)
+          ? location.hash
+          : '#league-winners';
+        showSection(id);
+      }
+      window.addEventListener('hashchange', initFromHash);
+      initFromHash();
+    })();
   </script>
 </body>
 </html>
