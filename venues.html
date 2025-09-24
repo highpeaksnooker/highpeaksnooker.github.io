@@ -151,13 +151,19 @@
       .catch(()=>{});
   </script>
 
-  <!-- Venues logic -->
+  <!-- Venues logic (data is embedded below) -->
   <script>
-  (async function(){
-    // Load venues
-    const venues = await fetch('data/venues.json', {cache:'no-store'})
-      .then(r => r.ok ? r.json() : [])
-      .catch(() => []);
+  (function(){
+    // ==== Embedded venues from your message ====
+    const venues = [
+      { name: "Chinley", teams: "Chinley", address: "23 Lower Ln, Chinley, High Peak SK23 6BE" },
+      { name: "Denton Liberal Club", teams: "Denton", address: "Denton Liberal Club, 1 Bowden St, Denton, Manchester M34 2AB" },
+      { name: "AlexAshton", teams: "AlexAshton", address: "Dean St, Ashton-under-Lyne OL6 7DY" },
+      { name: "Hayfield", teams: "Hayfield 1 & 2", address: "Steeple End Fold, Hayfield, High Peak SK22 2JD" },
+      { name: "Tintwistle", teams: "Tintwhistle 1 & 2", address: "13 New Rd, Tintwistle, Glossop SK13 1JN" },
+      { name: "Marple", teams: "Marple", address: "119 Church Ln, Marple, Stockport SK6 7AY" },
+      { name: "Whaley Bridge", teams: "Whaley 1 & 2", address: "43 Buxton Rd, Whaley Bridge, High Peak SK23 7HX" }
+    ];
 
     const list = document.getElementById('venueList');
     const empty = document.getElementById('venueEmpty');
@@ -172,17 +178,15 @@
 
     for (const v of venues){
       const name = v.name || 'Unknown Venue';
-      const team = v.team || '';
-      const lines = [
-        v.address1, v.address2, v.town, v.county, v.postcode
-      ].filter(Boolean);
+      const team = v.teams || '';
+      const addr = (v.address || '').trim();
 
-      // Prefer lat/lng if present; otherwise use full address string
-      const hasCoords = (typeof v.lat === 'number' && typeof v.lng === 'number');
-      const q = hasCoords ? `${v.lat},${v.lng}` : lines.join(', ');
+      // Split address into lines for tidy display (by commas)
+      const lines = addr ? addr.split(/\s*,\s*/g) : [];
 
-      const gUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}`;
-      const aUrl = `http://maps.apple.com/?q=${encodeURIComponent(q)}`;
+      const query = encodeURIComponent((name + ', ' + addr).trim());
+      const gUrl = `https://www.google.com/maps/search/?api=1&query=${query}`;
+      const aUrl = `https://maps.apple.com/?q=${query}`;
 
       const card = document.createElement('article');
       card.className = 'venue-card';
@@ -201,8 +205,6 @@
           <a class="btn" href="${gUrl}" target="_blank" rel="noopener">Open in Google Maps</a>
           <a class="btn" href="${aUrl}" target="_blank" rel="noopener">Open in Apple Maps</a>
         </div>
-
-        ${v.notes ? `<p class="meta">${escapeHtml(v.notes)}</p>` : ''}
       `;
 
       list.appendChild(card);
