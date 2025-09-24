@@ -1,36 +1,124 @@
 [
   {
-    "id": "m-2025-01-15-chinley-v-dentonlib",
-    "date": "2025-01-15",
-    "homeTeamId": "chinley",
-    "awayTeamId": "denton-lib",
-    "homeFrames": 4,
-    "awayFrames": 1,
+    "id": "m-2025-09-24-marple-v-tintwistle2",
+    "date": "2025-09-24",
+    "homeTeamId": "marple",
+    "awayTeamId": "tintwistle2",
+    "homeFrames": 2,
+    "awayFrames": 3,
     "frames": [
       {
-        "homePlayerId": "p-carr-l",
-        "awayPlayerId": "p-patel-a-j",
-        "winner": "home"
+        "homePlayerId": "p-glynn-evans",
+        "awayPlayerId": "p-nick-small",
+        "winner": "home",
+        "scores": { "home": 84, "away": 51 }
       },
       {
-        "homePlayerId": "p-thomas-d",
-        "awayPlayerId": "p-chandarana-r",
-        "winner": "home"
+        "homePlayerId": "p-ryan-ritchie",
+        "awayPlayerId": "p-jack-wrigley",
+        "winner": "home",
+        "scores": { "home": 82, "away": 32 }
       },
       {
-        "homePlayerId": "p-doherty-b",
-        "awayPlayerId": "p-garside-ash",
-        "winner": "home"
+        "homePlayerId": "p-c-lee",
+        "awayPlayerId": "p-g-davis",
+        "winner": "away",
+        "scores": { "home": 27, "away": 53 }
       },
       {
-        "homePlayerId": "p-holland-i-captain",
-        "awayPlayerId": "p-green-r",
-        "winner": "home"
+        "homePlayerId": "p-gareth-ritchie",
+        "awayPlayerId": "p-dan-corbally",
+        "winner": "away",
+        "scores": { "home": 37, "away": 56 }
       },
       {
-        "homePlayerId": "p-rowland-d",
-        "awayPlayerId": "p-kwan-eric",
-        "winner": "away"
+        "homePlayerId": "p-geoff-flavell",
+        "awayPlayerId": "p-perri-bethel",
+        "winner": "away",
+        "scores": { "home": 26, "away": 59 }
+      }
+    ]
+  },
+  {
+    "id": "m-2025-09-24-tintwistle1-v-whaley-1",
+    "date": "2025-09-24",
+    "homeTeamId": "tintwistle1",
+    "awayTeamId": "whaley-1",
+    "homeFrames": 1,
+    "awayFrames": 4,
+    "frames": [
+      {
+        "homePlayerId": "p-shaun-robinson",
+        "awayPlayerId": "p-john-gordon",
+        "winner": "away",
+        "scores": { "home": 27, "away": 86 }
+      },
+      {
+        "homePlayerId": "p-elliot-spencer",
+        "awayPlayerId": "p-rob-larkin",
+        "winner": "away",
+        "scores": { "home": 56, "away": 71 }
+      },
+      {
+        "homePlayerId": "p-n-wilson",
+        "awayPlayerId": "p-adam-rogers",
+        "winner": "away",
+        "scores": { "home": 46, "away": 82 },
+        "breaks": { "away": 25 }
+      },
+      {
+        "homePlayerId": "p-a-lawton",
+        "awayPlayerId": "p-g-carpenter",
+        "winner": "away",
+        "scores": { "home": 33, "away": 55 }
+      },
+      {
+        "homePlayerId": "p-s-crook",
+        "awayPlayerId": "p-dan-golpin",
+        "winner": "home",
+        "scores": { "home": 50, "away": 44 }
+      }
+    ]
+  },
+  {
+    "id": "m-2025-09-24-denton-lib-v-hayfield-1",
+    "date": "2025-09-24",
+    "homeTeamId": "denton-lib",
+    "awayTeamId": "hayfield-1",
+    "homeFrames": 3,
+    "awayFrames": 2,
+    "frames": [
+      {
+        "homePlayerId": "p-ash-garside",
+        "awayPlayerId": "p-r-wilkinson",
+        "winner": "home",
+        "scores": { "home": 100, "away": 78 },
+        "breaks": { "home": [35, 27] }
+      },
+      {
+        "homePlayerId": "p-aj-patel",
+        "awayPlayerId": "p-a-barnes",
+        "winner": "home",
+        "scores": { "home": 60, "away": 42 }
+      },
+      {
+        "homePlayerId": "p-s-mistry",
+        "awayPlayerId": "p-scott-lomas",
+        "winner": "away",
+        "scores": { "home": 54, "away": 60 }
+      },
+      {
+        "homePlayerId": "p-m-derbyshire",
+        "awayPlayerId": "p-sam-lomas",
+        "winner": "away",
+        "scores": { "home": 38, "away": 65 }
+      },
+      {
+        "homePlayerId": "p-eric-kwan",
+        "awayPlayerId": "p-b-lonsdale",
+        "winner": "home",
+        "scores": { "home": 96, "away": 94 },
+        "breaks": { "home": [27] }
       }
     ]
   }
