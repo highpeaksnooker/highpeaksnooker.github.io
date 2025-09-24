@@ -11,14 +11,14 @@
 
   <style>
     :root{
-      --brand-green:#002b19;   /* match crest green */
-      --banner-height:140px;   /* desktop logo height */
+      --brand-green:#002b19;
+      --banner-height:140px;
       --page-max:1100px;
       --accent:#19d36b;
-
-      --bar-dark:#1f1f1f;      /* announcement + menu colour */
-      --bar-border:#2a2a2a;
+      --bar-dark:#1f1f1f; --bar-border:#2a2a2a;
       --overlay-bg:rgba(15,17,22,.85);
+      --card-bg:#fff;
+      --muted:#6b7280;
     }
 
     html,body{margin:0}
@@ -26,53 +26,57 @@
     .container{max-width:var(--page-max);margin:0 auto;padding:0 12px}
 
     /* ===== Crest banner ===== */
-    header.logo-header{
-      background:var(--brand-green);
-      box-shadow:0 2px 10px rgba(0,0,0,.25);
-      height:var(--banner-height);
-      display:flex;align-items:center;justify-content:center;
-    }
+    header.logo-header{background:var(--brand-green);box-shadow:0 2px 10px rgba(0,0,0,.25);height:var(--banner-height);display:flex;align-items:center;justify-content:center}
     .logo-banner{height:100%;display:flex;align-items:center;justify-content:center}
     .logo-banner img{height:100%;width:auto;object-fit:contain;display:block;filter:drop-shadow(0 0 6px rgba(0,0,0,.4))}
 
-    /* ===== Announcement bar (slimmer) ===== */
-    #announcement-banner{
-      position:sticky;top:0;z-index:100;display:none;background:var(--bar-dark);color:#fff;
-      font-weight:600;font-size:.85rem;padding:.35rem 0;border-top:1px solid rgba(255,255,255,.06);
-      border-bottom:1px solid var(--bar-border)
-    }
+    /* ===== Announcement bar ===== */
+    #announcement-banner{position:sticky;top:0;z-index:100;display:none;background:var(--bar-dark);color:#fff;font-weight:600;font-size:.85rem;padding:.35rem 0;border-top:1px solid rgba(255,255,255,.06);border-bottom:1px solid var(--bar-border)}
     #announcement-inner{max-width:var(--page-max);margin:0 auto;padding:0 12px;text-align:center}
 
     /* ===== Menu bar ===== */
     .menu-bar{background:var(--bar-dark);padding:8px 0 10px;position:relative;z-index:110;border-bottom:1px solid var(--bar-border)}
     .menu-inner{max-width:var(--page-max);margin:0 auto;padding:0 12px;position:relative}
-    .menu-toggle{
-      width:100%;background:var(--bar-dark);color:#fff;padding:10px 12px;border:1px solid var(--bar-border);
-      border-radius:10px;font-weight:800;font-size:1rem;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,.25) inset
-    }
+    .menu-toggle{width:100%;background:var(--bar-dark);color:#fff;padding:10px 12px;border:1px solid var(--bar-border);border-radius:10px;font-weight:800;font-size:1rem;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,.25) inset}
     .menu-toggle:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
-    nav.site-nav{
-      position:absolute;left:12px;right:12px;top:calc(100% + 6px);background:var(--overlay-bg);backdrop-filter:blur(6px);
-      border:1px solid rgba(255,255,255,.08);border-radius:10px;box-shadow:0 18px 36px rgba(0,0,0,.45);padding:6px;z-index:120
-    }
+    nav.site-nav{position:absolute;left:12px;right:12px;top:calc(100% + 6px);background:var(--overlay-bg);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.08);border-radius:10px;box-shadow:0 18px 36px rgba(0,0,0,.45);padding:6px;z-index:120}
     [hidden]{display:none!important}
-    nav.site-nav a{
-      display:block;color:#e5e7eb;text-decoration:none;font-weight:700;padding:10px 10px;border-radius:8px
-    }
+    nav.site-nav a{display:block;color:#e5e7eb;text-decoration:none;font-weight:700;padding:10px 10px;border-radius:8px}
     nav.site-nav a:hover{background:rgba(255,255,255,.1)}
     nav.site-nav a.active{background:var(--accent);color:#0b1b0f}
 
-    /* ===== Page content ===== */
+    /* ===== Page ===== */
     main.container{background:#fff;padding:1rem 12px 1.5rem;border-radius:10px;margin-top:10px;box-shadow:0 1px 2px rgba(0,0,0,.06)}
-    h2{margin:.25rem 0 .5rem 0}
-    p{margin:.25rem 0 1rem 0}
-    .venue-list{display:grid;gap:12px}
-    .venue{background:#fff;border:1px solid #e6e6e6;border-radius:10px;padding:12px}
-    .venue h3{margin:.2rem 0 .3rem 0}
-    .venue .meta{color:#555;font-size:.95rem}
+    h2{margin:.25rem 0 .6rem}
+
+    /* ===== Venue list ===== */
+    .venue-grid{display:grid;grid-template-columns:1fr;gap:12px}
+    .venue-card{
+      background:var(--card-bg);border:1px solid #e5e7eb;border-radius:10px;
+      padding:12px;box-shadow:0 1px 2px rgba(0,0,0,.04)
+    }
+    .venue-header{display:flex;align-items:baseline;gap:.5rem;flex-wrap:wrap}
+    .venue-name{font-size:1.05rem;font-weight:800;margin:0}
+    .venue-team{font-size:.9rem;color:var(--muted);margin:0}
+    .venue-address{margin:.35rem 0 .6rem;line-height:1.35}
+    .venue-address span{display:block}
+    .btn-row{display:flex;flex-wrap:wrap;gap:.4rem}
+    .btn{
+      appearance:none;border:1px solid #d1d5db;background:#f8fafc;color:#111;cursor:pointer;
+      padding:.5rem .7rem;border-radius:8px;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:.4rem
+    }
+    .btn:hover{background:#eef2f7}
+    .meta{margin-top:.5rem;color:var(--muted);font-size:.9rem}
+    .empty{padding:18px;border:1px dashed #d1d5db;border-radius:10px;background:#fafafa;color:#555}
+
+    @media (min-width:700px){
+      .venue-grid{grid-template-columns:1fr 1fr}
+    }
+    @media (min-width:1000px){
+      .venue-grid{grid-template-columns:1fr 1fr 1fr}
+    }
 
     footer{text-align:center;padding:1.5rem 1rem;color:#777}
-
     @media (max-width:480px){
       :root{--banner-height:110px}
       .menu-toggle{font-size:.95rem;padding:9px 11px}
@@ -84,7 +88,7 @@
   <!-- Crest banner -->
   <header class="logo-header" role="banner">
     <div class="logo-banner">
-      <img src="logo.PNG?v=13" alt="High Peak &amp; Marple Snooker League crest">
+      <img src="logo.PNG?v=16" alt="High Peak &amp; Marple Snooker League crest">
     </div>
   </header>
 
@@ -114,10 +118,10 @@
 
   <main class="container">
     <h2>Venues</h2>
-    <p>Venue details will be displayed here.</p>
+    <p>Addresses for league venues with quick links to Google Maps and Apple Maps.</p>
 
-    <!-- Example structure (optional; replace with real data) -->
-    <div class="venue-list" id="venueList"></div>
+    <div id="venueList" class="venue-grid" aria-live="polite"></div>
+    <div id="venueEmpty" class="empty" hidden>Venues will appear here once added.</div>
   </main>
 
   <footer>&copy; 2025 High Peak &amp; Marple Snooker League</footer>
@@ -139,7 +143,7 @@
     fetch('data/announcement.json',{cache:'no-store'})
       .then(r=>r.json())
       .then(d=>{
-        if(d&&d.message&&d.message.trim()){
+        if(d && d.message && d.message.trim()){
           document.getElementById('announcement-text').textContent=d.message.trim();
           document.getElementById('announcement-banner').style.display='block';
         }
@@ -147,30 +151,67 @@
       .catch(()=>{});
   </script>
 
-  <!-- Optional: load venues from JSON (if you have data/venues.json) -->
+  <!-- Venues logic -->
   <script>
-    // If you have a venues JSON file, uncomment and shape as needed.
-    /*
-    fetch('data/venues.json',{cache:'no-store'})
-      .then(r=>r.json())
-      .then(venues=>{
-        const list=document.getElementById('venueList');
-        list.innerHTML='';
-        venues.forEach(v=>{
-          const card=document.createElement('div');
-          card.className='venue';
-          card.innerHTML=`
-            <h3>${v.name}</h3>
-            <div class="meta">${v.address || ''}</div>
-            <div class="meta">${v.postcode || ''}</div>
-            ${v.tables ? `<div class="meta">Tables: ${v.tables}</div>`:''}
-            ${v.notes ? `<p>${v.notes}</p>`:''}
-          `;
-          list.appendChild(card);
-        });
-      })
-      .catch(()=>{});
-    */
+  (async function(){
+    // Load venues
+    const venues = await fetch('data/venues.json', {cache:'no-store'})
+      .then(r => r.ok ? r.json() : [])
+      .catch(() => []);
+
+    const list = document.getElementById('venueList');
+    const empty = document.getElementById('venueEmpty');
+
+    if (!Array.isArray(venues) || venues.length === 0){
+      empty.hidden = false;
+      return;
+    }
+
+    // Sort A–Z by venue name
+    venues.sort((a,b)=> (a.name||'').localeCompare(b.name||''));
+
+    for (const v of venues){
+      const name = v.name || 'Unknown Venue';
+      const team = v.team || '';
+      const lines = [
+        v.address1, v.address2, v.town, v.county, v.postcode
+      ].filter(Boolean);
+
+      // Prefer lat/lng if present; otherwise use full address string
+      const hasCoords = (typeof v.lat === 'number' && typeof v.lng === 'number');
+      const q = hasCoords ? `${v.lat},${v.lng}` : lines.join(', ');
+
+      const gUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}`;
+      const aUrl = `http://maps.apple.com/?q=${encodeURIComponent(q)}`;
+
+      const card = document.createElement('article');
+      card.className = 'venue-card';
+
+      card.innerHTML = `
+        <div class="venue-header">
+          <h3 class="venue-name">${escapeHtml(name)}</h3>
+          ${team ? `<p class="venue-team">(${escapeHtml(team)})</p>` : ''}
+        </div>
+
+        <div class="venue-address" aria-label="Address">
+          ${lines.map(l => `<span>${escapeHtml(l)}</span>`).join('')}
+        </div>
+
+        <div class="btn-row">
+          <a class="btn" href="${gUrl}" target="_blank" rel="noopener">Open in Google Maps</a>
+          <a class="btn" href="${aUrl}" target="_blank" rel="noopener">Open in Apple Maps</a>
+        </div>
+
+        ${v.notes ? `<p class="meta">${escapeHtml(v.notes)}</p>` : ''}
+      `;
+
+      list.appendChild(card);
+    }
+
+    function escapeHtml(s=''){
+      return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    }
+  })();
   </script>
 </body>
 </html>
