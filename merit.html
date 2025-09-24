@@ -15,7 +15,6 @@
       --banner-height:140px;
       --page-max:1100px;
       --accent:#19d36b;
-
       --bar-dark:#1f1f1f;
       --bar-border:#2a2a2a;
       --overlay-bg:rgba(15,17,22,.85);
@@ -56,15 +55,41 @@
       border:1px solid rgba(255,255,255,.08);border-radius:10px;box-shadow:0 18px 36px rgba(0,0,0,.45);padding:6px;z-index:120
     }
     [hidden]{display:none!important}
-    nav.site-nav a{
-      display:block;color:#e5e7eb;text-decoration:none;font-weight:700;padding:10px 10px;border-radius:8px
-    }
+    nav.site-nav a{display:block;color:#e5e7eb;text-decoration:none;font-weight:700;padding:10px 10px;border-radius:8px}
     nav.site-nav a:hover{background:rgba(255,255,255,.1)}
     nav.site-nav a.active{background:var(--accent);color:#0b1b0f}
 
+    /* ===== Tabs ===== */
+    .tabs{display:flex;flex-wrap:wrap;gap:.35rem;margin:.25rem 0 .75rem}
+    .tab-btn{margin:0;padding:.4em .8em;border:none;border-radius:6px;font-weight:700;cursor:pointer}
+    .tab-btn.active{box-shadow:0 0 0 2px #333 inset}
+
+    /* Team colours (rows + tab swatches) */
+    tr.team-color-0{background-color:#e6f4ff}
+    tr.team-color-1{background-color:#e6ffe6}
+    tr.team-color-2{background-color:#fff0e6}
+    tr.team-color-3{background-color:#f9e6ff}
+    tr.team-color-4{background-color:#fffde6}
+    tr.team-color-5{background-color:#f0f0ff}
+    tr.team-color-6{background-color:#e6fff2}
+    tr.team-color-7{background-color:#ffe6f0}
+    tr.team-color-8{background-color:#f6f6f6}
+    tr.team-color-9{background-color:#e0f7fa}
+
+    .tab-btn.color-0{background:#cce8ff}
+    .tab-btn.color-1{background:#bfffbf}
+    .tab-btn.color-2{background:#ffd4b3}
+    .tab-btn.color-3{background:#ebccff}
+    .tab-btn.color-4{background:#fff9b3}
+    .tab-btn.color-5{background:#d6d6ff}
+    .tab-btn.color-6{background:#b3ffe0}
+    .tab-btn.color-7{background:#ffcce0}
+    .tab-btn.color-8{background:#dddddd}
+    .tab-btn.color-9{background:#b2ebf2}
+
     /* ===== Main card ===== */
     main.container{background:#fff;padding:1rem 12px 1.5rem;border-radius:10px;margin-top:10px;box-shadow:0 1px 2px rgba(0,0,0,.06)}
-    h2{margin:.25rem 0 1rem 0}
+    h2{margin:.25rem 0 .6rem 0}
 
     /* ===== Heatmap table (Merit) ===== */
     .table-scroller{overflow-x:auto;-webkit-overflow-scrolling:touch}
@@ -134,6 +159,10 @@
 
   <main class="container">
     <h2>Player Merit Table</h2>
+    <p>Toggle a team to filter the table. Team colour will match row highlight. Data recalculated from results automatically.</p>
+
+    <div class="tabs" id="teamTabs"></div>
+
     <div class="table-scroller">
       <table id="meritGrid" class="player-grid" aria-describedby="meritHeatmap"></table>
     </div>
@@ -169,7 +198,7 @@
       .catch(()=>{});
   </script>
 
-  <!-- Merit heatmap logic (auto-confirm weeks from matches only) -->
+  <!-- Merit heatmap + tabs logic -->
   <script>
   (async function () {
     const [teams, players, fixtures, matches] = await Promise.all([
@@ -179,17 +208,19 @@
       fetch('data/matches.json',{cache:'no-store'}).then(r=>r.json())
     ]);
 
+    // ---- team indexes & colours ----
     const teamById = Object.fromEntries(teams.map(t => [t.id, t]));
+    const teamColorClass = {};
+    teams.forEach((t,i)=> teamColorClass[t.id] = i % 10);
 
-    // --- Index fixtures by date ---
+    // ---- fixtures by date ----
     const fixturesByDate = {};
     for (const f of fixtures) (fixturesByDate[f.date] ||= []).push(f);
 
-    // --- Index matches by date+pair ---
+    // ---- matches map ----
     const mKey = m => `${m.date}|${m.homeTeamId}|${m.awayTeamId}`;
     const matchesByKey = new Map(matches.map(m => [mKey(m), m]));
 
-    // A match is "complete" if it has results or is explicitly postponed/void
     function isComplete(m){
       if (!m) return false;
       if (m.status === 'postponed' || m.status === 'void') return true;
@@ -198,57 +229,57 @@
       return false;
     }
 
-    // --- Confirmed dates: only dates where ALL fixtures are complete ---
-    const confirmedDates = Object.keys(fixturesByDate)
-      .filter(d => fixturesByDate[d].every(f => isComplete(matchesByKey.get(`${d}|${f.homeTeamId}|${f.awayTeamId}`))))
-      .sort((a,b)=> new Date(a)-new Date(b));
+    const allDates = Object.keys(fixturesByDate).sort((a,b)=>new Date(a)-new Date(b));
+    const confirmedDates = allDates.filter(d =>
+      fixturesByDate[d].every(f => isComplete(matchesByKey.get(`${d}|${f.homeTeamId}|${f.awayTeamId}`)))
+    );
 
-    // --- Did a team have a fixture on date? ---
+    // team has fixture?
     const teamHasFixture = {};
     for (const d of confirmedDates){
       teamHasFixture[d] = {};
       for (const t of teams) teamHasFixture[d][t.id] = false;
-      for (const f of fixturesByDate[d]) {
+      for (const f of fixturesByDate[d]){
         teamHasFixture[d][f.homeTeamId] = true;
         teamHasFixture[d][f.awayTeamId] = true;
       }
     }
 
-    // --- Seed per-player rows
+    // seed player rows
     const P = {};
     for (const p of players){
       P[p.id] = {
-        name: p.name,
-        teamId: p.teamId,
-        teamName: teamById[p.teamId]?.name || '',
-        HCP: p.HCP ?? p.hcp ?? 0,
-        perDate: Object.fromEntries(confirmedDates.map(d => [d,'blank'])),
-        totals: {played:0,won:0,lost:0,diff:0,break25:0,high:0,winPct:0}
+        id:p.id,
+        name:p.name,
+        teamId:p.teamId,
+        teamName:teamById[p.teamId]?.name || '',
+        HCP:p.HCP ?? p.hcp ?? 0,
+        perDate:Object.fromEntries(confirmedDates.map(d=>[d,'blank'])),
+        totals:{played:0,won:0,lost:0,diff:0,break25:0,high:0,winPct:0}
       };
     }
 
-    // Pre-mark black cells (no team fixture)
+    // mark black (no fixture)
     for (const p of players){
       for (const d of confirmedDates){
         if (!teamHasFixture[d][p.teamId]) P[p.id].perDate[d] = 'na';
       }
     }
 
-    // Record a frame into player row
+    // record frames
     function recordFrame(frame, isHome, date){
       const pid = isHome ? frame.homePlayerId : frame.awayPlayerId;
       const row = P[pid];
       if (!row || !confirmedDates.includes(date)) return;
 
-      if (row.perDate[date] !== 'na') {
+      if (row.perDate[date] !== 'na'){
         const win = frame.winner === 'home' ? isHome
                   : frame.winner === 'away' ? !isHome
                   : null;
-        if (win === true)  { row.perDate[date] = 'W'; row.totals.played++; row.totals.won++; }
-        if (win === false) { row.perDate[date] = 'L'; row.totals.played++; row.totals.lost++; }
+        if (win === true){ row.perDate[date] = 'W'; row.totals.played++; row.totals.won++; }
+        else if (win === false){ row.perDate[date] = 'L'; row.totals.played++; row.totals.lost++; }
       }
 
-      // Breaks ≥25
       const b = frame.breaks;
       const myBreak = isHome ? b?.home : b?.away;
       if (typeof myBreak === 'number' && myBreak >= 25){
@@ -257,83 +288,115 @@
       }
     }
 
-    // Apply frames for confirmed dates only
     for (const d of confirmedDates){
       for (const f of fixturesByDate[d]){
         const m = matchesByKey.get(`${d}|${f.homeTeamId}|${f.awayTeamId}`);
         if (!m || !Array.isArray(m.frames)) continue;
         for (const fr of m.frames){
-          recordFrame(fr, true,  d);
+          recordFrame(fr, true, d);
           recordFrame(fr, false, d);
         }
       }
     }
 
-    // Final totals
-    for (const row of Object.values(P)){
-      row.totals.diff   = row.totals.won - row.totals.lost;
-      row.totals.winPct = row.totals.played ? (row.totals.won / row.totals.played) : 0;
+    for (const r of Object.values(P)){
+      r.totals.diff = r.totals.won - r.totals.lost;
+      r.totals.winPct = r.totals.played ? (r.totals.won / r.totals.played) : 0;
     }
 
-    /* Merit ordering you specified:
-       Most wins first,
-       then fewer games (higher win%),
-       then most 25+ breaks,
-       then name A–Z.
-    */
-    const rows = Object.values(P).sort((a,b) =>
-      (b.totals.won - a.totals.won) ||
-      (a.totals.played - b.totals.played) ||
-      (b.totals.winPct - a.totals.winPct) ||
-      (b.totals.break25 - a.totals.break25) ||
-      a.name.localeCompare(b.name)
-    );
-
-    // ----- Render table -----
-    const tbl = document.getElementById('meritGrid');
-    const thead = document.createElement('thead');
-    const thRow = document.createElement('tr');
-    thRow.innerHTML =
-     `<th class="sticky"  style="min-width:220px; left:0">Player</th>
-      <th class="sticky-2" style="min-width:200px;">Team</th>
-      <th class="sticky-3" style="min-width:110px;">Start HCP</th>`;
-
-    for (const d of confirmedDates){
-      const th = document.createElement('th');
-      th.textContent = new Date(d).toLocaleDateString('en-GB',{day:'2-digit',month:'2-digit',year:'2-digit'});
-      thRow.appendChild(th);
+    // sorting per your spec
+    function sortRows(rows){
+      return rows.sort((a,b)=>
+        (b.totals.won - a.totals.won) ||
+        (a.totals.played - b.totals.played) ||
+        (b.totals.winPct - a.totals.winPct) ||
+        (b.totals.break25 - a.totals.break25) ||
+        a.name.localeCompare(b.name)
+      );
     }
-    for (const label of ['Played','Wins','Losses','W–L','25+','Highest Break']) {
-      const th = document.createElement('th'); th.textContent = label; thRow.appendChild(th);
+
+    // ---- tabs ----
+    const tabs = document.getElementById('teamTabs');
+    const ALL='__all__';
+    function mkBtn(id,label,colorClass){
+      const b=document.createElement('button');
+      b.type='button';
+      b.className='tab-btn'+(colorClass!==null?` color-${colorClass}`:'');
+      b.dataset.teamId=id;
+      b.textContent=label;
+      b.addEventListener('click',()=>{
+        document.querySelectorAll('.tab-btn').forEach(x=>x.classList.remove('active'));
+        b.classList.add('active');
+        localStorage.setItem('meritTeamFilter',id);
+        const newUrl = id && id!==ALL ? `?team=${encodeURIComponent(id)}` : location.pathname;
+        history.replaceState(null,'',newUrl);
+        render(id);
+      });
+      return b;
     }
-    thead.appendChild(thRow);
+    tabs.appendChild(mkBtn(ALL,'All Teams',null));
+    teams.forEach(t=> tabs.appendChild(mkBtn(t.id,t.name,teamColorClass[t.id])));
 
-    const tbody = document.createElement('tbody');
-    let rank = 0;
-    for (const r of rows){
-      rank++;
-      const tr = document.createElement('tr');
-      tr.innerHTML =
-       `<td class="sticky"  style="left:0;text-align:left">${escapeHtml(r.name)}</td>
-        <td class="sticky-2" style="text-align:left">${escapeHtml(r.teamName)}</td>
-        <td class="sticky-3">${r.HCP}</td>`;
+    const urlTeam=new URLSearchParams(location.search).get('team');
+    const stored=localStorage.getItem('meritTeamFilter');
+    const startId=(urlTeam&&teamById[urlTeam])?urlTeam:(stored&&teamById[stored]?stored:ALL);
+    const startBtn=[...tabs.children].find(b=>b.dataset.teamId===startId)||tabs.firstChild;
+    startBtn.classList.add('active');
 
+    // ---- render ----
+    function render(teamFilter){
+      const tbl = document.getElementById('meritGrid');
+      const thead = document.createElement('thead');
+      const thRow = document.createElement('tr');
+      thRow.innerHTML =
+      `<th class="sticky"  style="min-width:220px; left:0">Player</th>
+       <th class="sticky-2" style="min-width:200px;">Team</th>
+       <th class="sticky-3" style="min-width:110px;">Start HCP</th>`;
       for (const d of confirmedDates){
-        const v = r.perDate[d];
-        let cls='cell-blank', text='';
-        if (v==='W') { cls='cell-w'; text='W'; }
-        else if (v==='L') { cls='cell-l'; text='L'; }
-        else if (v==='na'){ cls='cell-na'; }
-        const td=document.createElement('td'); td.className=cls; td.textContent=text; tr.appendChild(td);
+        const th=document.createElement('th');
+        th.textContent=new Date(d).toLocaleDateString('en-GB',{day:'2-digit',month:'2-digit',year:'2-digit'});
+        thRow.appendChild(th);
       }
-      const T=r.totals;
-      tr.insertAdjacentHTML('beforeend',
-        `<td>${T.played}</td><td>${T.won}</td><td>${T.lost}</td>
-         <td>${T.won - T.lost}</td><td>${T.break25}</td><td>${T.high || 0}</td>`);
-      tbody.appendChild(tr);
+      for (const label of ['Played','Wins','Losses','W–L','25+','Highest Break']){
+        const th=document.createElement('th'); th.textContent=label; thRow.appendChild(th);
+      }
+      thead.appendChild(thRow);
+
+      const tbody = document.createElement('tbody');
+
+      const filtered = sortRows(Object.values(P)
+        .filter(r => teamFilter===ALL || r.teamId===teamFilter));
+
+      for (const r of filtered){
+        const tr=document.createElement('tr');
+        tr.className = `team-color-${teamColorClass[r.teamId]}`;
+        tr.innerHTML =
+        `<td class="sticky"  style="left:0;text-align:left">${escapeHtml(r.name)}</td>
+         <td class="sticky-2" style="text-align:left">${escapeHtml(r.teamName)}</td>
+         <td class="sticky-3">${r.HCP}</td>`;
+        for (const d of confirmedDates){
+          const v=r.perDate[d];
+          let cls='cell-blank',text='';
+          if (v==='W'){cls='cell-w';text='W'}
+          else if (v==='L'){cls='cell-l';text='L'}
+          else if (v==='na'){cls='cell-na'}
+          const td=document.createElement('td'); td.className=cls; td.textContent=text; tr.appendChild(td);
+        }
+        const T=r.totals;
+        tr.insertAdjacentHTML('beforeend',
+          `<td>${T.played}</td><td>${T.won}</td><td>${T.lost}</td>
+           <td>${T.won-T.lost}</td><td>${T.break25}</td><td>${T.high||0}</td>`);
+        tbody.appendChild(tr);
+      }
+
+      tbl.replaceChildren(thead, tbody);
+
+      document.title = (teamFilter!==ALL && teamById[teamFilter])
+        ? `Player Merit — ${teamById[teamFilter].name} — High Peak & Marple`
+        : `Player Merit Table — High Peak & Marple Snooker League`;
     }
 
-    tbl.replaceChildren(thead, tbody);
+    render(startId);
 
     function escapeHtml(s=''){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
   })();
