@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Merit — High Peak & Marple Snooker League</title>
+  <link rel="icon" type="image/png" href="/logo.PNG" sizes="192x192">
+  <link rel="apple-touch-icon" href="/logo.PNG">
+  <link rel="preload" as="image" href="/logo.PNG">
+  <link rel="stylesheet" href="style.css" />
+
+  <style>
+    :root{
+      --brand-green:#002b19;
+      --banner-height:140px;
+      --page-max:1100px;
+      --accent:#19d36b;
+      --bar-dark:#1f1f1f; --bar-border:#2a2a2a;
+      --overlay-bg:rgba(15,17,22,.85);
+    }
+
+    html,body{margin:0}
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#f7f8fb;color:#0b1220}
+    .container{max-width:var(--page-max);margin:0 auto;padding:0 12px}
+
+    /* ===== Crest banner ===== */
+    header.logo-header{background:var(--brand-green);box-shadow:0 2px 10px rgba(0,0,0,.25);height:var(--banner-height);display:flex;align-items:center;justify-content:center}
+    .logo-banner{height:100%;display:flex;align-items:center;justify-content:center}
+    .logo-banner img{height:100%;width:auto;object-fit:contain;display:block;filter:drop-shadow(0 0 6px rgba(0,0,0,.4))}
+
+    /* ===== Announcement bar ===== */
+    #announcement-banner{position:sticky;top:0;z-index:100;display:none;background:var(--bar-dark);color:#fff;font-weight:600;font-size:.85rem;padding:.35rem 0;border-top:1px solid rgba(255,255,255,.06);border-bottom:1px solid var(--bar-border)}
+    #announcement-inner{max-width:var(--page-max);margin:0 auto;padding:0 12px;text-align:center}
+
+    /* ===== Menu bar ===== */
+    .menu-bar{background:var(--bar-dark);padding:8px 0 10px;position:relative;z-index:110;border-bottom:1px solid var(--bar-border)}
+    .menu-inner{max-width:var(--page-max);margin:0 auto;padding:0 12px;position:relative}
+    .menu-toggle{width:100%;background:var(--bar-dark);color:#fff;padding:10px 12px;border:1px solid var(--bar-border);border-radius:10px;font-weight:800;font-size:1rem;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,.25) inset}
+    .menu-toggle:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+    nav.site-nav{position:absolute;left:12px;right:12px;top:calc(100% + 6px);background:var(--overlay-bg);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.08);border-radius:10px;box-shadow:0 18px 36px rgba(0,0,0,.45);padding:6px;z-index:120}
+    [hidden]{display:none!important}
+    nav.site-nav a{display:block;color:#e5e7eb;text-decoration:none;font-weight:700;padding:10px 10px;border-radius:8px}
+    nav.site-nav a:hover{background:rgba(255,255,255,.1)}
+    nav.site-nav a.active{background:var(--accent);color:#0b1b0f}
+
+    /* ===== Tabs ===== */
+    .tabs{display:flex;flex-wrap:wrap;gap:.35rem;margin:.25rem 0 .75rem}
+    .tab-btn{
+      margin:0;padding:.4em .8em;border:none;border-radius:6px;font-weight:700;cursor:pointer;
+      color:#000; /* force black text for readability on coloured backgrounds */
+    }
+    .tab-btn.active{box-shadow:0 0 0 2px #333 inset}
+
+    /* Team colours (rows + tab swatches) */
+    tr.team-color-0{background-color:#e6f4ff}
+    tr.team-color-1{background-color:#e6ffe6}
+    tr.team-color-2{background-color:#fff0e6}
+    tr.team-color-3{background-color:#f9e6ff}
+    tr.team-color-4{background-color:#fffde6}
+    tr.team-color-5{background-color:#f0f0ff}
+    tr.team-color-6{background-color:#e6fff2}
+    tr.team-color-7{background-color:#ffe6f0}
+    tr.team-color-8{background-color:#f6f6f6}
+    tr.team-color-9{background-color:#e0f7fa}
+
+    .tab-btn.color-0{background:#cce8ff}
+    .tab-btn.color-1{background:#bfffbf}
+    .tab-btn.color-2{background:#ffd4b3}
+    .tab-btn.color-3{background:#ebccff}
+    .tab-btn.color-4{background:#fff9b3}
+    .tab-btn.color-5{background:#d6d6ff}
+    .tab-btn.color-6{background:#b3ffe0}
+    .tab-btn.color-7{background:#ffcce0}
+    .tab-btn.color-8{background:#dddddd}
+    .tab-btn.color-9{background:#b2ebf2}
+
+    /* ===== Main card ===== */
+    main.container{background:#fff;padding:1rem 12px 1.5rem;border-radius:10px;margin-top:10px;box-shadow:0 1px 2px rgba(0,0,0,.06)}
+    h2{margin:.25rem 0 .6rem 0}
+
+    /* ===== Grid ===== */
+    .table-scroller{overflow-x:auto;-webkit-overflow-scrolling:touch}
+    .player-grid{
+      width:max(980px,100%);
+      border-collapse:separate; border-spacing:0;
+      background:#fff;font-size:.95rem;table-layout:fixed
+    }
+    .player-grid th,.player-grid td{
+      border:1px solid #e4e4e4;padding:8px 10px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis
+    }
+    .player-grid thead th{background:#f0f0f0;font-weight:700}
+
+    /* sticky identity columns — dynamic left offsets via CSS vars set in JS */
+    .player-grid th.sticky,.player-grid td.sticky{position:sticky; left:var(--s0, 0px); z-index:2; background:inherit;}
+    .player-grid th.sticky-2,.player-grid td.sticky-2{position:sticky; left:var(--s1, 220px); z-index:2; background:inherit;}
+    .player-grid th.sticky-3,.player-grid td.sticky-3{position:sticky; left:var(--s2, 420px); z-index:2; background:inherit;}
+    .player-grid td.sticky,.player-grid td.sticky-2,.player-grid td.sticky-3{box-shadow:2px 0 0 rgba(0,0,0,.05)}
+    .player-grid thead th.sticky,.player-grid thead th.sticky-2,.player-grid thead th.sticky-3{z-index:3}
+
+    /* Allow full names to wrap in first two columns */
+    .player-grid th.sticky,.player-grid td.sticky,
+    .player-grid th.sticky-2,.player-grid td.sticky-2{white-space:normal; overflow:visible; text-align:left}
+    .col-name{min-width:260px}
+    .col-team{min-width:220px}
+    .col-hcp{min-width:100px}
+
+    /* cell colours */
+    .cell-w{background:#19c67a;color:#083;font-weight:700}
+    .cell-l{background:#f6903d;color:#5a2a00;font-weight:700}
+    .cell-na{background:#111;color:#fff}
+    .cell-blank{background:#fff}
+
+    footer{text-align:center;padding:1.5rem 1rem;color:#777}
+
+    @media (max-width:480px){
+      :root{--banner-height:110px}
+      .menu-toggle{font-size:.95rem;padding:9px 11px}
+      .player-grid{font-size:.9rem}
+      .player-grid th,.player-grid td{padding:6px 8px}
+      .col-name{min-width:220px}
+      .col-team{min-width:180px}
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Crest banner -->
+  <header class="logo-header" role="banner">
+    <div class="logo-banner">
+      <img src="logo.PNG?v=16" alt="High Peak &amp; Marple Snooker League crest">
+    </div>
+  </header>
+
+  <!-- Announcement bar -->
+  <div id="announcement-banner" role="status" aria-live="polite">
+    <div id="announcement-inner" class="container">
+      <span id="announcement-text"></span>
+    </div>
+  </div>
+
+  <!-- Menu bar -->
+  <div class="menu-bar">
+    <div class="menu-inner">
+      <button class="menu-toggle" id="menuToggle" aria-expanded="false" aria-controls="siteNav">☰ Menu</button>
+      <nav id="siteNav" class="site-nav" hidden>
+        <a href="index.html">Home</a>
+        <a href="fixtures.html">Fixtures</a>
+        <a href="results.html">Results</a>
+        <a href="merit.html" class="active">Merit</a>
+        <a href="venues.html">Venues</a>
+        <a href="rules.html">Rules</a>
+        <a href="history.html">Honours List</a>
+        <a href="archive.html">Archive</a>
+      </nav>
+    </div>
+  </div>
+
+  <main class="container">
+    <h2>Merit</h2>
+    <p>Filter by team or view all players. If no results are confirmed yet, all totals show as 0.</p>
+
+    <div class="tabs" id="teamTabs"></div>
+
+    <div class="table-scroller">
+      <table id="playersGrid" class="player-grid" aria-describedby="meritHeatmap"></table>
+    </div>
+    <p id="meritHeatmap" class="visually-hidden">
+      Player weekly results grid with wins/losses by date and totals.
+    </p>
+  </main>
+
+  <footer>&copy; 2025 High Peak &amp; Marple Snooker League</footer>
+
+  <!-- Menu logic -->
+  <script>
+    (function(){
+      const btn=document.getElementById('menuToggle');
+      const nav=document.getElementById('siteNav');
+      function closeNav(){nav.hidden=true;btn.setAttribute('aria-expanded','false')}
+      btn.addEventListener('click',()=>{const ex=btn.getAttribute('aria-expanded')==='true';btn.setAttribute('aria-expanded',String(!ex));nav.hidden=ex});
+      document.addEventListener('click',(e)=>{if(!nav.hidden&&!nav.contains(e.target)&&e.target!==btn&&!btn.contains(e.target)){closeNav()}});
+      document.addEventListener('keydown',(e)=>{if(e.key==='Escape')closeNav()});
+    })();
+  </script>
+
+  <!-- Announcement -->
+  <script>
+    fetch('data/announcement.json',{cache:'no-store'})
+      .then(r=>r.json())
+      .then(d=>{
+        if(d&&d.message&&d.message.trim()){
+          document.getElementById('announcement-text').textContent=d.message.trim();
+          document.getElementById('announcement-banner').style.display='block';
+        }
+      })
+      .catch(()=>{});
+  </script>
+
+  <!-- Merit grid logic (same data logic as before) -->
+  <script>
+  (async function () {
+    const [teams, players, fixtures, matches] = await Promise.all([
+      fetch('data/teams.json',{cache:'no-store'}).then(r=>r.json()),
+      fetch('data/players.json',{cache:'no-store'}).then(r=>r.json()),
+      fetch('data/fixtures.json',{cache:'no-store'}).then(r=>r.json()).catch(()=>[]),
+      fetch('data/matches.json',{cache:'no-store'}).then(r=>r.json()).catch(()=>[])
+    ]);
+
+    const teamById = Object.fromEntries(teams.map(t => [t.id, t]));
+    const teamColorClass = {};
+    teams.forEach((t,i)=> teamColorClass[t.id] = i % 10);
+
+    // Index fixtures by date
+    const fixturesByDate = {};
+    for (const f of fixtures) (fixturesByDate[f.date] ||= []).push(f);
+
+    // Index matches by composite key
+    const mKey = m => `${m.date}|${m.homeTeamId}|${m.awayTeamId}`;
+    const matchesByKey = new Map(matches.map(m => [mKey(m), m]));
+
+    function isComplete(m){
+      if (!m) return false;
+      if (m.status === 'postponed' || m.status === 'void') return true;
+      if (typeof m.homeFrames === 'number' && typeof m.awayFrames === 'number') return true;
+      if (Array.isArray(m.frames) && m.frames.some(fr => fr.winner==='home' || fr.winner==='away')) return true;
+      return false;
+    }
+
+    const allDates = Object.keys(fixturesByDate).sort((a,b)=>new Date(a)-new Date(b));
+    const confirmedDates = allDates.filter(d =>
+      fixturesByDate[d].every(f => isComplete(matchesByKey.get(`${d}|${f.homeTeamId}|${f.awayTeamId}`)))
+    );
+
+    // Team had fixture on date?
+    const teamHasFixture = {};
+    for (const d of confirmedDates){
+      teamHasFixture[d] = {};
+      for (const t of teams) teamHasFixture[d][t.id] = false;
+      for (const f of fixturesByDate[d]){
+        teamHasFixture[d][f.homeTeamId] = true;
+        teamHasFixture[d][f.awayTeamId] = true;
+      }
+    }
+
+    // Seed per-player rows (always include every player)
+    const P = {};
+    for (const p of players){
+      P[p.id] = {
+        id:p.id,
+        name:p.name,
+        teamId:p.teamId,
+        teamName:teamById[p.teamId]?.name || '',
+        HCP:p.HCP ?? p.hcp ?? 0,
+        perDate:Object.fromEntries(confirmedDates.map(d=>[d,'blank'])),
+        totals:{played:0,won:0,lost:0,diff:0,break25:0,high:0,winPct:0}
+      };
+    }
+
+    // Pre-mark NA for dates the team didn't play
+    if (confirmedDates.length){
+      for (const p of players){
+        for (const d of confirmedDates){
+          if (!teamHasFixture[d][p.teamId]) P[p.id].perDate[d] = 'na';
+        }
+      }
+    }
+
+    // Apply frames
+    function recordFrame(frame, isHome, date){
+      const pid = isHome ? frame.homePlayerId : frame.awayPlayerId;
+      const row = P[pid];
+      if (!row || !confirmedDates.includes(date)) return;
+
+      if (row.perDate[date] !== 'na'){
+        const win = frame.winner === 'home' ? isHome
+                  : frame.winner === 'away' ? !isHome
+                  : null;
+        if (win === true){ row.perDate[date] = 'W'; row.totals.played++; row.totals.won++; }
+        else if (win === false){ row.perDate[date] = 'L'; row.totals.played++; row.totals.lost++; }
+      }
+
+      const b = frame.breaks;
+      const myBreak = isHome ? b?.home : b?.away;
+      if (typeof myBreak === 'number' && myBreak >= 25){
+        row.totals.break25++;
+        row.totals.high = Math.max(row.totals.high, myBreak);
+      }
+    }
+
+    for (const d of confirmedDates){
+      for (const f of fixturesByDate[d]){
+        const m = matchesByKey.get(`${d}|${f.homeTeamId}|${f.awayTeamId}`);
+        if (!m || !Array.isArray(m.frames)) continue;
+        for (const fr of m.frames){
+          recordFrame(fr, true, d);
+          recordFrame(fr, false, d);
+        }
+      }
+    }
+
+    for (const r of Object.values(P)){
+      r.totals.diff = r.totals.won - r.totals.lost;
+      r.totals.winPct = r.totals.played ? (r.totals.won / r.totals.played) : 0;
+    }
+
+    function sortRows(rows){
+      return rows.sort((a,b)=>
+        (a.teamName.localeCompare(b.teamName)) ||
+        a.name.localeCompare(b.name)
+      );
+    }
+
+    // --- Tabs
+    const tabs = document.getElementById('teamTabs');
+    const ALL='__all__';
+    function mkBtn(id,label,colorClass){
+      const b=document.createElement('button');
+      b.type='button';
+      b.className='tab-btn'+(colorClass!==null?` color-${colorClass}`:'');
+      b.dataset.teamId=id;
+      b.textContent=label;
+      b.addEventListener('click',()=>{
+        document.querySelectorAll('.tab-btn').forEach(x=>x.classList.remove('active'));
+        b.classList.add('active');
+        localStorage.setItem('playersTeamFilter',id);
+        const newUrl = id && id!==ALL ? `?team=${encodeURIComponent(id)}` : location.pathname;
+        history.replaceState(null,'',newUrl);
+        render(id);
+      });
+      return b;
+    }
+    tabs.appendChild(mkBtn(ALL,'All Teams',null));
+    teams.forEach(t=> tabs.appendChild(mkBtn(t.id,t.name,teamColorClass[t.id])));
+
+    const urlTeam=new URLSearchParams(location.search).get('team');
+    const stored=localStorage.getItem('playersTeamFilter');
+    const startId=(urlTeam&&teamById[urlTeam])?urlTeam:(stored&&teamById[stored]?stored:ALL);
+    const startBtn=[...tabs.children].find(b=>b.dataset.teamId===startId)||tabs.firstChild;
+    startBtn.classList.add('active');
+
+    // --- Render + sticky offsets calculation
+    function render(teamFilter){
+      const tbl = document.getElementById('playersGrid');
+      const thead = document.createElement('thead');
+      const thRow = document.createElement('tr');
+      thRow.innerHTML =
+      `<th class="sticky col-name"  style="left:auto">Name</th>
+       <th class="sticky-2 col-team" style="left:auto">Team</th>
+       <th class="sticky-3 col-hcp"  style="left:auto">Handicap</th>`;
+
+      for (const d of confirmedDates){
+        const th=document.createElement('th');
+        th.textContent=new Date(d).toLocaleDateString('en-GB',{day:'2-digit',month:'2-digit',year:'2-digit'});
+        thRow.appendChild(th);
+      }
+      ['Played','Won','Lost','Difference','25+','Max Break'].forEach(label=>{
+        const th=document.createElement('th'); th.textContent=label; thRow.appendChild(th);
+      });
+      thead.appendChild(thRow);
+
+      const tbody = document.createElement('tbody');
+      let rows = Object.values(P);
+      if (teamFilter && teamFilter !== ALL) rows = rows.filter(r=>r.teamId===teamFilter);
+      rows = sortRows(rows);
+
+      for (const r of rows){
+        const tr = document.createElement('tr');
+        tr.className = `team-color-${teamColorClass[r.teamId] ?? 0}`;
+        tr.innerHTML =
+         `<td class="sticky col-name"  style="left:auto">${escapeHtml(r.name)}</td>
+          <td class="sticky-2 col-team" style="left:auto">${escapeHtml(r.teamName)}</td>
+          <td class="sticky-3 col-hcp"  style="left:auto">${r.HCP}</td>`;
+
+        for (const d of confirmedDates){
+          const v = r.perDate[d];
+          let cls='cell-blank', text='';
+          if (v==='W') { cls='cell-w'; text='W'; }
+          else if (v==='L') { cls='cell-l'; text='L'; }
+          else if (v==='na'){ cls='cell-na'; }
+          const td=document.createElement('td'); td.className=cls; td.textContent=text; tr.appendChild(td);
+        }
+
+        const T=r.totals;
+        tr.insertAdjacentHTML('beforeend',
+          `<td>${T.played}</td><td>${T.won}</td><td>${T.lost}</td>
+           <td>${T.diff}</td><td>${T.break25}</td><td>${T.high || 0}</td>`);
+        tbody.appendChild(tr);
+      }
+
+      tbl.replaceChildren(thead, tbody);
+      setStickyOffsets(tbl);
+    }
+
+    function setStickyOffsets(tbl){
+      const headRow = tbl.querySelector('thead tr');
+      const firstRow = tbl.querySelector('tbody tr');
+      const w0 = (headRow?.children[0]?.offsetWidth) || (firstRow?.children[0]?.offsetWidth) || 0;
+      const w1 = (headRow?.children[1]?.offsetWidth) || (firstRow?.children[1]?.offsetWidth) || 0;
+      tbl.style.setProperty('--s0','0px');
+      tbl.style.setProperty('--s1', w0+'px');
+      tbl.style.setProperty('--s2', (w0+w1)+'px');
+    }
+
+    // initial render
+    render(startId);
+
+    // recalc on resize (debounced)
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(()=>{
+        const tbl=document.getElementById('playersGrid');
+        if (tbl) setStickyOffsets(tbl);
+      }, 100);
+    }, { passive:true });
+
+    function escapeHtml(s=''){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+  })();
+  </script>
+</body>
+</html>
