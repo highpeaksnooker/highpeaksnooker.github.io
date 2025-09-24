@@ -77,14 +77,47 @@
 
     /* ===== Players grid ===== */
     .table-scroller{overflow-x:auto;-webkit-overflow-scrolling:touch}
-    .player-grid{width:max(980px,100%);border-collapse:collapse;background:#fff;font-size:.95rem;table-layout:fixed}
-    .player-grid th,.player-grid td{border:1px solid #e4e4e4;padding:6px 8px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .player-grid{
+      width:max(980px,100%);
+      border-collapse:separate; /* separate helps sticky shadows */
+      border-spacing:0;
+      background:#fff;font-size:.95rem;table-layout:fixed
+    }
+    .player-grid th,.player-grid td{
+      border:1px solid #e4e4e4;padding:8px 10px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis
+    }
     .player-grid thead th{background:#f0f0f0;font-weight:700}
 
-    /* sticky identity columns */
-    .player-grid th.sticky,.player-grid td.sticky{position:sticky;left:0;background:#fff;z-index:3}
-    .player-grid th.sticky-2,.player-grid td.sticky-2{position:sticky;left:220px;background:#fff;z-index:3}
-    .player-grid th.sticky-3,.player-grid td.sticky-3{position:sticky;left:420px;background:#fff;z-index:3}
+    /* sticky identity columns — dynamic left offsets via CSS vars set in JS */
+    .player-grid th.sticky,.player-grid td.sticky{
+      position:sticky; left:var(--s0, 0px); z-index:2;
+      background:inherit; /* inherit row colour */
+    }
+    .player-grid th.sticky-2,.player-grid td.sticky-2{
+      position:sticky; left:var(--s1, 220px); z-index:2; background:inherit;
+    }
+    .player-grid th.sticky-3,.player-grid td.sticky-3{
+      position:sticky; left:var(--s2, 420px); z-index:2; background:inherit;
+    }
+    /* Make sticky columns readable & not overlap visually */
+    .player-grid td.sticky, .player-grid td.sticky-2, .player-grid td.sticky-3 {
+      box-shadow: 2px 0 0 rgba(0,0,0,.05);
+    }
+    .player-grid thead th.sticky,
+    .player-grid thead th.sticky-2,
+    .player-grid thead th.sticky-3 { z-index:3 } /* headers above cells */
+
+    /* Allow full names to wrap in first two columns */
+    .player-grid th.sticky, .player-grid td.sticky,
+    .player-grid th.sticky-2, .player-grid td.sticky-2{
+      white-space:normal; /* allow wrapping */
+      overflow:visible;   /* show full text */
+      text-align:left;
+    }
+    /* Wider minimums for first two columns to reduce wrapping */
+    .col-name  { min-width: 260px; }
+    .col-team  { min-width: 220px; }
+    .col-hcp   { min-width: 100px; }
 
     /* result colours */
     .cell-w{background:#19c67a;color:#083;font-weight:700}
@@ -98,7 +131,9 @@
       :root{--banner-height:110px}
       .menu-toggle{font-size:.95rem;padding:9px 11px}
       .player-grid{font-size:.9rem}
-      .player-grid th,.player-grid td{padding:5px 6px}
+      .player-grid th,.player-grid td{padding:6px 8px}
+      .col-name{min-width:220px}
+      .col-team{min-width:180px}
     }
   </style>
 </head>
@@ -116,7 +151,7 @@
     <div id="announcement-inner" class="container">
       <span id="announcement-text"></span>
     </div>
-  </div>
+  </header>
 
   <!-- Menu bar -->
   <div class="menu-bar">
@@ -317,27 +352,24 @@
     const startBtn=[...tabs.children].find(b=>b.dataset.teamId===startId)||tabs.firstChild;
     startBtn.classList.add('active');
 
-    // --- Render
+    // --- Render + sticky offsets calculation
     function render(teamFilter){
       const tbl = document.getElementById('playersGrid');
       const thead = document.createElement('thead');
       const thRow = document.createElement('tr');
       thRow.innerHTML =
-      `<th class="sticky"  style="min-width:220px; left:0">Name</th>
-       <th class="sticky-2" style="min-width:200px;">Team</th>
-       <th class="sticky-3" style="min-width:100px;">Handicap</th>`;
+      `<th class="sticky col-name"  style="left:auto">Name</th>
+       <th class="sticky-2 col-team" style="left:auto">Team</th>
+       <th class="sticky-3 col-hcp"  style="left:auto">Handicap</th>`;
 
       for (const d of confirmedDates){
         const th=document.createElement('th');
         th.textContent=new Date(d).toLocaleDateString('en-GB',{day:'2-digit',month:'2-digit',year:'2-digit'});
         thRow.appendChild(th);
       }
-
-      // Totals columns (always shown)
       ['Played','Won','Lost','Difference','25+','Max Break'].forEach(label=>{
         const th=document.createElement('th'); th.textContent=label; thRow.appendChild(th);
       });
-
       thead.appendChild(thRow);
 
       const tbody = document.createElement('tbody');
@@ -349,9 +381,9 @@
         const tr = document.createElement('tr');
         tr.className = `team-color-${teamColorClass[r.teamId] ?? 0}`;
         tr.innerHTML =
-         `<td class="sticky"  style="left:0;text-align:left">${escapeHtml(r.name)}</td>
-          <td class="sticky-2" style="text-align:left">${escapeHtml(r.teamName)}</td>
-          <td class="sticky-3">${r.HCP}</td>`;
+         `<td class="sticky col-name"  style="left:auto">${escapeHtml(r.name)}</td>
+          <td class="sticky-2 col-team" style="left:auto">${escapeHtml(r.teamName)}</td>
+          <td class="sticky-3 col-hcp"  style="left:auto">${r.HCP}</td>`;
 
         for (const d of confirmedDates){
           const v = r.perDate[d];
@@ -370,7 +402,43 @@
       }
 
       tbl.replaceChildren(thead, tbody);
+
+      // After the table is in the DOM, measure first three column widths and set CSS vars
+      setStickyOffsets(tbl);
+
+      // Recalc on window resize (debounced)
+      let resizeTimer;
+      window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(()=>setStickyOffsets(tbl), 100);
+      }, { passive: true });
     }
+
+    function setStickyOffsets(tbl){
+      const firstRow = tbl.querySelector('tbody tr');
+      const headRow  = tbl.querySelector('thead tr');
+      if (!firstRow || !headRow) {
+        // still set header offsets from header widths (if any)
+        const hCells = headRow ? headRow.children : [];
+        const w0 = hCells[0]?.offsetWidth || 0;
+        const w1 = hCells[1]?.offsetWidth || 0;
+        tbl.style.setProperty('--s0', '0px');
+        tbl.style.setProperty('--s1', w0+'px');
+        tbl.style.setProperty('--s2', (w0+w1)+'px');
+        return;
+      }
+      // Use header widths (more stable), fallback to first row
+      const h0 = headRow.children[0]?.offsetWidth || firstRow.children[0]?.offsetWidth || 0;
+      const h1 = headRow.children[1]?.offsetWidth || firstRow.children[1]?.offsetWidth || 0;
+
+      tbl.style.setProperty('--s0', '0px');
+      tbl.style.setProperty('--s1', h0 + 'px');
+      tbl.style.setProperty('--s2', (h0 + h1) + 'px');
+    }
+
+    const urlTeam=new URLSearchParams(location.search).get('team');
+    const stored=localStorage.getItem('playersTeamFilter');
+    const startId=(urlTeam&&teamById[urlTeam])?urlTeam:(stored&&teamById[stored]?stored:'__all__');
 
     render(startId);
 
