@@ -14,9 +14,8 @@
   { "id": "p-adam-rogers", "name": "Adam Rogers", "teamId": "whaley-1", "HCP": 7, "captain": false },
   { "id": "p-jack-scowen", "name": "Jack Scowen", "teamId": "whaley-1", "HCP": 21, "captain": false },
   { "id": "p-alex-sweet", "name": "Alex Sweet", "teamId": "whaley-1", "HCP": 21, "captain": false },
-  { "id": "p-matt-wing", "name": "Matt Wing", "teamId": "whaley-1", "HCP": 21, "captain": false }
-]
-[
+  { "id": "p-matt-wing", "name": "Matt Wing", "teamId": "whaley-1", "HCP": 21, "captain": false },
+
   { "id": "p-c-bailey", "name": "C Bailey", "teamId": "denton-lib", "HCP": -7, "captain": true },
   { "id": "p-r-chandarana", "name": "R Chandarana", "teamId": "denton-lib", "HCP": 7, "captain": false },
   { "id": "p-m-derbyshire", "name": "M Derbyshire", "teamId": "denton-lib", "HCP": 0, "captain": false },
@@ -25,9 +24,8 @@
   { "id": "p-eric-kwan", "name": "Eric Kwan", "teamId": "denton-lib", "HCP": -35, "captain": false },
   { "id": "p-k-mistry", "name": "K Mistry", "teamId": "denton-lib", "HCP": 21, "captain": false },
   { "id": "p-s-mistry", "name": "S Mistry", "teamId": "denton-lib", "HCP": 7, "captain": false },
-  { "id": "p-aj-patel", "name": "A.J. Patel", "teamId": "denton-lib", "HCP": -21, "captain": false }
-]
-[
+  { "id": "p-aj-patel", "name": "A.J. Patel", "teamId": "denton-lib", "HCP": -21, "captain": false },
+
   { "id": "p-j-barkess", "name": "J Barkess", "teamId": "whaley-2", "HCP": 14, "captain": false },
   { "id": "p-scott-barnard", "name": "Scott Barnard", "teamId": "whaley-2", "HCP": -7, "captain": false },
   { "id": "p-a-greaves", "name": "A Greaves", "teamId": "whaley-2", "HCP": 14, "captain": false },
@@ -37,9 +35,8 @@
   { "id": "p-s-renshaw", "name": "S Renshaw", "teamId": "whaley-2", "HCP": 0, "captain": false },
   { "id": "p-s-tuppen", "name": "S Tuppen", "teamId": "whaley-2", "HCP": 14, "captain": false },
   { "id": "p-b-walker", "name": "B Walker", "teamId": "whaley-2", "HCP": 7, "captain": false },
-  { "id": "p-p-walker", "name": "P Walker", "teamId": "whaley-2", "HCP": 7, "captain": false }
-]
-[
+  { "id": "p-p-walker", "name": "P Walker", "teamId": "whaley-2", "HCP": 7, "captain": false },
+
   { "id": "p-joe-brennan", "name": "Joe Brennan", "teamId": "tintwistle1", "HCP": -35, "captain": false },
   { "id": "p-a-clark", "name": "A Clark", "teamId": "tintwistle1", "HCP": -7, "captain": false },
   { "id": "p-s-crook", "name": "S Crook", "teamId": "tintwistle1", "HCP": -28, "captain": true },
@@ -55,9 +52,8 @@
   { "id": "p-elliot-spencer", "name": "Elliot Spencer", "teamId": "tintwistle1", "HCP": 14, "captain": false },
   { "id": "p-l-walker", "name": "L Walker", "teamId": "tintwistle1", "HCP": 28, "captain": false },
   { "id": "p-a-wright", "name": "A Wright", "teamId": "tintwistle1", "HCP": 0, "captain": false },
-  { "id": "p-n-wilson", "name": "N Wilson", "teamId": "tintwistle1", "HCP": -21, "captain": false }
-]
-[
+  { "id": "p-n-wilson", "name": "N Wilson", "teamId": "tintwistle1", "HCP": -21, "captain": false },
+
   { "id": "p-mike-alford", "name": "Mike Alford", "teamId": "marple", "HCP": 21, "captain": false },
   { "id": "p-tony-arnott", "name": "Tony Arnott", "teamId": "marple", "HCP": -14, "captain": false },
   { "id": "p-c-brown", "name": "C Brown", "teamId": "marple", "HCP": 21, "captain": false },
@@ -76,9 +72,8 @@
   { "id": "p-frank-stone", "name": "Frank Stone", "teamId": "marple", "HCP": 21, "captain": false },
   { "id": "p-p-taylor", "name": "P Taylor", "teamId": "marple", "HCP": 14, "captain": false },
   { "id": "p-h-walton", "name": "H Walton", "teamId": "marple", "HCP": 35, "captain": false },
-  { "id": "p-nick-wilbourne", "name": "Nick Wilbourne", "teamId": "marple", "HCP": 21, "captain": false }
-]
-[
+  { "id": "p-nick-wilbourne", "name": "Nick Wilbourne", "teamId": "marple", "HCP": 21, "captain": false },
+
   { "id": "p-steve-ashby", "name": "Steve Ashby", "teamId": "hayfield-2", "HCP": 14, "captain": false },
   { "id": "p-d-bloomfield", "name": "D Bloomfield", "teamId": "hayfield-2", "HCP": 21, "captain": false },
   { "id": "p-geoff-edge", "name": "Geoff Edge", "teamId": "hayfield-2", "HCP": 7, "captain": false },
@@ -91,9 +86,8 @@
   { "id": "p-b-monaghan", "name": "B Monaghan", "teamId": "hayfield-2", "HCP": 14, "captain": false },
   { "id": "p-tony-ryan", "name": "Tony Ryan", "teamId": "hayfield-2", "HCP": 14, "captain": false },
   { "id": "p-mark-snelling", "name": "Mark Snelling", "teamId": "hayfield-2", "HCP": 21, "captain": false },
-  { "id": "p-dean-taylor", "name": "Dean Taylor", "teamId": "hayfield-2", "HCP": 14, "captain": true }
-]
-[
+  { "id": "p-dean-taylor", "name": "Dean Taylor", "teamId": "hayfield-2", "HCP": 14, "captain": true },
+
   { "id": "p-d-bardsley", "name": "D Bardsley", "teamId": "tintwistle2", "HCP": 7, "captain": false },
   { "id": "p-chris-bethel", "name": "Chris Bethel", "teamId": "tintwistle2", "HCP": 7, "captain": false },
   { "id": "p-brian-bethel", "name": "Brian Bethel", "teamId": "tintwistle2", "HCP": 21, "captain": false },
@@ -114,9 +108,8 @@
   { "id": "p-nick-small", "name": "Nick Small", "teamId": "tintwistle2", "HCP": 21, "captain": false },
   { "id": "p-george-thirsk", "name": "George Thirsk", "teamId": "tintwistle2", "HCP": 35, "captain": false },
   { "id": "p-r-wilkinson", "name": "R Wilkinson", "teamId": "tintwistle2", "HCP": -14, "captain": false },
-  { "id": "p-jack-wrigley", "name": "Jack Wrigley", "teamId": "tintwistle2", "HCP": 7, "captain": false }
-]
-[
+  { "id": "p-jack-wrigley", "name": "Jack Wrigley", "teamId": "tintwistle2", "HCP": 7, "captain": false },
+
   { "id": "p-s-abell", "name": "S Abell", "teamId": "hayfield-1", "HCP": 28, "captain": false },
   { "id": "p-b-allen", "name": "B Allen", "teamId": "hayfield-1", "HCP": 0, "captain": false },
   { "id": "p-j-adamson", "name": "J Adamson", "teamId": "hayfield-1", "HCP": 14, "captain": false },
@@ -130,9 +123,8 @@
   { "id": "p-scott-lomas", "name": "Scott Lomas", "teamId": "hayfield-1", "HCP": 7, "captain": false },
   { "id": "p-b-lonsdale", "name": "B Lonsdale", "teamId": "hayfield-1", "HCP": 35, "captain": false },
   { "id": "p-tony-watkinson", "name": "Tony Watkinson", "teamId": "hayfield-1", "HCP": 35, "captain": false },
-  { "id": "p-d-winterbottom", "name": "D Winterbottom", "teamId": "hayfield-1", "HCP": 0, "captain": false }
-]
-[
+  { "id": "p-d-winterbottom", "name": "D Winterbottom", "teamId": "hayfield-1", "HCP": 0, "captain": false },
+
   { "id": "p-l-benstead", "name": "L Benstead", "teamId": "chinley", "HCP": 14, "captain": false },
   { "id": "p-a-carr", "name": "A Carr", "teamId": "chinley", "HCP": 14, "captain": false },
   { "id": "p-l-carr", "name": "L Carr", "teamId": "chinley", "HCP": -14, "captain": false },
@@ -146,9 +138,8 @@
   { "id": "p-s-lund", "name": "S Lund", "teamId": "chinley", "HCP": -14, "captain": false },
   { "id": "p-d-rowland", "name": "D Rowland", "teamId": "chinley", "HCP": -7, "captain": false },
   { "id": "p-d-thomas", "name": "D Thomas", "teamId": "chinley", "HCP": 14, "captain": false },
-  { "id": "p-g-walker", "name": "G Walker", "teamId": "chinley", "HCP": -7, "captain": false }
-]
-[
+  { "id": "p-g-walker", "name": "G Walker", "teamId": "chinley", "HCP": -7, "captain": false },
+
   { "id": "p-simon-buckley", "name": "Simon Buckley", "teamId": "alexashton", "HCP": -14, "captain": false },
   { "id": "p-p-bunting", "name": "P Bunting", "teamId": "alexashton", "HCP": 21, "captain": false },
   { "id": "p-nigel-cave", "name": "Nigel Cave", "teamId": "alexashton", "HCP": 14, "captain": false },
