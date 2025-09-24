@@ -107,7 +107,7 @@
   <!-- Crest banner -->
   <header class="logo-header" role="banner">
     <div class="logo-banner">
-      <img src="logo.PNG?v=15" alt="High Peak &amp; Marple Snooker League crest">
+      <img src="logo.PNG?v=16" alt="High Peak &amp; Marple Snooker League crest">
     </div>
   </header>
 
@@ -185,16 +185,15 @@
       fetch('data/matches.json',{cache:'no-store'}).then(r=>r.json()).catch(()=>[])
     ]);
 
-    // ---- team indexes & colours ----
     const teamById = Object.fromEntries(teams.map(t => [t.id, t]));
     const teamColorClass = {};
     teams.forEach((t,i)=> teamColorClass[t.id] = i % 10);
 
-    // ---- fixtures by date (may be empty) ----
+    // Index fixtures by date
     const fixturesByDate = {};
     for (const f of fixtures) (fixturesByDate[f.date] ||= []).push(f);
 
-    // ---- matches map (may be empty) ----
+    // Index matches by composite key
     const mKey = m => `${m.date}|${m.homeTeamId}|${m.awayTeamId}`;
     const matchesByKey = new Map(matches.map(m => [mKey(m), m]));
 
@@ -211,9 +210,172 @@
       fixturesByDate[d].every(f => isComplete(matchesByKey.get(`${d}|${f.homeTeamId}|${f.awayTeamId}`)))
     );
 
-    // team has fixture?
+    // Team had fixture on date?
     const teamHasFixture = {};
     for (const d of confirmedDates){
       teamHasFixture[d] = {};
       for (const t of teams) teamHasFixture[d][t.id] = false;
-      for (const f of fixturesByDate[d
+      for (const f of fixturesByDate[d]){
+        teamHasFixture[d][f.homeTeamId] = true;
+        teamHasFixture[d][f.awayTeamId] = true;
+      }
+    }
+
+    // Seed per-player rows (always include every player)
+    const P = {};
+    for (const p of players){
+      P[p.id] = {
+        id:p.id,
+        name:p.name,
+        teamId:p.teamId,
+        teamName:teamById[p.teamId]?.name || '',
+        HCP:p.HCP ?? p.hcp ?? 0,
+        perDate:Object.fromEntries(confirmedDates.map(d=>[d,'blank'])),
+        totals:{played:0,won:0,lost:0,diff:0,break25:0,high:0,winPct:0}
+      };
+    }
+
+    // Pre-mark NA for dates the team didn't play
+    if (confirmedDates.length){
+      for (const p of players){
+        for (const d of confirmedDates){
+          if (!teamHasFixture[d][p.teamId]) P[p.id].perDate[d] = 'na';
+        }
+      }
+    }
+
+    // Apply frames
+    function recordFrame(frame, isHome, date){
+      const pid = isHome ? frame.homePlayerId : frame.awayPlayerId;
+      const row = P[pid];
+      if (!row || !confirmedDates.includes(date)) return;
+
+      if (row.perDate[date] !== 'na'){
+        const win = frame.winner === 'home' ? isHome
+                  : frame.winner === 'away' ? !isHome
+                  : null;
+        if (win === true){ row.perDate[date] = 'W'; row.totals.played++; row.totals.won++; }
+        else if (win === false){ row.perDate[date] = 'L'; row.totals.played++; row.totals.lost++; }
+      }
+
+      const b = frame.breaks;
+      const myBreak = isHome ? b?.home : b?.away;
+      if (typeof myBreak === 'number' && myBreak >= 25){
+        row.totals.break25++;
+        row.totals.high = Math.max(row.totals.high, myBreak);
+      }
+    }
+
+    for (const d of confirmedDates){
+      for (const f of fixturesByDate[d]){
+        const m = matchesByKey.get(`${d}|${f.homeTeamId}|${f.awayTeamId}`);
+        if (!m || !Array.isArray(m.frames)) continue;
+        for (const fr of m.frames){
+          recordFrame(fr, true, d);
+          recordFrame(fr, false, d);
+        }
+      }
+    }
+
+    for (const r of Object.values(P)){
+      r.totals.diff = r.totals.won - r.totals.lost;
+      r.totals.winPct = r.totals.played ? (r.totals.won / r.totals.played) : 0;
+    }
+
+    function sortRows(rows){
+      return rows.sort((a,b)=>
+        (a.teamName.localeCompare(b.teamName)) ||
+        a.name.localeCompare(b.name)
+      );
+    }
+
+    // --- Tabs
+    const tabs = document.getElementById('teamTabs');
+    const ALL='__all__';
+    function mkBtn(id,label,colorClass){
+      const b=document.createElement('button');
+      b.type='button';
+      b.className='tab-btn'+(colorClass!==null?` color-${colorClass}`:'');
+      b.dataset.teamId=id;
+      b.textContent=label;
+      b.addEventListener('click',()=>{
+        document.querySelectorAll('.tab-btn').forEach(x=>x.classList.remove('active'));
+        b.classList.add('active');
+        localStorage.setItem('playersTeamFilter',id);
+        const newUrl = id && id!==ALL ? `?team=${encodeURIComponent(id)}` : location.pathname;
+        history.replaceState(null,'',newUrl);
+        render(id);
+      });
+      return b;
+    }
+    tabs.appendChild(mkBtn(ALL,'All Teams',null));
+    teams.forEach(t=> tabs.appendChild(mkBtn(t.id,t.name,teamColorClass[t.id])));
+
+    const urlTeam=new URLSearchParams(location.search).get('team');
+    const stored=localStorage.getItem('playersTeamFilter');
+    const startId=(urlTeam&&teamById[urlTeam])?urlTeam:(stored&&teamById[stored]?stored:ALL);
+    const startBtn=[...tabs.children].find(b=>b.dataset.teamId===startId)||tabs.firstChild;
+    startBtn.classList.add('active');
+
+    // --- Render
+    function render(teamFilter){
+      const tbl = document.getElementById('playersGrid');
+      const thead = document.createElement('thead');
+      const thRow = document.createElement('tr');
+      thRow.innerHTML =
+      `<th class="sticky"  style="min-width:220px; left:0">Name</th>
+       <th class="sticky-2" style="min-width:200px;">Team</th>
+       <th class="sticky-3" style="min-width:100px;">Handicap</th>`;
+
+      for (const d of confirmedDates){
+        const th=document.createElement('th');
+        th.textContent=new Date(d).toLocaleDateString('en-GB',{day:'2-digit',month:'2-digit',year:'2-digit'});
+        thRow.appendChild(th);
+      }
+
+      // Totals columns (always shown)
+      ['Played','Won','Lost','Difference','25+','Max Break'].forEach(label=>{
+        const th=document.createElement('th'); th.textContent=label; thRow.appendChild(th);
+      });
+
+      thead.appendChild(thRow);
+
+      const tbody = document.createElement('tbody');
+      let rows = Object.values(P);
+      if (teamFilter && teamFilter !== ALL) rows = rows.filter(r=>r.teamId===teamFilter);
+      rows = sortRows(rows);
+
+      for (const r of rows){
+        const tr = document.createElement('tr');
+        tr.className = `team-color-${teamColorClass[r.teamId] ?? 0}`;
+        tr.innerHTML =
+         `<td class="sticky"  style="left:0;text-align:left">${escapeHtml(r.name)}</td>
+          <td class="sticky-2" style="text-align:left">${escapeHtml(r.teamName)}</td>
+          <td class="sticky-3">${r.HCP}</td>`;
+
+        for (const d of confirmedDates){
+          const v = r.perDate[d];
+          let cls='cell-blank', text='';
+          if (v==='W') { cls='cell-w'; text='W'; }
+          else if (v==='L') { cls='cell-l'; text='L'; }
+          else if (v==='na'){ cls='cell-na'; }
+          const td=document.createElement('td'); td.className=cls; td.textContent=text; tr.appendChild(td);
+        }
+
+        const T=r.totals;
+        tr.insertAdjacentHTML('beforeend',
+          `<td>${T.played}</td><td>${T.won}</td><td>${T.lost}</td>
+           <td>${T.diff}</td><td>${T.break25}</td><td>${T.high || 0}</td>`);
+        tbody.appendChild(tr);
+      }
+
+      tbl.replaceChildren(thead, tbody);
+    }
+
+    render(startId);
+
+    function escapeHtml(s=''){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+  })();
+  </script>
+</body>
+</html>
