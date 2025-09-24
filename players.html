@@ -34,7 +34,7 @@
     .logo-banner{height:100%;display:flex;align-items:center;justify-content:center}
     .logo-banner img{height:100%;width:auto;object-fit:contain;display:block;filter:drop-shadow(0 0 6px rgba(0,0,0,.4))}
 
-    /* ===== Announcement bar (slimmer) ===== */
+    /* ===== Announcement bar ===== */
     #announcement-banner{
       position:sticky;top:0;z-index:100;display:none;background:var(--bar-dark);color:#fff;
       font-weight:600;font-size:.85rem;padding:.35rem 0;border-top:1px solid rgba(255,255,255,.06);
@@ -61,15 +61,34 @@
     nav.site-nav a:hover{background:rgba(255,255,255,.1)}
     nav.site-nav a.active{background:var(--accent);color:#0b1b0f}
 
-    /* ===== Main card ===== */
+    /* ===== Page card ===== */
     main.container{background:#fff;padding:1rem 12px 1.5rem;border-radius:10px;margin-top:10px;box-shadow:0 1px 2px rgba(0,0,0,.06)}
-    h2{margin:.25rem 0 .75rem 0}
+    h2{margin:.25rem 0 .5rem 0}
+    p.help{margin:.25rem 0 1rem 0;color:#5a6472}
 
-    /* ===== Heatmap table (Players) ===== */
+    /* ===== Team tabs ===== */
+    .tabs{display:flex;flex-wrap:wrap;gap:.4rem;margin:.5rem 0 1rem}
+    .tab-btn{
+      margin:0;padding:.45rem .7rem;border:none;border-radius:8px;font-weight:800;cursor:pointer;
+      background:#ececec;color:#111
+    }
+    .tab-btn.active{box-shadow:0 0 0 2px #333 inset}
+    .tab-btn.color-0{background:#cce8ff}
+    .tab-btn.color-1{background:#bfffbf}
+    .tab-btn.color-2{background:#ffd4b3}
+    .tab-btn.color-3{background:#ebccff}
+    .tab-btn.color-4{background:#fff9b3}
+    .tab-btn.color-5{background:#d6d6ff}
+    .tab-btn.color-6{background:#b3ffe0}
+    .tab-btn.color-7{background:#ffcce0}
+    .tab-btn.color-8{background:#dddddd}
+    .tab-btn.color-9{background:#b2ebf2}
+
+    /* ===== Heatmap table ===== */
     .table-scroller{overflow-x:auto;-webkit-overflow-scrolling:touch}
-    .player-grid{
+    table.player-grid{
       width:max(980px,100%);
-      border-collapse:collapse;background:#fff;font-size:.95rem;table-layout:fixed
+      border-collapse:collapse;background:#fff;font-size:.95rem;table-layout:fixed;border:1px solid #e4e4e4;border-radius:10px;overflow:hidden
     }
     .player-grid th,.player-grid td{
       border:1px solid #e4e4e4;padding:6px 8px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis
@@ -80,6 +99,18 @@
     .player-grid th.sticky,.player-grid td.sticky{position:sticky;left:0;background:#fff;z-index:3}
     .player-grid th.sticky-2,.player-grid td.sticky-2{position:sticky;left:220px;background:#fff;z-index:3}
     .player-grid th.sticky-3,.player-grid td.sticky-3{position:sticky;left:420px;background:#fff;z-index:3}
+
+    /* row team tint */
+    tr.team-color-0{background-color:#f4fbff}
+    tr.team-color-1{background-color:#f4fff4}
+    tr.team-color-2{background-color:#fff7f0}
+    tr.team-color-3{background-color:#faf4ff}
+    tr.team-color-4{background-color:#fffee6}
+    tr.team-color-5{background-color:#f6f6ff}
+    tr.team-color-6{background-color:#f3fffb}
+    tr.team-color-7{background-color:#fff0f6}
+    tr.team-color-8{background-color:#f8f8f8}
+    tr.team-color-9{background-color:#effcff}
 
     /* result colours */
     .cell-w{background:#19c67a;color:#083;font-weight:700}
@@ -102,7 +133,7 @@
   <!-- Crest banner -->
   <header class="logo-header" role="banner">
     <div class="logo-banner">
-      <img src="logo.PNG?v=13" alt="High Peak &amp; Marple Snooker League crest">
+      <img src="logo.PNG?v=20" alt="High Peak &amp; Marple Snooker League crest">
     </div>
   </header>
 
@@ -133,6 +164,10 @@
 
   <main class="container">
     <h2>Players</h2>
+    <p class="help">Use the team tabs to filter. Week columns only appear once a full week of fixtures is confirmed from <code>matches.json</code>.</p>
+
+    <div class="tabs" id="teamTabs"></div>
+
     <div class="table-scroller">
       <table id="playersGrid" class="player-grid" aria-describedby="playersHeatmap"></table>
     </div>
@@ -166,7 +201,7 @@
       .catch(()=>{});
   </script>
 
-  <!-- Players heatmap logic (auto-confirm weeks from matches only) -->
+  <!-- Players heatmap with team tabs -->
   <script>
   (async function () {
     const [teams, players, fixtures, matches] = await Promise.all([
@@ -176,158 +211,48 @@
       fetch('data/matches.json',{cache:'no-store'}).then(r=>r.json())
     ]);
 
+    // ===== team helpers =====
     const teamById = Object.fromEntries(teams.map(t => [t.id, t]));
+    const colorIndexByTeam = {};
+    teams.forEach((t,i)=>{ colorIndexByTeam[t.id] = i % 10; });
 
-    // --- Index fixtures by date ---
+    // ===== fixtures & matches indexing =====
     const fixturesByDate = {};
     for (const f of fixtures) (fixturesByDate[f.date] ||= []).push(f);
 
-    // --- Index matches by date+pair ---
     const mKey = m => `${m.date}|${m.homeTeamId}|${m.awayTeamId}`;
     const matchesByKey = new Map(matches.map(m => [mKey(m), m]));
 
-    // A match is "complete" if it has results or is explicitly postponed/void
-    function isComplete(m){
+    const isComplete = (m) => {
       if (!m) return false;
       if (m.status === 'postponed' || m.status === 'void') return true;
       if (typeof m.homeFrames === 'number' && typeof m.awayFrames === 'number') return true;
       if (Array.isArray(m.frames) && m.frames.some(fr => fr.winner==='home' || fr.winner==='away')) return true;
       return false;
-    }
+    };
 
-    // --- Confirmed dates: only dates where ALL fixtures are complete ---
     const confirmedDates = Object.keys(fixturesByDate)
       .filter(d => fixturesByDate[d].every(f => isComplete(matchesByKey.get(`${d}|${f.homeTeamId}|${f.awayTeamId}`))))
       .sort((a,b)=> new Date(a)-new Date(b));
 
-    // --- Did a team have a fixture on date? ---
+    // Did a team have a fixture on a date?
     const teamHasFixture = {};
     for (const d of confirmedDates){
       teamHasFixture[d] = {};
       for (const t of teams) teamHasFixture[d][t.id] = false;
-      for (const f of fixturesByDate[d]) {
+      for (const f of fixturesByDate[d]){
         teamHasFixture[d][f.homeTeamId] = true;
         teamHasFixture[d][f.awayTeamId] = true;
       }
     }
 
-    // --- Seed per-player rows
-    const P = {};
+    // ===== build per-player rows =====
+    const rowsByPlayer = {};
     for (const p of players){
-      P[p.id] = {
+      rowsByPlayer[p.id] = {
+        id: p.id,
         name: p.name,
         teamId: p.teamId,
         teamName: teamById[p.teamId]?.name || '',
         HCP: p.HCP ?? p.hcp ?? 0,
-        perDate: Object.fromEntries(confirmedDates.map(d => [d,'blank'])),
-        totals: {played:0,won:0,lost:0,diff:0,break25:0,high:0,winPct:0}
-      };
-    }
-
-    // Pre-mark black cells (no team fixture)
-    for (const p of players){
-      for (const d of confirmedDates){
-        if (!teamHasFixture[d][p.teamId]) P[p.id].perDate[d] = 'na';
-      }
-    }
-
-    // Record a frame into player row
-    function recordFrame(frame, isHome, date){
-      const pid = isHome ? frame.homePlayerId : frame.awayPlayerId;
-      const row = P[pid];
-      if (!row || !confirmedDates.includes(date)) return;
-
-      // If team had no fixture, keep 'na'
-      if (row.perDate[date] !== 'na') {
-        const win = frame.winner === 'home' ? isHome
-                  : frame.winner === 'away' ? !isHome
-                  : null;
-        if (win === true)  { row.perDate[date] = 'W'; row.totals.played++; row.totals.won++; }
-        if (win === false) { row.perDate[date] = 'L'; row.totals.played++; row.totals.lost++; }
-      }
-
-      // Breaks ≥25
-      const b = frame.breaks;
-      const myBreak = isHome ? b?.home : b?.away;
-      if (typeof myBreak === 'number' && myBreak >= 25){
-        row.totals.break25++;
-        row.totals.high = Math.max(row.totals.high, myBreak);
-      }
-    }
-
-    // Apply frames for confirmed dates only
-    for (const d of confirmedDates){
-      for (const f of fixturesByDate[d]){
-        const m = matchesByKey.get(`${d}|${f.homeTeamId}|${f.awayTeamId}`);
-        if (!m || !Array.isArray(m.frames)) continue;
-        for (const fr of m.frames){
-          recordFrame(fr, true,  d);
-          recordFrame(fr, false, d);
-        }
-      }
-    }
-
-    // Finalise totals
-    for (const row of Object.values(P)){
-      row.totals.diff   = row.totals.won - row.totals.lost;
-      row.totals.winPct = row.totals.played ? (row.totals.won / row.totals.played) : 0;
-    }
-
-    // Sorting: Most wins ↓, Fewer games ↑, Win% ↓, 25+ ↓, Name A–Z
-    const rows = Object.values(P).sort((a,b) =>
-      (b.totals.won - a.totals.won) ||
-      (a.totals.played - b.totals.played) ||
-      (b.totals.winPct - a.totals.winPct) ||
-      (b.totals.break25 - a.totals.break25) ||
-      a.name.localeCompare(b.name)
-    );
-
-    // ----- Render table -----
-    const tbl = document.getElementById('playersGrid');
-    const thead = document.createElement('thead');
-    const thRow = document.createElement('tr');
-    thRow.innerHTML =
-     `<th class="sticky"  style="min-width:220px; left:0">Name</th>
-      <th class="sticky-2" style="min-width:200px;">Team</th>
-      <th class="sticky-3" style="min-width:100px;">Handicap</th>`;
-
-    for (const d of confirmedDates){
-      const th = document.createElement('th');
-      th.textContent = new Date(d).toLocaleDateString('en-GB',{day:'2-digit',month:'2-digit',year:'2-digit'});
-      thRow.appendChild(th);
-    }
-    for (const label of ['Played','Won','Lost','Difference','25+','Max Break']) {
-      const th = document.createElement('th'); th.textContent = label; thRow.appendChild(th);
-    }
-    thead.appendChild(thRow);
-
-    const tbody = document.createElement('tbody');
-    for (const r of rows){
-      const tr = document.createElement('tr');
-      tr.innerHTML =
-       `<td class="sticky"  style="left:0;text-align:left">${escapeHtml(r.name)}</td>
-        <td class="sticky-2" style="text-align:left">${escapeHtml(r.teamName)}</td>
-        <td class="sticky-3">${r.HCP}</td>`;
-
-      for (const d of confirmedDates){
-        const v = r.perDate[d];
-        let cls='cell-blank', text='';
-        if (v==='W') { cls='cell-w'; text='W'; }
-        else if (v==='L') { cls='cell-l'; text='L'; }
-        else if (v==='na'){ cls='cell-na'; }
-        const td=document.createElement('td'); td.className=cls; td.textContent=text; tr.appendChild(td);
-      }
-      const T=r.totals;
-      tr.insertAdjacentHTML('beforeend',
-        `<td>${T.played}</td><td>${T.won}</td><td>${T.lost}</td>
-         <td>${T.diff}</td><td>${T.break25}</td><td>${T.high || 0}</td>`);
-      tbody.appendChild(tr);
-    }
-
-    tbl.replaceChildren(thead, tbody);
-
-    function escapeHtml(s=''){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
-  })();
-  </script>
-</body>
-</html>
+        perDate: Object.fromEntries(confirmedDates.map(d => [d,'blank']
