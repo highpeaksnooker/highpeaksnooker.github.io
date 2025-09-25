@@ -18,32 +18,29 @@
       --bar-dark:#1f1f1f; --bar-border:#2a2a2a;
       --overlay-bg:rgba(15,17,22,.85);
 
-      /* widths */
-      --w-name:260px;   /* desktop */
-      --w-team:220px;   /* desktop */
-      --w-hcp:  64px;
-      --w-week: 42px;   /* weekly dd/mm */
-      --w-pwl:  44px;   /* P, W, L */
-      --w-diff: 54px;   /* +/- */
-      --w-25:   52px;   /* 25+ */
-      --w-hi:   76px;   /* High Break number */
-      --grid-font: .94rem;
+      /* desktop/base widths */
+      --w-name:200px;
+      --w-team:180px;
+      --w-hcp:  56px;
+      --w-week: 40px;
+      --w-pwl:  44px;
+      --w-diff: 54px;
+      --w-25:   52px;
+      --w-hi:   74px;
+      --grid-font:.92rem;
     }
 
     html,body{margin:0}
     body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#f7f8fb;color:#0b1220}
     .container{max-width:var(--page-max);margin:0 auto;padding:0 12px}
 
-    /* ===== Crest banner ===== */
     header.logo-header{background:var(--brand-green);box-shadow:0 2px 10px rgba(0,0,0,.25);height:var(--banner-height);display:flex;align-items:center;justify-content:center}
     .logo-banner{height:100%;display:flex;align-items:center;justify-content:center}
     .logo-banner img{height:100%;width:auto;object-fit:contain;display:block;filter:drop-shadow(0 0 6px rgba(0,0,0,.4))}
 
-    /* ===== Announcement bar ===== */
     #announcement-banner{position:sticky;top:0;z-index:100;display:none;background:var(--bar-dark);color:#fff;font-weight:600;font-size:.85rem;padding:.35rem 0;border-top:1px solid rgba(255,255,255,.06);border-bottom:1px solid var(--bar-border)}
     #announcement-inner{max-width:var(--page-max);margin:0 auto;padding:0 12px;text-align:center}
 
-    /* ===== Menu bar ===== */
     .menu-bar{background:var(--bar-dark);padding:8px 0 10px;position:relative;z-index:110;border-bottom:1px solid var(--bar-border)}
     .menu-inner{max-width:var(--page-max);margin:0 auto;padding:0 12px;position:relative}
     .menu-toggle{width:100%;background:var(--bar-dark);color:#fff;padding:10px 12px;border:1px solid var(--bar-border);border-radius:10px;font-weight:800;font-size:1rem;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,.25) inset}
@@ -54,12 +51,13 @@
     nav.site-nav a:hover{background:rgba(255,255,255,.1)}
     nav.site-nav a.active{background:var(--accent);color:#0b1b0f}
 
-    /* ===== Tabs ===== */
+    main.container{background:#fff;padding:1rem 12px 1.2rem;border-radius:10px;margin-top:10px;box-shadow:0 1px 2px rgba(0,0,0,.06)}
+    h2{margin:.25rem 0 .6rem 0}
     .tabs{display:flex;flex-wrap:wrap;gap:.35rem;margin:.25rem 0 .75rem}
-    .tab-btn{margin:0;padding:.4em .8em;border:none;border-radius:6px;font-weight:700;cursor:pointer;color:#000}
+    .tab-btn{margin:0;padding:.35em .7em;border:none;border-radius:6px;font-weight:700;cursor:pointer;color:#000}
     .tab-btn.active{box-shadow:0 0 0 2px #333 inset}
 
-    /* Team colours (rows + tab swatches) */
+    /* team color swatches */
     tr.team-color-0{background-color:#e6f4ff}
     tr.team-color-1{background-color:#e6ffe6}
     tr.team-color-2{background-color:#fff0e6}
@@ -72,85 +70,86 @@
     tr.team-color-9{background-color:#e0f7fa}
     .tab-btn.color-0{background:#cce8ff}.tab-btn.color-1{background:#bfffbf}.tab-btn.color-2{background:#ffd4b3}.tab-btn.color-3{background:#ebccff}.tab-btn.color-4{background:#fff9b3}.tab-btn.color-5{background:#d6d6ff}.tab-btn.color-6{background:#b3ffe0}.tab-btn.color-7{background:#ffcce0}.tab-btn.color-8{background:#dddddd}.tab-btn.color-9{background:#b2ebf2}
 
-    /* ===== Main card ===== */
-    main.container{background:#fff;padding:1rem 12px 1.5rem;border-radius:10px;margin-top:10px;box-shadow:0 1px 2px rgba(0,0,0,.06)}
-    h2{margin:.25rem 0 .6rem 0}
-
-    /* ===== Grid ===== */
     .table-scroller{overflow-x:auto;-webkit-overflow-scrolling:touch}
     .player-grid{
-      width:max(980px,100%);
+      width:100%;
       border-collapse:separate;border-spacing:0;
-      background:#fff;font-size:var(--grid-font);table-layout:fixed
+      background:#fff;font-size:var(--grid-font);table-layout:fixed;
     }
     .player-grid th,.player-grid td{
-      border:1px solid #e4e4e4;padding:6px 8px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis
+      border:1px solid #e4e4e4;padding:5px 6px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis
     }
     .player-grid thead th{background:#f0f0f0;font-weight:700}
 
-    /* sticky identity columns — dynamic left offsets via CSS vars set in JS */
+    /* sticky identity columns */
     .player-grid th.sticky,.player-grid td.sticky{position:sticky; left:var(--s0, 0px); z-index:2; background:inherit;}
-    .player-grid th.sticky-2,.player-grid td.sticky-2{position:sticky; left:var(--s1, 220px); z-index:2; background:inherit;}
-    .player-grid th.sticky-3,.player-grid td.sticky-3{position:sticky; left:var(--s2, 420px); z-index:2; background:inherit;}
+    .player-grid th.sticky-2,.player-grid td.sticky-2{position:sticky; left:var(--s1, 200px); z-index:2; background:inherit;}
+    .player-grid th.sticky-3,.player-grid td.sticky-3{position:sticky; left:var(--s2, 380px); z-index:2; background:inherit;}
     .player-grid td.sticky,.player-grid td.sticky-2,.player-grid td.sticky-3{box-shadow:2px 0 0 rgba(0,0,0,.05)}
     .player-grid thead th.sticky,.player-grid thead th.sticky-2,.player-grid thead th.sticky-3{z-index:3}
 
-    /* identity column widths */
-    .col-name{min-width:var(--w-name); text-align:left; white-space:normal}
-    .col-team{min-width:var(--w-team); text-align:left; white-space:normal}
+    /* identity columns (smaller type & tighter) */
+    .col-name,.col-team{white-space:normal;text-align:left;line-height:1.15}
+    .col-name{min-width:var(--w-name); font-size:.92em}
+    .col-team{min-width:var(--w-team); font-size:.90em}
     .col-hcp {width:var(--w-hcp)}
 
-    /* narrow, even columns */
+    /* compact columns */
     .col-week{width:var(--w-week); min-width:var(--w-week)}
     .col-p,.col-w,.col-l{width:var(--w-pwl)}
     .col-diff{width:var(--w-diff)}
     .col-25{width:var(--w-25)}
     .col-hi{width:var(--w-hi)}
 
-    /* cell colours */
+    /* result colouring */
     .cell-w{background:#19c67a;color:#083;font-weight:700}
     .cell-l{background:#f6903d;color:#5a2a00;font-weight:700}
     .cell-na{background:#111;color:#fff}
     .cell-blank{background:#fff}
 
-    footer{text-align:center;padding:1.5rem 1rem;color:#777}
+    footer{text-align:center;padding:1.2rem 1rem;color:#777}
 
-    /* ===== Mobile tweaks ===== */
+    /* ===== Mobile squeeze ===== */
     @media (max-width:480px){
       :root{
         --banner-height:110px;
-        --w-name:220px;   /* tighter on mobile */
-        --w-team:180px;
-        --w-hcp:58px;
-        --w-week:38px;
-        --w-pwl:40px;
-        --w-diff:50px;
-        --w-25:48px;
-        --w-hi:70px;
-        --grid-font:.90rem;
+
+        /* very tight widths for portrait fit */
+        --w-name:138px;
+        --w-team:116px;
+        --w-hcp:  44px;
+
+        --w-week: 32px;
+        --w-pwl:  36px;
+        --w-diff: 46px;
+        --w-25:   42px;
+        --w-hi:   60px;
+
+        --grid-font:.84rem;
       }
+
       .menu-toggle{font-size:.95rem;padding:9px 11px}
-      .player-grid th,.player-grid td{padding:5px 6px}
+      .player-grid th,.player-grid td{padding:4px 5px}
+
+      /* even smaller text in name/team cells on phones */
+      .col-name{font-size:.82em}
+      .col-team{font-size:.80em}
     }
   </style>
 </head>
 <body>
-
-  <!-- Crest banner -->
   <header class="logo-header" role="banner">
     <div class="logo-banner">
       <img src="logo.PNG?v=16" alt="High Peak &amp; Marple Snooker League crest">
     </div>
   </header>
 
-  <!-- Announcement bar -->
   <div id="announcement-banner" role="status" aria-live="polite">
     <div id="announcement-inner" class="container">
       <span id="announcement-text"></span>
     </div>
   </div>
 
-  <!-- Menu bar -->
   <div class="menu-bar">
     <div class="menu-inner">
       <button class="menu-toggle" id="menuToggle" aria-expanded="false" aria-controls="siteNav">☰ Menu</button>
@@ -183,7 +182,7 @@
 
   <footer>&copy; 2025 High Peak &amp; Marple Snooker League</footer>
 
-  <!-- Menu logic -->
+  <!-- Menu -->
   <script>
     (function(){
       const btn=document.getElementById('menuToggle');
@@ -208,7 +207,7 @@
       .catch(()=>{});
   </script>
 
-  <!-- Merit grid logic -->
+  <!-- Merit grid -->
   <script>
   (async function () {
     const [teams, players, fixtures, matches] = await Promise.all([
@@ -371,7 +370,6 @@
         thRow.appendChild(th);
       }
 
-      // Totals headers (compact)
       const compactHeads = [
         ['P','col-p'],['W','col-w'],['L','col-l'],
         ['+/-','col-diff'],['25+','col-25'],['High Break','col-hi']
@@ -383,8 +381,8 @@
 
       const tbody = document.createElement('tbody');
       let rows = Object.values(P);
-      if (!teamFilter || teamFilter === ALL) rows = rows.filter(r => r.totals.played > 0);
-      else rows = rows.filter(r => r.teamId === teamFilter);
+      rows = (!teamFilter || teamFilter === ALL) ? rows.filter(r => r.totals.played > 0)
+                                                : rows.filter(r => r.teamId === teamFilter);
       rows = sortRows(rows);
 
       for (const r of rows){
@@ -401,10 +399,7 @@
           if (v==='W') { cls='cell-w'; text='W'; }
           else if (v==='L') { cls='cell-l'; text='L'; }
           else if (v==='na'){ cls='cell-na'; }
-          const td=document.createElement('td');
-          td.className = `col-week ${cls}`;
-          td.textContent=text;
-          tr.appendChild(td);
+          const td=document.createElement('td'); td.className=`col-week ${cls}`; td.textContent=text; tr.appendChild(td);
         }
 
         const T=r.totals;
