@@ -17,6 +17,24 @@
       --accent:#19d36b;
       --bar-dark:#1f1f1f; --bar-border:#2a2a2a;
       --overlay-bg:rgba(15,17,22,.85);
+
+      /* Narrow week column sizing */
+      --week-col-w:36px;           /* default */
+      --week-col-font:.8rem;       /* default */
+      --grid-font:.95rem;          /* default */
+      --cell-pad-y:6px;            /* default */
+      --cell-pad-x:8px;            /* default */
+    }
+
+    @media (max-width:480px){
+      :root{
+        --banner-height:110px;
+        --week-col-w:28px;         /* tighter on phones */
+        --week-col-font:.7rem;
+        --grid-font:.85rem;
+        --cell-pad-y:4px;
+        --cell-pad-x:6px;
+      }
     }
 
     html,body{margin:0}
@@ -46,8 +64,7 @@
     /* ===== Tabs ===== */
     .tabs{display:flex;flex-wrap:wrap;gap:.35rem;margin:.25rem 0 .75rem}
     .tab-btn{
-      margin:0;padding:.4em .8em;border:none;border-radius:6px;font-weight:700;cursor:pointer;
-      color:#000;
+      margin:0;padding:.4em .8em;border:none;border-radius:6px;font-weight:700;cursor:pointer;color:#000;
     }
     .tab-btn.active{box-shadow:0 0 0 2px #333 inset}
 
@@ -62,7 +79,6 @@
     tr.team-color-7{background-color:#ffe6f0}
     tr.team-color-8{background-color:#f6f6f6}
     tr.team-color-9{background-color:#e0f7fa}
-
     .tab-btn.color-0{background:#cce8ff}
     .tab-btn.color-1{background:#bfffbf}
     .tab-btn.color-2{background:#ffd4b3}
@@ -81,17 +97,19 @@
     /* ===== Grid ===== */
     .table-scroller{overflow-x:auto;-webkit-overflow-scrolling:touch}
     .player-grid{
-      width:max(980px,100%);
+      width:max(960px,100%);
       border-collapse:separate; border-spacing:0;
-      background:#fff;font-size:.95rem;table-layout:fixed
+      background:#fff;font-size:var(--grid-font);table-layout:fixed
     }
     .player-grid th,.player-grid td{
-      border:1px solid #e4e4e4;padding:8px 10px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.15
+      border:1px solid #e4e4e4;padding:var(--cell-pad-y) var(--cell-pad-x);
+      text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.15
     }
     .player-grid thead th{background:#f0f0f0;font-weight:700}
 
-    /* Smaller date header cells */
-    .player-grid th.date-th{font-size:.8rem;padding:6px 6px}
+    /* WEEK columns — fixed narrow width & small font */
+    .player-grid th.week-th{width:var(--week-col-w);min-width:var(--week-col-w);max-width:var(--week-col-w);padding:calc(var(--cell-pad-y) - 2px) 0;font-size:var(--week-col-font)}
+    .player-grid td.week-td{width:var(--week-col-w);min-width:var(--week-col-w);max-width:var(--week-col-w);padding:2px 0;font-weight:700}
 
     /* sticky identity columns — dynamic left offsets via CSS vars set in JS */
     .player-grid th.sticky,.player-grid td.sticky{position:sticky; left:var(--s0, 0px); z-index:2; background:inherit;}
@@ -103,33 +121,24 @@
     /* Allow full names to wrap in first two columns */
     .player-grid th.sticky,.player-grid td.sticky,
     .player-grid th.sticky-2,.player-grid td.sticky-2{white-space:normal; overflow:visible; text-align:left}
-    .col-name{min-width:260px}
-    .col-team{min-width:220px}
-    .col-hcp{min-width:100px}
+    .col-name{min-width:240px}
+    .col-team{min-width:200px}
+    .col-hcp{min-width:90px;text-align:center}
 
     /* cell colours */
-    .cell-w{background:#19c67a;color:#083;font-weight:700}
-    .cell-l{background:#f6903d;color:#5a2a00;font-weight:700}
+    .cell-w{background:#19c67a;color:#083;font-weight:800}
+    .cell-l{background:#f6903d;color:#5a2a00;font-weight:800}
     .cell-na{background:#111;color:#fff}
     .cell-blank{background:#fff}
 
     footer{text-align:center;padding:1.5rem 1rem;color:#777}
 
-    /* ===== Mobile tweaks (portrait-friendly) ===== */
+    /* ===== Mobile extra tweaks (portrait) ===== */
     @media (max-width:480px){
-      :root{--banner-height:110px}
-
-      .menu-toggle{font-size:.95rem;padding:9px 11px}
-
-      /* tighter grid */
-      .player-grid{font-size:.85rem}
-      .player-grid th,.player-grid td{padding:5px 6px}
-      .player-grid th.date-th{font-size:.7rem;padding:4px 4px}
-      .col-name{min-width:180px}
-      .col-team{min-width:150px}
-      .col-hcp{min-width:72px}
-
-      /* make W/L cells slimmer */
+      .player-grid{font-size:var(--grid-font)}
+      .col-name{min-width:170px}
+      .col-team{min-width:140px}
+      .col-hcp{min-width:70px}
       .player-grid td{line-height:1.05}
     }
   </style>
@@ -369,13 +378,13 @@
        <th class="sticky-2 col-team" style="left:auto">Team</th>
        <th class="sticky-3 col-hcp"  style="left:auto">Handicap</th>`;
 
-      // Dates as dd/mm (small)
+      // Dates as dd/mm (very compact headers)
       for (const d of confirmedDates){
         const th=document.createElement('th');
         const dt=new Date(d);
         const dd=String(dt.getDate()).padStart(2,'0');
         const mm=String(dt.getMonth()+1).padStart(2,'0');
-        th.className='date-th';
+        th.className='week-th';
         th.textContent=`${dd}/${mm}`;
         thRow.appendChild(th);
       }
@@ -411,7 +420,10 @@
           if (v==='W') { cls='cell-w'; text='W'; }
           else if (v==='L') { cls='cell-l'; text='L'; }
           else if (v==='na'){ cls='cell-na'; }
-          const td=document.createElement('td'); td.className=cls; td.textContent=text; tr.appendChild(td);
+          const td=document.createElement('td');
+          td.className=`week-td ${cls}`;
+          td.textContent=text;
+          tr.appendChild(td);
         }
 
         const T=r.totals;
