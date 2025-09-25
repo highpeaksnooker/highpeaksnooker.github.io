@@ -54,6 +54,8 @@
     table#resultsTable tbody tr:nth-child(even){background:#fafafa}
     table#resultsTable tbody tr:hover{background:#f1f7ff}
 
+    .match-thumb{width:40px;height:auto;border:1px solid #ccc;border-radius:4px;cursor:pointer}
+    .match-thumb:hover{box-shadow:0 0 6px rgba(0,0,0,.35)}
     footer{text-align:center;padding:1.5rem 1rem;color:#777}
 
     @media (max-width:480px){
@@ -106,7 +108,8 @@
             <th>Date</th>
             <th>Home Team</th>
             <th>Away Team</th>
-            <th>Score</th>
+            <th>Total (incl. bonus)</th>
+            <th>Card</th>
           </tr>
         </thead>
         <tbody id="resultsTbody"></tbody>
@@ -157,7 +160,7 @@
         // newest first
         matches.sort((a,b)=> new Date(b.date) - new Date(a.date));
 
-        function calcFrames(m){
+        function countFrames(m){
           if (typeof m.homeFrames === 'number' && typeof m.awayFrames === 'number'){
             return {home:m.homeFrames, away:m.awayFrames};
           }
@@ -171,22 +174,40 @@
           return {home,away};
         }
 
+        function totalsWithBonus(m){
+          const {home, away} = countFrames(m);
+          let homeTot = home;
+          let awayTot = away;
+          if (home > away){ homeTot += 2; }
+          else if (away > home){ awayTot += 3; }
+          // if equal, no bonus
+          return {homeTot, awayTot};
+        }
+
+        const fmtGB = d => new Date(d).toLocaleDateString('en-GB',{day:'2-digit',month:'2-digit',year:'numeric'});
+
         for (const m of matches){
           if (m.status === 'postponed' || m.status === 'void') continue;
 
-          const {home, away} = calcFrames(m);
-          // show only if at least one frame has a result
-          if (home === 0 && away === 0) continue;
+          const {homeTot, awayTot} = totalsWithBonus(m);
+          if (homeTot===0 && awayTot===0) continue; // skip incomplete
 
           const homeName = teamById[m.homeTeamId] || m.homeTeamId || '—';
           const awayName = teamById[m.awayTeamId] || m.awayTeamId || '—';
 
+          const imgCell = m.image
+            ? `<a href="images/matches/${m.image}" target="_blank" rel="noopener">
+                 <img src="images/matches/${m.image}" class="match-thumb" alt="Match card">
+               </a>`
+            : '';
+
           const tr = document.createElement('tr');
           tr.innerHTML = `
-            <td>${m.date}</td>
+            <td>${fmtGB(m.date)}</td>
             <td>${homeName}</td>
             <td>${awayName}</td>
-            <td>${home} - ${away}</td>
+            <td>${homeTot} - ${awayTot}</td>
+            <td>${imgCell}</td>
           `;
           tbody.appendChild(tr);
         }
