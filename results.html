@@ -64,8 +64,12 @@
     /* Results */
     main.container{background:#fff;padding:1rem 12px 1.5rem;border-radius:10px;margin-top:10px;box-shadow:0 1px 2px rgba(0,0,0,.06)}
     h2{margin:.25rem 0 .5rem 0}
+
+    /* Scaled fit wrapper */
     .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:8px;box-shadow:0 1px 2px rgba(0,0,0,.06);background:#fff}
-    table#resultsTable{width:100%;border-collapse:collapse;table-layout:auto}
+    #resultsWrap{position:relative;overflow:hidden} /* we control height when scaled */
+
+    table#resultsTable{width:100%;border-collapse:collapse;table-layout:auto;transform-origin:top left}
     table#resultsTable th,table#resultsTable td{padding:.6rem .75rem;border-bottom:1px solid #e9e9e9;text-align:left}
     table#resultsTable thead th{background:#eef1f5;color:#0f172a;font-weight:700;font-size:.95rem}
     table#resultsTable tbody tr:nth-child(even){background:#fafafa}
@@ -88,6 +92,7 @@
 
     footer{text-align:center;padding:1.5rem 1rem;color:#777}
 
+    /* Small-device padding tweak (content looks better when scaled) */
     @media (max-width:480px){
       :root{--banner-height:110px}
       .menu-toggle{font-size:.95rem;padding:9px 11px}
@@ -130,7 +135,9 @@
 
   <main class="container">
     <h2>Match Results</h2>
-    <div class="table-wrap">
+
+    <!-- Fit wrapper: we scale the table to the wrapper width on mobile portrait -->
+    <div id="resultsWrap" class="table-wrap">
       <table id="resultsTable" aria-describedby="resultsCaption">
         <caption id="resultsCaption">Weekly match results</caption>
         <thead>
@@ -183,7 +190,7 @@
       .catch(()=>{});
   </script>
 
-  <!-- Results logic -->
+  <!-- Results logic + Auto Fit-to-screen in portrait -->
   <script>
     (async function(){
       try{
@@ -249,10 +256,8 @@
         const modal = document.getElementById('imgModal');
         const imgEl = document.getElementById('matchImg');
         const errEl = document.getElementById('imgError');
-        const closeBtn = document.getElementById('modalClose');
 
         function buildCandidates(filename){
-          // try both folders and common extension variants
           const v = Date.now();
           const base = filename.replace(/\.(jpg|jpeg|png)$/i, '');
           const exts = ['.jpg','.JPG','.jpeg','.JPEG','.png','.PNG'];
@@ -264,7 +269,6 @@
               combos.push(`${f}${base}${e}?v=${v}`);
             }
           }
-          // put the exact filename attempts first
           return [...withGiven, ...combos];
         }
 
@@ -303,6 +307,42 @@
             imgEl.src='about:blank';
           }
         });
+
+        /* ===== Auto fit-to-screen for portrait phones ===== */
+        const wrap = document.getElementById('resultsWrap');
+        const table = document.getElementById('resultsTable');
+
+        function applyFit(){
+          // Only try to fit on narrow portrait screens
+          const isPortrait = window.matchMedia('(orientation: portrait)').matches;
+          const isNarrow   = window.matchMedia('(max-width: 600px)').matches;
+
+          // Reset first to measure natural size
+          table.style.transform = 'none';
+          wrap.style.height = '';
+
+          if (!isPortrait || !isNarrow) return;
+
+          const wrapW = wrap.clientWidth || window.innerWidth;
+          const tableW = table.scrollWidth;
+
+          // Scale down if the table is wider than the wrapper
+          const scale = Math.min(1, wrapW / Math.max(1, tableW));
+
+          const naturalH = table.offsetHeight; // height before scaling
+          table.style.transformOrigin = 'top left';
+          table.style.transform = `scale(${scale})`;
+          wrap.style.height = (naturalH * scale) + 'px';
+        }
+
+        // Re-fit when rows are added, on resize and orientation changes
+        const ro = new ResizeObserver(applyFit);
+        ro.observe(table);
+        window.addEventListener('resize', applyFit, {passive:true});
+        window.addEventListener('orientationchange', applyFit, {passive:true});
+
+        // Initial fit (after rows are rendered)
+        setTimeout(applyFit, 0);
 
       }catch(e){
         console.warn('Results load failed:', e);
