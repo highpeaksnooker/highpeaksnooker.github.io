@@ -141,7 +141,6 @@
             <th>#</th><th>Team</th>
             <th title="Matches Played">P</th>
             <th title="Wins">W</th>
-            <th title="Draws">D</th>
             <th title="Losses">L</th>
             <th title="Frames For">FF</th>
             <th title="Frames Against">FA</th>
@@ -218,7 +217,7 @@
     }
   </script>
 
-  <!-- League table -->
+  <!-- League table (no Draws) -->
   <script>
     (async function () {
       try {
@@ -232,28 +231,50 @@
         const sinceDate=travellers.since||null;
         const holderId=computeTravellersHolder({teams,matches,initialHolder,sinceDate});
 
+        // Table model WITHOUT draws
         const table={};
         for(const t of teams){
-          table[t.id]={teamId:t.id,name:t.name,P:0,W:0,D:0,L:0,FF:0,FA:0,FD:0,Pts:0};
+          table[t.id]={teamId:t.id,name:t.name,P:0,W:0,L:0,FF:0,FA:0,FD:0,Pts:0};
         }
 
         for(const m of matches){
           const h=table[m.homeTeamId],a=table[m.awayTeamId];
           if(!h||!a) continue;
+          // Only count matches that have numeric frame totals
           if(typeof m.homeFrames!=='number'||typeof m.awayFrames!=='number') continue;
-          h.P++;a.P++;
-          h.FF+=m.homeFrames;h.FA+=m.awayFrames;
-          a.FF+=m.awayFrames;a.FA+=m.homeFrames;
-          h.Pts+=m.homeFrames;a.Pts+=m.awayFrames;
-          if(m.homeFrames>m.awayFrames){h.W++;a.L++;h.Pts+=2;}
-          else if(m.homeFrames<m.awayFrames){a.W++;h.L++;a.Pts+=3;}
-          else{h.D++;a.D++;h.Pts+=1;a.Pts+=1;}
+
+          // Played
+          h.P++; a.P++;
+
+          // Frames for/against
+          h.FF+=m.homeFrames; h.FA+=m.awayFrames;
+          a.FF+=m.awayFrames; a.FA+=m.homeFrames;
+
+          // Base points = frames won
+          h.Pts+=m.homeFrames; a.Pts+=m.awayFrames;
+
+          // Result (no draws in league rules)
+          if(m.homeFrames>m.awayFrames){
+            h.W++; a.L++;
+            h.Pts+=2; // home win bonus
+          } else if(m.homeFrames<m.awayFrames){
+            a.W++; h.L++;
+            a.Pts+=3; // away win bonus (2 + 1 extra)
+          } else {
+            // Defensive: if data ever has equal frames, treat as no bonus/no W/L.
+            // (Should not occur under league rules.)
+          }
         }
 
+        // Frame difference
         for(const t of Object.values(table)) t.FD=t.FF-t.FA;
 
-        const rows=Object.values(table).sort((x,y)=> (y.Pts-x.Pts)||(y.FD-x.FD)||(y.FF-x.FF)||x.name.localeCompare(y.name));
+        // Sort by Points, then FD, then FF, then Team name
+        const rows=Object.values(table).sort(
+          (x,y)=> (y.Pts-x.Pts)||(y.FD-x.FD)||(y.FF-x.FF)||x.name.localeCompare(y.name)
+        );
 
+        // Render
         const body=document.getElementById('leagueBody');
         body.innerHTML='';
         rows.forEach((t,i)=>{
@@ -264,7 +285,7 @@
             <td><a href="merit.html?team=${encodeURIComponent(t.teamId)}">${escapeHtml(t.name)}</a>
               ${isHolder?'<span class="travellers-badge" title="Travellers’ Prize">T</span>':''}
             </td>
-            <td>${t.P}</td><td>${t.W}</td><td>${t.D}</td><td>${t.L}</td>
+            <td>${t.P}</td><td>${t.W}</td><td>${t.L}</td>
             <td>${t.FF}</td><td>${t.FA}</td><td>${t.FD}</td><td>${t.Pts}</td>`;
           body.appendChild(tr);
         });
