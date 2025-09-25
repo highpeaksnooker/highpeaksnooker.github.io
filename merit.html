@@ -86,9 +86,12 @@
       background:#fff;font-size:.95rem;table-layout:fixed
     }
     .player-grid th,.player-grid td{
-      border:1px solid #e4e4e4;padding:8px 10px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis
+      border:1px solid #e4e4e4;padding:8px 10px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.15
     }
     .player-grid thead th{background:#f0f0f0;font-weight:700}
+
+    /* Smaller date header cells */
+    .player-grid th.date-th{font-size:.8rem;padding:6px 6px}
 
     /* sticky identity columns — dynamic left offsets via CSS vars set in JS */
     .player-grid th.sticky,.player-grid td.sticky{position:sticky; left:var(--s0, 0px); z-index:2; background:inherit;}
@@ -112,13 +115,22 @@
 
     footer{text-align:center;padding:1.5rem 1rem;color:#777}
 
+    /* ===== Mobile tweaks (portrait-friendly) ===== */
     @media (max-width:480px){
       :root{--banner-height:110px}
+
       .menu-toggle{font-size:.95rem;padding:9px 11px}
-      .player-grid{font-size:.9rem}
-      .player-grid th,.player-grid td{padding:6px 8px}
-      .col-name{min-width:220px}
-      .col-team{min-width:180px}
+
+      /* tighter grid */
+      .player-grid{font-size:.85rem}
+      .player-grid th,.player-grid td{padding:5px 6px}
+      .player-grid th.date-th{font-size:.7rem;padding:4px 4px}
+      .col-name{min-width:180px}
+      .col-team{min-width:150px}
+      .col-hcp{min-width:72px}
+
+      /* make W/L cells slimmer */
+      .player-grid td{line-height:1.05}
     }
   </style>
 </head>
@@ -284,14 +296,14 @@
         else if (win === false){ row.perDate[date] = 'L'; row.totals.played++; row.totals.lost++; }
       }
 
-      // ---- MULTI-BREAK SUPPORT (25+) ----
+      // MULTI-BREAK SUPPORT (25+)
       const b = frame.breaks || {};
       const mine = isHome ? b.home : b.away;
       const list = toBreakList(mine);
       const plus25 = list.filter(n => n >= 25);
       if (plus25.length){
-        row.totals.break25 += plus25.length;                       // count all
-        row.totals.high = Math.max(row.totals.high, ...plus25);    // highest
+        row.totals.break25 += plus25.length;
+        row.totals.high = Math.max(row.totals.high, ...plus25);
       }
     }
 
@@ -357,12 +369,18 @@
        <th class="sticky-2 col-team" style="left:auto">Team</th>
        <th class="sticky-3 col-hcp"  style="left:auto">Handicap</th>`;
 
+      // Dates as dd/mm (small)
       for (const d of confirmedDates){
         const th=document.createElement('th');
-        th.textContent=new Date(d).toLocaleDateString('en-GB',{day:'2-digit',month:'2-digit',year:'2-digit'});
+        const dt=new Date(d);
+        const dd=String(dt.getDate()).padStart(2,'0');
+        const mm=String(dt.getMonth()+1).padStart(2,'0');
+        th.className='date-th';
+        th.textContent=`${dd}/${mm}`;
         thRow.appendChild(th);
       }
-      ['Played','Won','Lost','Difference','25+','Max Break'].forEach(label=>{
+      // Totals (High Break label)
+      ['Played','Won','Lost','Difference','25+','High Break'].forEach(label=>{
         const th=document.createElement('th'); th.textContent=label; thRow.appendChild(th);
       });
       thead.appendChild(thRow);
