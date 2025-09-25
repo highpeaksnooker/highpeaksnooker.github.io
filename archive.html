@@ -24,28 +24,70 @@
     body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#f7f8fb;color:#0b1220}
     .container{max-width:var(--page-max);margin:0 auto;padding:0 12px}
 
-    header.logo-header{background:var(--brand-green);box-shadow:0 2px 10px rgba(0,0,0,.25);height:var(--banner-height);display:flex;align-items:center;justify-content:center}
-    .logo-banner img{height:100%;object-fit:contain;filter:drop-shadow(0 0 6px rgba(0,0,0,.4))}
+    /* Crest banner (match other pages) */
+    header.logo-header{
+      background:var(--brand-green);
+      box-shadow:0 2px 10px rgba(0,0,0,.25);
+      height:var(--banner-height);
+      display:flex;align-items:center;justify-content:center;
+      overflow:hidden;
+    }
+    .logo-banner{height:100%;display:flex;align-items:center;justify-content:center}
+    /* key fix: constrain by max-height instead of forcing height:100% */
+    .logo-banner img{
+      max-height:100%;
+      width:auto;
+      object-fit:contain;
+      display:block;
+      filter:drop-shadow(0 0 6px rgba(0,0,0,.4));
+    }
 
-    #announcement-banner{position:sticky;top:0;z-index:100;display:none;background:var(--bar-dark);color:#fff;font-weight:600;font-size:.85rem;padding:.35rem 0;border-top:1px solid rgba(255,255,255,.06);border-bottom:1px solid var(--bar-border)}
+    /* Announcement bar */
+    #announcement-banner{
+      position:sticky;top:0;z-index:100;display:none;background:var(--bar-dark);color:#fff;
+      font-weight:600;font-size:.85rem;padding:.35rem 0;border-top:1px solid rgba(255,255,255,.06);
+      border-bottom:1px solid var(--bar-border)
+    }
     #announcement-inner{max-width:var(--page-max);margin:0 auto;padding:0 12px;text-align:center}
 
+    /* Menu bar */
     .menu-bar{background:var(--bar-dark);padding:8px 0 10px;position:relative;z-index:110;border-bottom:1px solid var(--bar-border)}
     .menu-inner{max-width:var(--page-max);margin:0 auto;padding:0 12px;position:relative}
-    .menu-toggle{width:100%;background:var(--bar-dark);color:#fff;padding:10px 12px;border:1px solid var(--bar-border);border-radius:10px;font-weight:800;font-size:1rem;cursor:pointer}
-    nav.site-nav{position:absolute;left:12px;right:12px;top:calc(100% + 6px);background:var(--overlay-bg);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.08);border-radius:10px;box-shadow:0 18px 36px rgba(0,0,0,.45);padding:6px}
+    .menu-toggle{
+      width:100%;background:var(--bar-dark);color:#fff;padding:10px 12px;border:1px solid var(--bar-border);
+      border-radius:10px;font-weight:800;font-size:1rem;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,.25) inset
+    }
+    .menu-toggle:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+    nav.site-nav{
+      position:absolute;left:12px;right:12px;top:calc(100% + 6px);background:var(--overlay-bg);backdrop-filter:blur(6px);
+      border:1px solid rgba(255,255,255,.08);border-radius:10px;box-shadow:0 18px 36px rgba(0,0,0,.45);padding:6px;z-index:120
+    }
     [hidden]{display:none!important}
-    nav.site-nav a{display:block;color:#e5e7eb;text-decoration:none;font-weight:700;padding:10px;border-radius:8px}
+    nav.site-nav a{display:block;color:#e5e7eb;text-decoration:none;font-weight:700;padding:10px 10px;border-radius:8px}
+    nav.site-nav a:hover{background:rgba(255,255,255,.1)}
     nav.site-nav a.active{background:var(--accent);color:#0b1b0f}
 
+    /* Page content */
     main.container{background:#fff;padding:1rem 12px 2rem;border-radius:10px;margin-top:10px;box-shadow:0 1px 2px rgba(0,0,0,.06)}
     h2{margin:.25rem 0 1rem 0}
 
-    /* === Archive Previews === */
+    /* Archive grid */
     .pdf-container{display:flex;flex-wrap:wrap;gap:2rem;margin-top:1rem;justify-content:center}
-    .pdf-preview{flex:1 1 300px;max-width:350px;background:#fff;border:1px solid #ccc;border-radius:8px;overflow:hidden;box-shadow:0 2px 5px rgba(0,0,0,0.1)}
-    .pdf-preview img{width:100%;height:200px;object-fit:cover;background:#f2f2f2}
-    .pdf-preview a{display:block;padding:.8rem;background:#f9f9f9;text-align:center;font-weight:bold;color:#228be6;text-decoration:none}
+    .pdf-preview{
+      flex:1 1 300px;max-width:350px;background:#fff;border:1px solid #ccc;border-radius:8px;
+      overflow:hidden;box-shadow:0 2px 5px rgba(0,0,0,0.1)
+    }
+    .pdf-preview .thumb-wrap{position:relative;background:#f2f2f2;height:200px}
+    .pdf-preview img{
+      width:100%;height:100%;object-fit:cover;display:block
+    }
+    .pdf-preview .fallback{
+      position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+      color:#666;font-size:.9rem;padding:.5rem;text-align:center
+    }
+    .pdf-preview a{
+      display:block;padding:.8rem;background:#f9f9f9;text-align:center;font-weight:bold;color:#228be6;text-decoration:none
+    }
     .pdf-preview a:hover{background:#e6f0ff}
 
     footer{text-align:center;padding:1.5rem 1rem;color:#777}
@@ -59,15 +101,23 @@
 <body>
 
   <!-- Crest banner -->
-  <header class="logo-header"><div class="logo-banner"><img src="logo.PNG?v=16" alt="League crest"></div></header>
+  <header class="logo-header" role="banner">
+    <div class="logo-banner">
+      <img src="logo.PNG?v=16" alt="High Peak &amp; Marple Snooker League crest">
+    </div>
+  </header>
 
   <!-- Announcement bar -->
-  <div id="announcement-banner"><div id="announcement-inner"><span id="announcement-text"></span></div></div>
+  <div id="announcement-banner" role="status" aria-live="polite">
+    <div id="announcement-inner" class="container">
+      <span id="announcement-text"></span>
+    </div>
+  </div>
 
   <!-- Menu bar -->
   <div class="menu-bar">
     <div class="menu-inner">
-      <button class="menu-toggle" id="menuToggle">☰ Menu</button>
+      <button class="menu-toggle" id="menuToggle" aria-expanded="false" aria-controls="siteNav">☰ Menu</button>
       <nav id="siteNav" class="site-nav" hidden>
         <a href="index.html">Home</a>
         <a href="fixtures.html">Fixtures</a>
@@ -83,54 +133,93 @@
 
   <main class="container">
     <h2>Archived Seasons</h2>
-    <p>Click any preview below to open the full image in a new tab.</p>
+    <p>Tap a card to open the full image in a new tab.</p>
 
     <div class="pdf-container">
+      <!-- Use the exact filenames (case-sensitive on GitHub Pages) -->
       <div class="pdf-preview">
-        <img src="pdfs/Final%20Standings%202024-2025.jpg" alt="Final Standings 2024–25">
-        <a href="pdfs/Final%20Standings%202024-2025.jpg" target="_blank">Final Standings 2024–25</a>
+        <div class="thumb-wrap">
+          <img loading="lazy" src="pdfs/Final%20Standings%202024-2025.jpg" alt="Final Standings 2024–25" onerror="this.style.display='none'; this.nextElementSibling.hidden=false;">
+          <div class="fallback" hidden>Preview unavailable</div>
+        </div>
+        <a href="pdfs/Final%20Standings%202024-2025.jpg" target="_blank" rel="noopener">Final Standings 2024–25</a>
       </div>
+
       <div class="pdf-preview">
-        <img src="pdfs/Merit%20Table%202023-2024.JPG" alt="Merit Table 2023–24">
-        <a href="pdfs/Merit%20Table%202023-2024.JPG" target="_blank">Merit Table 2023–24</a>
+        <div class="thumb-wrap">
+          <img loading="lazy" src="pdfs/Merit%20table%202023-2024.JPG" alt="Merit Table 2023–24" onerror="this.style.display='none'; this.nextElementSibling.hidden=false;">
+          <div class="fallback" hidden>Preview unavailable</div>
+        </div>
+        <a href="pdfs/Merit%20table%202023-2024.JPG" target="_blank" rel="noopener">Merit Table 2023–24</a>
       </div>
+
       <div class="pdf-preview">
-        <img src="pdfs/Final%20Standings%202023-2024.JPG" alt="Final Standings 2023–24">
-        <a href="pdfs/Final%20Standings%202023-2024.JPG" target="_blank">Final Standings 2023–24</a>
+        <div class="thumb-wrap">
+          <img loading="lazy" src="pdfs/Final%20Standings%202023-2024.JPG" alt="Final Standings 2023–24" onerror="this.style.display='none'; this.nextElementSibling.hidden=false;">
+          <div class="fallback" hidden>Preview unavailable</div>
+        </div>
+        <a href="pdfs/Final%20Standings%202023-2024.JPG" target="_blank" rel="noopener">Final Standings 2023–24</a>
       </div>
+
       <div class="pdf-preview">
-        <img src="pdfs/Final%20Standings%202022-2023.JPG" alt="Final Standings 2022–23">
-        <a href="pdfs/Final%20Standings%202022-2023.JPG" target="_blank">Final Standings 2022–23</a>
+        <div class="thumb-wrap">
+          <img loading="lazy" src="pdfs/Final%20Standings%202022-2023.JPG" alt="Final Standings 2022–23" onerror="this.style.display='none'; this.nextElementSibling.hidden=false;">
+          <div class="fallback" hidden>Preview unavailable</div>
+        </div>
+        <a href="pdfs/Final%20Standings%202022-2023.JPG" target="_blank" rel="noopener">Final Standings 2022–23</a>
       </div>
+
       <div class="pdf-preview">
-        <img src="pdfs/Merit%20Table%202022-2023.JPG" alt="Merit Table 2022–23">
-        <a href="pdfs/Merit%20Table%202022-2023.JPG" target="_blank">Merit Table 2022–23</a>
+        <div class="thumb-wrap">
+          <img loading="lazy" src="pdfs/Merit%20Table%202022-2023.JPG" alt="Merit Table 2022–23" onerror="this.style.display='none'; this.nextElementSibling.hidden=false;">
+          <div class="fallback" hidden>Preview unavailable</div>
+        </div>
+        <a href="pdfs/Merit%20Table%202022-2023.JPG" target="_blank" rel="noopener">Merit Table 2022–23</a>
       </div>
+
       <div class="pdf-preview">
-        <img src="pdfs/Final%20standings%202021-2022.JPG" alt="Final Standings 2021–22">
-        <a href="pdfs/Final%20standings%202021-2022.JPG" target="_blank">Final Standings 2021–22</a>
+        <div class="thumb-wrap">
+          <img loading="lazy" src="pdfs/Final%20standings%202021-2022.JPG" alt="Final Standings 2021–22" onerror="this.style.display='none'; this.nextElementSibling.hidden=false;">
+          <div class="fallback" hidden>Preview unavailable</div>
+        </div>
+        <a href="pdfs/Final%20standings%202021-2022.JPG" target="_blank" rel="noopener">Final Standings 2021–22</a>
       </div>
+
       <div class="pdf-preview">
-        <img src="pdfs/Merit%20Table%202021-2022.JPG" alt="Merit Table 2021–22">
-        <a href="pdfs/Merit%20Table%202021-2022.JPG" target="_blank">Merit Table 2021–22</a>
+        <div class="thumb-wrap">
+          <img loading="lazy" src="pdfs/Merit%20Table%202021-2022.JPG" alt="Merit Table 2021–22" onerror="this.style.display='none'; this.nextElementSibling.hidden=false;">
+          <div class="fallback" hidden>Preview unavailable</div>
+        </div>
+        <a href="pdfs/Merit%20Table%202021-2022.JPG" target="_blank" rel="noopener">Merit Table 2021–22</a>
       </div>
     </div>
   </main>
 
   <footer>&copy; 2025 High Peak &amp; Marple Snooker League</footer>
 
+  <!-- Menu toggle -->
   <script>
-    // Simple menu toggle
-    document.getElementById('menuToggle').addEventListener('click',()=>{
+    (function(){
+      const btn=document.getElementById('menuToggle');
       const nav=document.getElementById('siteNav');
-      nav.hidden=!nav.hidden;
-    });
+      function closeNav(){nav.hidden=true;btn.setAttribute('aria-expanded','false')}
+      btn.addEventListener('click',()=>{const ex=btn.getAttribute('aria-expanded')==='true';btn.setAttribute('aria-expanded',String(!ex));nav.hidden=ex});
+      document.addEventListener('click',(e)=>{if(!nav.hidden&&!nav.contains(e.target)&&e.target!==btn&&!btn.contains(e.target)){closeNav()}});
+      document.addEventListener('keydown',(e)=>{if(e.key==='Escape')closeNav()});
+    })();
   </script>
+
+  <!-- Announcement -->
   <script>
-    // Announcement banner loader
-    fetch('data/announcement.json').then(r=>r.json()).then(d=>{
-      if(d.message){document.getElementById('announcement-text').textContent=d.message;document.getElementById('announcement-banner').style.display='block';}
-    });
+    fetch('data/announcement.json',{cache:'no-store'})
+      .then(r=>r.json())
+      .then(d=>{
+        if(d&&d.message&&d.message.trim()){
+          document.getElementById('announcement-text').textContent=d.message.trim();
+          document.getElementById('announcement-banner').style.display='block';
+        }
+      })
+      .catch(()=>{});
   </script>
 </body>
 </html>
