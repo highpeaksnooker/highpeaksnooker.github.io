@@ -196,7 +196,7 @@
       .catch(()=>{});
   </script>
 
-  <!-- Merit grid logic (dates from matches; fixtures only used for NA marking; All Teams shows only players who've played) -->
+  <!-- Merit grid logic (dates from matches; fixtures used for NA; All Teams shows only players who've played) -->
   <script>
   (async function () {
     const [teams, players, fixtures, matches] = await Promise.all([
@@ -224,7 +224,7 @@
     const dateSet = new Set(completedMatches.map(m => m.date));
     const confirmedDates = Array.from(dateSet).sort((a,b)=>new Date(a)-new Date(b));
 
-    // --- Build "team had fixture?" map, using matches; then merge in fixtures (optional)
+    // --- Build "team had fixture?" map from matches; merge fixtures for NA
     const teamHasFixture = {};
     for (const d of confirmedDates){
       teamHasFixture[d] = {};
@@ -235,14 +235,13 @@
       teamHasFixture[m.date][m.homeTeamId] = true;
       teamHasFixture[m.date][m.awayTeamId] = true;
     }
-    // If fixtures exist, also mark those teams as having a fixture (keeps NA cells correct even if a match is missing)
     for (const f of fixtures){
       if (!teamHasFixture[f.date]) continue;
       teamHasFixture[f.date][f.homeTeamId] = true;
       teamHasFixture[f.date][f.awayTeamId] = true;
     }
 
-    // --- Seed per-player rows (include everyone; we'll filter in render)
+    // --- Seed per-player rows (include everyone; filter later in render)
     const P = {};
     for (const p of players){
       P[p.id] = {
@@ -256,7 +255,7 @@
       };
     }
 
-    // Pre-mark NA for dates the team didn't play
+    // Pre-mark NA where the team had no fixture that date
     if (confirmedDates.length){
       for (const p of players){
         for (const d of confirmedDates){
@@ -265,7 +264,7 @@
       }
     }
 
-    // --- Apply frames from the completed matches
+    // --- Apply frames from completed matches
     function recordFrame(frame, isHome, date){
       const pid = isHome ? frame.homePlayerId : frame.awayPlayerId;
       const row = P[pid];
@@ -279,7 +278,7 @@
         else if (win === false){ row.perDate[date] = 'L'; row.totals.played++; row.totals.lost++; }
       }
 
-      // Optional per-frame breaks object: {home: n, away: n}
+      // Optional breaks: {home: n, away: n}
       const b = frame.breaks;
       const myBreak = isHome ? b?.home : b?.away;
       if (typeof myBreak === 'number' && myBreak >= 25){
@@ -301,11 +300,17 @@
       r.totals.winPct = r.totals.played ? (r.totals.won / r.totals.played) : 0;
     }
 
+    // === NEW SORT: Wins desc, Played asc, High Break desc, Name asc
     function sortRows(rows){
-      return rows.sort((a,b)=>
-        (a.teamName.localeCompare(b.teamName)) ||
-        a.name.localeCompare(b.name)
-      );
+      return rows.sort((a,b)=>{
+        const aw=a.totals.won, bw=b.totals.won;
+        if (bw!==aw) return bw-aw;                       // wins DESC
+        const ap=a.totals.played, bp=b.totals.played;
+        if (ap!==bp) return ap-bp;                       // played ASC
+        const ah=a.totals.high||0, bh=b.totals.high||0;
+        if (bh!==ah) return bh-ah;                       // high break DESC
+        return a.name.localeCompare(b.name);             // name ASC
+      });
     }
 
     // --- Tabs
