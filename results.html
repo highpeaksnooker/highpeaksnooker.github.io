@@ -8,6 +8,7 @@
   <link rel="apple-touch-icon" href="/logo.PNG">
   <link rel="preload" as="image" href="/logo.PNG">
   <link rel="stylesheet" href="style.css" />
+
   <style>
     :root{
       --brand-green:#002b19;
@@ -18,31 +19,49 @@
       --bar-border:#2a2a2a;
       --overlay-bg:rgba(15,17,22,.85);
     }
+
     html,body{margin:0}
     body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#f7f8fb;color:#0b1220}
     .container{max-width:var(--page-max);margin:0 auto;padding:0 12px}
 
     /* Crest banner */
-    header.logo-header{background:var(--brand-green);box-shadow:0 2px 10px rgba(0,0,0,.25);height:var(--banner-height);display:flex;align-items:center;justify-content:center}
+    header.logo-header{
+      background:var(--brand-green);
+      box-shadow:0 2px 10px rgba(0,0,0,.25);
+      height:var(--banner-height);
+      display:flex;align-items:center;justify-content:center;
+    }
     .logo-banner{height:100%;display:flex;align-items:center;justify-content:center}
     .logo-banner img{height:100%;width:auto;object-fit:contain;display:block;filter:drop-shadow(0 0 6px rgba(0,0,0,.4))}
 
-    /* Announcement bar */
-    #announcement-banner{position:sticky;top:0;z-index:100;display:none;background:var(--bar-dark);color:#fff;font-weight:600;font-size:.85rem;padding:.35rem 0;border-top:1px solid rgba(255,255,255,.06);border-bottom:1px solid var(--bar-border)}
+    /* Announcement */
+    #announcement-banner{
+      position:sticky;top:0;z-index:100;display:none;background:var(--bar-dark);color:#fff;
+      font-weight:600;font-size:.85rem;padding:.35rem 0;border-top:1px solid rgba(255,255,255,.06);
+      border-bottom:1px solid var(--bar-border)
+    }
     #announcement-inner{max-width:var(--page-max);margin:0 auto;padding:0 12px;text-align:center}
 
     /* Menu bar */
     .menu-bar{background:var(--bar-dark);padding:8px 0 10px;position:relative;z-index:110;border-bottom:1px solid var(--bar-border)}
     .menu-inner{max-width:var(--page-max);margin:0 auto;padding:0 12px;position:relative}
-    .menu-toggle{width:100%;background:var(--bar-dark);color:#fff;padding:10px 12px;border:1px solid var(--bar-border);border-radius:10px;font-weight:800;font-size:1rem;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,.25) inset}
+    .menu-toggle{
+      width:100%;background:var(--bar-dark);color:#fff;padding:10px 12px;border:1px solid var(--bar-border);
+      border-radius:10px;font-weight:800;font-size:1rem;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,.25) inset
+    }
     .menu-toggle:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
-    nav.site-nav{position:absolute;left:12px;right:12px;top:calc(100% + 6px);background:var(--overlay-bg);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.08);border-radius:10px;box-shadow:0 18px 36px rgba(0,0,0,.45);padding:6px;z-index:120}
+    nav.site-nav{
+      position:absolute;left:12px;right:12px;top:calc(100% + 6px);background:var(--overlay-bg);backdrop-filter:blur(6px);
+      border:1px solid rgba(255,255,255,.08);border-radius:10px;box-shadow:0 18px 36px rgba(0,0,0,.45);padding:6px;z-index:120
+    }
     [hidden]{display:none!important}
-    nav.site-nav a{display:block;color:#e5e7eb;text-decoration:none;font-weight:700;padding:10px 10px;border-radius:8px}
+    nav.site-nav a{
+      display:block;color:#e5e7eb;text-decoration:none;font-weight:700;padding:10px 10px;border-radius:8px
+    }
     nav.site-nav a:hover{background:rgba(255,255,255,.1)}
     nav.site-nav a.active{background:var(--accent);color:#0b1b0f}
 
-    /* Results table */
+    /* Results */
     main.container{background:#fff;padding:1rem 12px 1.5rem;border-radius:10px;margin-top:10px;box-shadow:0 1px 2px rgba(0,0,0,.06)}
     h2{margin:.25rem 0 .5rem 0}
     .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:8px;box-shadow:0 1px 2px rgba(0,0,0,.06);background:#fff}
@@ -52,21 +71,36 @@
     table#resultsTable tbody tr:nth-child(even){background:#fafafa}
     table#resultsTable tbody tr:hover{background:#f1f7ff}
 
-    /* Card button */
-    .card-btn{display:inline-flex;align-items:center;justify-content:center;width:34px;height:28px;border:1px solid #d9d9d9;border-radius:6px;background:#f7f7f7;cursor:pointer}
-    .card-btn:hover{background:#eef6ff;border-color:#bcd7ff}
+    /* card button */
+    .card-btn{
+      display:inline-flex;align-items:center;justify-content:center;
+      width:32px;height:32px;border:1px solid #d6d6d6;border-radius:8px;background:#f8fafc;cursor:pointer
+    }
+    .card-btn:hover{background:#eaf2ff}
 
-    /* Lightbox overlay */
-    .overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;z-index:1000;padding:16px}
-    .overlay img{max-width:min(1200px,95vw);max-height:90vh;border-radius:8px;box-shadow:0 12px 36px rgba(0,0,0,.6);background:#111}
-    .overlay[aria-hidden="false"]{display:flex}
+    /* Modal */
+    .modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:16px;z-index:200}
+    .modal.open{display:flex}
+    .modal-content{max-width:min(1000px,95vw);max-height:min(90vh,100%);background:#0b0b0b;padding:10px;border-radius:10px}
+    .modal img{max-width:100%;max-height:80vh;display:block;margin:0 auto}
+    .modal .close{position:absolute;top:18px;right:18px;background:#fff;border:none;border-radius:8px;padding:6px 10px;font-weight:800;cursor:pointer}
+    .modal .err{color:#fff;text-align:center;padding:20px}
+
+    footer{text-align:center;padding:1.5rem 1rem;color:#777}
+
+    @media (max-width:480px){
+      :root{--banner-height:110px}
+      .menu-toggle{font-size:.95rem;padding:9px 11px}
+      table#resultsTable th,table#resultsTable td{padding:.55rem .6rem}
+    }
   </style>
 </head>
 <body>
+
   <!-- Crest banner -->
   <header class="logo-header" role="banner">
     <div class="logo-banner">
-      <img src="logo.PNG?v=17" alt="High Peak &amp; Marple Snooker League crest">
+      <img src="logo.PNG?v=16" alt="High Peak &amp; Marple Snooker League crest">
     </div>
   </header>
 
@@ -113,9 +147,13 @@
     </div>
   </main>
 
-  <!-- Lightbox overlay -->
-  <div id="imgOverlay" class="overlay" aria-hidden="true" role="dialog" aria-label="Match card image">
-    <img id="overlayImg" alt="Match card">
+  <!-- Image Modal -->
+  <div id="imgModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="imgCaption">
+    <button class="close" id="modalClose" aria-label="Close">✕</button>
+    <div class="modal-content">
+      <img id="matchImg" alt="Match card">
+      <div id="imgError" class="err" hidden>Couldn’t load the match card image.</div>
+    </div>
   </div>
 
   <footer>&copy; 2025 High Peak &amp; Marple Snooker League</footer>
@@ -148,96 +186,100 @@
   <!-- Results logic -->
   <script>
     (async function(){
-      const [teams,matches]=await Promise.all([
-        fetch('data/teams.json',{cache:'no-store'}).then(r=>r.json()),
-        fetch('data/matches.json',{cache:'no-store'}).then(r=>r.json())
-      ]);
+      try{
+        const [teams,matches]=await Promise.all([
+          fetch('data/teams.json',{cache:'no-store'}).then(r=>r.json()),
+          fetch('data/matches.json',{cache:'no-store'}).then(r=>r.json())
+        ]);
 
-      const teamById=Object.fromEntries(teams.map(t=>[t.id,t.name]));
-      const tbody=document.getElementById('resultsTbody');
-      tbody.innerHTML='';
+        const teamById = Object.fromEntries(teams.map(t => [t.id, t.name]));
+        const tbody = document.getElementById('resultsTbody');
+        tbody.innerHTML = '';
 
-      // newest first
-      matches.sort((a,b)=>new Date(b.date)-new Date(a.date));
+        // newest first
+        matches.sort((a,b)=> new Date(b.date) - new Date(a.date));
 
-      function framesCount(m){
-        if (typeof m.homeFrames==='number' && typeof m.awayFrames==='number'){
-          return {home:m.homeFrames, away:m.awayFrames};
+        function framesFrom(m){
+          if (typeof m.homeFrames==='number' && typeof m.awayFrames==='number'){
+            return {home:m.homeFrames, away:m.awayFrames};
+          }
+          let home=0, away=0;
+          if (Array.isArray(m.frames)){
+            for (const fr of m.frames){
+              if (fr.winner==='home') home++;
+              else if (fr.winner==='away') away++;
+            }
+          }
+          return {home,away};
         }
-        let home=0,away=0;
-        (m.frames||[]).forEach(fr=>{
-          if(fr.winner==='home') home++;
-          else if(fr.winner==='away') away++;
+
+        const fmt = d => new Date(d).toLocaleDateString('en-GB',{day:'2-digit',month:'2-digit',year:'numeric'});
+
+        for (const m of matches){
+          if (m.status === 'postponed' || m.status === 'void') continue;
+          const {home,away} = framesFrom(m);
+          if (home===0 && away===0) continue;
+
+          const tr = document.createElement('tr');
+          const homeName = teamById[m.homeTeamId] || m.homeTeamId || '—';
+          const awayName = teamById[m.awayTeamId] || m.awayTeamId || '—';
+
+          const imgFile = m.image && String(m.image).trim() ? String(m.image).trim() : null;
+
+          tr.innerHTML = `
+            <td>${fmt(m.date)}</td>
+            <td>${homeName}</td>
+            <td>${awayName}</td>
+            <td>${home} - ${away}</td>
+            <td>${imgFile ? `<button class="card-btn" data-img="${imgFile}" title="View match card" aria-label="View match card">🖼️</button>` : ''}</td>
+          `;
+          tbody.appendChild(tr);
+        }
+
+        // Modal open/close + resilient image loader
+        const modal = document.getElementById('imgModal');
+        const imgEl = document.getElementById('matchImg');
+        const errEl = document.getElementById('imgError');
+        const closeBtn = document.getElementById('modalClose');
+
+        function openImage(imgFile, cacheKey){
+          // try /images/matches/ first, then fall back to /images/
+          const v = cacheKey || Date.now();
+          const primary = `images/matches/${imgFile}?v=${encodeURIComponent(v)}`;
+          const fallback = `images/${imgFile}?v=${encodeURIComponent(v)}`;
+
+          errEl.hidden = true;
+          imgEl.removeAttribute('hidden');
+
+          imgEl.onerror = function(){
+            if (imgEl.src.includes('/images/matches/')) {
+              imgEl.src = fallback;   // try root
+            } else {
+              // both failed
+              imgEl.setAttribute('hidden','hidden');
+              errEl.hidden = false;
+            }
+          };
+          imgEl.src = primary;
+          modal.classList.add('open');
+        }
+
+        document.addEventListener('click', (e)=>{
+          const btn = e.target.closest('.card-btn');
+          if (btn && btn.dataset.img){
+            openImage(btn.dataset.img, btn.dataset.img);
+          }
+          if (e.target.id==='modalClose' || e.target===modal){
+            modal.classList.remove('open');
+            imgEl.src='about:blank';
+          }
         });
-        return {home,away};
-      }
+        document.addEventListener('keydown', (e)=>{
+          if (e.key==='Escape') modal.classList.remove('open');
+        });
 
-      function bonusFor(m){
-        // 2 for home win, 3 for away win (0 if drawn/not finished)
-        const {home,away}=framesCount(m);
-        if (home>away) return {home:2, away:0};
-        if (away>home) return {home:0, away:3};
-        return {home:0,away:0};
-      }
-
-      function toGB(d){
-        return new Date(d).toLocaleDateString('en-GB',{day:'2-digit',month:'2-digit',year:'numeric'});
-      }
-
-      function makeCardButton(imgName, alt){
-        if(!imgName) return document.createTextNode('—');
-        const btn=document.createElement('button');
-        btn.className='card-btn'; btn.type='button'; btn.title='View match card';
-        // Prefer /images/<file>; if it fails, fall back to /images/matches/<file>
-        const primary=`/images/${imgName}`;
-        const fallback=`/images/matches/${imgName}`;
-        btn.dataset.srcPrimary=primary;
-        btn.dataset.srcFallback=fallback;
-        btn.addEventListener('click',()=> openOverlay(primary, fallback, alt));
-        btn.innerHTML='❐';
-        return btn;
-      }
-
-      function openOverlay(primary, fallback, alt){
-        const ov=document.getElementById('imgOverlay');
-        const img=document.getElementById('overlayImg');
-        img.alt = alt || 'Match card';
-        img.src = primary;
-        img.onerror = function(){
-          if (img.src !== fallback) img.src = fallback;
-        };
-        ov.setAttribute('aria-hidden','false');
-      }
-      document.getElementById('imgOverlay').addEventListener('click',e=>{
-        if(e.target.id==='imgOverlay') e.currentTarget.setAttribute('aria-hidden','true');
-      });
-      document.addEventListener('keydown',e=>{
-        if(e.key==='Escape') document.getElementById('imgOverlay').setAttribute('aria-hidden','true');
-      });
-
-      for(const m of matches){
-        if (m.status==='postponed' || m.status==='void') continue;
-
-        const {home,away}=framesCount(m);
-        if (home===0 && away===0) continue;
-
-        const bonus=bonusFor(m);
-        const totalHome=home + bonus.home;
-        const totalAway=away + bonus.away;
-
-        const tr=document.createElement('tr');
-        tr.innerHTML=`
-          <td>${toGB(m.date)}</td>
-          <td>${teamById[m.homeTeamId] || m.homeTeamId || '—'}</td>
-          <td>${teamById[m.awayTeamId] || m.awayTeamId || '—'}</td>
-          <td>${totalHome} - ${totalAway}</td>
-        `;
-        const tdCard=document.createElement('td');
-        tdCard.appendChild(
-          makeCardButton(m.image, `${m.date} ${m.homeTeamId} v ${m.awayTeamId}`)
-        );
-        tr.appendChild(tdCard);
-        tbody.appendChild(tr);
+      }catch(e){
+        console.warn('Results load failed:', e);
       }
     })();
   </script>
