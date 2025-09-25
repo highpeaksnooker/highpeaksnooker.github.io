@@ -24,44 +24,27 @@
     body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#f7f8fb;color:#0b1220}
     .container{max-width:var(--page-max);margin:0 auto;padding:0 12px}
 
-    /* ===== Crest banner ===== */
-    header.logo-header{
-      background:var(--brand-green);
-      box-shadow:0 2px 10px rgba(0,0,0,.25);
-      height:var(--banner-height);
-      display:flex;align-items:center;justify-content:center;
-    }
+    /* Crest banner */
+    header.logo-header{background:var(--brand-green);box-shadow:0 2px 10px rgba(0,0,0,.25);height:var(--banner-height);display:flex;align-items:center;justify-content:center}
     .logo-banner{height:100%;display:flex;align-items:center;justify-content:center}
     .logo-banner img{height:100%;width:auto;object-fit:contain;display:block;filter:drop-shadow(0 0 6px rgba(0,0,0,.4))}
 
-    /* ===== Announcement bar (slimmer) ===== */
-    #announcement-banner{
-      position:sticky;top:0;z-index:100;display:none;background:var(--bar-dark);color:#fff;
-      font-weight:600;font-size:.85rem;padding:.35rem 0;border-top:1px solid rgba(255,255,255,.06);
-      border-bottom:1px solid var(--bar-border)
-    }
+    /* Announcement bar */
+    #announcement-banner{position:sticky;top:0;z-index:100;display:none;background:var(--bar-dark);color:#fff;font-weight:600;font-size:.85rem;padding:.35rem 0;border-top:1px solid rgba(255,255,255,.06);border-bottom:1px solid var(--bar-border)}
     #announcement-inner{max-width:var(--page-max);margin:0 auto;padding:0 12px;text-align:center}
 
-    /* ===== Menu bar ===== */
+    /* Menu bar */
     .menu-bar{background:var(--bar-dark);padding:8px 0 10px;position:relative;z-index:110;border-bottom:1px solid var(--bar-border)}
     .menu-inner{max-width:var(--page-max);margin:0 auto;padding:0 12px;position:relative}
-    .menu-toggle{
-      width:100%;background:var(--bar-dark);color:#fff;padding:10px 12px;border:1px solid var(--bar-border);
-      border-radius:10px;font-weight:800;font-size:1rem;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,.25) inset
-    }
+    .menu-toggle{width:100%;background:var(--bar-dark);color:#fff;padding:10px 12px;border:1px solid var(--bar-border);border-radius:10px;font-weight:800;font-size:1rem;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,.25) inset}
     .menu-toggle:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
-    nav.site-nav{
-      position:absolute;left:12px;right:12px;top:calc(100% + 6px);background:var(--overlay-bg);backdrop-filter:blur(6px);
-      border:1px solid rgba(255,255,255,.08);border-radius:10px;box-shadow:0 18px 36px rgba(0,0,0,.45);padding:6px;z-index:120
-    }
+    nav.site-nav{position:absolute;left:12px;right:12px;top:calc(100% + 6px);background:var(--overlay-bg);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.08);border-radius:10px;box-shadow:0 18px 36px rgba(0,0,0,.45);padding:6px;z-index:120}
     [hidden]{display:none!important}
-    nav.site-nav a{
-      display:block;color:#e5e7eb;text-decoration:none;font-weight:700;padding:10px 10px;border-radius:8px
-    }
+    nav.site-nav a{display:block;color:#e5e7eb;text-decoration:none;font-weight:700;padding:10px 10px;border-radius:8px}
     nav.site-nav a:hover{background:rgba(255,255,255,.1)}
     nav.site-nav a.active{background:var(--accent);color:#0b1b0f}
 
-    /* ===== Results table ===== */
+    /* Results table */
     main.container{background:#fff;padding:1rem 12px 1.5rem;border-radius:10px;margin-top:10px;box-shadow:0 1px 2px rgba(0,0,0,.06)}
     h2{margin:.25rem 0 .5rem 0}
     .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:8px;box-shadow:0 1px 2px rgba(0,0,0,.06);background:#fff}
@@ -85,7 +68,7 @@
   <!-- Crest banner -->
   <header class="logo-header" role="banner">
     <div class="logo-banner">
-      <img src="logo.PNG?v=13" alt="High Peak &amp; Marple Snooker League crest">
+      <img src="logo.PNG?v=16" alt="High Peak &amp; Marple Snooker League crest">
     </div>
   </header>
 
@@ -161,24 +144,54 @@
   <!-- Results logic -->
   <script>
     (async function(){
-      const [teams,matches]=await Promise.all([
-        fetch('data/teams.json').then(r=>r.json()),
-        fetch('data/matches.json').then(r=>r.json())
-      ]);
+      try{
+        const [teams,matches]=await Promise.all([
+          fetch('data/teams.json',{cache:'no-store'}).then(r=>r.json()),
+          fetch('data/matches.json',{cache:'no-store'}).then(r=>r.json())
+        ]);
 
-      const teamById=Object.fromEntries(teams.map(t=>[t.id,t.name]));
-      const tbody=document.getElementById('resultsTbody');
-      matches.sort((a,b)=>new Date(b.date)-new Date(a.date)); // Newest first
+        const teamById = Object.fromEntries(teams.map(t => [t.id, t.name]));
+        const tbody = document.getElementById('resultsTbody');
+        tbody.innerHTML = '';
 
-      for(const m of matches){
-        const row=document.createElement('tr');
-        const score=`${m.homeFrames} - ${m.awayFrames}`;
-        row.innerHTML=`
-          <td>${m.date}</td>
-          <td>${teamById[m.homeTeam]}</td>
-          <td>${teamById[m.awayTeam]}</td>
-          <td>${score}</td>`;
-        tbody.appendChild(row);
+        // newest first
+        matches.sort((a,b)=> new Date(b.date) - new Date(a.date));
+
+        function calcFrames(m){
+          if (typeof m.homeFrames === 'number' && typeof m.awayFrames === 'number'){
+            return {home:m.homeFrames, away:m.awayFrames};
+          }
+          let home=0, away=0;
+          if (Array.isArray(m.frames)){
+            for (const fr of m.frames){
+              if (fr.winner === 'home') home++;
+              else if (fr.winner === 'away') away++;
+            }
+          }
+          return {home,away};
+        }
+
+        for (const m of matches){
+          if (m.status === 'postponed' || m.status === 'void') continue;
+
+          const {home, away} = calcFrames(m);
+          // show only if at least one frame has a result
+          if (home === 0 && away === 0) continue;
+
+          const homeName = teamById[m.homeTeamId] || m.homeTeamId || '—';
+          const awayName = teamById[m.awayTeamId] || m.awayTeamId || '—';
+
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${m.date}</td>
+            <td>${homeName}</td>
+            <td>${awayName}</td>
+            <td>${home} - ${away}</td>
+          `;
+          tbody.appendChild(tr);
+        }
+      }catch(e){
+        console.warn('Results load failed:', e);
       }
     })();
   </script>
