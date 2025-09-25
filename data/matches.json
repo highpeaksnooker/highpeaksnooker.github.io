@@ -122,4 +122,95 @@
       }
     ]
   }
+][
+  {
+    "id": "m-2025-09-24-whaley-2-v-chinley",
+    "date": "2025-09-24",
+    "homeTeamId": "whaley-2",
+    "awayTeamId": "chinley",
+    "homeFrames": 3,
+    "awayFrames": 2,
+    "frames": [
+      {
+        "homePlayerId": "p-p-walker",
+        "awayPlayerId": "p-d-thomas",
+        "homePoints": 7,
+        "awayPoints": 61,
+        "winner": "away"
+      },
+      {
+        "homePlayerId": "p-f-lee",
+        "awayPlayerId": "p-b-doherty",
+        "homePoints": 22,
+        "awayPoints": 58,
+        "winner": "away"
+      },
+      {
+        "homePlayerId": "p-scott-barnard",
+        "awayPlayerId": "p-l-carr",
+        "homePoints": 56,
+        "awayPoints": 15,
+        "winner": "home"
+      },
+      {
+        "homePlayerId": "p-s-renshaw",
+        "awayPlayerId": "p-d-rowland",
+        "homePoints": 58,
+        "awayPoints": 35,
+        "winner": "home"
+      },
+      {
+        "homePlayerId": "p-b-walker",
+        "awayPlayerId": "p-s-lund",
+        "homePoints": 71,
+        "awayPoints": 28,
+        "winner": "home"
+      }
+    ]
+  },
+  {
+    "id": "m-2025-09-24-hayfield-2-v-alexashton",
+    "date": "2025-09-24",
+    "homeTeamId": "hayfield-2",
+    "awayTeamId": "alexashton",
+    "homeFrames": 3,
+    "awayFrames": 2,
+    "frames": [
+      {
+        "homePlayerId": "p-mark-enright",
+        "awayPlayerId": "p-a-garbett",
+        "homePoints": 89,
+        "awayPoints": 67,
+        "winner": "home"
+      },
+      {
+        "homePlayerId": "p-paul-glover",
+        "awayPlayerId": "p-simon-buckley",
+        "homePoints": 78,
+        "awayPoints": 91,
+        "winner": "away"
+      },
+      {
+        "homePlayerId": "p-d-bloomfield",
+        "awayPlayerId": "p-b-pregnall",
+        "homePoints": 42,
+        "awayPoints": 72,
+        "winner": "away"
+      },
+      {
+        "homePlayerId": "p-mark-snelling",
+        "awayPlayerId": "p-nigel-cave",
+        "homePoints": 57,
+        "awayPoints": 24,
+        "winner": "home"
+      },
+      {
+        "homePlayerId": "p-dean-taylor",
+        "awayPlayerId": "p-p-leigh",
+        "homePoints": 74,
+        "awayPoints": 63,
+        "winner": "home"
+      }
+    ]
+  }
 ]
