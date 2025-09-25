@@ -6,6 +6,7 @@
     "awayTeamId": "tintwistle2",
     "homeFrames": 2,
     "awayFrames": 3,
+    "image": "m-2025-09-24-marple-v-tintwistle2.jpg",
     "frames": [
       {
         "homePlayerId": "p-glynn-evans",
@@ -51,6 +52,7 @@
     "awayTeamId": "whaley-1",
     "homeFrames": 1,
     "awayFrames": 4,
+    "image": "m-2025-09-24-tintwistle1-v-whaley-1.jpg",
     "frames": [
       {
         "homePlayerId": "p-shaun-robinson",
@@ -97,6 +99,7 @@
     "awayTeamId": "hayfield-1",
     "homeFrames": 3,
     "awayFrames": 2,
+    "image": "m-2025-09-24-denton-lib-v-hayfield-1.jpg",
     "frames": [
       {
         "homePlayerId": "p-ash-garside",
@@ -104,7 +107,7 @@
         "homePoints": 100,
         "awayPoints": 78,
         "winner": "home",
-        "breaks": { "home": 35 }
+        "breaks": { "home": [35, 27] }
       },
       {
         "homePlayerId": "p-aj-patel",
@@ -144,6 +147,7 @@
     "awayTeamId": "chinley",
     "homeFrames": 3,
     "awayFrames": 2,
+    "image": "m-2025-09-24-whaley-2-v-chinley.jpg",
     "frames": [
       {
         "homePlayerId": "p-p-walker",
@@ -189,6 +193,7 @@
     "awayTeamId": "alexashton",
     "homeFrames": 3,
     "awayFrames": 2,
+    "image": "m-2025-09-24-hayfield-2-v-alexashton.jpg",
     "frames": [
       {
         "homePlayerId": "p-mark-enright",
