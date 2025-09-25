@@ -64,7 +64,16 @@
       box-shadow:0 1px 2px rgba(0,0,0,.06)
     }
     main h2{margin:.25rem 0 .5rem 0}
+
+    /* fit-to-screen toolbar */
+    .fitbar{display:flex;justify-content:flex-end;margin:.4rem 0 .25rem;color:#333;font-size:.9rem}
+    .fitbar input{transform:translateY(1px)}
+
+    /* table wrapper (id used by fit script) */
     .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+    #leagueWrap{position:relative}
+    #leagueWrap.fit-active{overflow:hidden}
+
     table#leagueTable{
       width:100%;border-collapse:collapse;border:1px solid #ddd;border-radius:10px;overflow:hidden;font-size:.95rem
     }
@@ -91,8 +100,8 @@
     @media (max-width:480px){
       :root{--banner-height:110px}
       .menu-toggle{font-size:.95rem;padding:9px 11px}
-      table#leagueTable{font-size:.9rem}
-      table#leagueTable th,table#leagueTable td{padding:.45rem .4rem}
+      table#leagueTable{font-size:.85rem}
+      table#leagueTable th,table#leagueTable td{padding:.4rem .35rem}
     }
   </style>
 </head>
@@ -134,7 +143,17 @@
     <p>This is the official site for the High Peak &amp; Marple Snooker League. Use the menu above to navigate.</p>
 
     <h2>Current League Table</h2>
-    <div class="table-wrap">
+
+    <!-- Fit-to-screen toolbar -->
+    <div id="fitToolbar" class="fitbar">
+      <label>
+        <input type="checkbox" id="fitToggle">
+        Fit table to screen (mobile)
+      </label>
+    </div>
+
+    <!-- Table wrapper has specific id used by the fit script -->
+    <div id="leagueWrap" class="table-wrap">
       <table id="leagueTable" aria-describedby="League table showing standings">
         <thead>
           <tr>
@@ -261,8 +280,7 @@
             a.W++; h.L++;
             a.Pts+=3; // away win bonus (2 + 1 extra)
           } else {
-            // Defensive: if data ever has equal frames, treat as no bonus/no W/L.
-            // (Should not occur under league rules.)
+            // If equal frames ever appear, treat as no bonus (defensive only).
           }
         }
 
@@ -292,6 +310,51 @@
 
         function escapeHtml(str=''){return str.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
       } catch(e){console.warn('League table load failed:',e);}
+    })();
+  </script>
+
+  <!-- Fit-to-screen script -->
+  <script>
+    (function(){
+      const wrap = document.getElementById('leagueWrap');
+      const tbl  = document.getElementById('leagueTable');
+      const toggle = document.getElementById('fitToggle');
+
+      // Auto-enable on small screens
+      const auto = window.matchMedia('(max-width: 600px)').matches;
+      if (auto) toggle.checked = true;
+
+      function applyFit(){
+        // Reset to measure natural size
+        tbl.style.transform = 'none';
+        wrap.classList.remove('fit-active');
+        wrap.style.height = '';
+
+        if (!toggle.checked) return;
+
+        // Compute scale so table width fits wrapper width
+        const wrapW = wrap.clientWidth || window.innerWidth;
+        const tableW = tbl.scrollWidth;
+        const scale = Math.min(1, wrapW / Math.max(1, tableW));
+
+        // Apply scale & reserve height so nothing is cut off
+        const naturalH = tbl.offsetHeight;
+        tbl.style.transformOrigin = 'top left';
+        tbl.style.transform = `scale(${scale})`;
+        wrap.classList.add('fit-active');
+        wrap.style.height = (naturalH * scale) + 'px';
+      }
+
+      // Re-fit when table updates or on viewport changes
+      const ro = new ResizeObserver(applyFit);
+      ro.observe(tbl);
+      window.addEventListener('resize', applyFit, {passive:true});
+      window.addEventListener('orientationchange', applyFit, {passive:true});
+      toggle.addEventListener('change', applyFit);
+
+      // Try after DOM ready and once more for async-populated table
+      document.addEventListener('DOMContentLoaded', () => setTimeout(applyFit, 0));
+      setTimeout(applyFit, 0);
     })();
   </script>
 </body>
