@@ -47,7 +47,7 @@
     .tabs{display:flex;flex-wrap:wrap;gap:.35rem;margin:.25rem 0 .75rem}
     .tab-btn{
       margin:0;padding:.4em .8em;border:none;border-radius:6px;font-weight:700;cursor:pointer;
-      color:#000; /* force black text for readability on coloured backgrounds */
+      color:#000;
     }
     .tab-btn.active{box-shadow:0 0 0 2px #333 inset}
 
@@ -196,7 +196,7 @@
       .catch(()=>{});
   </script>
 
-  <!-- Merit grid logic (updated: partial weeks + All Teams only players who've played) -->
+  <!-- Merit grid logic (dates from matches; fixtures only used for NA marking; All Teams shows only players who've played) -->
   <script>
   (async function () {
     const [teams, players, fixtures, matches] = await Promise.all([
@@ -210,14 +210,7 @@
     const teamColorClass = {};
     teams.forEach((t,i)=> teamColorClass[t.id] = i % 10);
 
-    // Index fixtures by date
-    const fixturesByDate = {};
-    for (const f of fixtures) (fixturesByDate[f.date] ||= []).push(f);
-
-    // Index matches by composite key
-    const mKey = m => `${m.date}|${m.homeTeamId}|${m.awayTeamId}`;
-    const matchesByKey = new Map(matches.map(m => [mKey(m), m]));
-
+    // Helper: is match complete
     function isComplete(m){
       if (!m) return false;
       if (m.status === 'postponed' || m.status === 'void') return true;
@@ -226,25 +219,30 @@
       return false;
     }
 
-    const allDates = Object.keys(fixturesByDate).sort((a,b)=>new Date(a)-new Date(b));
+    // --- Build week list directly from completed matches
+    const completedMatches = matches.filter(isComplete);
+    const dateSet = new Set(completedMatches.map(m => m.date));
+    const confirmedDates = Array.from(dateSet).sort((a,b)=>new Date(a)-new Date(b));
 
-    // NEW: include date if at least one fixture that day is complete
-    const confirmedDates = allDates.filter(d =>
-      fixturesByDate[d].some(f => isComplete(matchesByKey.get(`${d}|${f.homeTeamId}|${f.awayTeamId}`)))
-    );
-
-    // Team had fixture on date?
+    // --- Build "team had fixture?" map, using matches; then merge in fixtures (optional)
     const teamHasFixture = {};
     for (const d of confirmedDates){
       teamHasFixture[d] = {};
       for (const t of teams) teamHasFixture[d][t.id] = false;
-      for (const f of fixturesByDate[d]){
-        teamHasFixture[d][f.homeTeamId] = true;
-        teamHasFixture[d][f.awayTeamId] = true;
-      }
+    }
+    for (const m of completedMatches){
+      if (!teamHasFixture[m.date]) continue;
+      teamHasFixture[m.date][m.homeTeamId] = true;
+      teamHasFixture[m.date][m.awayTeamId] = true;
+    }
+    // If fixtures exist, also mark those teams as having a fixture (keeps NA cells correct even if a match is missing)
+    for (const f of fixtures){
+      if (!teamHasFixture[f.date]) continue;
+      teamHasFixture[f.date][f.homeTeamId] = true;
+      teamHasFixture[f.date][f.awayTeamId] = true;
     }
 
-    // Seed per-player rows (include everyone; we'll filter at render)
+    // --- Seed per-player rows (include everyone; we'll filter in render)
     const P = {};
     for (const p of players){
       P[p.id] = {
@@ -267,7 +265,7 @@
       }
     }
 
-    // Apply frames
+    // --- Apply frames from the completed matches
     function recordFrame(frame, isHome, date){
       const pid = isHome ? frame.homePlayerId : frame.awayPlayerId;
       const row = P[pid];
@@ -281,6 +279,7 @@
         else if (win === false){ row.perDate[date] = 'L'; row.totals.played++; row.totals.lost++; }
       }
 
+      // Optional per-frame breaks object: {home: n, away: n}
       const b = frame.breaks;
       const myBreak = isHome ? b?.home : b?.away;
       if (typeof myBreak === 'number' && myBreak >= 25){
@@ -289,14 +288,11 @@
       }
     }
 
-    for (const d of confirmedDates){
-      for (const f of fixturesByDate[d]){
-        const m = matchesByKey.get(`${d}|${f.homeTeamId}|${f.awayTeamId}`);
-        if (!m || !Array.isArray(m.frames)) continue;
-        for (const fr of m.frames){
-          recordFrame(fr, true, d);
-          recordFrame(fr, false, d);
-        }
+    for (const m of completedMatches){
+      if (!Array.isArray(m.frames)) continue;
+      for (const fr of m.frames){
+        recordFrame(fr, true,  m.date);
+        recordFrame(fr, false, m.date);
       }
     }
 
@@ -363,7 +359,7 @@
       const tbody = document.createElement('tbody');
       let rows = Object.values(P);
 
-      // NEW: All Teams -> only players who've played; Team tab -> everyone from that team
+      // All Teams -> only players who've played; Team tab -> everyone in that team
       if (!teamFilter || teamFilter === ALL) {
         rows = rows.filter(r => r.totals.played > 0);
       } else {
