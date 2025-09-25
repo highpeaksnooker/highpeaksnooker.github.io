@@ -10,32 +10,37 @@
       {
         "homePlayerId": "p-glynn-evans",
         "awayPlayerId": "p-nick-small",
-        "winner": "home",
-        "scores": { "home": 84, "away": 51 }
+        "homePoints": 84,
+        "awayPoints": 51,
+        "winner": "home"
       },
       {
         "homePlayerId": "p-ryan-ritchie",
         "awayPlayerId": "p-jack-wrigley",
-        "winner": "home",
-        "scores": { "home": 82, "away": 32 }
+        "homePoints": 82,
+        "awayPoints": 32,
+        "winner": "home"
       },
       {
         "homePlayerId": "p-c-lee",
         "awayPlayerId": "p-g-davis",
-        "winner": "away",
-        "scores": { "home": 27, "away": 53 }
+        "homePoints": 27,
+        "awayPoints": 53,
+        "winner": "away"
       },
       {
         "homePlayerId": "p-gareth-ritchie",
         "awayPlayerId": "p-dan-corbally",
-        "winner": "away",
-        "scores": { "home": 37, "away": 56 }
+        "homePoints": 37,
+        "awayPoints": 56,
+        "winner": "away"
       },
       {
         "homePlayerId": "p-geoff-flavell",
         "awayPlayerId": "p-perri-bethel",
-        "winner": "away",
-        "scores": { "home": 26, "away": 59 }
+        "homePoints": 26,
+        "awayPoints": 59,
+        "winner": "away"
       }
     ]
   },
@@ -50,33 +55,38 @@
       {
         "homePlayerId": "p-shaun-robinson",
         "awayPlayerId": "p-john-gordon",
-        "winner": "away",
-        "scores": { "home": 27, "away": 86 }
+        "homePoints": 27,
+        "awayPoints": 86,
+        "winner": "away"
       },
       {
         "homePlayerId": "p-elliot-spencer",
         "awayPlayerId": "p-rob-larkin",
-        "winner": "away",
-        "scores": { "home": 56, "away": 71 }
+        "homePoints": 56,
+        "awayPoints": 71,
+        "winner": "away"
       },
       {
         "homePlayerId": "p-n-wilson",
         "awayPlayerId": "p-adam-rogers",
+        "homePoints": 46,
+        "awayPoints": 82,
         "winner": "away",
-        "scores": { "home": 46, "away": 82 },
         "breaks": { "away": 25 }
       },
       {
         "homePlayerId": "p-a-lawton",
         "awayPlayerId": "p-g-carpenter",
-        "winner": "away",
-        "scores": { "home": 33, "away": 55 }
+        "homePoints": 33,
+        "awayPoints": 55,
+        "winner": "away"
       },
       {
         "homePlayerId": "p-s-crook",
         "awayPlayerId": "p-dan-golpin",
-        "winner": "home",
-        "scores": { "home": 50, "away": 44 }
+        "homePoints": 50,
+        "awayPoints": 44,
+        "winner": "home"
       }
     ]
   },
@@ -90,39 +100,43 @@
     "frames": [
       {
         "homePlayerId": "p-ash-garside",
-        "awayPlayerId": "p-r-wilkinson",
+        "awayPlayerId": "p-tony-watkinson",
+        "homePoints": 100,
+        "awayPoints": 78,
         "winner": "home",
-        "scores": { "home": 100, "away": 78 },
-        "breaks": { "home": [35, 27] }
+        "breaks": { "home": 35 }
       },
       {
         "homePlayerId": "p-aj-patel",
         "awayPlayerId": "p-a-barnes",
-        "winner": "home",
-        "scores": { "home": 60, "away": 42 }
+        "homePoints": 60,
+        "awayPoints": 42,
+        "winner": "home"
       },
       {
         "homePlayerId": "p-s-mistry",
         "awayPlayerId": "p-scott-lomas",
-        "winner": "away",
-        "scores": { "home": 54, "away": 60 }
+        "homePoints": 54,
+        "awayPoints": 60,
+        "winner": "away"
       },
       {
         "homePlayerId": "p-m-derbyshire",
         "awayPlayerId": "p-sam-lomas",
-        "winner": "away",
-        "scores": { "home": 38, "away": 65 }
+        "homePoints": 38,
+        "awayPoints": 65,
+        "winner": "away"
       },
       {
         "homePlayerId": "p-eric-kwan",
         "awayPlayerId": "p-b-lonsdale",
+        "homePoints": 96,
+        "awayPoints": 94,
         "winner": "home",
-        "scores": { "home": 96, "away": 94 },
-        "breaks": { "home": [27] }
+        "breaks": { "home": 27 }
       }
     ]
-  }
-][
+  },
   {
     "id": "m-2025-09-24-whaley-2-v-chinley",
     "date": "2025-09-24",
