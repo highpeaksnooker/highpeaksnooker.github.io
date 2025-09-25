@@ -8,7 +8,6 @@
   <link rel="apple-touch-icon" href="/logo.PNG">
   <link rel="preload" as="image" href="/logo.PNG">
   <link rel="stylesheet" href="style.css" />
-
   <style>
     :root{
       --brand-green:#002b19;
@@ -19,7 +18,6 @@
       --bar-border:#2a2a2a;
       --overlay-bg:rgba(15,17,22,.85);
     }
-
     html,body{margin:0}
     body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#f7f8fb;color:#0b1220}
     .container{max-width:var(--page-max);margin:0 auto;padding:0 12px}
@@ -54,23 +52,21 @@
     table#resultsTable tbody tr:nth-child(even){background:#fafafa}
     table#resultsTable tbody tr:hover{background:#f1f7ff}
 
-    .match-thumb{width:40px;height:auto;border:1px solid #ccc;border-radius:4px;cursor:pointer}
-    .match-thumb:hover{box-shadow:0 0 6px rgba(0,0,0,.35)}
-    footer{text-align:center;padding:1.5rem 1rem;color:#777}
+    /* Card button */
+    .card-btn{display:inline-flex;align-items:center;justify-content:center;width:34px;height:28px;border:1px solid #d9d9d9;border-radius:6px;background:#f7f7f7;cursor:pointer}
+    .card-btn:hover{background:#eef6ff;border-color:#bcd7ff}
 
-    @media (max-width:480px){
-      :root{--banner-height:110px}
-      .menu-toggle{font-size:.95rem;padding:9px 11px}
-      table#resultsTable th,table#resultsTable td{padding:.55rem .6rem}
-    }
+    /* Lightbox overlay */
+    .overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;z-index:1000;padding:16px}
+    .overlay img{max-width:min(1200px,95vw);max-height:90vh;border-radius:8px;box-shadow:0 12px 36px rgba(0,0,0,.6);background:#111}
+    .overlay[aria-hidden="false"]{display:flex}
   </style>
 </head>
 <body>
-
   <!-- Crest banner -->
   <header class="logo-header" role="banner">
     <div class="logo-banner">
-      <img src="logo.PNG?v=16" alt="High Peak &amp; Marple Snooker League crest">
+      <img src="logo.PNG?v=17" alt="High Peak &amp; Marple Snooker League crest">
     </div>
   </header>
 
@@ -117,6 +113,11 @@
     </div>
   </main>
 
+  <!-- Lightbox overlay -->
+  <div id="imgOverlay" class="overlay" aria-hidden="true" role="dialog" aria-label="Match card image">
+    <img id="overlayImg" alt="Match card">
+  </div>
+
   <footer>&copy; 2025 High Peak &amp; Marple Snooker League</footer>
 
   <!-- Menu logic -->
@@ -147,72 +148,96 @@
   <!-- Results logic -->
   <script>
     (async function(){
-      try{
-        const [teams,matches]=await Promise.all([
-          fetch('data/teams.json',{cache:'no-store'}).then(r=>r.json()),
-          fetch('data/matches.json',{cache:'no-store'}).then(r=>r.json())
-        ]);
+      const [teams,matches]=await Promise.all([
+        fetch('data/teams.json',{cache:'no-store'}).then(r=>r.json()),
+        fetch('data/matches.json',{cache:'no-store'}).then(r=>r.json())
+      ]);
 
-        const teamById = Object.fromEntries(teams.map(t => [t.id, t.name]));
-        const tbody = document.getElementById('resultsTbody');
-        tbody.innerHTML = '';
+      const teamById=Object.fromEntries(teams.map(t=>[t.id,t.name]));
+      const tbody=document.getElementById('resultsTbody');
+      tbody.innerHTML='';
 
-        // newest first
-        matches.sort((a,b)=> new Date(b.date) - new Date(a.date));
+      // newest first
+      matches.sort((a,b)=>new Date(b.date)-new Date(a.date));
 
-        function countFrames(m){
-          if (typeof m.homeFrames === 'number' && typeof m.awayFrames === 'number'){
-            return {home:m.homeFrames, away:m.awayFrames};
-          }
-          let home=0, away=0;
-          if (Array.isArray(m.frames)){
-            for (const fr of m.frames){
-              if (fr.winner === 'home') home++;
-              else if (fr.winner === 'away') away++;
-            }
-          }
-          return {home,away};
+      function framesCount(m){
+        if (typeof m.homeFrames==='number' && typeof m.awayFrames==='number'){
+          return {home:m.homeFrames, away:m.awayFrames};
         }
+        let home=0,away=0;
+        (m.frames||[]).forEach(fr=>{
+          if(fr.winner==='home') home++;
+          else if(fr.winner==='away') away++;
+        });
+        return {home,away};
+      }
 
-        function totalsWithBonus(m){
-          const {home, away} = countFrames(m);
-          let homeTot = home;
-          let awayTot = away;
-          if (home > away){ homeTot += 2; }
-          else if (away > home){ awayTot += 3; }
-          // if equal, no bonus
-          return {homeTot, awayTot};
-        }
+      function bonusFor(m){
+        // 2 for home win, 3 for away win (0 if drawn/not finished)
+        const {home,away}=framesCount(m);
+        if (home>away) return {home:2, away:0};
+        if (away>home) return {home:0, away:3};
+        return {home:0,away:0};
+      }
 
-        const fmtGB = d => new Date(d).toLocaleDateString('en-GB',{day:'2-digit',month:'2-digit',year:'numeric'});
+      function toGB(d){
+        return new Date(d).toLocaleDateString('en-GB',{day:'2-digit',month:'2-digit',year:'numeric'});
+      }
 
-        for (const m of matches){
-          if (m.status === 'postponed' || m.status === 'void') continue;
+      function makeCardButton(imgName, alt){
+        if(!imgName) return document.createTextNode('—');
+        const btn=document.createElement('button');
+        btn.className='card-btn'; btn.type='button'; btn.title='View match card';
+        // Prefer /images/<file>; if it fails, fall back to /images/matches/<file>
+        const primary=`/images/${imgName}`;
+        const fallback=`/images/matches/${imgName}`;
+        btn.dataset.srcPrimary=primary;
+        btn.dataset.srcFallback=fallback;
+        btn.addEventListener('click',()=> openOverlay(primary, fallback, alt));
+        btn.innerHTML='❐';
+        return btn;
+      }
 
-          const {homeTot, awayTot} = totalsWithBonus(m);
-          if (homeTot===0 && awayTot===0) continue; // skip incomplete
+      function openOverlay(primary, fallback, alt){
+        const ov=document.getElementById('imgOverlay');
+        const img=document.getElementById('overlayImg');
+        img.alt = alt || 'Match card';
+        img.src = primary;
+        img.onerror = function(){
+          if (img.src !== fallback) img.src = fallback;
+        };
+        ov.setAttribute('aria-hidden','false');
+      }
+      document.getElementById('imgOverlay').addEventListener('click',e=>{
+        if(e.target.id==='imgOverlay') e.currentTarget.setAttribute('aria-hidden','true');
+      });
+      document.addEventListener('keydown',e=>{
+        if(e.key==='Escape') document.getElementById('imgOverlay').setAttribute('aria-hidden','true');
+      });
 
-          const homeName = teamById[m.homeTeamId] || m.homeTeamId || '—';
-          const awayName = teamById[m.awayTeamId] || m.awayTeamId || '—';
+      for(const m of matches){
+        if (m.status==='postponed' || m.status==='void') continue;
 
-          const imgCell = m.image
-            ? `<a href="images/matches/${m.image}" target="_blank" rel="noopener">
-                 <img src="images/matches/${m.image}" class="match-thumb" alt="Match card">
-               </a>`
-            : '';
+        const {home,away}=framesCount(m);
+        if (home===0 && away===0) continue;
 
-          const tr = document.createElement('tr');
-          tr.innerHTML = `
-            <td>${fmtGB(m.date)}</td>
-            <td>${homeName}</td>
-            <td>${awayName}</td>
-            <td>${homeTot} - ${awayTot}</td>
-            <td>${imgCell}</td>
-          `;
-          tbody.appendChild(tr);
-        }
-      }catch(e){
-        console.warn('Results load failed:', e);
+        const bonus=bonusFor(m);
+        const totalHome=home + bonus.home;
+        const totalAway=away + bonus.away;
+
+        const tr=document.createElement('tr');
+        tr.innerHTML=`
+          <td>${toGB(m.date)}</td>
+          <td>${teamById[m.homeTeamId] || m.homeTeamId || '—'}</td>
+          <td>${teamById[m.awayTeamId] || m.awayTeamId || '—'}</td>
+          <td>${totalHome} - ${totalAway}</td>
+        `;
+        const tdCard=document.createElement('td');
+        tdCard.appendChild(
+          makeCardButton(m.image, `${m.date} ${m.homeTeamId} v ${m.awayTeamId}`)
+        );
+        tr.appendChild(tdCard);
+        tbody.appendChild(tr);
       }
     })();
   </script>
