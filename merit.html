@@ -196,7 +196,7 @@
       .catch(()=>{});
   </script>
 
-  <!-- Merit grid logic (dates from matches; fixtures used for NA; All Teams shows only players who've played) -->
+  <!-- Merit grid logic -->
   <script>
   (async function () {
     const [teams, players, fixtures, matches] = await Promise.all([
@@ -210,7 +210,7 @@
     const teamColorClass = {};
     teams.forEach((t,i)=> teamColorClass[t.id] = i % 10);
 
-    // Helper: is match complete
+    // Match completeness
     function isComplete(m){
       if (!m) return false;
       if (m.status === 'postponed' || m.status === 'void') return true;
@@ -219,12 +219,12 @@
       return false;
     }
 
-    // --- Build week list directly from completed matches
+    // Weeks from completed matches
     const completedMatches = matches.filter(isComplete);
     const dateSet = new Set(completedMatches.map(m => m.date));
     const confirmedDates = Array.from(dateSet).sort((a,b)=>new Date(a)-new Date(b));
 
-    // --- Build "team had fixture?" map from matches; merge fixtures for NA
+    // Team had fixture?
     const teamHasFixture = {};
     for (const d of confirmedDates){
       teamHasFixture[d] = {};
@@ -241,7 +241,7 @@
       teamHasFixture[f.date][f.awayTeamId] = true;
     }
 
-    // --- Seed per-player rows (include everyone; filter later in render)
+    // Seed rows
     const P = {};
     for (const p of players){
       P[p.id] = {
@@ -255,7 +255,7 @@
       };
     }
 
-    // Pre-mark NA where the team had no fixture that date
+    // NA cells where team didn't play
     if (confirmedDates.length){
       for (const p of players){
         for (const d of confirmedDates){
@@ -264,7 +264,13 @@
       }
     }
 
-    // --- Apply frames from completed matches
+    // Helper to accept number/array/missing for breaks
+    function toBreakList(x){
+      if (Array.isArray(x)) return x.filter(n => typeof n === 'number');
+      if (typeof x === 'number') return [x];
+      return [];
+    }
+
     function recordFrame(frame, isHome, date){
       const pid = isHome ? frame.homePlayerId : frame.awayPlayerId;
       const row = P[pid];
@@ -278,12 +284,14 @@
         else if (win === false){ row.perDate[date] = 'L'; row.totals.played++; row.totals.lost++; }
       }
 
-      // Optional breaks: {home: n, away: n}
-      const b = frame.breaks;
-      const myBreak = isHome ? b?.home : b?.away;
-      if (typeof myBreak === 'number' && myBreak >= 25){
-        row.totals.break25++;
-        row.totals.high = Math.max(row.totals.high, myBreak);
+      // ---- MULTI-BREAK SUPPORT (25+) ----
+      const b = frame.breaks || {};
+      const mine = isHome ? b.home : b.away;
+      const list = toBreakList(mine);
+      const plus25 = list.filter(n => n >= 25);
+      if (plus25.length){
+        row.totals.break25 += plus25.length;                       // count all
+        row.totals.high = Math.max(row.totals.high, ...plus25);    // highest
       }
     }
 
@@ -300,20 +308,18 @@
       r.totals.winPct = r.totals.played ? (r.totals.won / r.totals.played) : 0;
     }
 
-    // === NEW SORT: Wins desc, Played asc, High Break desc, Name asc
+    // Sort: Wins ↓, Played ↑, High Break ↓, Name ↑
     function sortRows(rows){
       return rows.sort((a,b)=>{
-        const aw=a.totals.won, bw=b.totals.won;
-        if (bw!==aw) return bw-aw;                       // wins DESC
-        const ap=a.totals.played, bp=b.totals.played;
-        if (ap!==bp) return ap-bp;                       // played ASC
+        if (b.totals.won !== a.totals.won) return b.totals.won - a.totals.won;
+        if (a.totals.played !== b.totals.played) return a.totals.played - b.totals.played;
         const ah=a.totals.high||0, bh=b.totals.high||0;
-        if (bh!==ah) return bh-ah;                       // high break DESC
-        return a.name.localeCompare(b.name);             // name ASC
+        if (bh!==ah) return bh-ah;
+        return a.name.localeCompare(b.name);
       });
     }
 
-    // --- Tabs
+    // Tabs
     const tabs = document.getElementById('teamTabs');
     const ALL='__all__';
     function mkBtn(id,label,colorClass){
@@ -341,7 +347,7 @@
     const startBtn=[...tabs.children].find(b=>b.dataset.teamId===startId)||tabs.firstChild;
     startBtn.classList.add('active');
 
-    // --- Render + sticky offsets calculation
+    // Render
     function render(teamFilter){
       const tbl = document.getElementById('playersGrid');
       const thead = document.createElement('thead');
