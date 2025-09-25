@@ -199,7 +199,9 @@
         // newest first
         matches.sort((a,b)=> new Date(b.date) - new Date(a.date));
 
-        function framesFrom(m){
+        // Count frames and then apply bonus rule:
+        // Home win => +2 bonus to home. Away win => +3 bonus to away.
+        function frameCounts(m){
           if (typeof m.homeFrames==='number' && typeof m.awayFrames==='number'){
             return {home:m.homeFrames, away:m.awayFrames};
           }
@@ -212,12 +214,19 @@
           }
           return {home,away};
         }
+        function totalsWithBonus(m){
+          const {home,away} = frameCounts(m);
+          let H = home, A = away;
+          if (H > A) H += 2;             // home win bonus
+          else if (A > H) A += 3;        // away win bonus (2 + 1 extra)
+          return {home:H, away:A};
+        }
 
         const fmt = d => new Date(d).toLocaleDateString('en-GB',{day:'2-digit',month:'2-digit',year:'numeric'});
 
         for (const m of matches){
           if (m.status === 'postponed' || m.status === 'void') continue;
-          const {home,away} = framesFrom(m);
+          const {home,away} = totalsWithBonus(m);
           if (home===0 && away===0) continue;
 
           const tr = document.createElement('tr');
@@ -242,32 +251,46 @@
         const errEl = document.getElementById('imgError');
         const closeBtn = document.getElementById('modalClose');
 
-        function openImage(imgFile, cacheKey){
-          // try /images/matches/ first, then fall back to /images/
-          const v = cacheKey || Date.now();
-          const primary = `images/matches/${imgFile}?v=${encodeURIComponent(v)}`;
-          const fallback = `images/${imgFile}?v=${encodeURIComponent(v)}`;
+        function buildCandidates(filename){
+          // try both folders and common extension variants
+          const v = Date.now();
+          const base = filename.replace(/\.(jpg|jpeg|png)$/i, '');
+          const exts = ['.jpg','.JPG','.jpeg','.JPEG','.png','.PNG'];
+          const folders = ['images/matches/','images/'];
+          const withGiven = folders.map(f => `${f}${filename}?v=${v}`);
+          const combos = [];
+          for (const f of folders){
+            for (const e of exts){
+              combos.push(`${f}${base}${e}?v=${v}`);
+            }
+          }
+          // put the exact filename attempts first
+          return [...withGiven, ...combos];
+        }
 
+        function openImage(imgFile){
+          const candidates = buildCandidates(imgFile);
+          let idx = 0;
           errEl.hidden = true;
           imgEl.removeAttribute('hidden');
 
           imgEl.onerror = function(){
-            if (imgEl.src.includes('/images/matches/')) {
-              imgEl.src = fallback;   // try root
+            idx++;
+            if (idx < candidates.length){
+              imgEl.src = candidates[idx];
             } else {
-              // both failed
               imgEl.setAttribute('hidden','hidden');
               errEl.hidden = false;
             }
           };
-          imgEl.src = primary;
+          imgEl.src = candidates[idx];
           modal.classList.add('open');
         }
 
         document.addEventListener('click', (e)=>{
           const btn = e.target.closest('.card-btn');
           if (btn && btn.dataset.img){
-            openImage(btn.dataset.img, btn.dataset.img);
+            openImage(btn.dataset.img);
           }
           if (e.target.id==='modalClose' || e.target===modal){
             modal.classList.remove('open');
@@ -275,7 +298,10 @@
           }
         });
         document.addEventListener('keydown', (e)=>{
-          if (e.key==='Escape') modal.classList.remove('open');
+          if (e.key==='Escape') {
+            modal.classList.remove('open');
+            imgEl.src='about:blank';
+          }
         });
 
       }catch(e){
