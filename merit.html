@@ -1,553 +1,461 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Merit — High Peak & Marple Snooker League</title>
-  <link rel="icon" type="image/png" href="/logo.PNG" sizes="192x192">
-  <link rel="apple-touch-icon" href="/logo.PNG">
-  <link rel="preload" as="image" href="/logo.PNG">
-  <link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Merit — High Peak & Marple Snooker League</title>
+<link rel="icon" type="image/png" href="/logo.PNG" sizes="192x192">
+<link rel="apple-touch-icon" href="/logo.PNG">
+<link rel="preload" as="image" href="/logo.PNG">
+<link rel="stylesheet" href="style.css" />
+<style>
+  :root{
+    --brand-green:#002b19; --banner-height:140px; --page-max:1100px; --accent:#19d36b;
+    --bar-dark:#1f1f1f; --bar-border:#2a2a2a; --overlay-bg:rgba(15,17,22,.85);
+    /* desktop/base widths */
+    --w-name:200px; --w-team:180px; --w-hcp:56px; --w-week:40px; --w-pwl:44px;
+    --w-diff:54px; --w-25:52px; --w-hi:74px; --grid-font:.92rem;
+  }
+  html,body{margin:0}
+  body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#f7f8fb;color:#0b1220}
+  .container{max-width:var(--page-max);margin:0 auto;padding:0 12px}
 
-  <style>
+  header.logo-header{background:var(--brand-green);box-shadow:0 2px 10px rgba(0,0,0,.25);height:var(--banner-height);display:flex;align-items:center;justify-content:center}
+  .logo-banner{height:100%;display:flex;align-items:center;justify-content:center}
+  .logo-banner img{height:100%;width:auto;object-fit:contain;display:block;filter:drop-shadow(0 0 6px rgba(0,0,0,.4))}
+
+  #announcement-banner{position:sticky;top:0;z-index:100;display:none;background:var(--bar-dark);color:#fff;font-weight:600;font-size:.85rem;padding:.35rem 0;border-top:1px solid rgba(255,255,255,.06);border-bottom:1px solid var(--bar-border)}
+  #announcement-inner{max-width:var(--page-max);margin:0 auto;padding:0 12px;text-align:center}
+
+  .menu-bar{background:var(--bar-dark);padding:8px 0 10px;position:relative;z-index:110;border-bottom:1px solid var(--bar-border)}
+  .menu-inner{max-width:var(--page-max);margin:0 auto;padding:0 12px;position:relative}
+  .menu-toggle{width:100%;background:var(--bar-dark);color:#fff;padding:10px 12px;border:1px solid var(--bar-border);border-radius:10px;font-weight:800;font-size:1rem;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,.25) inset}
+  .menu-toggle:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+  nav.site-nav{position:absolute;left:12px;right:12px;top:calc(100% + 6px);background:var(--overlay-bg);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.08);border-radius:10px;box-shadow:0 18px 36px rgba(0,0,0,.45);padding:6px;z-index:120}
+  [hidden]{display:none!important}
+  nav.site-nav a{display:block;color:#e5e7eb;text-decoration:none;font-weight:700;padding:10px 10px;border-radius:8px}
+  nav.site-nav a:hover{background:rgba(255,255,255,.1)}
+  nav.site-nav a.active{background:var(--accent);color:#0b1b0f}
+
+  main.container{background:#fff;padding:1rem 12px 1.2rem;border-radius:10px;margin-top:10px;box-shadow:0 1px 2px rgba(0,0,0,.06)}
+  h2{margin:.25rem 0 .6rem 0}
+
+  .view-tabs{display:flex;gap:.4rem;margin:.25rem 0 .75rem}
+  .view-tabs .view-btn{margin:0;padding:.4em .8em;border:none;border-radius:8px;font-weight:800;cursor:pointer;background:#eef1f5}
+  .view-tabs .view-btn.active{background:var(--accent);color:#0b1b0f}
+
+  .tabs{display:flex;flex-wrap:wrap;gap:.35rem;margin:.25rem 0 .75rem}
+  .tab-btn{margin:0;padding:.35em .7em;border:none;border-radius:6px;font-weight:700;cursor:pointer;color:#000}
+  .tab-btn.active{box-shadow:0 0 0 2px #333 inset}
+
+  tr.team-color-0{background-color:#e6f4ff}
+  tr.team-color-1{background-color:#e6ffe6}
+  tr.team-color-2{background-color:#fff0e6}
+  tr.team-color-3{background-color:#f9e6ff}
+  tr.team-color-4{background-color:#fffde6}
+  tr.team-color-5{background-color:#f0f0ff}
+  tr.team-color-6{background-color:#e6fff2}
+  tr.team-color-7{background-color:#ffe6f0}
+  tr.team-color-8{background-color:#f6f6f6}
+  tr.team-color-9{background-color:#e0f7fa}
+  .tab-btn.color-0{background:#cce8ff}.tab-btn.color-1{background:#bfffbf}.tab-btn.color-2{background:#ffd4b3}.tab-btn.color-3{background:#ebccff}.tab-btn.color-4{background:#fff9b3}.tab-btn.color-5{background:#d6d6ff}.tab-btn.color-6{background:#b3ffe0}.tab-btn.color-7{background:#ffcce0}.tab-btn.color-8{background:#dddddd}.tab-btn.color-9{background:#b2ebf2}
+
+  .table-scroller{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .player-grid{width:100%;border-collapse:separate;border-spacing:0;background:#fff;font-size:var(--grid-font);table-layout:fixed}
+  .player-grid th,.player-grid td{border:1px solid #e4e4e4;padding:5px 6px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .player-grid thead th{background:#f0f0f0;font-weight:700}
+
+  .player-grid th.sticky,.player-grid td.sticky{position:sticky;left:var(--s0,0px);z-index:2;background:inherit}
+  .player-grid th.sticky-2,.player-grid td.sticky-2{position:sticky;left:var(--s1,200px);z-index:2;background:inherit}
+  .player-grid th.sticky-3,.player-grid td.sticky-3{position:sticky;left:var(--s2,380px);z-index:2;background:inherit}
+  .player-grid td.sticky,.player-grid td.sticky-2,.player-grid td.sticky-3{box-shadow:2px 0 0 rgba(0,0,0,.05)}
+
+  .col-name,.col-team{text-align:left;line-height:1.15}
+  .col-name{min-width:var(--w-name);font-size:.9em}
+  .col-team{min-width:var(--w-team);font-size:.88em}
+  .col-hcp{width:var(--w-hcp)}
+
+  .col-week{width:var(--w-week);min-width:var(--w-week);font-variant-numeric:tabular-nums}
+  .col-p,.col-w,.col-l{width:var(--w-pwl)}
+  .col-diff{width:var(--w-diff)}
+  .col-25{width:var(--w-25)}
+  .col-hi{width:var(--w-hi)}
+
+  .cell-w{background:#19c67a;color:#083;font-weight:700}
+  .cell-l{background:#f6903d;color:#5a2a00;font-weight:700}
+  .cell-na{background:#111;color:#fff}
+  .cell-blank{background:#fff}
+
+  .breaks-wrap{margin-top:.5rem}
+  table.breaks{width:100%;border-collapse:collapse;background:#fff;font-size:.95rem;border:1px solid #e5e5e5;table-layout:auto}
+  table.breaks th,table.breaks td{border:1px solid #ddd;padding:.55rem .6rem;text-align:left;vertical-align:top}
+  table.breaks thead th{background:#f0f0f0;font-weight:700}
+  .col-b-name{min-width:200px}
+  .col-b-team{min-width:160px}
+  .col-b-count{width:70px;text-align:center}
+  .col-b-high{width:90px;text-align:center}
+  .col-b-list{width:auto}
+
+  footer{text-align:center;padding:1.2rem 1rem;color:#777}
+
+  @media (max-width:480px){
     :root{
-      --brand-green:#002b19;
-      --banner-height:140px;
-      --page-max:1100px;
-      --accent:#19d36b;
-      --bar-dark:#1f1f1f; --bar-border:#2a2a2a;
-      --overlay-bg:rgba(15,17,22,.85);
-
-      /* desktop/base widths */
-      --w-name:200px;
-      --w-team:180px;
-      --w-hcp:  56px;
-      --w-week: 40px;
-      --w-pwl:  44px;
-      --w-diff: 54px;
-      --w-25:   52px;
-      --w-hi:   74px;
-      --grid-font:.92rem;
+      --banner-height:110px;
+      --w-name:138px; --w-team:116px; --w-hcp:44px;
+      --w-week:32px; --w-pwl:36px; --w-diff:46px; --w-25:42px; --w-hi:60px;
+      --grid-font:.82rem;
     }
-
-    html,body{margin:0}
-    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#f7f8fb;color:#0b1220}
-    .container{max-width:var(--page-max);margin:0 auto;padding:0 12px}
-
-    /* ===== Crest banner ===== */
-    header.logo-header{background:var(--brand-green);box-shadow:0 2px 10px rgba(0,0,0,.25);height:var(--banner-height);display:flex;align-items:center;justify-content:center}
-    .logo-banner{height:100%;display:flex;align-items:center;justify-content:center}
-    .logo-banner img{height:100%;width:auto;object-fit:contain;display:block;filter:drop-shadow(0 0 6px rgba(0,0,0,.4))}
-
-    /* ===== Announcement bar ===== */
-    #announcement-banner{position:sticky;top:0;z-index:100;display:none;background:var(--bar-dark);color:#fff;font-weight:600;font-size:.85rem;padding:.35rem 0;border-top:1px solid rgba(255,255,255,.06);border-bottom:1px solid var(--bar-border)}
-    #announcement-inner{max-width:var(--page-max);margin:0 auto;padding:0 12px;text-align:center}
-
-    /* ===== Menu bar ===== */
-    .menu-bar{background:var(--bar-dark);padding:8px 0 10px;position:relative;z-index:110;border-bottom:1px solid var(--bar-border)}
-    .menu-inner{max-width:var(--page-max);margin:0 auto;padding:0 12px;position:relative}
-    .menu-toggle{width:100%;background:var(--bar-dark);color:#fff;padding:10px 12px;border:1px solid var(--bar-border);border-radius:10px;font-weight:800;font-size:1rem;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,.25) inset}
-    .menu-toggle:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
-    nav.site-nav{position:absolute;left:12px;right:12px;top:calc(100% + 6px);background:var(--overlay-bg);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.08);border-radius:10px;box-shadow:0 18px 36px rgba(0,0,0,.45);padding:6px;z-index:120}
-    [hidden]{display:none!important}
-    nav.site-nav a{display:block;color:#e5e7eb;text-decoration:none;font-weight:700;padding:10px 10px;border-radius:8px}
-    nav.site-nav a:hover{background:rgba(255,255,255,.1)}
-    nav.site-nav a.active{background:var(--accent);color:#0b1b0f}
-
-    /* ===== Page structure ===== */
-    main.container{background:#fff;padding:1rem 12px 1.2rem;border-radius:10px;margin-top:10px;box-shadow:0 1px 2px rgba(0,0,0,.06)}
-    h2{margin:.25rem 0 .6rem 0}
-
-    /* ===== View tabs (Merit / Breaks) ===== */
-    .view-tabs{display:flex;gap:.4rem;margin:.25rem 0 .75rem}
-    .view-tabs .view-btn{margin:0;padding:.4em .8em;border:none;border-radius:8px;font-weight:800;cursor:pointer;background:#eef1f5}
-    .view-tabs .view-btn.active{background:var(--accent);color:#0b1b0f}
-
-    /* ===== Team filter tabs (Merit view only) ===== */
-    .tabs{display:flex;flex-wrap:wrap;gap:.35rem;margin:.25rem 0 .75rem}
-    .tab-btn{margin:0;padding:.35em .7em;border:none;border-radius:6px;font-weight:700;cursor:pointer;color:#000}
-    .tab-btn.active{box-shadow:0 0 0 2px #333 inset}
-
-    /* team colour swatches & row backgrounds */
-    tr.team-color-0{background-color:#e6f4ff}
-    tr.team-color-1{background-color:#e6ffe6}
-    tr.team-color-2{background-color:#fff0e6}
-    tr.team-color-3{background-color:#f9e6ff}
-    tr.team-color-4{background-color:#fffde6}
-    tr.team-color-5{background-color:#f0f0ff}
-    tr.team-color-6{background-color:#e6fff2}
-    tr.team-color-7{background-color:#ffe6f0}
-    tr.team-color-8{background-color:#f6f6f6}
-    tr.team-color-9{background-color:#e0f7fa}
-    .tab-btn.color-0{background:#cce8ff}.tab-btn.color-1{background:#bfffbf}.tab-btn.color-2{background:#ffd4b3}.tab-btn.color-3{background:#ebccff}.tab-btn.color-4{background:#fff9b3}.tab-btn.color-5{background:#d6d6ff}.tab-btn.color-6{background:#b3ffe0}.tab-btn.color-7{background:#ffcce0}.tab-btn.color-8{background:#dddddd}.tab-btn.color-9{background:#b2ebf2}
-
-    /* ===== Merit grid ===== */
-    .table-scroller{overflow-x:auto;-webkit-overflow-scrolling:touch}
-    .player-grid{width:100%;border-collapse:separate;border-spacing:0;background:#fff;font-size:var(--grid-font);table-layout:fixed}
-    .player-grid th,.player-grid td{border:1px solid #e4e4e4;padding:5px 6px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .player-grid thead th{background:#f0f0f0;font-weight:700}
-
-    .player-grid th.sticky,.player-grid td.sticky{position:sticky;left:var(--s0,0px);z-index:2;background:inherit}
-    .player-grid th.sticky-2,.player-grid td.sticky-2{position:sticky;left:var(--s1,200px);z-index:2;background:inherit}
-    .player-grid th.sticky-3,.player-grid td.sticky-3{position:sticky;left:var(--s2,380px);z-index:2;background:inherit}
-    .player-grid td.sticky,.player-grid td.sticky-2,.player-grid td.sticky-3{box-shadow:2px 0 0 rgba(0,0,0,.05)}
-
-    .col-name,.col-team{text-align:left;line-height:1.15}
-    .col-name{min-width:var(--w-name);font-size:.9em}
-    .col-team{min-width:var(--w-team);font-size:.88em}
-    .col-hcp{width:var(--w-hcp)}
-
-    .col-week{width:var(--w-week);min-width:var(--w-week);font-variant-numeric:tabular-nums}
-    .col-p,.col-w,.col-l{width:var(--w-pwl)}
-    .col-diff{width:var(--w-diff)}
-    .col-25{width:var(--w-25)}
-    .col-hi{width:var(--w-hi)}
-
-    .cell-w{background:#19c67a;color:#083;font-weight:700}
-    .cell-l{background:#f6903d;color:#5a2a00;font-weight:700}
-    .cell-na{background:#111;color:#fff}
-    .cell-blank{background:#fff}
-
-    /* ===== Breaks table ===== */
-    .breaks-wrap{margin-top:.5rem}
-    table.breaks{width:100%;border-collapse:collapse;background:#fff;font-size:.95rem;border:1px solid #e5e5e5;table-layout:auto}
-    table.breaks th,table.breaks td{border:1px solid #ddd;padding:.55rem .6rem;text-align:left;vertical-align:top}
-    table.breaks thead th{background:#f0f0f0;font-weight:700}
-    .col-b-name{min-width:200px}
-    .col-b-team{min-width:160px}
-    .col-b-count{width:70px;text-align:center}
-    .col-b-high{width:90px;text-align:center}
-    .col-b-list{width:auto}
-
-    footer{text-align:center;padding:1.2rem 1rem;color:#777}
-
-    @media (max-width:480px){
-      :root{
-        --banner-height:110px;
-        --w-name:138px;--w-team:116px;--w-hcp:44px;
-        --w-week:32px;--w-pwl:36px;--w-diff:46px;--w-25:42px;--w-hi:60px;
-        --grid-font:.82rem;
-      }
-      .player-grid th,.player-grid td{padding:4px 5px}
-      .col-name{font-size:.8em}
-      .col-team{font-size:.78em}
-      .col-b-name{min-width:150px}
-      .col-b-team{min-width:110px}
-      table.breaks{font-size:.88rem}
-    }
-  </style>
+    .player-grid th,.player-grid td{padding:4px 5px}
+    .col-name{font-size:.8em}
+    .col-team{font-size:.78em}
+    .col-b-name{min-width:150px}
+    .col-b-team{min-width:110px}
+    table.breaks{font-size:.88rem}
+  }
+</style>
 </head>
 <body>
-  <!-- Crest banner -->
-  <header class="logo-header" role="banner">
-    <div class="logo-banner">
-      <img src="logo.PNG?v=16" alt="High Peak &amp; Marple Snooker League crest">
-    </div>
-  </header>
+<header class="logo-header" role="banner">
+  <div class="logo-banner">
+    <img src="logo.PNG?v=16" alt="High Peak &amp; Marple Snooker League crest">
+  </div>
+</header>
 
-  <!-- Announcement bar -->
-  <div id="announcement-banner" role="status" aria-live="polite">
-    <div id="announcement-inner" class="container">
-      <span id="announcement-text"></span>
-    </div>
+<div id="announcement-banner" role="status" aria-live="polite">
+  <div id="announcement-inner" class="container">
+    <span id="announcement-text"></span>
+  </div>
+</div>
+
+<div class="menu-bar">
+  <div class="menu-inner">
+    <button class="menu-toggle" id="menuToggle" aria-expanded="false" aria-controls="siteNav">☰ Menu</button>
+    <nav id="siteNav" class="site-nav" hidden>
+      <a href="index.html">Home</a>
+      <a href="fixtures.html">Fixtures</a>
+      <a href="results.html">Results</a>
+      <a href="merit.html" class="active">Merit</a>
+      <a href="venues.html">Venues</a>
+      <a href="rules.html">Rules</a>
+      <a href="history.html">Honours List</a>
+      <a href="archive.html">Archive</a>
+    </nav>
+  </div>
+</div>
+
+<main class="container">
+  <h2>Merit</h2>
+  <p>Filter by team or view all players. Switch to Breaks to see every 25+ break.</p>
+
+  <div class="view-tabs">
+    <button class="view-btn active" data-view="merit">Merit Table</button>
+    <button class="view-btn" data-view="breaks">Breaks</button>
   </div>
 
-  <!-- Menu bar -->
-  <div class="menu-bar">
-    <div class="menu-inner">
-      <button class="menu-toggle" id="menuToggle" aria-expanded="false" aria-controls="siteNav">☰ Menu</button>
-      <nav id="siteNav" class="site-nav" hidden>
-        <a href="index.html">Home</a>
-        <a href="fixtures.html">Fixtures</a>
-        <a href="results.html">Results</a>
-        <a href="merit.html" class="active">Merit</a>
-        <a href="venues.html">Venues</a>
-        <a href="rules.html">Rules</a>
-        <a href="history.html">Honours List</a>
-        <a href="archive.html">Archive</a>
-      </nav>
+  <section id="view-merit">
+    <div class="tabs" id="teamTabs"></div>
+    <div class="table-scroller">
+      <table id="playersGrid" class="player-grid" aria-describedby="meritHeatmap"></table>
     </div>
-  </div>
+    <p id="meritHeatmap" class="visually-hidden">Player weekly results grid with wins/losses by date and totals.</p>
+  </section>
 
-  <main class="container">
-    <h2>Merit</h2>
-    <p>Filter by team or view all players. Switch to Breaks to see every 25+ break.</p>
-
-    <!-- View switcher -->
-    <div class="view-tabs">
-      <button class="view-btn active" data-view="merit">Merit Table</button>
-      <button class="view-btn" data-view="breaks">Breaks</button>
+  <section id="view-breaks" hidden>
+    <div class="breaks-wrap">
+      <table class="breaks" id="breaksTable">
+        <thead>
+          <tr>
+            <th class="col-b-name">Player</th>
+            <th class="col-b-team">Team</th>
+            <th class="col-b-count">25+</th>
+            <th class="col-b-high">High</th>
+            <th class="col-b-list">Breaks</th>
+          </tr>
+        </thead>
+        <tbody id="breaksBody"></tbody>
+      </table>
     </div>
+  </section>
+</main>
 
-    <!-- Merit view -->
-    <section id="view-merit">
-      <div class="tabs" id="teamTabs"></div>
-      <div class="table-scroller">
-        <table id="playersGrid" class="player-grid" aria-describedby="meritHeatmap"></table>
-      </div>
-      <p id="meritHeatmap" class="visually-hidden">Player weekly results grid with wins/losses by date and totals.</p>
-    </section>
+<footer>&copy; 2025 High Peak &amp; Marple Snooker League</footer>
 
-    <!-- Breaks view -->
-    <section id="view-breaks" hidden>
-      <div class="breaks-wrap">
-        <table class="breaks" id="breaksTable">
-          <thead>
-            <tr>
-              <th class="col-b-name">Player</th>
-              <th class="col-b-team">Team</th>
-              <th class="col-b-count">25+</th>
-              <th class="col-b-high">High</th>
-              <th class="col-b-list">Breaks</th>
-            </tr>
-          </thead>
-          <tbody id="breaksBody"></tbody>
-        </table>
-      </div>
-    </section>
-  </main>
+<script>
+  (function(){
+    const btn=document.getElementById('menuToggle');
+    const nav=document.getElementById('siteNav');
+    function closeNav(){nav.hidden=true;btn.setAttribute('aria-expanded','false')}
+    btn.addEventListener('click',()=>{
+      const ex=btn.getAttribute('aria-expanded')==='true';
+      btn.setAttribute('aria-expanded',String(!ex));
+      nav.hidden=ex;
+    });
+    document.addEventListener('click',(e)=>{
+      if(!nav.hidden && !nav.contains(e.target) && e.target!==btn && !btn.contains(e.target)){ closeNav(); }
+    });
+    document.addEventListener('keydown',(e)=>{ if(e.key==='Escape') closeNav(); });
+  })();
+</script>
 
-  <footer>&copy; 2025 High Peak &amp; Marple Snooker League</footer>
-
-  <!-- Menu logic -->
-  <script>
-    (function(){
-      const btn=document.getElementById('menuToggle');
-      const nav=document.getElementById('siteNav');
-      function closeNav(){nav.hidden=true;btn.setAttribute('aria-expanded','false')}
-      btn.addEventListener('click',()=>{
-        const ex=btn.getAttribute('aria-expanded')==='true';
-        btn.setAttribute('aria-expanded',String(!ex));
-        nav.hidden=ex;
-      });
-      document.addEventListener('click',(e)=>{
-        if(!nav.hidden && !nav.contains(e.target) && e.target!==btn && !btn.contains(e.target)){ closeNav(); }
-      });
-      document.addEventListener('keydown',(e)=>{ if(e.key==='Escape') closeNav(); });
-    })();
-  </script>
-
-  <!-- Announcement -->
-  <script>
-    fetch('data/announcement.json',{cache:'no-store'})
-      .then(r=>r.json())
-      .then(d=>{
-        if(d && d.message && d.message.trim()){
-          document.getElementById('announcement-text').textContent=d.message.trim();
-          document.getElementById('announcement-banner').style.display='block';
-        }
-      })
-      .catch(()=>{});
-  </script>
-
-  <!-- Merit + Breaks logic -->
-  <script>
-    (async function () {
-      const [teams, players, fixtures, matches] = await Promise.all([
-        fetch('data/teams.json',{cache:'no-store'}).then(r=>r.json()),
-        fetch('data/players.json',{cache:'no-store'}).then(r=>r.json()),
-        fetch('data/fixtures.json',{cache:'no-store'}).then(r=>r.json()).catch(()=>[]),
-        fetch('data/matches.json',{cache:'no-store'}).then(r=>r.json()).catch(()=>[])
-      ]);
-
-      const teamById = Object.fromEntries(teams.map(t => [t.id, t]));
-      const teamColorClass = {}; teams.forEach((t,i)=> teamColorClass[t.id] = i % 10);
-
-      // Helpers
-      function isComplete(m){
-        if (!m) return false;
-        if (m.status === 'postponed' || m.status === 'void') return true;
-        if (typeof m.homeFrames === 'number' && typeof m.awayFrames === 'number') return true;
-        if (Array.isArray(m.frames) && m.frames.some(fr => fr.winner==='home' || fr.winner==='away')) return true;
-        return false;
+<script>
+  fetch('data/announcement.json',{cache:'no-store'})
+    .then(r=>r.json())
+    .then(d=>{
+      if(d && d.message && d.message.trim()){
+        document.getElementById('announcement-text').textContent=d.message.trim();
+        document.getElementById('announcement-banner').style.display='block';
       }
-      function escapeHtml(s=''){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
-      function toBreakList(x){ if(Array.isArray(x)) return x.filter(n=>typeof n==='number'); if(typeof x==='number') return [x]; return []; }
+    })
+    .catch(()=>{});
+</script>
 
-      // Confirmed weeks from completed matches
-      const completedMatches = matches.filter(isComplete);
-      const dateSet = new Set(completedMatches.map(m => m.date));
-      const confirmedDates = Array.from(dateSet).sort((a,b)=>new Date(a)-new Date(b));
+<script>
+(async function () {
+  const [teams, players, fixtures, matches] = await Promise.all([
+    fetch('data/teams.json',{cache:'no-store'}).then(r=>r.json()),
+    fetch('data/players.json',{cache:'no-store'}).then(r=>r.json()),
+    fetch('data/fixtures.json',{cache:'no-store'}).then(r=>r.json()).catch(()=>[]),
+    fetch('data/matches.json',{cache:'no-store'}).then(r=>r.json()).catch(()=>[])
+  ]);
 
-      // Which teams had a fixture on each confirmed date (from matches + fixtures)
-      const teamHasFixture = {};
-      for (const d of confirmedDates){ teamHasFixture[d] = {}; teams.forEach(t=>teamHasFixture[d][t.id]=false); }
-      completedMatches.forEach(m=>{ if(teamHasFixture[m.date]){ teamHasFixture[m.date][m.homeTeamId]=true; teamHasFixture[m.date][m.awayTeamId]=true; }});
-      fixtures.forEach(f=>{ if(teamHasFixture[f.date]){ teamHasFixture[f.date][f.homeTeamId]=true; teamHasFixture[f.date][f.awayTeamId]=true; }});
+  const teamById = Object.fromEntries(teams.map(t => [t.id, t]));
+  const teamColorClass = {}; teams.forEach((t,i)=> teamColorClass[t.id] = i % 10);
 
-      // Player rows + Breaks aggregation
-const P = {};
-const breaksByPlayer = {};
-players.forEach(p=>{
-  P[p.id] = {
-    id:p.id, name:p.name, teamId:p.teamId,
-    teamName:teamById[p.teamId]?.name || '',
-    HCP: p.HCP ?? p.hcp ?? 0,
-    perDate: Object.fromEntries(confirmedDates.map(d=>[d,'blank'])),
-    totals: { played:0, won:0, lost:0, diff:0, break25:0, high:0, winPct:0 }
-  };
-  breaksByPlayer[p.id] = {
-    name:p.name, teamName:teamById[p.teamId]?.name || '',
-    list:[], high:0
-  };
-});
+  function isComplete(m){
+    if (!m) return false;
+    if (m.status === 'postponed' || m.status === 'void') return true;
+    if (typeof m.homeFrames === 'number' && typeof m.awayFrames === 'number') return true;
+    if (Array.isArray(m.frames) && m.frames.some(fr => fr.winner==='home' || fr.winner==='away')) return true;
+    return false;
+  }
+  function escapeHtml(s=''){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+  function toBreakList(x){ if(Array.isArray(x)) return x.filter(n=>typeof n==='number'); if(typeof x==='number') return [x]; return []; }
 
-// Mark NA where team had no fixture that week
-if (confirmedDates.length){
-  for (const p of players){
-    for (const d of confirmedDates){
-      if (!teamHasFixture[d][p.teamId]) P[p.id].perDate[d] = 'na';
+  const completedMatches = matches.filter(isComplete);
+  const dateSet = new Set(completedMatches.map(m => m.date));
+  const confirmedDates = Array.from(dateSet).sort((a,b)=>new Date(a)-new Date(b));
+
+  const teamHasFixture = {};
+  for (const d of confirmedDates){ teamHasFixture[d] = {}; teams.forEach(t=>teamHasFixture[d][t.id]=false); }
+  completedMatches.forEach(m=>{ if(teamHasFixture[m.date]){ teamHasFixture[m.date][m.homeTeamId]=true; teamHasFixture[m.date][m.awayTeamId]=true; }});
+  fixtures.forEach(f=>{ if(teamHasFixture[f.date]){ teamHasFixture[f.date][f.homeTeamId]=true; teamHasFixture[f.date][f.awayTeamId]=true; }});
+
+  const P = {};
+  const breaksByPlayer = {};
+  players.forEach(p=>{
+    P[p.id] = {
+      id:p.id, name:p.name, teamId:p.teamId,
+      teamName:teamById[p.teamId]?.name || '',
+      HCP: p.HCP ?? p.hcp ?? 0,
+      perDate: Object.fromEntries(confirmedDates.map(d=>[d,'blank'])),
+      totals: { played:0, won:0, lost:0, diff:0, break25:0, high:0, winPct:0 }
+    };
+    breaksByPlayer[p.id] = { name:p.name, teamName:teamById[p.teamId]?.name || '', list:[], high:0 };
+  });
+
+  if (confirmedDates.length){
+    for (const p of players){
+      for (const d of confirmedDates){
+        if (!teamHasFixture[d][p.teamId]) P[p.id].perDate[d] = 'na';
+      }
     }
   }
-}
 
-// Apply a single frame result + collect 25+ breaks
-function recordFrame(frame, isHome, date){
-  const pid = isHome ? frame.homePlayerId : frame.awayPlayerId;
-  const row = P[pid];
-  if (!row || !confirmedDates.includes(date)) return;
+  function recordFrame(frame, isHome, date){
+    const pid = isHome ? frame.homePlayerId : frame.awayPlayerId;
+    const row = P[pid];
+    if (!row || !confirmedDates.includes(date)) return;
 
-  if (row.perDate[date] !== 'na'){
-    const win = frame.winner === 'home' ? isHome
-              : frame.winner === 'away' ? !isHome
-              : null;
-    if (win === true){ row.perDate[date] = 'W'; row.totals.played++; row.totals.won++; }
-    else if (win === false){ row.perDate[date] = 'L'; row.totals.played++; row.totals.lost++; }
+    if (row.perDate[date] !== 'na'){
+      const win = frame.winner === 'home' ? isHome : frame.winner === 'away' ? !isHome : null;
+      if (win === true){ row.perDate[date] = 'W'; row.totals.played++; row.totals.won++; }
+      else if (win === false){ row.perDate[date] = 'L'; row.totals.played++; row.totals.lost++; }
+    }
+
+    const mine = isHome ? frame?.breaks?.home : frame?.breaks?.away;
+    const plus25 = toBreakList(mine).filter(n=>n>=25);
+    if (plus25.length){
+      row.totals.break25 += plus25.length;
+      row.totals.high = Math.max(row.totals.high, ...plus25);
+      breaksByPlayer[pid].list.push(...plus25);
+      breaksByPlayer[pid].high = Math.max(breaksByPlayer[pid].high, ...plus25);
+    }
   }
 
-  const mine = isHome ? frame?.breaks?.home : frame?.breaks?.away;
-  const plus25 = toBreakList(mine).filter(n=>n>=25);
-  if (plus25.length){
-    row.totals.break25 += plus25.length;
-    row.totals.high = Math.max(row.totals.high, ...plus25);
-    breaksByPlayer[pid].list.push(...plus25);
-    breaksByPlayer[pid].high = Math.max(breaksByPlayer[pid].high, ...plus25);
-  }
-}
-
-// Walk all completed matches/frames
-completedMatches.forEach(m=>{
-  if (!Array.isArray(m.frames)) return;
-  m.frames.forEach(fr=>{
-    recordFrame(fr, true,  m.date);
-    recordFrame(fr, false, m.date);
+  completedMatches.forEach(m=>{
+    if (!Array.isArray(m.frames)) return;
+    m.frames.forEach(fr=>{
+      recordFrame(fr, true,  m.date);
+      recordFrame(fr, false, m.date);
+    });
   });
-});
 
-// Finish totals
-Object.values(P).forEach(r=>{
-  r.totals.diff = r.totals.won - r.totals.lost;
-  r.totals.winPct = r.totals.played ? (r.totals.won / r.totals.played) : 0;
-});
-        }
+  Object.values(P).forEach(r=>{
+    r.totals.diff = r.totals.won - r.totals.lost;
+    r.totals.winPct = r.totals.played ? (r.totals.won / r.totals.played) : 0;
+  });
 
-      // Apply frames and collect 25+ breaks
-      function recordFrame(frame, isHome, date){
-        const pid = isHome ? frame.homePlayerId : frame.awayPlayerId;
-        const row = P[pid];
-        if (!row || !confirmedDates.includes(date)) return;
+  function sortRows(rows){
+    return rows.sort((a,b)=>{
+      if (b.totals.won !== a.totals.won) return b.totals.won - a.totals.won;
+      if (a.totals.played !== b.totals.played) return a.totals.played - b.totals.played;
+      const ah=a.totals.high||0, bh=b.totals.high||0;
+      if (bh!==ah) return bh-ah;
+      return a.name.localeCompare(b.name);
+    });
+  }
 
-        if (row.perDate[date] !== 'na'){
-          const win = frame.winner === 'home' ? isHome
-                    : frame.winner === 'away' ? !isHome
-                    : null;
-          if (win === true){ row.perDate[date] = 'W'; row.totals.played++; row.totals.won++; }
-          else if (win === false){ row.perDate[date] = 'L'; row.totals.played++; row.totals.lost++; }
-        }
+  const tabs = document.getElementById('teamTabs');
+  const ALL='__all__';
+  function mkBtn(id,label,colorClass){
+    const b=document.createElement('button');
+    b.type='button';
+    b.className='tab-btn'+(colorClass!==null?` color-${colorClass}`:'');
+    b.dataset.teamId=id;
+    b.textContent=label;
+    b.addEventListener('click',()=>{
+      document.querySelectorAll('.tab-btn').forEach(x=>x.classList.remove('active'));
+      b.classList.add('active');
+      localStorage.setItem('playersTeamFilter',id);
+      const newUrl = id && id!==ALL ? `?team=${encodeURIComponent(id)}` : location.pathname;
+      history.replaceState(null,'',newUrl);
+      renderMerit(id);
+    });
+    return b;
+  }
+  tabs.appendChild(mkBtn(ALL,'All Teams',null));
+  teams.forEach(t=> tabs.appendChild(mkBtn(t.id,t.name,teamColorClass[t.id])));
 
-        const mine = isHome ? frame?.breaks?.home : frame?.breaks?.away;
-        const plus25 = toBreakList(mine).filter(n=>n>=25);
-        if (plus25.length){
-          row.totals.break25 += plus25.length;
-          row.totals.high = Math.max(row.totals.high, ...plus25);
-          breaksByPlayer[pid].list.push(...plus25);
-          breaksByPlayer[pid].high = Math.max(breaksByPlayer[pid].high, ...plus25);
-        }
+  const urlTeam=new URLSearchParams(location.search).get('team');
+  const stored=localStorage.getItem('playersTeamFilter');
+  const startId=(urlTeam&&teamById[urlTeam])?urlTeam:(stored&&teamById[stored]?stored:ALL);
+  const startBtn=[...tabs.children].find(b=>b.dataset.teamId===startId)||tabs.firstChild;
+  startBtn.classList.add('active');
+
+  function renderMerit(teamFilter){
+    const tbl = document.getElementById('playersGrid');
+    const thead = document.createElement('thead');
+    const thRow = document.createElement('tr');
+
+    thRow.innerHTML =
+      `<th class="sticky col-name">Name</th>
+       <th class="sticky-2 col-team">Team</th>
+       <th class="sticky-3 col-hcp">HCP</th>`;
+
+    for (const d of confirmedDates){
+      const dt = new Date(d);
+      const short = dt.toLocaleDateString('en-GB',{day:'2-digit',month:'2-digit'});
+      const full  = dt.toLocaleDateString('en-GB',{day:'2-digit',month:'long',year:'numeric'});
+      const th=document.createElement('th');
+      th.className='col-week';
+      th.title = full;
+      th.textContent = short;
+      thRow.appendChild(th);
+    }
+
+    const compactHeads = [
+      ['P','col-p'],['W','col-w'],['L','col-l'],
+      ['+/-','col-diff'],['25+','col-25'],['High Break','col-hi']
+    ];
+    for (const [label,cls] of compactHeads){
+      const th=document.createElement('th'); th.textContent=label; th.className=cls; thRow.appendChild(th);
+    }
+    thead.appendChild(thRow);
+
+    const tbody = document.createElement('tbody');
+    let rows = Object.values(P);
+    rows = (!teamFilter || teamFilter === ALL) ? rows.filter(r => r.totals.played > 0)
+                                              : rows.filter(r => r.teamId === teamFilter);
+    rows = sortRows(rows);
+
+    for (const r of rows){
+      const tr = document.createElement('tr');
+      tr.className = `team-color-${teamColorClass[r.teamId] ?? 0}`;
+      tr.innerHTML =
+       `<td class="sticky col-name">${escapeHtml(r.name)}</td>
+        <td class="sticky-2 col-team">${escapeHtml(r.teamName)}</td>
+        <td class="sticky-3 col-hcp">${r.HCP}</td>`;
+
+      for (const d of confirmedDates){
+        const v = r.perDate[d];
+        let cls='cell-blank', text='';
+        if (v==='W') { cls='cell-w'; text='W'; }
+        else if (v==='L') { cls='cell-l'; text='L'; }
+        else if (v==='na'){ cls='cell-na'; }
+        const td=document.createElement('td'); td.className=`col-week ${cls}`; td.textContent=text; tr.appendChild(td);
       }
 
-      completedMatches.forEach(m=>{
-        if (!Array.isArray(m.frames)) return;
-        m.frames.forEach(fr=>{
-          recordFrame(fr, true,  m.date);
-          recordFrame(fr, false, m.date);
-        });
-      });
+      const T=r.totals;
+      tr.insertAdjacentHTML('beforeend',
+        `<td class="col-p">${T.played}</td>
+         <td class="col-w">${T.won}</td>
+         <td class="col-l">${T.lost}</td>
+         <td class="col-diff">${T.diff}</td>
+         <td class="col-25">${T.break25}</td>
+         <td class="col-hi">${T.high || 0}</td>`);
+      tbody.appendChild(tr);
+    }
 
-      Object.values(P).forEach(r=>{
-        r.totals.diff = r.totals.won - r.totals.lost;
-        r.totals.winPct = r.totals.played ? (r.totals.won / r.totals.played) : 0;
-      });
+    tbl.replaceChildren(thead, tbody);
+    setStickyOffsets(tbl);
+  }
 
-      // Sort merit rows: Wins ↓, Played ↑, High Break ↓, Name ↑
-      function sortRows(rows){
-        return rows.sort((a,b)=>{
-          if (b.totals.won !== a.totals.won) return b.totals.won - a.totals.won;
-          if (a.totals.played !== b.totals.played) return a.totals.played - b.totals.played;
-          const ah=a.totals.high||0, bh=b.totals.high||0;
-          if (bh!==ah) return bh-ah;
-          return a.name.localeCompare(b.name);
-        });
-      }
+  function setStickyOffsets(tbl){
+    const headRow = tbl.querySelector('thead tr');
+    const firstRow = tbl.querySelector('tbody tr');
+    const w0 = (headRow?.children[0]?.offsetWidth) || (firstRow?.children[0]?.offsetWidth) || 0;
+    const w1 = (headRow?.children[1]?.offsetWidth) || (firstRow?.children[1]?.offsetWidth) || 0;
+    tbl.style.setProperty('--s0','0px');
+    tbl.style.setProperty('--s1', w0+'px');
+    tbl.style.setProperty('--s2', (w0+w1)+'px');
+  }
 
-      // Team tabs (Merit view)
-      const tabs = document.getElementById('teamTabs');
-      const ALL='__all__';
-      function mkBtn(id,label,colorClass){
-        const b=document.createElement('button');
-        b.type='button';
-        b.className='tab-btn'+(colorClass!==null?` color-${colorClass}`:'');
-        b.dataset.teamId=id;
-        b.textContent=label;
-        b.addEventListener('click',()=>{
-          document.querySelectorAll('.tab-btn').forEach(x=>x.classList.remove('active'));
-          b.classList.add('active');
-          localStorage.setItem('playersTeamFilter',id);
-          const newUrl = id && id!==ALL ? `?team=${encodeURIComponent(id)}` : location.pathname;
-          history.replaceState(null,'',newUrl);
-          renderMerit(id);
-        });
-        return b;
-      }
-      tabs.appendChild(mkBtn(ALL,'All Teams',null));
-      teams.forEach(t=> tabs.appendChild(mkBtn(t.id,t.name,teamColorClass[t.id])));
+  renderMerit(startId);
 
-      const urlTeam=new URLSearchParams(location.search).get('team');
-      const stored=localStorage.getItem('playersTeamFilter');
-      const startId=(urlTeam&&teamById[urlTeam])?urlTeam:(stored&&teamById[stored]?stored:ALL);
-      const startBtn=[...tabs.children].find(b=>b.dataset.teamId===startId)||tabs.firstChild;
-      startBtn.classList.add('active');
+  function renderBreaks(){
+    const body = document.getElementById('breaksBody');
+    body.innerHTML = '';
+    const rows = Object.entries(breaksByPlayer)
+      .map(([pid,info])=>{
+        const list = [...info.list].sort((a,b)=>b-a);
+        return { pid, name:info.name, team:info.teamName, count:list.length, high:list[0]||0, list };
+      })
+      .filter(r=>r.count>0)
+      .sort((a,b)=> (b.count-a.count)||(b.high-a.high)||a.name.localeCompare(b.name));
 
-      // Render Merit table
-      function renderMerit(teamFilter){
-        const tbl = document.getElementById('playersGrid');
-        const thead = document.createElement('thead');
-        const thRow = document.createElement('tr');
+    rows.forEach(r=>{
+      const tr=document.createElement('tr');
+      tr.innerHTML = `
+        <td class="col-b-name">${escapeHtml(r.name)}</td>
+        <td class="col-b-team">${escapeHtml(r.team)}</td>
+        <td class="col-b-count">${r.count}</td>
+        <td class="col-b-high">${r.high}</td>
+        <td class="col-b-list">${r.list.join(' · ')}</td>`;
+      body.appendChild(tr);
+    });
+  }
+  renderBreaks();
 
-        thRow.innerHTML =
-          `<th class="sticky col-name">Name</th>
-           <th class="sticky-2 col-team">Team</th>
-           <th class="sticky-3 col-hcp">HCP</th>`;
+  document.querySelectorAll('.view-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      document.querySelectorAll('.view-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      const v = btn.dataset.view;
+      document.getElementById('view-merit').hidden = (v!=='merit');
+      document.getElementById('view-breaks').hidden = (v!=='breaks');
+    });
+  });
 
-        for (const d of confirmedDates){
-          const dt = new Date(d);
-          const short = dt.toLocaleDateString('en-GB',{day:'2-digit',month:'2-digit'}); // dd/mm
-          const full  = dt.toLocaleDateString('en-GB',{day:'2-digit',month:'long',year:'numeric'});
-          const th=document.createElement('th');
-          th.className='col-week';
-          th.title = full;
-                    th.textContent = short;
-          thRow.appendChild(th);
-        }
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(()=>{
+      const tbl=document.getElementById('playersGrid');
+      if (tbl) setStickyOffsets(tbl);
+    }, 100);
+  }, { passive:true });
 
-        const compactHeads = [
-          ['P','col-p'],['W','col-w'],['L','col-l'],
-          ['+/-','col-diff'],['25+','col-25'],['High Break','col-hi']
-        ];
-        for (const [label,cls] of compactHeads){
-          const th=document.createElement('th'); th.textContent=label; th.className=cls; thRow.appendChild(th);
-        }
-        thead.appendChild(thRow);
-
-        const tbody = document.createElement('tbody');
-        let rows = Object.values(P);
-        // All Teams -> only players who've played; Team tab -> everyone in that team
-        if (!teamFilter || teamFilter === ALL) rows = rows.filter(r => r.totals.played > 0);
-        else rows = rows.filter(r => r.teamId === teamFilter);
-        rows = sortRows(rows);
-
-        for (const r of rows){
-          const tr = document.createElement('tr');
-          tr.className = `team-color-${teamColorClass[r.teamId] ?? 0}`;
-          tr.innerHTML =
-           `<td class="sticky col-name">${escapeHtml(r.name)}</td>
-            <td class="sticky-2 col-team">${escapeHtml(r.teamName)}</td>
-            <td class="sticky-3 col-hcp">${r.HCP}</td>`;
-
-          for (const d of confirmedDates){
-            const v = r.perDate[d];
-            let cls='cell-blank', text='';
-            if (v==='W') { cls='cell-w'; text='W'; }
-            else if (v==='L') { cls='cell-l'; text='L'; }
-            else if (v==='na'){ cls='cell-na'; }
-            const td=document.createElement('td'); td.className=`col-week ${cls}`; td.textContent=text; tr.appendChild(td);
-          }
-
-          const T=r.totals;
-          tr.insertAdjacentHTML('beforeend',
-            `<td class="col-p">${T.played}</td>
-             <td class="col-w">${T.won}</td>
-             <td class="col-l">${T.lost}</td>
-             <td class="col-diff">${T.diff}</td>
-             <td class="col-25">${T.break25}</td>
-             <td class="col-hi">${T.high || 0}</td>`);
-          tbody.appendChild(tr);
-        }
-
-        tbl.replaceChildren(thead, tbody);
-        setStickyOffsets(tbl);
-      }
-
-      // Sticky left offsets calculation
-      function setStickyOffsets(tbl){
-        const headRow = tbl.querySelector('thead tr');
-        const firstRow = tbl.querySelector('tbody tr');
-        const w0 = (headRow?.children[0]?.offsetWidth) || (firstRow?.children[0]?.offsetWidth) || 0;
-        const w1 = (headRow?.children[1]?.offsetWidth) || (firstRow?.children[1]?.offsetWidth) || 0;
-        tbl.style.setProperty('--s0','0px');
-        tbl.style.setProperty('--s1', w0+'px');
-        tbl.style.setProperty('--s2', (w0+w1)+'px');
-      }
-
-      // Initial render (Merit)
-      renderMerit(startId);
-
-      // Breaks table render
-      function renderBreaks(){
-        const body = document.getElementById('breaksBody');
-        body.innerHTML = '';
-        const rows = Object.entries(breaksByPlayer)
-          .map(([pid,info])=>{
-            const list = [...info.list].sort((a,b)=>b-a); // high -> low
-            return { pid, name:info.name, team:info.teamName, count:list.length, high:list[0]||0, list };
-          })
-          .filter(r=>r.count>0)
-          .sort((a,b)=> (b.count-a.count)||(b.high-a.high)||a.name.localeCompare(b.name));
-
-        rows.forEach(r=>{
-          const tr=document.createElement('tr');
-          tr.innerHTML = `
-            <td class="col-b-name">${escapeHtml(r.name)}</td>
-            <td class="col-b-team">${escapeHtml(r.team)}</td>
-            <td class="col-b-count">${r.count}</td>
-            <td class="col-b-high">${r.high}</td>
-            <td class="col-b-list">${r.list.join(' · ')}</td>`;
-          body.appendChild(tr);
-        });
-      }
-      renderBreaks();
-
-      // View switcher
-      document.querySelectorAll('.view-btn').forEach(btn=>{
-        btn.addEventListener('click',()=>{
-          document.querySelectorAll('.view-btn').forEach(b=>b.classList.remove('active'));
-          btn.classList.add('active');
-          const v = btn.dataset.view;
-          document.getElementById('view-merit').hidden = (v!=='merit');
-          document.getElementById('view-breaks').hidden = (v!=='breaks');
-        });
-      });
-
-      // Recalc sticky on resize
-      let resizeTimer;
-      window.addEventListener('resize', () => {
-        clearTimeout(resizeTimer);
-        resizeTimer = setTimeout(()=>{
-          const tbl=document.getElementById('playersGrid');
-          if (tbl) setStickyOffsets(tbl);
-        }, 100);
-      }, { passive:true });
-
-    })();
-  </script>
+})();
+</script>
 </body>
 </html>
