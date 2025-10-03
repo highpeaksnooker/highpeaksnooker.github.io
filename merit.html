@@ -294,8 +294,71 @@
           for (const d of confirmedDates){
             if (!teamHasFixture[d][p.teamId]) P[p.id].perDate[d] = 'na';
           }
+          // --- Player rows & 25+ breaks aggregation ------------------------------
+      const P = {};
+      const breaksByPlayer = {};
+
+      players.forEach(p=>{
+        P[p.id] = {
+          id:p.id,
+          name:p.name,
+          teamId:p.teamId,
+          teamName:teamById[p.teamId]?.name || '',
+          HCP: p.HCP ?? p.hcp ?? 0,
+          perDate: Object.fromEntries(confirmedDates.map(d=>[d,'blank'])),
+          totals: { played:0, won:0, lost:0, diff:0, break25:0, high:0, winPct:0 }
+        };
+        breaksByPlayer[p.id] = { name:p.name, teamName:teamById[p.teamId]?.name || '', list:[], high:0 };
+      });
+
+      // Mark NA where team had no fixture that week
+      if (confirmedDates.length){
+        for (const p of players){
+          for (const d of confirmedDates){
+            if (!teamHasFixture[d][p.teamId]) P[p.id].perDate[d] = 'na';
+          }
         }
       }
+
+      // Helper to apply a single frame result to a player's row and collect breaks
+      function recordFrame(frame, isHome, date){
+        const pid = isHome ? frame.homePlayerId : frame.awayPlayerId;
+        const row = P[pid];
+        if (!row || !confirmedDates.includes(date)) return;
+
+        if (row.perDate[date] !== 'na'){
+          const win = frame.winner === 'home' ? isHome
+                    : frame.winner === 'away' ? !isHome
+                    : null;
+          if (win === true){ row.perDate[date] = 'W'; row.totals.played++; row.totals.won++; }
+          else if (win === false){ row.perDate[date] = 'L'; row.totals.played++; row.totals.lost++; }
+        }
+
+        const mine = isHome ? frame?.breaks?.home : frame?.breaks?.away;
+        const plus25 = toBreakList(mine).filter(n=>n>=25);
+        if (plus25.length){
+          row.totals.break25 += plus25.length;
+          row.totals.high = Math.max(row.totals.high, ...plus25);
+          breaksByPlayer[pid].list.push(...plus25);
+          breaksByPlayer[pid].high = Math.max(breaksByPlayer[pid].high, ...plus25);
+        }
+      }
+
+      // Walk all completed matches/frames
+      completedMatches.forEach(m=>{
+        if (!Array.isArray(m.frames)) return;
+        m.frames.forEach(fr=>{
+          recordFrame(fr, true,  m.date);
+          recordFrame(fr, false, m.date);
+        });
+      });
+
+      // Finish totals
+      Object.values(P).forEach(r=>{
+        r.totals.diff = r.totals.won - r.totals.lost;
+        r.totals.winPct = r.totals.played ? (r.totals.won / r.totals.played) : 0;
+      });
+        }
 
       // Apply frames and collect 25+ breaks
       function recordFrame(frame, isHome, date){
