@@ -156,5 +156,12 @@
   { "id": "p-paul-rayson", "name": "Paul Rayson", "teamId": "alexashton", "HCP": 0, "captain": false, "aliases": ["P Rayson", "Rayson"] },
   { "id": "p-d-shields", "name": "D Shields", "teamId": "alexashton", "HCP": -28, "captain": false, "aliases": ["Shields"] },
   { "id": "p-aaron-squire", "name": "Aaron Squire", "teamId": "alexashton", "HCP": 21, "captain": false, "aliases": ["A Squire", "Squire"] },
-  { "id": "p-m-sigley", "name": "M Sigley", "teamId": "alexashton", "HCP": 7, "captain": false, "aliases": ["Sigley"] }
+  { "id": "p-m-sigley", "name": "M Sigley", "teamId": "alexashton", "HCP": 7, "captain": false, "aliases": ["Sigley"] },
+  { "id": "p-chris-joy", "name": "Chris Joy", "teamId": "tintwistle2", "HCP": 14, "captain": false, "aliases": ["C Joy", "Joy"] },
+
+  { "id": "p-fletcher-glover", "name": "Fletcher Glover", "teamId": "hayfield-2", "HCP": 14, "captain": false, "aliases": ["F Glover", "Glover"] },
+  { "id": "p-g-fairclough", "name": "G Fairclough", "teamId": "hayfield-2", "HCP": 14, "captain": false, "aliases": ["Fairclough"] },
+  { "id": "p-a-mckay", "name": "A McKay", "teamId": "hayfield-2", "HCP": 14, "captain": false, "aliases": ["McKay"] },
+  { "id": "p-tony-ryan", "name": "Tony Ryan", "teamId": "hayfield-2", "HCP": 14, "captain": false, "aliases": ["T Ryan", "Ryan"] }
+]
 ]
