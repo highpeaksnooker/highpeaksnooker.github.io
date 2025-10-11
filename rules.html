@@ -15,7 +15,6 @@
       --banner-height:140px;
       --page-max:1100px;
       --accent:#19d36b;
-
       --bar-dark:#1f1f1f;
       --bar-border:#2a2a2a;
       --overlay-bg:rgba(15,17,22,.85);
@@ -25,7 +24,7 @@
     body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#f7f8fb;color:#0b1220}
     .container{max-width:var(--page-max);margin:0 auto;padding:0 12px}
 
-    /* ===== Crest banner ===== */
+    /* Crest banner */
     header.logo-header{
       background:var(--brand-green);
       box-shadow:0 2px 10px rgba(0,0,0,.25);
@@ -35,7 +34,7 @@
     .logo-banner{height:100%;display:flex;align-items:center;justify-content:center}
     .logo-banner img{height:100%;width:auto;object-fit:contain;display:block;filter:drop-shadow(0 0 6px rgba(0,0,0,.4))}
 
-    /* ===== Announcement bar ===== */
+    /* Announcement */
     #announcement-banner{
       position:sticky;top:0;z-index:100;display:none;background:var(--bar-dark);color:#fff;
       font-weight:600;font-size:.85rem;padding:.35rem 0;border-top:1px solid rgba(255,255,255,.06);
@@ -43,7 +42,7 @@
     }
     #announcement-inner{max-width:var(--page-max);margin:0 auto;padding:0 12px;text-align:center}
 
-    /* ===== Menu bar ===== */
+    /* Menu bar */
     .menu-bar{background:var(--bar-dark);padding:8px 0 10px;position:relative;z-index:110;border-bottom:1px solid var(--bar-border)}
     .menu-inner{max-width:var(--page-max);margin:0 auto;padding:0 12px;position:relative}
     .menu-toggle{
@@ -62,20 +61,19 @@
     nav.site-nav a:hover{background:rgba(255,255,255,.1)}
     nav.site-nav a.active{background:var(--accent);color:#0b1b0f}
 
-    /* ===== Page content ===== */
+    /* Page content */
     main.container{background:#fff;padding:1rem 12px 1.5rem;border-radius:10px;margin-top:10px;box-shadow:0 1px 2px rgba(0,0,0,.06)}
     h2{margin:.25rem 0 1rem 0}
-    .card{background:#fff;border:1px solid #e6e6e6;border-radius:10px;padding:12px;margin-bottom:14px}
+    .card{background:#fff;border:1px solid #e6e6e6;border-radius:12px;padding:12px;margin-bottom:14px}
     footer{text-align:center;padding:1.5rem 1rem;color:#777}
 
-    /* ===== PDF tile ===== */
+    /* PDF tile (thumbnail of page 1) */
     .pdf-card{
       display:block;position:relative;border:1px solid #e6e6e6;border-radius:12px;overflow:hidden;
       background:#fafafa;box-shadow:0 1px 2px rgba(0,0,0,.04);text-decoration:none;color:inherit
     }
-    .pdf-thumb{
-      display:block;width:100%;aspect-ratio:3/4;object-fit:cover;background:#f1f5f9
-    }
+    .thumb-wrap{position:relative;background:#f1f5f9}
+    #pdfThumbCanvas{display:block;width:100%;height:auto;aspect-ratio:3/4}
     .pdf-meta{
       display:flex;align-items:center;justify-content:space-between;gap:10px;
       padding:10px 12px;font-weight:600
@@ -83,34 +81,31 @@
     .pdf-badge{
       font-size:.8rem;background:var(--accent);color:#072814;padding:4px 8px;border-radius:999px
     }
+    .pdf-note{margin:.5rem 0 0 0;color:#555;font-size:.9rem}
 
-    /* ===== Modal (PDF viewer) ===== */
-    .modal{
-      position:fixed;inset:0;background:rgba(0,0,0,.75);display:none;align-items:center;justify-content:center;
-      padding:12px;z-index:1300
-    }
+    /* Modal viewer */
+    .modal{position:fixed;inset:0;background:rgba(0,0,0,.8);display:none;align-items:center;justify-content:center;padding:10px;z-index:1300}
     .modal.open{display:flex}
-    .modal-panel{
-      width:min(1100px,96vw);height:min(92vh,1100px);background:#0b0b0b;border-radius:12px;position:relative;overflow:hidden;
-      display:flex;flex-direction:column
+    .viewer{
+      width:min(1100px,96vw);height:min(92vh,1200px);background:#0b0b0b;border-radius:12px;display:flex;flex-direction:column;overflow:hidden
     }
-    .modal-header{
-      display:flex;align-items:center;justify-content:space-between;padding:8px 10px;background:#111;color:#fff
+    .viewer-header{
+      display:flex;align-items:center;gap:8px;justify-content:space-between;background:#111;color:#fff;padding:8px 10px
     }
-    .modal-header a{color:#9ae6b4;font-weight:700;text-decoration:none}
-    .modal-close{
-      background:#fff;border:none;border-radius:8px;padding:6px 10px;font-weight:800;cursor:pointer;color:#111
+    .controls{display:flex;align-items:center;gap:8px}
+    .controls button{
+      background:#fff;border:1px solid #d8d8d8;border-radius:8px;padding:6px 10px;font-weight:800;cursor:pointer;color:#111
     }
-    .modal-body{flex:1;background:#222}
-    .modal-body iframe,.modal-body embed{
-      width:100%;height:100%;border:0;display:block;background:#222
-    }
+    .controls .page-btn{padding:6px 9px}
+    .controls .page-btn[aria-current="true"]{background:var(--accent);color:#072814;border-color:#0a7b42}
+    .viewer-body{flex:1;display:flex;align-items:center;justify-content:center;background:#222}
+    #viewCanvas{max-width:100%;max-height:100%;background:#fff;border-radius:4px}
+    .viewer-footer{display:flex;justify-content:space-between;align-items:center;color:#ddd;background:#111;padding:6px 10px;font-size:.9rem}
+    .modal-close{background:#fff;border:none;border-radius:8px;padding:6px 10px;font-weight:800;cursor:pointer;color:#111}
 
-    /* Fallback thumbnail placeholder (inline SVG container) */
-    .thumb-fallback{
-      position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:#edf2f7
-    }
-    .thumb-fallback svg{width:38%;max-width:260px;height:auto;opacity:.6}
+    /* Fallback tile if PDF.js fails */
+    .thumb-fallback{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+    .thumb-fallback svg{width:40%;max-width:260px;height:auto;opacity:.6}
 
     @media (max-width:480px){
       :root{--banner-height:110px}
@@ -154,40 +149,49 @@
   <main class="container">
     <h2>League Rules</h2>
 
-    <!-- Single PDF tile -->
+    <!-- PDF tile showing page 1 as an image (rendered by PDF.js) -->
     <a id="pdfTile" href="pdfs/LeagueRules.pdf" class="pdf-card" aria-label="Open League Rules PDF">
-      <!-- If you add a real cover image at pdfs/league-rules-cover.jpg it will be used.
-           Otherwise a nice placeholder icon appears. -->
-      <img class="pdf-thumb" id="pdfThumb" src="pdfs/league-rules-cover.jpg" alt="League Rules PDF cover" loading="lazy">
-      <div class="thumb-fallback" id="thumbFallback" hidden>
-        <!-- simple inline PDF icon -->
-        <svg viewBox="0 0 64 64" role="img" aria-label="PDF">
-          <path fill="#dc2626" d="M12 2h28l12 12v48H12z"/>
-          <path fill="#f3f4f6" d="M40 2v12h12"/>
-          <rect x="15" y="38" width="34" height="16" rx="3" fill="#111"/>
-          <text x="32" y="50" text-anchor="middle" font-size="12" font-family="system-ui,Segoe UI,Arial" fill="#f9fafb">PDF</text>
-        </svg>
+      <div class="thumb-wrap">
+        <canvas id="pdfThumbCanvas" width="900" height="1200" aria-label="League Rules first page preview"></canvas>
+        <div id="thumbFallback" class="thumb-fallback" hidden>
+          <!-- simple inline PDF icon -->
+          <svg viewBox="0 0 64 64" role="img" aria-label="PDF">
+            <path fill="#dc2626" d="M12 2h28l12 12v48H12z"/>
+            <path fill="#f3f4f6" d="M40 2v12h12"/>
+            <rect x="15" y="38" width="34" height="16" rx="3" fill="#111"/>
+            <text x="32" y="50" text-anchor="middle" font-size="12" font-family="system-ui,Segoe UI,Arial" fill="#f9fafb">PDF</text>
+          </svg>
+        </div>
       </div>
       <div class="pdf-meta">
         <span>High Peak &amp; Marple — League Rules</span>
-        <span class="pdf-badge">View PDF</span>
+        <span class="pdf-badge">Open & Zoom</span>
       </div>
     </a>
+    <p class="pdf-note">Tap the image to open the rules and switch between pages 1–4.</p>
   </main>
 
-  <!-- PDF modal -->
-  <div id="pdfModal" class="modal" role="dialog" aria-modal="true" aria-label="League Rules PDF">
-    <div class="modal-panel">
-      <div class="modal-header">
+  <!-- Modal PDF viewer with page buttons (1–4) + zoom -->
+  <div id="pdfModal" class="modal" role="dialog" aria-modal="true" aria-label="League Rules PDF viewer">
+    <div class="viewer">
+      <div class="viewer-header">
         <strong>League Rules (PDF)</strong>
-        <div style="display:flex;gap:10px;align-items:center">
-          <a id="openNewTab" href="pdfs/LeagueRules.pdf" target="_blank" rel="noopener">Open in new tab</a>
-          <button class="modal-close" id="pdfClose" aria-label="Close">✕</button>
+        <div class="controls">
+          <button id="prevBtn" title="Previous page">← Prev</button>
+          <div id="pageBtns"></div>
+          <button id="nextBtn" title="Next page">Next →</button>
+          <button id="zoomOutBtn" title="Zoom out">−</button>
+          <button id="zoomInBtn" title="Zoom in">+</button>
+          <a id="openNewTab" href="pdfs/LeagueRules.pdf" target="_blank" rel="noopener" style="color:#9ae6b4;font-weight:700;text-decoration:none">Open in new tab</a>
+          <button class="modal-close" id="closeBtn" aria-label="Close">✕</button>
         </div>
       </div>
-      <div class="modal-body">
-        <!-- Browser PDF viewer with zoom controls (varies by browser) -->
-        <iframe id="pdfFrame" src="" title="League Rules PDF"></iframe>
+      <div class="viewer-body">
+        <canvas id="viewCanvas"></canvas>
+      </div>
+      <div class="viewer-footer">
+        <span id="pageInfo">Page 1 of 4</span>
+        <span id="zoomInfo">100%</span>
       </div>
     </div>
   </div>
@@ -219,42 +223,164 @@
       .catch(()=>{});
   </script>
 
-  <!-- PDF tile + modal logic -->
+  <!-- PDF.js (CDN) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script>
+    // Set worker source (needed by PDF.js)
+    if (window['pdfjsLib']) {
+      pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    }
+  </script>
+
+  <!-- PDF thumbnail + modal viewer logic -->
   <script>
     (function(){
       const PDF_URL = 'pdfs/LeagueRules.pdf';
+
+      // Elements
+      const thumbCanvas = document.getElementById('pdfThumbCanvas');
+      const thumbFallback = document.getElementById('thumbFallback');
       const tile = document.getElementById('pdfTile');
-      const frame = document.getElementById('pdfFrame');
+
       const modal = document.getElementById('pdfModal');
-      const closeBtn = document.getElementById('pdfClose');
-      const thumb = document.getElementById('pdfThumb');
-      const fallback = document.getElementById('thumbFallback');
+      const closeBtn = document.getElementById('closeBtn');
+      const prevBtn = document.getElementById('prevBtn');
+      const nextBtn = document.getElementById('nextBtn');
+      const zoomInBtn = document.getElementById('zoomInBtn');
+      const zoomOutBtn = document.getElementById('zoomOutBtn');
+      const pageBtnsWrap = document.getElementById('pageBtns');
+      const pageInfo = document.getElementById('pageInfo');
+      const zoomInfo = document.getElementById('zoomInfo');
+      const viewCanvas = document.getElementById('viewCanvas');
+      const vCtx = viewCanvas.getContext('2d');
 
-      // If the cover image doesn't exist, show the inline placeholder.
-      thumb.addEventListener('error', ()=>{ fallback.hidden = false; thumb.hidden = true; }, {once:true});
+      let pdfDoc = null;
+      let currentPage = 1;
+      let totalPages = 4;  // will be replaced by pdf.numPages
+      let zoom = 1.0;
 
-      // Open modal (use built-in PDF viewer; add fit-to-width hint for some browsers)
-      function openPDF(){
-        frame.src = PDF_URL + '#view=FitH';
+      // ---------- Render first page thumbnail ----------
+      async function renderThumb(){
+        try{
+          const pdf = await pdfjsLib.getDocument(PDF_URL).promise;
+          pdfDoc = pdf;
+          totalPages = pdf.numPages;
+
+          const page = await pdf.getPage(1);
+          // Compute scale to fit our canvas width/height nicely
+          const desiredW = thumbCanvas.width; // 900
+          const viewport = page.getViewport({ scale: 1 });
+          const scale = desiredW / viewport.width;
+          const vp = page.getViewport({ scale });
+
+          thumbCanvas.height = vp.height;
+          thumbCanvas.width = vp.width;
+
+          await page.render({ canvasContext: thumbCanvas.getContext('2d'), viewport: vp }).promise;
+        }catch(err){
+          console.warn('PDF thumb render failed:', err);
+          thumbFallback.hidden = false;
+        }
+      }
+
+      // ---------- Modal viewer ----------
+      async function renderPage(num){
+        if(!pdfDoc) return;
+        const page = await pdfDoc.getPage(num);
+
+        // Base viewport at scale 1
+        const baseVp = page.getViewport({ scale: 1 });
+        // Fit width of modal body (minus some padding) and apply zoom
+        const maxW = Math.min(1100, window.innerWidth * 0.94);
+        const scaleToFit = maxW / baseVp.width;
+        const vp = page.getViewport({ scale: scaleToFit * zoom });
+
+        viewCanvas.width = vp.width;
+        viewCanvas.height = vp.height;
+
+        await page.render({ canvasContext: vCtx, viewport: vp }).promise;
+
+        pageInfo.textContent = `Page ${num} of ${totalPages}`;
+        zoomInfo.textContent = `${Math.round(zoom*100)}%`;
+        updateNavButtons();
+        updatePageButtons();
+      }
+
+      function updateNavButtons(){
+        prevBtn.disabled = (currentPage <= 1);
+        nextBtn.disabled = (currentPage >= totalPages);
+      }
+
+      function updatePageButtons(){
+        // Show buttons for pages 1..min(4, totalPages) and if more, continue.
+        // Your rules PDF is 4 pages, so this will produce 4 buttons.
+        const count = Math.min(4, totalPages);
+        if (pageBtnsWrap.childElementCount !== count){
+          pageBtnsWrap.innerHTML = '';
+          for(let i=1;i<=count;i++){
+            const b = document.createElement('button');
+            b.className = 'page-btn';
+            b.type = 'button';
+            b.textContent = i;
+            b.setAttribute('data-page', String(i));
+            pageBtnsWrap.appendChild(b);
+          }
+        }
+        [...pageBtnsWrap.children].forEach(btn=>{
+          const p = Number(btn.getAttribute('data-page'));
+          btn.setAttribute('aria-current', p === currentPage ? 'true' : 'false');
+        });
+      }
+
+      function openModal(){
         modal.classList.add('open');
+        if (pdfDoc){
+          renderPage(currentPage);
+        }
       }
-      function closePDF(){
+      function closeModal(){
         modal.classList.remove('open');
-        frame.src = 'about:blank';
       }
 
-      tile.addEventListener('click', (e)=>{
-        // Prevent full-page navigation; open our modal instead.
-        e.preventDefault();
-        openPDF();
+      // ---------- Events ----------
+      tile.addEventListener('click', (e)=>{ e.preventDefault(); openModal(); });
+      closeBtn.addEventListener('click', closeModal);
+      modal.addEventListener('click', (e)=>{ if(e.target === modal) closeModal(); });
+      document.addEventListener('keydown', (e)=>{ if(e.key==='Escape' && modal.classList.contains('open')) closeModal(); });
+
+      prevBtn.addEventListener('click', async ()=>{
+        if (currentPage>1){ currentPage--; await renderPage(currentPage); }
+      });
+      nextBtn.addEventListener('click', async ()=>{
+        if (currentPage<totalPages){ currentPage++; await renderPage(currentPage); }
+      });
+      zoomInBtn.addEventListener('click', async ()=>{
+        zoom = Math.min(3, zoom + 0.2);
+        await renderPage(currentPage);
+      });
+      zoomOutBtn.addEventListener('click', async ()=>{
+        zoom = Math.max(0.4, zoom - 0.2);
+        await renderPage(currentPage);
       });
 
-      closeBtn.addEventListener('click', closePDF);
-      modal.addEventListener('click', (e)=>{ if(e.target===modal) closePDF(); });
-      document.addEventListener('keydown', (e)=>{ if(e.key==='Escape' && modal.classList.contains('open')) closePDF(); });
+      pageBtnsWrap.addEventListener('click', async (e)=>{
+        const b = e.target.closest('button.page-btn');
+        if (!b) return;
+        const p = Number(b.getAttribute('data-page'));
+        if (p && p !== currentPage){
+          currentPage = p;
+          await renderPage(currentPage);
+        }
+      });
 
-      // Ensure the “Open in new tab” link points at the same PDF
-      document.getElementById('openNewTab').href = PDF_URL;
+      window.addEventListener('resize', ()=>{ if (modal.classList.contains('open')) renderPage(currentPage); });
+
+      // ---------- Go! ----------
+      if (window['pdfjsLib']){
+        renderThumb().then(()=>{ /* thumb shown */ }).catch(()=>{ thumbFallback.hidden = false; });
+      }else{
+        thumbFallback.hidden = false;
+      }
     })();
   </script>
 </body>
