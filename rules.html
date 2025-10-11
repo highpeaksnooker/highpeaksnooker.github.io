@@ -81,7 +81,6 @@
       overflow:hidden;box-shadow:0 1px 2px rgba(0,0,0,.04)
     }
     .rules-grid img{width:100%;height:320px;object-fit:cover;display:block}
-    .rules-grid figcaption{padding:6px 8px;font-size:.85rem;color:#444}
     .lightbox{
       position:fixed;inset:0;display:none;align-items:center;justify-content:center;
       background:rgba(0,0,0,.85);z-index:1200;padding:16px
@@ -132,6 +131,7 @@
   <main class="container">
     <h2>League Rules</h2>
 
+    <!-- Example summary -->
     <div class="card">
       <ol>
         <li>Matches consist of 6 frames unless otherwise agreed by captains.</li>
@@ -142,24 +142,27 @@
       </ol>
     </div>
 
-    <!-- Scanned pages -->
+    <!-- Full rules section -->
     <section class="card rules-card" aria-labelledby="full-rules-heading">
       <h3 id="full-rules-heading">Full Rules (Scans)</h3>
-      <p>Tap a page to enlarge. You can also <a href="assets/league-rules.pdf" target="_blank" rel="noopener">download the full rules as a PDF</a>.</p>
+      <p>Tap a page to enlarge. You can also 
+        <a href="pdfs/LeagueRules.pdf" target="_blank" rel="noopener">
+          download the full rules as a PDF
+        </a>.
+      </p>
 
       <div class="rules-grid">
-        <!-- Replace image paths with your uploaded files -->
-        <a href="assets/rules-1.jpg" aria-label="Open rules page 1">
-          <img src="assets/rules-1.jpg" alt="League rules, page 1">
+        <a href="pdfs/rules-1.jpg" aria-label="Open rules page 1">
+          <img src="pdfs/rules-1.jpg" alt="League rules, page 1">
         </a>
-        <a href="assets/rules-2.jpg" aria-label="Open rules page 2">
-          <img src="assets/rules-2.jpg" alt="League rules, page 2">
+        <a href="pdfs/rules-2.jpg" aria-label="Open rules page 2">
+          <img src="pdfs/rules-2.jpg" alt="League rules, page 2">
         </a>
-        <a href="assets/rules-3.jpg" aria-label="Open rules page 3">
-          <img src="assets/rules-3.jpg" alt="League rules, page 3">
+        <a href="pdfs/rules-3.jpg" aria-label="Open rules page 3">
+          <img src="pdfs/rules-3.jpg" alt="League rules, page 3">
         </a>
-        <a href="assets/rules-4.jpg" aria-label="Open rules page 4">
-          <img src="assets/rules-4.jpg" alt="League rules, page 4">
+        <a href="pdfs/rules-4.jpg" aria-label="Open rules page 4">
+          <img src="pdfs/rules-4.jpg" alt="League rules, page 4">
         </a>
       </div>
     </section>
@@ -192,15 +195,13 @@
       .catch(()=>{});
   </script>
 
-  <!-- Lightbox for rules scans -->
+  <!-- Lightbox -->
   <script>
     (function(){
       const box = document.createElement('div');
       box.id = 'rulesLightbox';
       box.className = 'lightbox';
       box.setAttribute('aria-hidden','true');
-      box.setAttribute('role','dialog');
-      box.setAttribute('aria-label','Rules page preview');
       box.innerHTML = '<img alt="">';
       document.body.appendChild(box);
 
@@ -208,7 +209,7 @@
       document.querySelectorAll('.rules-grid a').forEach(a=>{
         a.addEventListener('click', e=>{
           e.preventDefault();
-          img.src = a.getAttribute('href');
+          img.src = a.href;
           box.setAttribute('aria-hidden','false');
         });
       });
@@ -217,5 +218,6 @@
       document.addEventListener('keydown', e=>{ if(box.getAttribute('aria-hidden')==='false' && e.key==='Escape') close(); });
     })();
   </script>
+
 </body>
 </html>
