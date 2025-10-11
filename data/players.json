@@ -154,6 +154,7 @@
   { "id": "p-p-leigh", "name": "P Leigh", "teamId": "alexashton", "HCP": 28, "captain": true, "aliases": ["P Leigh", "Leigh"] },
   { "id": "p-b-pregnall", "name": "B Pregnall", "teamId": "alexashton", "HCP": 21, "captain": false, "aliases": ["Pregnall"] },
   { "id": "p-paul-rayson", "name": "Paul Rayson", "teamId": "alexashton", "HCP": 0, "captain": false, "aliases": ["P Rayson", "Rayson"] },
+  { "id": "p-c-patel", "name": "C Patel", "teamId": "alexashton", "HCP": 21, "captain": false, "aliases": ["Patel"] },
   { "id": "p-d-shields", "name": "D Shields", "teamId": "alexashton", "HCP": -28, "captain": false, "aliases": ["Shields"] },
   { "id": "p-aaron-squire", "name": "Aaron Squire", "teamId": "alexashton", "HCP": 21, "captain": false, "aliases": ["A Squire", "Squire"] },
   { "id": "p-m-sigley", "name": "M Sigley", "teamId": "alexashton", "HCP": 7, "captain": false, "aliases": ["Sigley"] },
