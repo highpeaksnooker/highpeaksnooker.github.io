@@ -61,19 +61,24 @@
     nav.site-nav a:hover{background:rgba(255,255,255,.1)}
     nav.site-nav a.active{background:var(--accent);color:#0b1b0f}
 
-    /* Results */
+    /* Page */
     main.container{background:#fff;padding:1rem 12px 1.5rem;border-radius:10px;margin-top:10px;box-shadow:0 1px 2px rgba(0,0,0,.06)}
     h2{margin:.25rem 0 .5rem 0}
 
-    /* Scaled fit wrapper */
-    .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:8px;box-shadow:0 1px 2px rgba(0,0,0,.06);background:#fff}
-    #resultsWrap{position:relative;overflow:hidden} /* we control height when scaled */
+    /* Week sections */
+    .week{margin:18px 0 22px}
+    .week h3{
+      margin:0 0 8px;color:#0b1220;font-size:1.35rem
+    }
+    .week .rule{height:3px;background:var(--accent);border-radius:2px;margin:8px 0 10px}
 
-    table#resultsTable{width:100%;border-collapse:collapse;table-layout:auto;transform-origin:top left}
-    table#resultsTable th,table#resultsTable td{padding:.6rem .75rem;border-bottom:1px solid #e9e9e9;text-align:left}
-    table#resultsTable thead th{background:#eef1f5;color:#0f172a;font-weight:700;font-size:.95rem}
-    table#resultsTable tbody tr:nth-child(even){background:#fafafa}
-    table#resultsTable tbody tr:hover{background:#f1f7ff}
+    /* Table styling */
+    .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:8px;box-shadow:0 1px 2px rgba(0,0,0,.06);background:#fff}
+    table.match-table{width:100%;border-collapse:collapse}
+    table.match-table th,table.match-table td{padding:.6rem .75rem;border-bottom:1px solid #e9e9e9;text-align:left}
+    table.match-table thead th{background:#eef1f5;color:#0f172a;font-weight:700;font-size:.95rem}
+    table.match-table tbody tr:nth-child(even){background:#fafafa}
+    table.match-table tbody tr:hover{background:#f1f7ff}
 
     /* card button */
     .card-btn{
@@ -92,11 +97,10 @@
 
     footer{text-align:center;padding:1.5rem 1rem;color:#777}
 
-    /* Small-device padding tweak (content looks better when scaled) */
     @media (max-width:480px){
       :root{--banner-height:110px}
       .menu-toggle{font-size:.95rem;padding:9px 11px}
-      table#resultsTable th,table#resultsTable td{padding:.55rem .6rem}
+      table.match-table th,table.match-table td{padding:.55rem .6rem}
     }
   </style>
 </head>
@@ -135,23 +139,8 @@
 
   <main class="container">
     <h2>Match Results</h2>
-
-    <!-- Fit wrapper: we scale the table to the wrapper width on mobile portrait -->
-    <div id="resultsWrap" class="table-wrap">
-      <table id="resultsTable" aria-describedby="resultsCaption">
-        <caption id="resultsCaption">Weekly match results</caption>
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Home Team</th>
-            <th>Away Team</th>
-            <th>Total (incl. bonus)</th>
-            <th>Card</th>
-          </tr>
-        </thead>
-        <tbody id="resultsTbody"></tbody>
-      </table>
-    </div>
+    <!-- Week sections render here -->
+    <div id="results"></div>
   </main>
 
   <!-- Image Modal -->
@@ -190,7 +179,7 @@
       .catch(()=>{});
   </script>
 
-  <!-- Results logic + Auto Fit-to-screen in portrait -->
+  <!-- Results: group by date + modal -->
   <script>
     (async function(){
       try{
@@ -200,14 +189,10 @@
         ]);
 
         const teamById = Object.fromEntries(teams.map(t => [t.id, t.name]));
-        const tbody = document.getElementById('resultsTbody');
-        tbody.innerHTML = '';
+        // remove void/postponed
+        const clean = matches.filter(m=>m.status!=='postponed' && m.status!=='void');
 
-        // newest first
-        matches.sort((a,b)=> new Date(b.date) - new Date(a.date));
-
-        // Count frames and then apply bonus rule:
-        // Home win => +2 bonus to home. Away win => +3 bonus to away.
+        // helper: count frames + bonus
         function frameCounts(m){
           if (typeof m.homeFrames==='number' && typeof m.awayFrames==='number'){
             return {home:m.homeFrames, away:m.awayFrames};
@@ -224,35 +209,71 @@
         function totalsWithBonus(m){
           const {home,away} = frameCounts(m);
           let H = home, A = away;
-          if (H > A) H += 2;             // home win bonus
-          else if (A > H) A += 3;        // away win bonus (2 + 1 extra)
+          if (H > A) H += 2;          // home win bonus
+          else if (A > H) A += 3;     // away win bonus
           return {home:H, away:A};
         }
+        const fmtWeek = d =>
+          new Date(d).toLocaleDateString('en-GB',{weekday:'short', day:'2-digit', month:'short', year:'numeric'});
 
-        const fmt = d => new Date(d).toLocaleDateString('en-GB',{day:'2-digit',month:'2-digit',year:'numeric'});
-
-        for (const m of matches){
-          if (m.status === 'postponed' || m.status === 'void') continue;
-          const {home,away} = totalsWithBonus(m);
-          if (home===0 && away===0) continue;
-
-          const tr = document.createElement('tr');
-          const homeName = teamById[m.homeTeamId] || m.homeTeamId || '—';
-          const awayName = teamById[m.awayTeamId] || m.awayTeamId || '—';
-
-          const imgFile = m.image && String(m.image).trim() ? String(m.image).trim() : null;
-
-          tr.innerHTML = `
-            <td>${fmt(m.date)}</td>
-            <td>${homeName}</td>
-            <td>${awayName}</td>
-            <td>${home} - ${away}</td>
-            <td>${imgFile ? `<button class="card-btn" data-img="${imgFile}" title="View match card" aria-label="View match card">🖼️</button>` : ''}</td>
-          `;
-          tbody.appendChild(tr);
+        // group by date (YYYY-MM-DD)
+        const byDate = new Map();
+        for (const m of clean){
+          const key = m.date;
+          if (!byDate.has(key)) byDate.set(key, []);
+          byDate.get(key).push(m);
         }
 
-        // Modal open/close + resilient image loader
+        // render newest date first
+        const dates = Array.from(byDate.keys()).sort((a,b)=> new Date(b) - new Date(a));
+        const host = document.getElementById('results');
+        host.innerHTML = '';
+
+        for (const d of dates){
+          const section = document.createElement('section');
+          section.className = 'week';
+
+          section.innerHTML = `
+            <h3>${fmtWeek(d)}</h3>
+            <div class="rule"></div>
+            <div class="table-wrap">
+              <table class="match-table" aria-label="Results for ${fmtWeek(d)}">
+                <thead>
+                  <tr>
+                    <th>Home</th>
+                    <th>Away</th>
+                    <th>Total (incl. bonus)</th>
+                    <th>Card</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          `;
+          const tbody = section.querySelector('tbody');
+
+          for (const m of byDate.get(d)){
+            const {home,away} = totalsWithBonus(m);
+            if (home===0 && away===0) continue;
+
+            const tr = document.createElement('tr');
+            const homeName = teamById[m.homeTeamId] || m.homeTeamId || '—';
+            const awayName = teamById[m.awayTeamId] || m.awayTeamId || '—';
+            const imgFile = m.image && String(m.image).trim() ? String(m.image).trim() : null;
+
+            tr.innerHTML = `
+              <td>${homeName}</td>
+              <td>${awayName}</td>
+              <td>${home} - ${away}</td>
+              <td>${imgFile ? `<button class="card-btn" data-img="${imgFile}" title="View match card" aria-label="View match card">🖼️</button>` : ''}</td>
+            `;
+            tbody.appendChild(tr);
+          }
+
+          host.appendChild(section);
+        }
+
+        /* ===== Modal image loader ===== */
         const modal = document.getElementById('imgModal');
         const imgEl = document.getElementById('matchImg');
         const errEl = document.getElementById('imgError');
@@ -271,13 +292,11 @@
           }
           return [...withGiven, ...combos];
         }
-
         function openImage(imgFile){
           const candidates = buildCandidates(imgFile);
           let idx = 0;
           errEl.hidden = true;
           imgEl.removeAttribute('hidden');
-
           imgEl.onerror = function(){
             idx++;
             if (idx < candidates.length){
@@ -293,9 +312,7 @@
 
         document.addEventListener('click', (e)=>{
           const btn = e.target.closest('.card-btn');
-          if (btn && btn.dataset.img){
-            openImage(btn.dataset.img);
-          }
+          if (btn && btn.dataset.img){ openImage(btn.dataset.img); }
           if (e.target.id==='modalClose' || e.target===modal){
             modal.classList.remove('open');
             imgEl.src='about:blank';
@@ -307,42 +324,6 @@
             imgEl.src='about:blank';
           }
         });
-
-        /* ===== Auto fit-to-screen for portrait phones ===== */
-        const wrap = document.getElementById('resultsWrap');
-        const table = document.getElementById('resultsTable');
-
-        function applyFit(){
-          // Only try to fit on narrow portrait screens
-          const isPortrait = window.matchMedia('(orientation: portrait)').matches;
-          const isNarrow   = window.matchMedia('(max-width: 600px)').matches;
-
-          // Reset first to measure natural size
-          table.style.transform = 'none';
-          wrap.style.height = '';
-
-          if (!isPortrait || !isNarrow) return;
-
-          const wrapW = wrap.clientWidth || window.innerWidth;
-          const tableW = table.scrollWidth;
-
-          // Scale down if the table is wider than the wrapper
-          const scale = Math.min(1, wrapW / Math.max(1, tableW));
-
-          const naturalH = table.offsetHeight; // height before scaling
-          table.style.transformOrigin = 'top left';
-          table.style.transform = `scale(${scale})`;
-          wrap.style.height = (naturalH * scale) + 'px';
-        }
-
-        // Re-fit when rows are added, on resize and orientation changes
-        const ro = new ResizeObserver(applyFit);
-        ro.observe(table);
-        window.addEventListener('resize', applyFit, {passive:true});
-        window.addEventListener('orientationchange', applyFit, {passive:true});
-
-        // Initial fit (after rows are rendered)
-        setTimeout(applyFit, 0);
 
       }catch(e){
         console.warn('Results load failed:', e);
