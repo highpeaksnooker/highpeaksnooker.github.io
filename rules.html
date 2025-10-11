@@ -66,32 +66,55 @@
     main.container{background:#fff;padding:1rem 12px 1.5rem;border-radius:10px;margin-top:10px;box-shadow:0 1px 2px rgba(0,0,0,.06)}
     h2{margin:.25rem 0 1rem 0}
     .card{background:#fff;border:1px solid #e6e6e6;border-radius:10px;padding:12px;margin-bottom:14px}
-    ol{margin:.5rem 0 0 1.25rem;padding:0}
-    li{margin:.3rem 0}
     footer{text-align:center;padding:1.5rem 1rem;color:#777}
 
-    /* ===== Rules scans (grid + lightbox) ===== */
-    .rules-card h3{margin:.25rem 0 .5rem}
-    .rules-grid{
-      display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-      gap:10px;margin-top:.5rem
+    /* ===== PDF tile ===== */
+    .pdf-card{
+      display:block;position:relative;border:1px solid #e6e6e6;border-radius:12px;overflow:hidden;
+      background:#fafafa;box-shadow:0 1px 2px rgba(0,0,0,.04);text-decoration:none;color:inherit
     }
-    .rules-grid a{
-      display:block;background:#fafafa;border:1px solid #e6e6e6;border-radius:10px;
-      overflow:hidden;box-shadow:0 1px 2px rgba(0,0,0,.04)
+    .pdf-thumb{
+      display:block;width:100%;aspect-ratio:3/4;object-fit:cover;background:#f1f5f9
     }
-    .rules-grid img{width:100%;height:320px;object-fit:cover;display:block}
-    .lightbox{
-      position:fixed;inset:0;display:none;align-items:center;justify-content:center;
-      background:rgba(0,0,0,.85);z-index:1200;padding:16px
+    .pdf-meta{
+      display:flex;align-items:center;justify-content:space-between;gap:10px;
+      padding:10px 12px;font-weight:600
     }
-    .lightbox img{max-width:95vw;max-height:90vh;display:block;border-radius:6px}
-    .lightbox[aria-hidden="false"]{display:flex}
+    .pdf-badge{
+      font-size:.8rem;background:var(--accent);color:#072814;padding:4px 8px;border-radius:999px
+    }
+
+    /* ===== Modal (PDF viewer) ===== */
+    .modal{
+      position:fixed;inset:0;background:rgba(0,0,0,.75);display:none;align-items:center;justify-content:center;
+      padding:12px;z-index:1300
+    }
+    .modal.open{display:flex}
+    .modal-panel{
+      width:min(1100px,96vw);height:min(92vh,1100px);background:#0b0b0b;border-radius:12px;position:relative;overflow:hidden;
+      display:flex;flex-direction:column
+    }
+    .modal-header{
+      display:flex;align-items:center;justify-content:space-between;padding:8px 10px;background:#111;color:#fff
+    }
+    .modal-header a{color:#9ae6b4;font-weight:700;text-decoration:none}
+    .modal-close{
+      background:#fff;border:none;border-radius:8px;padding:6px 10px;font-weight:800;cursor:pointer;color:#111
+    }
+    .modal-body{flex:1;background:#222}
+    .modal-body iframe,.modal-body embed{
+      width:100%;height:100%;border:0;display:block;background:#222
+    }
+
+    /* Fallback thumbnail placeholder (inline SVG container) */
+    .thumb-fallback{
+      position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:#edf2f7
+    }
+    .thumb-fallback svg{width:38%;max-width:260px;height:auto;opacity:.6}
 
     @media (max-width:480px){
       :root{--banner-height:110px}
       .menu-toggle{font-size:.95rem;padding:9px 11px}
-      .rules-grid img{height:240px}
     }
   </style>
 </head>
@@ -100,7 +123,7 @@
   <!-- Crest banner -->
   <header class="logo-header" role="banner">
     <div class="logo-banner">
-      <img src="logo.PNG?v=14" alt="High Peak &amp; Marple Snooker League crest">
+      <img src="logo.PNG?v=16" alt="High Peak &amp; Marple Snooker League crest">
     </div>
   </header>
 
@@ -131,42 +154,43 @@
   <main class="container">
     <h2>League Rules</h2>
 
-    <!-- Example summary -->
-    <div class="card">
-      <ol>
-        <li>Matches consist of 6 frames unless otherwise agreed by captains.</li>
-        <li>Standard WPBSA snooker rules apply unless stated here.</li>
-        <li>Start time is 7:30pm unless mutually agreed in advance.</li>
-        <li>Phones must be silent during play.</li>
-        <li>Captains must submit results within 24 hours of the match ending.</li>
-      </ol>
-    </div>
-
-    <!-- Full rules section -->
-    <section class="card rules-card" aria-labelledby="full-rules-heading">
-      <h3 id="full-rules-heading">Full Rules (Scans)</h3>
-      <p>Tap a page to enlarge. You can also 
-        <a href="pdfs/LeagueRules.pdf" target="_blank" rel="noopener">
-          download the full rules as a PDF
-        </a>.
-      </p>
-
-      <div class="rules-grid">
-        <a href="pdfs/rules-1.jpg" aria-label="Open rules page 1">
-          <img src="pdfs/rules-1.jpg" alt="League rules, page 1">
-        </a>
-        <a href="pdfs/rules-2.jpg" aria-label="Open rules page 2">
-          <img src="pdfs/rules-2.jpg" alt="League rules, page 2">
-        </a>
-        <a href="pdfs/rules-3.jpg" aria-label="Open rules page 3">
-          <img src="pdfs/rules-3.jpg" alt="League rules, page 3">
-        </a>
-        <a href="pdfs/rules-4.jpg" aria-label="Open rules page 4">
-          <img src="pdfs/rules-4.jpg" alt="League rules, page 4">
-        </a>
+    <!-- Single PDF tile -->
+    <a id="pdfTile" href="pdfs/LeagueRules.pdf" class="pdf-card" aria-label="Open League Rules PDF">
+      <!-- If you add a real cover image at pdfs/league-rules-cover.jpg it will be used.
+           Otherwise a nice placeholder icon appears. -->
+      <img class="pdf-thumb" id="pdfThumb" src="pdfs/league-rules-cover.jpg" alt="League Rules PDF cover" loading="lazy">
+      <div class="thumb-fallback" id="thumbFallback" hidden>
+        <!-- simple inline PDF icon -->
+        <svg viewBox="0 0 64 64" role="img" aria-label="PDF">
+          <path fill="#dc2626" d="M12 2h28l12 12v48H12z"/>
+          <path fill="#f3f4f6" d="M40 2v12h12"/>
+          <rect x="15" y="38" width="34" height="16" rx="3" fill="#111"/>
+          <text x="32" y="50" text-anchor="middle" font-size="12" font-family="system-ui,Segoe UI,Arial" fill="#f9fafb">PDF</text>
+        </svg>
       </div>
-    </section>
+      <div class="pdf-meta">
+        <span>High Peak &amp; Marple — League Rules</span>
+        <span class="pdf-badge">View PDF</span>
+      </div>
+    </a>
   </main>
+
+  <!-- PDF modal -->
+  <div id="pdfModal" class="modal" role="dialog" aria-modal="true" aria-label="League Rules PDF">
+    <div class="modal-panel">
+      <div class="modal-header">
+        <strong>League Rules (PDF)</strong>
+        <div style="display:flex;gap:10px;align-items:center">
+          <a id="openNewTab" href="pdfs/LeagueRules.pdf" target="_blank" rel="noopener">Open in new tab</a>
+          <button class="modal-close" id="pdfClose" aria-label="Close">✕</button>
+        </div>
+      </div>
+      <div class="modal-body">
+        <!-- Browser PDF viewer with zoom controls (varies by browser) -->
+        <iframe id="pdfFrame" src="" title="League Rules PDF"></iframe>
+      </div>
+    </div>
+  </div>
 
   <footer>&copy; 2025 High Peak &amp; Marple Snooker League</footer>
 
@@ -195,29 +219,43 @@
       .catch(()=>{});
   </script>
 
-  <!-- Lightbox -->
+  <!-- PDF tile + modal logic -->
   <script>
     (function(){
-      const box = document.createElement('div');
-      box.id = 'rulesLightbox';
-      box.className = 'lightbox';
-      box.setAttribute('aria-hidden','true');
-      box.innerHTML = '<img alt="">';
-      document.body.appendChild(box);
+      const PDF_URL = 'pdfs/LeagueRules.pdf';
+      const tile = document.getElementById('pdfTile');
+      const frame = document.getElementById('pdfFrame');
+      const modal = document.getElementById('pdfModal');
+      const closeBtn = document.getElementById('pdfClose');
+      const thumb = document.getElementById('pdfThumb');
+      const fallback = document.getElementById('thumbFallback');
 
-      const img = box.querySelector('img');
-      document.querySelectorAll('.rules-grid a').forEach(a=>{
-        a.addEventListener('click', e=>{
-          e.preventDefault();
-          img.src = a.href;
-          box.setAttribute('aria-hidden','false');
-        });
+      // If the cover image doesn't exist, show the inline placeholder.
+      thumb.addEventListener('error', ()=>{ fallback.hidden = false; thumb.hidden = true; }, {once:true});
+
+      // Open modal (use built-in PDF viewer; add fit-to-width hint for some browsers)
+      function openPDF(){
+        frame.src = PDF_URL + '#view=FitH';
+        modal.classList.add('open');
+      }
+      function closePDF(){
+        modal.classList.remove('open');
+        frame.src = 'about:blank';
+      }
+
+      tile.addEventListener('click', (e)=>{
+        // Prevent full-page navigation; open our modal instead.
+        e.preventDefault();
+        openPDF();
       });
-      function close(){ box.setAttribute('aria-hidden','true'); img.removeAttribute('src'); }
-      box.addEventListener('click', e=>{ if(e.target===box) close(); });
-      document.addEventListener('keydown', e=>{ if(box.getAttribute('aria-hidden')==='false' && e.key==='Escape') close(); });
+
+      closeBtn.addEventListener('click', closePDF);
+      modal.addEventListener('click', (e)=>{ if(e.target===modal) closePDF(); });
+      document.addEventListener('keydown', (e)=>{ if(e.key==='Escape' && modal.classList.contains('open')) closePDF(); });
+
+      // Ensure the “Open in new tab” link points at the same PDF
+      document.getElementById('openNewTab').href = PDF_URL;
     })();
   </script>
-
 </body>
 </html>
