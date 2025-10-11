@@ -22,7 +22,6 @@
   { "id": "p-ash-garside", "name": "Ash Garside", "teamId": "denton-lib", "HCP": -35, "captain": false, "aliases": ["A Garside", "Garside"] },
   { "id": "p-r-green", "name": "R Green", "teamId": "denton-lib", "HCP": 0, "captain": false, "aliases": ["Green"] },
   { "id": "p-eric-kwan", "name": "Eric Kwan", "teamId": "denton-lib", "HCP": -35, "captain": false, "aliases": ["E Kwan", "Kwan"] },
-  { "id": "p-k-mistry", "name": "K Mistry", "teamId": "denton-lib", "HCP": 21, "captain": false, "aliases": ["K Mistry", "Mistry"] },
   { "id": "p-s-mistry", "name": "S Mistry", "teamId": "denton-lib", "HCP": 7, "captain": false, "aliases": ["S Mistry", "Mistry"] },
   { "id": "p-aj-patel", "name": "A.J. Patel", "teamId": "denton-lib", "HCP": -21, "captain": false, "aliases": ["AJ Patel", "A Patel", "Patel"] },
 
@@ -158,5 +157,6 @@
   { "id": "p-d-shields", "name": "D Shields", "teamId": "alexashton", "HCP": -28, "captain": false, "aliases": ["Shields"] },
   { "id": "p-aaron-squire", "name": "Aaron Squire", "teamId": "alexashton", "HCP": 21, "captain": false, "aliases": ["A Squire", "Squire"] },
   { "id": "p-m-sigley", "name": "M Sigley", "teamId": "alexashton", "HCP": 7, "captain": false, "aliases": ["Sigley"] },
+  { "id": "p-k-mistry", "name": "K Mistry", "teamId": "alexashton", "HCP": 21, "captain": false, "aliases": ["K Mistry", "Mistry"] },
   { "id": "p-chris-joy", "name": "Chris Joy", "teamId": "tintwistle2", "HCP": 14, "captain": false, "aliases": ["C Joy", "Joy"] }
 ]
