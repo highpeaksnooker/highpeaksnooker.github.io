@@ -123,6 +123,7 @@
   { "id": "p-tony-ryan", "name": "Tony Ryan", "teamId": "hayfield-2", "HCP": 14, "captain": false, "aliases": ["T Ryan", "Ryan"] },
   { "id": "p-mark-snelling", "name": "Mark Snelling", "teamId": "hayfield-2", "HCP": 21, "captain": false, "aliases": ["M Snelling", "Snelling"] },
   { "id": "p-dean-taylor", "name": "Dean Taylor", "teamId": "hayfield-2", "HCP": 14, "captain": true, "aliases": ["D Taylor", "Taylor"] },
+  { "id": "p-d-hayes", "name": "Dan Hayes", "teamId": "hayfield-2", "HCP": 14, "captain": false, "aliases": ["D Hayes", "Hayes"] },
 
   { "id": "p-l-benstead", "name": "L Benstead", "teamId": "chinley", "HCP": 14, "captain": false, "aliases": ["Benstead"] },
   { "id": "p-a-carr", "name": "A Carr", "teamId": "chinley", "HCP": 14, "captain": false, "aliases": ["Carr"] },
