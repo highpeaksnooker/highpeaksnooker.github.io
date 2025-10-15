@@ -12,9 +12,12 @@
   :root{
     --brand-green:#002b19; --banner-height:140px; --page-max:1100px; --accent:#19d36b;
     --bar-dark:#1f1f1f; --bar-border:#2a2a2a; --overlay-bg:rgba(15,17,22,.85);
-    /* desktop/base widths */
-    --w-name:200px; --w-team:180px; --w-hcp:56px; --w-week:40px; --w-pwl:44px;
-    --w-diff:54px; --w-25:52px; --w-hi:88px; --grid-font:.92rem;
+
+    /* base widths (JS will auto-fit --w-week) */
+    --w-name:200px; --w-team:180px; --w-hcp:56px;
+    --w-week:40px;  /* will be resized dynamically */
+    --w-pwl:44px; --w-diff:54px; --w-25:52px; --w-hi:88px;
+    --grid-font:.92rem;
   }
   html,body{margin:0}
   body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#f7f8fb;color:#0b1220}
@@ -55,7 +58,7 @@
   .tab-btn{margin:0;padding:.35em .7em;border:none;border-radius:6px;font-weight:700;cursor:pointer;color:#000}
   .tab-btn.active{box-shadow:0 0 0 2px #333 inset}
 
-  /* Team colour bands (row background tint) */
+  /* Team colour bands */
   tr.team-color-0{background-color:#e6f4ff}
   tr.team-color-1{background-color:#e6ffe6}
   tr.team-color-2{background-color:#fff0e6}
@@ -102,7 +105,7 @@
   .col-b-count{width:70px;text-align:center}
   .col-b-high{width:90px;text-align:center}
   .col-b-list{width:auto}
-  .star{color:#eab308; filter: drop-shadow(0 0 1px rgba(0,0,0,.35));} /* golden star */
+  .star{color:#eab308; filter: drop-shadow(0 0 1px rgba(0,0,0,.35));}
 
   footer{text-align:center;padding:1.2rem 1rem;color:#777}
 
@@ -154,9 +157,7 @@
 
 <main class="container">
   <h2>Merit</h2>
-  <p class="legend">Filter by team or view all players. Switch to Breaks to see every 25+ break.
-    <span style="margin-left:.6rem">⭐ = current league high-break holder</span>
-  </p>
+  <p class="legend">Filter by team or view all players. Week columns auto-shrink (W1–W18). ⭐ marks current high-break holder.</p>
 
   <div class="view-tabs">
     <button class="view-btn active" data-view="merit">Merit Table</button>
@@ -168,7 +169,7 @@
     <div class="table-scroller">
       <table id="playersGrid" class="player-grid" aria-describedby="meritHeatmap"></table>
     </div>
-    <p id="meritHeatmap" class="visually-hidden">Player weekly results grid with wins/losses by date and totals.</p>
+    <p id="meritHeatmap" class="visually-hidden">Player weekly results grid with wins/losses by week (W1..W18) and totals.</p>
   </section>
 
   <section id="view-breaks" hidden>
@@ -222,9 +223,11 @@
     .catch(()=>{});
 </script>
 
-<!-- Merit / Breaks logic with highest-break ⭐ -->
+<!-- Merit / Breaks logic (W1..W18 with auto-fit week width) -->
 <script>
 (async function () {
+  const WEEK_MAX = 18; // render W1..W18
+
   const [teams, players, fixtures, matches] = await Promise.all([
     fetch('data/teams.json',{cache:'no-store'}).then(r=>r.json()),
     fetch('data/players.json',{cache:'no-store'}).then(r=>r.json()),
@@ -245,17 +248,19 @@
   function escapeHtml(s=''){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
   function toBreakList(x){ if(Array.isArray(x)) return x.filter(n=>typeof n==='number'); if(typeof x==='number') return [x]; return []; }
 
+  // Confirmed dates from completed matches
   const completedMatches = matches.filter(isComplete);
   const dateSet = new Set(completedMatches.map(m => m.date));
-  const confirmedDates = Array.from(dateSet).sort((a,b)=>new Date(a)-new Date(b));
+  const confirmedDatesAll = Array.from(dateSet).sort((a,b)=>new Date(a)-new Date(b));
+  const weekDates = confirmedDatesAll.slice(0, WEEK_MAX); // cap at 18
 
-  /* Mark “NA” weeks for teams without a fixture */
+  // Which teams had fixtures on those dates
   const teamHasFixture = {};
-  for (const d of confirmedDates){ teamHasFixture[d] = {}; teams.forEach(t=>teamHasFixture[d][t.id]=false); }
+  for (const d of weekDates){ teamHasFixture[d] = {}; teams.forEach(t=>teamHasFixture[d][t.id]=false); }
   completedMatches.forEach(m=>{ if(teamHasFixture[m.date]){ teamHasFixture[m.date][m.homeTeamId]=true; teamHasFixture[m.date][m.awayTeamId]=true; }});
   fixtures.forEach(f=>{ if(teamHasFixture[f.date]){ teamHasFixture[f.date][f.homeTeamId]=true; teamHasFixture[f.date][f.awayTeamId]=true; }});
 
-  /* Player rows + breaks accumulator */
+  // Player rows + breaks accumulator
   const P = {};
   const breaksByPlayer = {};
   players.forEach(p=>{
@@ -263,24 +268,25 @@
       id:p.id, name:p.name, teamId:p.teamId,
       teamName:teamById[p.teamId]?.name || '',
       HCP: p.HCP ?? p.hcp ?? 0,
-      perDate: Object.fromEntries(confirmedDates.map(d=>[d,'blank'])),
+      perDate: Object.fromEntries(weekDates.map(d=>[d,'blank'])),
       totals: { played:0, won:0, lost:0, diff:0, break25:0, high:0, winPct:0 }
     };
     breaksByPlayer[p.id] = { name:p.name, teamName:teamById[p.teamId]?.name || '', list:[], high:0 };
   });
 
-  if (confirmedDates.length){
+  if (weekDates.length){
     for (const p of players){
-      for (const d of confirmedDates){
+      for (const d of weekDates){
         if (!teamHasFixture[d][p.teamId]) P[p.id].perDate[d] = 'na';
       }
     }
   }
 
   function recordFrame(frame, isHome, date){
+    if (!weekDates.includes(date)) return;
     const pid = isHome ? frame.homePlayerId : frame.awayPlayerId;
     const row = P[pid];
-    if (!row || !confirmedDates.includes(date)) return;
+    if (!row) return;
 
     if (row.perDate[date] !== 'na'){
       const win = frame.winner === 'home' ? isHome : frame.winner === 'away' ? !isHome : null;
@@ -297,7 +303,6 @@
       breaksByPlayer[pid].high = Math.max(breaksByPlayer[pid].high, ...plus25);
     }
   }
-
   completedMatches.forEach(m=>{
     if (!Array.isArray(m.frames)) return;
     m.frames.forEach(fr=>{
@@ -311,13 +316,12 @@
     r.totals.winPct = r.totals.played ? (r.totals.won / r.totals.played) : 0;
   });
 
-  /* === Highest-break star calculation === */
+  // Highest-break star
   const leagueHigh = Math.max(0, ...Object.values(P).map(r => r.totals.high || 0));
   const highBreakHolders = new Set(
     Object.values(P).filter(r => (r.totals.high||0) === leagueHigh && leagueHigh>0).map(r => r.id)
   );
 
-  /* Sorting */
   function sortRows(rows){
     return rows.sort((a,b)=>{
       if (b.totals.won !== a.totals.won) return b.totals.won - a.totals.won;
@@ -328,7 +332,7 @@
     });
   }
 
-  /* Team tabs */
+  // Team tabs
   const tabs = document.getElementById('teamTabs');
   const ALL='__all__';
   function mkBtn(id,label,colorClass){
@@ -356,7 +360,38 @@
   const startBtn=[...tabs.children].find(b=>b.dataset.teamId===startId)||tabs.firstChild;
   startBtn.classList.add('active');
 
-  /* Render Merit table */
+  /* ===== Auto-fit week column width so W1..Wn fit in the viewport ===== */
+  function autoFitWeekWidth(tbl, weeksCount){
+    const scroller = tbl.parentElement; // .table-scroller
+    const visible = scroller.clientWidth || scroller.getBoundingClientRect().width || 0;
+    if (!visible) return;
+
+    // Temporarily use a small week width to measure fixed parts
+    tbl.style.setProperty('--w-week','32px');
+
+    const head = tbl.querySelector('thead tr');
+    if (!head) return;
+
+    // Sum widths of NON-week columns (name, team, HCP + totals)
+    // Week columns are indices [3 .. 3+weeksCount-1]
+    let fixedW = 0;
+    head.childNodes.forEach((th, idx)=>{
+      if (idx < 3 || idx >= 3 + weeksCount) {
+        fixedW += th.offsetWidth || 0;
+      }
+    });
+
+    const gutter = 8; // small buffer
+    const spaceForWeeks = Math.max(0, visible - fixedW - gutter);
+    const minW = 18;  // don't go unreadably small
+    const maxW = 44;  // don't grow too big
+    const perWeek = Math.floor(spaceForWeeks / Math.max(weeksCount,1));
+    const target = Math.max(minW, Math.min(maxW, perWeek));
+
+    tbl.style.setProperty('--w-week', target + 'px');
+  }
+
+  // Render Merit (with W1..Wn headers)
   function renderMerit(teamFilter){
     const tbl = document.getElementById('playersGrid');
 
@@ -367,24 +402,21 @@
        <th class="sticky-2 col-team">Team</th>
        <th class="sticky-3 col-hcp">HCP</th>`;
 
-    for (const d of confirmedDates){
+    weekDates.forEach((d, i)=>{
       const dt = new Date(d);
-      const short = dt.toLocaleDateString('en-GB',{day:'2-digit',month:'2-digit'});
-      const full  = dt.toLocaleDateString('en-GB',{day:'2-digit',month:'long',year:'numeric'});
+      const ddmmyyLong = dt.toLocaleDateString('en-GB',{day:'2-digit',month:'long',year:'numeric'});
       const th=document.createElement('th');
       th.className='col-week';
-      th.title = full;
-      th.textContent = short;
+      th.title = ddmmyyLong;        // full date on tooltip
+      th.textContent = 'W' + (i+1); // header label
       thRow.appendChild(th);
-    }
+    });
 
-    const compactHeads = [
-      ['P','col-p'],['W','col-w'],['L','col-l'],
-      ['+/-','col-diff'],['25+','col-25'],['High Break','col-hi']
-    ];
-    for (const [label,cls] of compactHeads){
-      const th=document.createElement('th'); th.textContent=label; th.className=cls; thRow.appendChild(th);
-    }
+    [['P','col-p'],['W','col-w'],['L','col-l'],['+/-','col-diff'],['25+','col-25'],['High Break','col-hi']]
+      .forEach(([label,cls])=>{
+        const th=document.createElement('th'); th.textContent=label; th.className=cls; thRow.appendChild(th);
+      });
+
     thead.appendChild(thRow);
 
     const tbody = document.createElement('tbody');
@@ -393,8 +425,8 @@
                                               : rows.filter(r => r.teamId === teamFilter && r.totals.played > 0);
     rows = sortRows(rows);
 
-    for (const r of rows){
-      const isHighHolder = highBreakHolders.has(r.id);
+    rows.forEach(r=>{
+      const isHighHolder = (r.totals.high||0)>0 && (r.totals.high === Math.max(...Object.values(P).map(x=>x.totals.high||0)));
       const star = isHighHolder ? ' <span class="star" aria-label="High break holder" title="High break holder">⭐</span>' : '';
 
       const tr = document.createElement('tr');
@@ -404,35 +436,29 @@
         <td class="sticky-2 col-team">${escapeHtml(r.teamName)}</td>
         <td class="sticky-3 col-hcp">${r.HCP}</td>`;
 
-      for (const d of confirmedDates){
+      weekDates.forEach(d=>{
         const v = r.perDate[d];
         let cls='cell-blank', text='';
         if (v==='W') { cls='cell-w'; text='W'; }
         else if (v==='L') { cls='cell-l'; text='L'; }
         else if (v==='na'){ cls='cell-na'; }
         const td=document.createElement('td'); td.className=`col-week ${cls}`; td.textContent=text; tr.appendChild(td);
-      }
+      });
 
       const T=r.totals;
-      const hiCell = isHighHolder
-        ? `${T.high || 0} <span class="star" aria-hidden="true">⭐</span>`
-        : `${T.high || 0}`;
-
       tr.insertAdjacentHTML('beforeend',
         `<td class="col-p">${T.played}</td>
          <td class="col-w">${T.won}</td>
          <td class="col-l">${T.lost}</td>
          <td class="col-diff">${T.diff}</td>
          <td class="col-25">${T.break25}</td>
-         <td class="col-hi">${hiCell}</td>`);
+         <td class="col-hi">${T.high || 0}</td>`);
       tbody.appendChild(tr);
-    }
+    });
 
     tbl.replaceChildren(thead, tbody);
-    setStickyOffsets(tbl);
-  }
 
-  function setStickyOffsets(tbl){
+    // sticky offsets for first 3 cols
     const headRow = tbl.querySelector('thead tr');
     const firstRow = tbl.querySelector('tbody tr');
     const w0 = (headRow?.children[0]?.offsetWidth) || (firstRow?.children[0]?.offsetWidth) || 0;
@@ -440,17 +466,20 @@
     tbl.style.setProperty('--s0','0px');
     tbl.style.setProperty('--s1', w0+'px');
     tbl.style.setProperty('--s2', (w0+w1)+'px');
+
+    // finally, auto-fit week width to visible space
+    autoFitWeekWidth(tbl, weekDates.length);
   }
 
+  // Initial render
   renderMerit(startId);
 
-  /* Breaks view */
+  // Breaks view
   function renderBreaks(){
     const body = document.getElementById('breaksBody');
     body.innerHTML = '';
 
-    // sort by high break then count, then name
-    const seriesHigh = leagueHigh;
+    const seriesHigh = Math.max(0, ...Object.values(breaksByPlayer).map(b => b.high || 0));
     const rows = Object.entries(breaksByPlayer)
       .map(([pid,info])=>{
         const list = [...info.list].sort((a,b)=>b-a);
@@ -474,7 +503,7 @@
   }
   renderBreaks();
 
-  /* View switcher */
+  // View switcher
   document.querySelectorAll('.view-btn').forEach(btn=>{
     btn.addEventListener('click',()=>{
       document.querySelectorAll('.view-btn').forEach(b=>b.classList.remove('active'));
@@ -482,16 +511,27 @@
       const v = btn.dataset.view;
       document.getElementById('view-merit').hidden = (v!=='merit');
       document.getElementById('view-breaks').hidden = (v!=='breaks');
+      // recalc when returning to merit view
+      if (v==='merit'){
+        const tbl=document.getElementById('playersGrid');
+        if (tbl){
+          // ensure week width is re-fitted to current viewport
+          const weeksCount = tbl.querySelectorAll('thead th.col-week').length;
+          autoFitWeekWidth(tbl, weeksCount);
+        }
+      }
     });
   });
 
-  /* Recompute sticky offsets on resize */
+  // Recompute on resize (debounced)
   let resizeTimer;
   window.addEventListener('resize', () => {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(()=>{
       const tbl=document.getElementById('playersGrid');
-      if (tbl) setStickyOffsets(tbl);
+      if (!tbl) return;
+      const weeksCount = tbl.querySelectorAll('thead th.col-week').length;
+      autoFitWeekWidth(tbl, weeksCount);
     }, 100);
   }, { passive:true });
 
