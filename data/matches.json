@@ -934,6 +934,237 @@
         "winner": "home"
       }
     ]
+  },
+[
+  {
+    "id": "m-2025-10-22-denton-lib-v-hayfield-2",
+    "date": "2025-10-22",
+    "homeTeamId": "denton-lib",
+    "awayTeamId": "hayfield-2",
+    "homeFrames": 3,
+    "awayFrames": 2,
+    "frames": [
+      {
+        "homePlayerId": "p-ash-garside",
+        "awayPlayerId": "p-mark-enright",
+        "homePoints": 86,
+        "awayPoints": 109,
+        "winner": "away"
+      },
+      {
+        "homePlayerId": "p-s-mistry",
+        "awayPlayerId": "p-dean-taylor",
+        "homePoints": 64,
+        "awayPoints": 30,
+        "winner": "home"
+      },
+      {
+        "homePlayerId": "p-r-green",
+        "awayPlayerId": "p-d-hayes",
+        "homePoints": 80,
+        "awayPoints": 45,
+        "winner": "home"
+      },
+      {
+        "homePlayerId": "p-m-derbyshire",
+        "awayPlayerId": "p-mark-snelling",
+        "homePoints": 52,
+        "awayPoints": 60,
+        "winner": "away"
+      },
+      {
+        "homePlayerId": "p-eric-kwan",
+        "awayPlayerId": "p-paul-glover",
+        "homePoints": 93,
+        "awayPoints": 71,
+        "winner": "home"
+      }
+    ]
+  },
+  {
+    "id": "m-2025-10-22-whaley-2-v-whaley-1",
+    "date": "2025-10-22",
+    "homeTeamId": "whaley-2",
+    "awayTeamId": "whaley-1",
+    "homeFrames": 2,
+    "awayFrames": 3,
+    "frames": [
+      {
+        "homePlayerId": "p-lee-jones",
+        "awayPlayerId": "p-jack-scowen",
+        "homePoints": 23,
+        "awayPoints": 71,
+        "winner": "away"
+      },
+      {
+        "homePlayerId": "p-scott-barnard",
+        "awayPlayerId": "p-j-howard",
+        "homePoints": 33,
+        "awayPoints": 83,
+        "winner": "away",
+        "breaks": { "away": 30 }
+      },
+      {
+        "homePlayerId": "p-f-lee",
+        "awayPlayerId": "p-james-golpin",
+        "homePoints": 39,
+        "awayPoints": 82,
+        "winner": "away"
+      },
+      {
+        "homePlayerId": "p-b-walker",
+        "awayPlayerId": "p-adam-rogers",
+        "homePoints": 62,
+        "awayPoints": 33,
+        "winner": "home"
+      },
+      {
+        "homePlayerId": "p-s-renshaw",
+        "awayPlayerId": "p-dan-golpin",
+        "homePoints": 68,
+        "awayPoints": 57,
+        "winner": "home"
+      }
+    ]
+  },
+  {
+    "id": "m-2025-10-22-marple-v-tintwistle1",
+    "date": "2025-10-22",
+    "homeTeamId": "marple",
+    "awayTeamId": "tintwistle1",
+    "homeFrames": 1,
+    "awayFrames": 4,
+    "frames": [
+      {
+        "homePlayerId": "p-nick-wilbourne",
+        "awayPlayerId": "p-shaun-robinson",
+        "homePoints": 68,
+        "awayPoints": 88,
+        "winner": "away",
+        "breaks": { "away": 27 }
+      },
+      {
+        "homePlayerId": "p-ryan-ritchie",
+        "awayPlayerId": "p-c-heyes",
+        "homePoints": 89,
+        "awayPoints": 103,
+        "winner": "away",
+        "breaks": { "away": 27 }
+      },
+      {
+        "homePlayerId": "p-glynn-evans",
+        "awayPlayerId": "p-s-crook",
+        "homePoints": 97,
+        "awayPoints": 39,
+        "winner": "home",
+        "breaks": { "home": 25 }
+      },
+      {
+        "homePlayerId": "p-d-burrows",
+        "awayPlayerId": "p-n-wilson",
+        "homePoints": 80,
+        "awayPoints": 84,
+        "winner": "away"
+      },
+      {
+        "homePlayerId": "p-geoff-flavell",
+        "awayPlayerId": "p-a-lawton",
+        "homePoints": 0,
+        "awayPoints": 1,
+        "winner": "away"
+      }
+    ]
+  },
+  {
+    "id": "m-2025-10-22-tintwistle2-v-alexashton",
+    "date": "2025-10-22",
+    "homeTeamId": "tintwistle2",
+    "awayTeamId": "alexashton",
+    "homeFrames": 3,
+    "awayFrames": 2,
+    "frames": [
+      {
+        "homePlayerId": "p-jack-wrigley",
+        "awayPlayerId": "p-simon-buckley",
+        "homePoints": 79,
+        "awayPoints": 57,
+        "winner": "home"
+      },
+      {
+        "homePlayerId": "p-k-hardman",
+        "awayPlayerId": "p-a-garbett",
+        "homePoints": 59,
+        "awayPoints": 52,
+        "winner": "home"
+      },
+      {
+        "homePlayerId": "p-d-rushby",
+        "awayPlayerId": "p-b-pregnall",
+        "homePoints": 28,
+        "awayPoints": 56,
+        "winner": "away"
+      },
+      {
+        "homePlayerId": "p-nick-small",
+        "awayPlayerId": "p-nigel-cave",
+        "homePoints": 85,
+        "awayPoints": 54,
+        "winner": "home"
+      },
+      {
+        "homePlayerId": "p-d-harrison",
+        "awayPlayerId": "p-p-leigh",
+        "homePoints": 35,
+        "awayPoints": 39,
+        "winner": "away"
+      }
+    ]
+  },
+  {
+    "id": "m-2025-10-22-hayfield-1-v-chinley",
+    "date": "2025-10-22",
+    "homeTeamId": "hayfield-1",
+    "awayTeamId": "chinley",
+    "homeFrames": 1,
+    "awayFrames": 4,
+    "frames": [
+      {
+        "homePlayerId": "p-a-lee",
+        "awayPlayerId": "p-b-doherty",
+        "homePoints": 33,
+        "awayPoints": 64,
+        "winner": "away"
+      },
+      {
+        "homePlayerId": "p-b-lonsdale",
+        "awayPlayerId": "p-d-thomas",
+        "homePoints": 47,
+        "awayPoints": 78,
+        "winner": "away"
+      },
+      {
+        "homePlayerId": "p-sam-lomas",
+        "awayPlayerId": "p-l-carr",
+        "homePoints": 74,
+        "awayPoints": 70,
+        "winner": "home",
+        "breaks": { "away": 36 }
+      },
+      {
+        "homePlayerId": "p-scott-lomas",
+        "awayPlayerId": "p-d-rowland",
+        "homePoints": 41,
+        "awayPoints": 69,
+        "winner": "away"
+      },
+      {
+        "homePlayerId": "p-p-lomas",
+        "awayPlayerId": "p-i-holland",
+        "homePoints": 55,
+        "awayPoints": 69,
+        "winner": "away"
+      }
+    ]
   }
 ]
 
