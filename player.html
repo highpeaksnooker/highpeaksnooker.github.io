@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Player Results — High Peak & Marple Snooker League</title>
+<link rel="icon" type="image/png" href="/logo.PNG" sizes="192x192">
+<link rel="apple-touch-icon" href="/logo.PNG">
+<link rel="preload" as="image" href="/logo.PNG">
+<link rel="stylesheet" href="style.css" />
+<style>
+  :root{
+    --page-max: 1100px;
+    --brand: #002b19;
+    --subtle: #f6f7f8;
+  }
+  body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif; margin:0; color:#111;}
+  header{background:var(--brand); color:#fff; padding:16px;}
+  header .wrap{max-width:var(--page-max); margin:0 auto; display:flex; align-items:center; gap:12px;}
+  header img{height:44px; width:44px; object-fit:contain}
+  main{max-width:var(--page-max); margin:24px auto; padding:0 16px 64px;}
+  h1{margin:0.2em 0 0.3em; font-size:1.8rem}
+  .picker{background:var(--subtle); padding:12px; border-radius:10px; margin-bottom:16px; display:flex; gap:8px; flex-wrap:wrap; align-items:center}
+  .picker input, .picker select{padding:10px 12px; font-size:1rem}
+  .stats{display:flex; gap:12px; flex-wrap:wrap; margin:12px 0 20px}
+  .stat{background:var(--subtle); border-radius:10px; padding:10px 12px;}
+  .tag{display:inline-block; padding:2px 8px; border-radius:999px; background:#e9f5ee; color:#0a5; font-weight:600; font-size:0.85rem}
+  table{width:100%; border-collapse:collapse; margin-top:8px; font-size:0.95rem}
+  thead th{position:sticky; top:0; background:#fff;}
+  th, td{border-bottom:1px solid #e9ecef; padding:10px 8px; text-align:left; vertical-align:middle}
+  tbody tr:hover{background:#fafafa}
+  .right{text-align:right}
+  .muted{color:#666}
+  .pill{display:inline-block; padding:2px 8px; border-radius:999px; font-weight:600; font-size:0.85rem}
+  .pill.win{background:#e6f7ed; color:#137b3f}
+  .pill.loss{background:#fdecec; color:#b42020}
+  .small{font-size:0.85rem}
+  .controls{display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-top:10px}
+  button{cursor:pointer; border:1px solid #cfd6dc; background:#fff; padding:8px 12px; border-radius:8px; font-weight:600}
+  button:hover{background:#f6f7f8}
+  .flex{display:flex; align-items:center; gap:10px; flex-wrap:wrap}
+  .spacer{flex:1}
+  .nowrap{white-space:nowrap}
+  .avatar{height:36px; width:36px; border-radius:50%; background:#dfe7e2; display:inline-flex; align-items:center; justify-content:center; font-weight:700; color:#1f513a}
+  .crumbs{margin:6px 0 0}
+  .crumbs a{color:#cfe9db}
+  .crumbs a:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <img src="/logo.PNG" alt="League logo">
+      <div>
+        <div class="crumbs small"><a href="/index.html">Home</a> · <a href="/players.html">Players</a> · Player Results</div>
+        <h1 id="pageTitle">Player Results</h1>
+      </div>
+      <div class="spacer"></div>
+      <div id="quickNav" class="flex small muted"></div>
+    </div>
+  </header>
+
+  <main>
+    <div class="picker" id="picker">
+      <label for="playerSelect" class="nowrap"><strong>Select player:</strong></label>
+      <select id="playerSelect"></select>
+      <input id="searchBox" placeholder="Search players…" />
+      <button id="goBtn">View results</button>
+      <div class="spacer"></div>
+      <div class="small muted">Tip: Link directly like <code>?player=p-glynn-evans</code></div>
+    </div>
+
+    <div id="playerHeader" class="flex" style="display:none">
+      <div class="avatar" id="avatar">P</div>
+      <div>
+        <div class="small muted" id="teamName">Team</div>
+        <div class="flex" style="gap:6px">
+          <h2 id="playerName" style="margin:0"></h2>
+          <span class="tag" id="hcpTag">HCP 0</span>
+        </div>
+      </div>
+      <div class="spacer"></div>
+      <div class="controls">
+        <button id="prevBtn" title="Previous player">◀ Prev</button>
+        <button id="nextBtn" title="Next player">Next ▶</button>
+        <button id="copyLinkBtn">Copy link</button>
+        <button id="exportCsvBtn">Export CSV</button>
+      </div>
+    </div>
+
+    <div id="summary" class="stats" style="display:none">
+      <div class="stat"><strong id="gamesPlayed">0</strong> frames</div>
+      <div class="stat"><strong id="wins">0</strong> wins</div>
+      <div class="stat"><strong id="losses">0</strong> losses</div>
+      <div class="stat"><strong id="diff">+0</strong> diff</div>
+    </div>
+
+    <div style="overflow:auto">
+      <table id="resultsTable" style="display:none">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Fixture</th>
+            <th>Home/Away</th>
+            <th>Opponent</th>
+            <th>Opponent Team</th>
+            <th class="right">Score</th>
+            <th>Result</th>
+            <th>Breaks</th>
+          </tr>
+        </thead>
+        <tbody id="resultsBody"></tbody>
+      </table>
+    </div>
+
+    <p id="noData" class="muted" style="display:none">No frames found for this player this season.</p>
+  </main>
+
+<script>
+(async function(){
+  // --------- Config: adjust paths if needed ----------
+  const PATH_PLAYERS = './data/players.json';
+  const PATH_TEAMS   = './data/teams.json';
+  const PATH_MATCHES = './data/matches.json';
+
+  // --------- Helpers ----------
+  const qs = new URLSearchParams(location.search);
+  const fmtDate = (s) => {
+    // Expect YYYY-MM-DD
+    if(!s) return '';
+    const [y,m,d] = s.split('-').map(n=>+n);
+    const dt = new Date(Date.UTC(y, m-1, d));
+    return dt.toLocaleDateString(undefined, { year:'numeric', month:'short', day:'2-digit' });
+  };
+  const download = (filename, text) => {
+    const a = document.createElement('a');
+    a.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+    a.setAttribute('download', filename);
+    a.style.display = 'none';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+  };
+
+  // --------- Load data ----------
+  const [players, teams, matches] = await Promise.all([
+    fetch(PATH_PLAYERS).then(r=>r.json()),
+    fetch(PATH_TEAMS).then(r=>r.json()),
+    fetch(PATH_MATCHES).then(r=>r.json())
+  ]);
+
+  // Maps for quick lookups
+  const playerById = Object.fromEntries(players.map(p => [p.id, p]));
+  const teamById   = Object.fromEntries(teams.map(t => [t.id, t]));
+
+  // Populate picker
+  const selectEl = document.getElementById('playerSelect');
+  players
+    .slice() // copy
+    .sort((a,b) => a.name.localeCompare(b.name))
+    .forEach(p => {
+      const opt = document.createElement('option');
+      opt.value = p.id;
+      const teamName = teamById[p.teamId]?.name ?? p.teamId;
+      opt.textContent = `${p.name} (${teamName})`;
+      selectEl.appendChild(opt);
+    });
+
+  // Search box filters the select options
+  const searchBox = document.getElementById('searchBox');
+  searchBox.addEventListener('input', () => {
+    const q = searchBox.value.trim().toLowerCase();
+    for (const opt of selectEl.options) {
+      opt.hidden = q && !opt.textContent.toLowerCase().includes(q);
+    }
+  });
+
+  // Handle direct player param or picker
+  const initialPlayerId = qs.get('player') || players[0]?.id;
+  selectEl.value = initialPlayerId;
+
+  const render = (playerId) => {
+    const p = playerById[playerId];
+    if (!p) return;
+
+    // Header
+    document.getElementById('picker').style.display = 'none';
+    document.getElementById('playerHeader').style.display = '';
+    document.getElementById('summary').style.display = '';
+    document.getElementById('resultsTable').style.display = '';
+
+    document.getElementById('pageTitle').textContent = `Player Results — ${p.name}`;
+    document.getElementById('playerName').textContent = p.name;
+    const initials = p.name.split(/\s+/).map(x=>x[0]).slice(0,2).join('').toUpperCase();
+    document.getElementById('avatar').textContent = initials || 'P';
+    document.getElementById('hcpTag').textContent = `HCP ${p.HCP}`;
+    document.getElementById('teamName').textContent =
+      teamById[p.teamId]?.name || p.teamId;
+
+    // Prev/Next (alphabetical)
+    const sorted = players.slice().sort((a,b)=>a.name.localeCompare(b.name));
+    const idx = sorted.findIndex(x => x.id === p.id);
+    const prev = sorted[(idx - 1 + sorted.length) % sorted.length];
+    const next = sorted[(idx + 1) % sorted.length];
+    document.getElementById('prevBtn').onclick = () => location.assign(`?player=${prev.id}`);
+    document.getElementById('nextBtn').onclick = () => location.assign(`?player=${next.id}`);
+
+    document.getElementById('copyLinkBtn').onclick = async () => {
+      const url = `${location.origin}${location.pathname}?player=${encodeURIComponent(p.id)}`;
+      try { await navigator.clipboard.writeText(url); } catch {}
+      alert('Link copied!');
+    };
+
+    // Build this player's frame list from matches.json
+    const rows = [];
+    for (const m of matches) {
+      const isHome = (frame) => frame.homePlayerId === p.id;
+      const isAway = (frame) => frame.awayPlayerId === p.id;
+
+      for (const frame of m.frames || []) {
+        if (!frame.homePlayerId || !frame.awayPlayerId) continue;
+        if (!(isHome(frame) || isAway(frame))) continue;
+
+        const homeTeam = teamById[m.homeTeamId]?.name || m.homeTeamId;
+        const awayTeam = teamById[m.awayTeamId]?.name || m.awayTeamId;
+
+        const youAreHome = isHome(frame);
+        const yourPts = youAreHome ? frame.homePoints : frame.awayPoints;
+        const oppPts   = youAreHome ? frame.awayPoints : frame.homePoints;
+
+        const oppId = youAreHome ? frame.awayPlayerId : frame.homePlayerId;
+        const opp   = playerById[oppId];
+        const oppName = opp?.name || oppId;
+        const oppTeamId = youAreHome ? m.awayTeamId : m.homeTeamId;
+        const oppTeamName = teamById[oppTeamId]?.name || oppTeamId;
+
+        const result = frame.winner === (youAreHome ? 'home' : 'away') ? 'W' : 'L';
+
+        // Breaks: show any for either side, marking (you) where relevant
+        let breaks = '';
+        if (frame.breaks) {
+          const b = [];
+          if (frame.breaks.home) {
+            const list = Array.isArray(frame.breaks.home) ? frame.breaks.home : [frame.breaks.home];
+            b.push(`${youAreHome ? 'You' : 'Opp'}: ${list.join(', ')}`);
+          }
+          if (frame.breaks.away) {
+            const list = Array.isArray(frame.breaks.away) ? frame.breaks.away : [frame.breaks.away];
+            b.push(`${youAreHome ? 'Opp' : 'You'}: ${list.join(', ')}`);
+          }
+          breaks = b.join(' | ');
+        }
+
+        // Handle walkovers or missing scores (e.g., 0–1)
+        const scoreText = (Number.isFinite(yourPts) && Number.isFinite(oppPts))
+          ? `${yourPts}–${oppPts}`
+          : (yourPts ?? '—') + '–' + (oppPts ?? '—');
+
+        rows.push({
+          date: m.date,
+          fixture: `${homeTeam} vs ${awayTeam}`,
+          hoa: youAreHome ? 'Home' : 'Away',
+          oppName,
+          oppTeamName,
+          scoreText,
+          result,
+          breaks,
+          sortKey: m.date + (youAreHome ? 'H' : 'A')
+        });
+      }
+    }
+
+    // Sort by date ascending
+    rows.sort((a,b) => a.sortKey.localeCompare(b.sortKey));
+
+    // Render table
+    const tb = document.getElementById('resultsBody');
+    tb.innerHTML = '';
+    let wins=0, losses=0;
+    for (const r of rows) {
+      if (r.result === 'W') wins++; else losses++;
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${fmtDate(r.date)}</td>
+        <td>${r.fixture}</td>
+        <td>${r.hoa}</td>
+        <td>${r.oppName}</td>
+        <td>${r.oppTeamName}</td>
+        <td class="right">${r.scoreText}</td>
+        <td><span class="pill ${r.result==='W'?'win':'loss'}">${r.result}</span></td>
+        <td class="small">${r.breaks || ''}</td>
+      `;
+      tb.appendChild(tr);
+    }
+
+    document.getElementById('noData').style.display = rows.length ? 'none' : '';
+    document.getElementById('resultsTable').style.display = rows.length ? '' : 'none';
+
+    // Summary
+    document.getElementById('gamesPlayed').textContent = rows.length;
+    document.getElementById('wins').textContent = wins;
+    document.getElementById('losses').textContent = losses;
+    const diff = wins - losses;
+    document.getElementById('diff').textContent = (diff>=0?'+':'') + diff;
+
+    // CSV export
+    document.getElementById('exportCsvBtn').onclick = () => {
+      const csv = [
+        ['Date','Fixture','Home/Away','Opponent','Opponent Team','Score','Result','Breaks'].join(','),
+        ...rows.map(r => [
+          r.date, r.fixture, r.hoa, r.oppName, r.oppTeamName, r.scoreText, r.result, r.breaks
+        ].map(v => `"${String(v ?? '').replaceAll('"','""')}"`).join(','))
+      ].join('\n');
+      download(`${p.name.replaceAll(' ','_')}_results.csv`, csv);
+    };
+  };
+
+  // Quick nav hint
+  const quick = document.getElementById('quickNav');
+  quick.innerHTML = `<span class="nowrap">Jump to:</span>`;
+  ['marple','hayfield-1','hayfield-2','tintwistle1','tintwistle2','whaley-1','whaley-2','denton-lib','chinley']
+    .forEach(tid=>{
+      if(!teams.find(t=>t.id===tid)) return;
+      const a = document.createElement('a');
+      a.href = `/players.html#${tid}`;
+      a.textContent = teamById[tid]?.name ?? tid;
+      a.style.marginRight='8px';
+      a.style.color='#cfe9db';
+      quick.appendChild(a);
+    });
+
+  // Picker actions (when no ?player= provided)
+  document.getElementById('goBtn').onclick = () => {
+    const id = selectEl.value;
+    if (id) location.assign(`?player=${encodeURIComponent(id)}`);
+  };
+
+  // Auto-render if we have a player id
+  if (initialPlayerId) render(initialPlayerId);
+
+})();
+</script>
+</body>
+</html>
