@@ -95,6 +95,18 @@
   .cell-na{background:#111;color:#fff}
   .cell-blank{background:#fff}
 
+  /* Clickable player links */
+  a.player-link{color:#0b5; font-weight:700; text-decoration:none}
+  a.player-link:hover, a.player-link:focus{ text-decoration:underline; outline:none }
+
+  /* Player detail table */
+  #playerDetail h3{margin:.2rem 0 .8rem}
+  #playerFrames{border:1px solid #e5e5e5}
+  #playerFrames th, #playerFrames td{border:1px solid #e5e5e5; padding:.5rem .55rem; text-align:left}
+  #playerFrames thead th{background:#f0f0f0}
+  .result-win{color:#0a7a2a; font-weight:700}
+  .result-loss{color:#b02a0a; font-weight:700}
+
   /* Breaks table */
   .breaks-wrap{margin-top:.5rem}
   table.breaks{width:100%;border-collapse:collapse;background:#fff;font-size:.95rem;border:1px solid #e5e5e5;table-layout:auto}
@@ -164,6 +176,7 @@
     <button class="view-btn" data-view="breaks">Breaks</button>
   </div>
 
+  <!-- MERIT VIEW -->
   <section id="view-merit">
     <div class="tabs" id="teamTabs"></div>
     <div class="table-scroller">
@@ -172,6 +185,29 @@
     <p id="meritHeatmap" class="visually-hidden">Player weekly results grid with wins/losses by week (W1..W18) and totals.</p>
   </section>
 
+  <!-- PLAYER DETAIL VIEW (initially hidden) -->
+  <section id="playerDetail" hidden style="margin-top:1rem">
+    <button id="backToMerit" style="margin-bottom:1rem">← Back to Merit Table</button>
+    <h3 id="detailHeader"></h3>
+    <table id="playerFrames" style="width:100%;border-collapse:collapse;background:#fff;font-size:0.95rem">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Fixture</th>
+          <th>Home/Away</th>
+          <th>Opponent</th>
+          <th>Opponent Team</th>
+          <th>Score</th>
+          <th>Result</th>
+          <th>Breaks</th>
+        </tr>
+      </thead>
+      <tbody id="playerFramesBody"></tbody>
+    </table>
+    <p id="noFrames" style="display:none;color:#666">No frame data for this player yet.</p>
+  </section>
+
+  <!-- BREAKS VIEW -->
   <section id="view-breaks" hidden>
     <div class="breaks-wrap">
       <table class="breaks" id="breaksTable">
@@ -223,7 +259,7 @@
     .catch(()=>{});
 </script>
 
-<!-- Merit / Breaks logic (W1..W18 with auto-fit week width) -->
+<!-- Merit / Breaks / Player Detail logic -->
 <script>
 (async function () {
   const WEEK_MAX = 18; // render W1..W18
@@ -236,6 +272,7 @@
   ]);
 
   const teamById = Object.fromEntries(teams.map(t => [t.id, t]));
+  const playerById = Object.fromEntries(players.map(p => [p.id, p]));
   const teamColorClass = {}; teams.forEach((t,i)=> teamColorClass[t.id] = i % 10);
 
   function isComplete(m){
@@ -246,7 +283,12 @@
     return false;
   }
   function escapeHtml(s=''){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
-  function toBreakList(x){ if(Array.isArray(x)) return x.filter(n=>typeof n==='number'); if(typeof x==='number') return [x]; return []; }
+  function toBreakList(x){
+    if (!x) return [];
+    // supports: number | number[] | {home:number[]|number, away:number[]|number}
+    const arr = Array.isArray(x) ? x : (typeof x === 'number' ? [x] : []);
+    return arr.filter(n=>typeof n==='number');
+  }
 
   // Confirmed dates from completed matches
   const completedMatches = matches.filter(isComplete);
@@ -365,29 +407,21 @@
     const scroller = tbl.parentElement; // .table-scroller
     const visible = scroller.clientWidth || scroller.getBoundingClientRect().width || 0;
     if (!visible) return;
-
-    // Temporarily use a small week width to measure fixed parts
-    tbl.style.setProperty('--w-week','32px');
+    tbl.style.setProperty('--w-week','32px'); // temp for measuring
 
     const head = tbl.querySelector('thead tr');
     if (!head) return;
 
-    // Sum widths of NON-week columns (name, team, HCP + totals)
-    // Week columns are indices [3 .. 3+weeksCount-1]
     let fixedW = 0;
     head.childNodes.forEach((th, idx)=>{
-      if (idx < 3 || idx >= 3 + weeksCount) {
-        fixedW += th.offsetWidth || 0;
-      }
+      if (idx < 3 || idx >= 3 + weeksCount) { fixedW += th.offsetWidth || 0; }
     });
 
-    const gutter = 8; // small buffer
+    const gutter = 8;
     const spaceForWeeks = Math.max(0, visible - fixedW - gutter);
-    const minW = 18;  // don't go unreadably small
-    const maxW = 44;  // don't grow too big
+    const minW = 18, maxW = 44;
     const perWeek = Math.floor(spaceForWeeks / Math.max(weeksCount,1));
     const target = Math.max(minW, Math.min(maxW, perWeek));
-
     tbl.style.setProperty('--w-week', target + 'px');
   }
 
@@ -431,8 +465,10 @@
 
       const tr = document.createElement('tr');
       tr.className = `team-color-${teamColorClass[r.teamId] ?? 0}`;
+
+      const nameCell = `<a href="#" class="player-link" data-id="${r.id}" title="View full results">${escapeHtml(r.name)}${star}</a>`;
       tr.innerHTML =
-       `<td class="sticky col-name">${escapeHtml(r.name)}${star}</td>
+       `<td class="sticky col-name">${nameCell}</td>
         <td class="sticky-2 col-team">${escapeHtml(r.teamName)}</td>
         <td class="sticky-3 col-hcp">${r.HCP}</td>`;
 
@@ -474,6 +510,126 @@
   // Initial render
   renderMerit(startId);
 
+  // === Player Detail View ===
+  function formatDate(d){
+    if(!d) return '';
+    const dt = new Date(d);
+    if (isNaN(dt)) return d; // fallback to raw
+    return dt.toLocaleDateString('en-GB',{weekday:'short', day:'2-digit', month:'short', year:'numeric'});
+  }
+  function listBreaks(b){
+    if(!b) return '';
+    const arr = Array.isArray(b) ? b : (typeof b==='number' ? [b] : []);
+    const plus = arr.filter(n=>typeof n==='number' && n>=0);
+    return plus.join(' · ');
+  }
+
+  function showPlayerDetail(playerId){
+    const section = document.getElementById('playerDetail');
+    const tableBody = document.getElementById('playerFramesBody');
+    const header = document.getElementById('detailHeader');
+    const meritSection = document.getElementById('view-merit');
+    const p = playerById[playerId];
+    if(!p){ return; }
+
+    // Hide main merit view, show detail view
+    meritSection.hidden = true;
+    section.hidden = false;
+    header.textContent = `${p.name} — ${teamById[p.teamId]?.name || p.teamId}`;
+
+    // Gather all frames from matches.json
+    const rows = [];
+    for(const m of matches){
+      const frames = Array.isArray(m.frames) ? m.frames : [];
+      for(const fr of frames){
+        const isHome = fr.homePlayerId === playerId;
+        const isAway = fr.awayPlayerId === playerId;
+        if(!(isHome || isAway)) continue;
+
+        const oppId = isHome ? fr.awayPlayerId : fr.homePlayerId;
+        const opp = playerById[oppId];
+        const oppTeamId = isHome ? m.awayTeamId : m.homeTeamId;
+        const oppTeam = teamById[oppTeamId]?.name || oppTeamId;
+
+        const youAreHome = isHome;
+        const yourPts = (youAreHome ? fr.homePoints : fr.awayPoints);
+        const oppPts  = (youAreHome ? fr.awayPoints : fr.homePoints);
+        const hasPts = Number.isFinite(yourPts) && Number.isFinite(oppPts);
+
+        const youWon = fr.winner === (youAreHome ? 'home' : 'away');
+        const result = youWon ? 'W' : 'L';
+
+        // breaks can be recorded per side
+        const myBreaks = youAreHome ? fr?.breaks?.home : fr?.breaks?.away;
+
+        rows.push({
+          date: m.date,
+          fixture: `${teamById[m.homeTeamId]?.name || m.homeTeamId} vs ${teamById[m.awayTeamId]?.name || m.awayTeamId}`,
+          hoa: youAreHome ? 'Home' : 'Away',
+          opponent: opp?.name || '—',
+          oppTeam,
+          score: hasPts ? `${yourPts}–${oppPts}` : '—',
+          result,
+          breaks: listBreaks(myBreaks)
+        });
+      }
+    }
+
+    rows.sort((a,b)=> a.date.localeCompare(b.date));
+    tableBody.innerHTML = '';
+    if(!rows.length){
+      document.getElementById('noFrames').style.display = '';
+      return;
+    }
+    document.getElementById('noFrames').style.display = 'none';
+
+    rows.forEach(r=>{
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${escapeHtml(formatDate(r.date))}</td>
+        <td>${escapeHtml(r.fixture)}</td>
+        <td>${escapeHtml(r.hoa)}</td>
+        <td>${escapeHtml(r.opponent)}</td>
+        <td>${escapeHtml(r.oppTeam)}</td>
+        <td>${escapeHtml(r.score)}</td>
+        <td class="${r.result==='W'?'result-win':'result-loss'}">${r.result}</td>
+        <td>${escapeHtml(r.breaks)}</td>`;
+      tableBody.appendChild(tr);
+    });
+
+    // Put player id in hash so you can deep-link / refresh
+    history.replaceState(null,'', `#player=${encodeURIComponent(playerId)}`);
+  }
+
+  // Deep-link support (optional)
+  (function(){
+    const m = location.hash.match(/#player=([^&]+)/);
+    if(m){
+      const pid = decodeURIComponent(m[1]);
+      if(playerById[pid]) showPlayerDetail(pid);
+    }
+  })();
+
+  // Back button
+  document.getElementById('backToMerit').addEventListener('click',()=>{
+    document.getElementById('playerDetail').hidden = true;
+    document.getElementById('view-merit').hidden = false;
+    // clear hash
+    if (location.hash.startsWith('#player=')) {
+      history.replaceState(null,'', location.pathname + location.search);
+    }
+  });
+
+  // Delegate clicks on player links
+  document.addEventListener('click', e=>{
+    const link = e.target.closest('.player-link');
+    if(link){
+      e.preventDefault();
+      const id = link.dataset.id;
+      if (id) showPlayerDetail(id);
+    }
+  });
+
   // Breaks view
   function renderBreaks(){
     const body = document.getElementById('breaksBody');
@@ -509,13 +665,17 @@
       document.querySelectorAll('.view-btn').forEach(b=>b.classList.remove('active'));
       btn.classList.add('active');
       const v = btn.dataset.view;
+
+      // If a player detail is open and user switches tabs, hide it
+      document.getElementById('playerDetail').hidden = true;
+
       document.getElementById('view-merit').hidden = (v!=='merit');
       document.getElementById('view-breaks').hidden = (v!=='breaks');
+
       // recalc when returning to merit view
       if (v==='merit'){
         const tbl=document.getElementById('playersGrid');
         if (tbl){
-          // ensure week width is re-fitted to current viewport
           const weeksCount = tbl.querySelectorAll('thead th.col-week').length;
           autoFitWeekWidth(tbl, weeksCount);
         }
