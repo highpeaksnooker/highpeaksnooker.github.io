@@ -109,7 +109,8 @@
   { "id": "p-b-lonsdale", "name": "B Lonsdale", "teamId": "hayfield-1", "HCP": 35, "captain": false, "aliases": ["B Lonsdale", "Lonsdale"] },
   { "id": "p-tony-watkinson", "name": "Tony Watkinson", "teamId": "hayfield-1", "HCP": 35, "captain": false, "aliases": ["T Watkinson", "Watkinson"] },
   { "id": "p-d-winterbottom", "name": "D Winterbottom", "teamId": "hayfield-1", "HCP": 0, "captain": false, "aliases": ["Winterbottom"] },
-
+  { "id": "p-c-Lee", "name": "C Lee", "teamId": "hayfield-1", "HCP": 14, "captain": false, "aliases": ["Lee"] },
+  
   { "id": "p-steve-ashby", "name": "Steve Ashby", "teamId": "hayfield-2", "HCP": 14, "captain": false, "aliases": ["S Ashby", "Ashby"] },
   { "id": "p-d-bloomfield", "name": "D Bloomfield", "teamId": "hayfield-2", "HCP": 21, "captain": false, "aliases": ["Bloomfield"] },
   { "id": "p-geoff-edge", "name": "Geoff Edge", "teamId": "hayfield-2", "HCP": 7, "captain": false, "aliases": ["G Edge", "Edge"] },
