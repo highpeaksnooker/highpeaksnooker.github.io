@@ -926,7 +926,7 @@
         "winner": "home",
         "breaks": { "home": 25 }
       },
-      {
+          {
         "homePlayerId": "p-d-evans",
         "awayPlayerId": "p-perri-bethel",
         "homePoints": 62,
