@@ -1378,6 +1378,8 @@
     {
       "homePlayerId": "p-s-crook",
       "awayPlayerId": "p-s-renshaw",
+      "homePoints": 90,
+      "awayPoints": 33,
       "winner": "home",
       "breaks": { "home": [44, 32] }
     },
