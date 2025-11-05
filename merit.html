@@ -14,7 +14,7 @@
     --bar-dark:#1f1f1f; --bar-border:#2a2a2a; --overlay-bg:rgba(15,17,22,.85);
 
     /* base widths (JS will auto-fit --w-week) */
-    --w-name:200px; --w-team:180px; --w-hcp:56px;
+    --w-name:200px; --w-team:180px; --w-hcp:56px; --w-start:56px;
     --w-week:40px;  /* will be resized dynamically */
     --w-pwl:44px; --w-diff:54px; --w-25:52px; --w-hi:88px;
     --grid-font:.92rem;
@@ -79,11 +79,13 @@
   .player-grid th.sticky,.player-grid td.sticky{position:sticky;left:var(--s0,0px);z-index:2;background:inherit}
   .player-grid th.sticky-2,.player-grid td.sticky-2{position:sticky;left:var(--s1,200px);z-index:2;background:inherit}
   .player-grid th.sticky-3,.player-grid td.sticky-3{position:sticky;left:var(--s2,380px);z-index:2;background:inherit}
-  .player-grid td.sticky,.player-grid td.sticky-2,.player-grid td.sticky-3{box-shadow:2px 0 0 rgba(0,0,0,.05)}
+  .player-grid th.sticky-4,.player-grid td.sticky-4{position:sticky;left:var(--s3,436px);z-index:2;background:inherit}
+  .player-grid td.sticky,.player-grid td.sticky-2,.player-grid td.sticky-3,.player-grid td.sticky-4{box-shadow:2px 0 0 rgba(0,0,0,.05)}
   .col-name,.col-team{text-align:left;line-height:1.15}
   .col-name{min-width:var(--w-name);font-size:.9em}
   .col-team{min-width:var(--w-team);font-size:.88em}
   .col-hcp{width:var(--w-hcp)}
+  .col-start{width:var(--w-start)}
   .col-week{width:var(--w-week);min-width:var(--w-week);font-variant-numeric:tabular-nums}
   .col-p,.col-w,.col-l{width:var(--w-pwl)}
   .col-diff{width:var(--w-diff)}
@@ -125,7 +127,7 @@
   @media (max-width:480px){
     :root{
       --banner-height:110px;
-      --w-name:138px; --w-team:116px; --w-hcp:44px;
+      --w-name:138px; --w-team:116px; --w-hcp:44px; --w-start:44px;
       --w-week:32px; --w-pwl:36px; --w-diff:46px; --w-25:42px; --w-hi:70px;
       --grid-font:.82rem;
     }
@@ -306,10 +308,14 @@
   const P = {};
   const breaksByPlayer = {};
   players.forEach(p=>{
+    const currentHcp = (p.HCP ?? p.hcp ?? p.handicap ?? 0);
+    const startingHcp = (p.startingHcp ?? p.startHcp ?? p.hcp_start ?? currentHcp ?? 0);
+
     P[p.id] = {
       id:p.id, name:p.name, teamId:p.teamId,
       teamName:teamById[p.teamId]?.name || '',
-      HCP: p.HCP ?? p.hcp ?? 0,
+      HCP: currentHcp,
+      Start: startingHcp,
       perDate: Object.fromEntries(weekDates.map(d=>[d,'blank'])),
       totals: { played:0, won:0, lost:0, diff:0, break25:0, high:0, winPct:0 }
     };
@@ -414,7 +420,8 @@
 
     let fixedW = 0;
     head.childNodes.forEach((th, idx)=>{
-      if (idx < 3 || idx >= 3 + weeksCount) { fixedW += th.offsetWidth || 0; }
+      // now 4 fixed columns: Name, Team, HCP, Start
+      if (idx < 4 || idx >= 4 + weeksCount) { fixedW += th.offsetWidth || 0; }
     });
 
     const gutter = 8;
@@ -434,7 +441,8 @@
     thRow.innerHTML =
       `<th class="sticky col-name">Name</th>
        <th class="sticky-2 col-team">Team</th>
-       <th class="sticky-3 col-hcp">HCP</th>`;
+       <th class="sticky-3 col-hcp">HCP</th>
+       <th class="sticky-4 col-start">Start</th>`;
 
     weekDates.forEach((d, i)=>{
       const dt = new Date(d);
@@ -455,12 +463,14 @@
 
     const tbody = document.createElement('tbody');
     let rows = Object.values(P);
-    rows = (!teamFilter || teamFilter === ALL) ? rows.filter(r => r.totals.played > 0)
-                                              : rows.filter(r => r.teamId === teamFilter && r.totals.played > 0);
+    rows = (!teamFilter || teamFilter === '__all__') ? rows.filter(r => r.totals.played > 0)
+                                                     : rows.filter(r => r.teamId === teamFilter && r.totals.played > 0);
     rows = sortRows(rows);
 
+    const seriesHigh = Math.max(0, ...Object.values(P).map(x=>x.totals.high||0));
+
     rows.forEach(r=>{
-      const isHighHolder = (r.totals.high||0)>0 && (r.totals.high === Math.max(...Object.values(P).map(x=>x.totals.high||0)));
+      const isHighHolder = (r.totals.high||0)>0 && (r.totals.high === seriesHigh);
       const star = isHighHolder ? ' <span class="star" aria-label="High break holder" title="High break holder">⭐</span>' : '';
 
       const tr = document.createElement('tr');
@@ -470,7 +480,8 @@
       tr.innerHTML =
        `<td class="sticky col-name">${nameCell}</td>
         <td class="sticky-2 col-team">${escapeHtml(r.teamName)}</td>
-        <td class="sticky-3 col-hcp">${r.HCP}</td>`;
+        <td class="sticky-3 col-hcp">${r.HCP}</td>
+        <td class="sticky-4 col-start">${r.Start}</td>`;
 
       weekDates.forEach(d=>{
         const v = r.perDate[d];
@@ -494,14 +505,16 @@
 
     tbl.replaceChildren(thead, tbody);
 
-    // sticky offsets for first 3 cols
+    // sticky offsets for first 4 cols
     const headRow = tbl.querySelector('thead tr');
     const firstRow = tbl.querySelector('tbody tr');
     const w0 = (headRow?.children[0]?.offsetWidth) || (firstRow?.children[0]?.offsetWidth) || 0;
     const w1 = (headRow?.children[1]?.offsetWidth) || (firstRow?.children[1]?.offsetWidth) || 0;
+    const w2 = (headRow?.children[2]?.offsetWidth) || (firstRow?.children[2]?.offsetWidth) || 0;
     tbl.style.setProperty('--s0','0px');
     tbl.style.setProperty('--s1', w0+'px');
     tbl.style.setProperty('--s2', (w0+w1)+'px');
+    tbl.style.setProperty('--s3', (w0+w1+w2)+'px');
 
     // finally, auto-fit week width to visible space
     autoFitWeekWidth(tbl, weekDates.length);
