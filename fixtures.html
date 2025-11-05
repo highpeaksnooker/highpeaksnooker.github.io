@@ -3,28 +3,92 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>High Peak & Marple Snooker League - Fixtures</title>
+  <title>Fixtures — High Peak & Marple Snooker League</title>
   <link rel="icon" type="image/png" href="/logo.PNG" sizes="192x192">
   <link rel="apple-touch-icon" href="/logo.PNG">
   <link rel="preload" as="image" href="/logo.PNG">
   <link rel="stylesheet" href="style.css" />
+
   <style>
-    /* Keep this *very* light so we don't fight your theme */
-    .fixture-day{margin:22px 0 26px}
-    .fixture-date{
-      margin:0 0 10px;font-weight:800;color:#0f172a;font-size:1.05rem;
-      padding-bottom:6px;border-bottom:2px solid var(--accent, #19d36b)
+    :root{
+      --brand-green:#002b19;
+      --banner-height:140px;
+      --page-max:1100px;
+      --accent:#19d36b;
+      --bar-dark:#1f1f1f;
+      --bar-border:#2a2a2a;
+      --overlay-bg:rgba(15,17,22,.85);
     }
-    .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:8px;background:#fff}
+
+    html,body{margin:0}
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#f7f8fb;color:#0b1220}
+    .container{max-width:var(--page-max);margin:0 auto;padding:0 12px}
+
+    /* Crest banner — keep identical to results.html */
+    header.logo-header{
+      background:var(--brand-green);
+      box-shadow:0 2px 10px rgba(0,0,0,.25);
+      height:var(--banner-height);
+      display:flex;align-items:center;justify-content:center;
+    }
+    .logo-banner{height:100%;display:flex;align-items:center;justify-content:center}
+    .logo-banner img{height:100%;width:auto;object-fit:contain;display:block;filter:drop-shadow(0 0 6px rgba(0,0,0,.4))}
+
+    /* Announcement (identical) */
+    #announcement-banner{
+      position:sticky;top:0;z-index:100;display:none;background:var(--bar-dark);color:#fff;
+      font-weight:600;font-size:.85rem;padding:.35rem 0;border-top:1px solid rgba(255,255,255,.06);
+      border-bottom:1px solid var(--bar-border)
+    }
+    #announcement-inner{max-width:var(--page-max);margin:0 auto;padding:0 12px;text-align:center}
+
+    /* Menu bar (identical) */
+    .menu-bar{background:var(--bar-dark);padding:8px 0 10px;position:relative;z-index:110;border-bottom:1px solid var(--bar-border)}
+    .menu-inner{max-width:var(--page-max);margin:0 auto;padding:0 12px;position:relative}
+    .menu-toggle{
+      width:100%;background:var(--bar-dark);color:#fff;padding:10px 12px;border:1px solid var(--bar-border);
+      border-radius:10px;font-weight:800;font-size:1rem;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,.25) inset
+    }
+    .menu-toggle:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+    nav.site-nav{
+      position:absolute;left:12px;right:12px;top:calc(100% + 6px);background:var(--overlay-bg);backdrop-filter:blur(6px);
+      border:1px solid rgba(255,255,255,.08);border-radius:10px;box-shadow:0 18px 36px rgba(0,0,0,.45);padding:6px;z-index:120
+    }
+    [hidden]{display:none!important}
+    nav.site-nav a{
+      display:block;color:#e5e7eb;text-decoration:none;font-weight:700;padding:10px 10px;border-radius:8px
+    }
+    nav.site-nav a:hover{background:rgba(255,255,255,.1)}
+    nav.site-nav a.active{background:var(--accent);color:#0b1b0f}
+
+    /* Page wrapper (identical) */
+    main.container{background:#fff;padding:1rem 12px 1.5rem;border-radius:10px;margin-top:10px;box-shadow:0 1px 2px rgba(0,0,0,.06)}
+    h2{margin:.25rem 0 .5rem 0}
+
+    /* Fixtures tables — same look as Results tables */
+    .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:8px;box-shadow:0 1px 2px rgba(0,0,0,.06);background:#fff}
     table.fixtures{width:100%;border-collapse:collapse;table-layout:fixed;min-width:520px}
     .fixtures th,.fixtures td{padding:.6rem .75rem;border-bottom:1px solid #e9e9e9;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     .fixtures thead th{background:#eef1f5;color:#0f172a;font-weight:700;font-size:.95rem}
     .fixtures tbody tr:nth-child(even){background:#fafafa}
     .fixtures tbody tr:hover{background:#f1f7ff}
+
+    .fixture-day{margin:18px 0 22px}
+    .fixture-date{margin:0 0 8px;color:#0b1220;font-size:1.35rem}
+    .fixture-rule{height:3px;background:var(--accent);border-radius:2px;margin:8px 0 10px}
+
     .controls{margin:.5rem 0 1rem;font-weight:600}
     .badge{font-size:.75rem;font-weight:800;border-radius:999px;padding:.15rem .5rem;border:1px solid transparent;display:inline-block}
     .badge.upcoming{background:#e7fbe7;color:#056b2c;border-color:#9ae6b4}
     .badge.past{background:#fff7e6;color:#5a2a00;border-color:#ffd38a}
+
+    footer{text-align:center;padding:1.5rem 1rem;color:#777}
+
+    @media (max-width:480px){
+      :root{--banner-height:110px}
+      .menu-toggle{font-size:.95rem;padding:9px 11px}
+      .fixtures th,.fixtures td{padding:.55rem .6rem}
+    }
   </style>
 </head>
 <body>
@@ -32,12 +96,12 @@
   <!-- Crest banner -->
   <header class="logo-header" role="banner">
     <div class="logo-banner">
-      <img src="logo.PNG?v=13" alt="High Peak &amp; Marple Snooker League crest">
+      <img src="logo.PNG?v=16" alt="High Peak &amp; Marple Snooker League crest">
     </div>
   </header>
 
   <!-- Announcement bar -->
-  <div id="announcement-banner" role="status" aria-live="polite" style="display:none">
+  <div id="announcement-banner" role="status" aria-live="polite">
     <div id="announcement-inner" class="container">
       <span id="announcement-text"></span>
     </div>
@@ -63,13 +127,15 @@
   <main class="container">
     <h2>Fixtures</h2>
     <p>Completed fixtures are hidden automatically once results are posted. Tick below to show past matches.</p>
-    <div class="controls"><label><input type="checkbox" id="showPast"> Show past fixtures</label></div>
+    <div class="controls">
+      <label><input type="checkbox" id="showPast"> Show past fixtures</label>
+    </div>
     <div id="fixtures">Loading fixtures…</div>
   </main>
 
   <footer>&copy; 2025 High Peak &amp; Marple Snooker League</footer>
 
-  <!-- Menu logic -->
+  <!-- Menu logic (identical) -->
   <script>
     (function(){
       const btn=document.getElementById('menuToggle');
@@ -81,7 +147,7 @@
     })();
   </script>
 
-  <!-- Announcement -->
+  <!-- Announcement (identical) -->
   <script>
     fetch('data/announcement.json',{cache:'no-store'})
       .then(r=>r.json())
@@ -94,13 +160,12 @@
       .catch(()=>{});
   </script>
 
-  <!-- Fixtures loader (now reading matches.json correctly) -->
+  <!-- Fixtures loader (uses matches.json + name aliases) -->
   <script>
     (async function(){
-      // Helper: normalise display names to your canonical IDs
+      // Name → ID alias helper so fixtures.json names match matches.json team IDs
       const ALIAS = {
-        // Canonical teams you gave me
-        'alex ashton':'alexashton','alexashton':'alexashton',
+        'alexashton':'alexashton','alex ashton':'alexashton',
         'hadfield':'hadfield',
         'hayfield 1':'hayfield-1','hayfield1':'hayfield-1',
         'hayfield 2':'hayfield-2','hayfield2':'hayfield-2',
@@ -110,99 +175,100 @@
         'whaley 2':'whaley-2','whaley2':'whaley-2',
         'chinley':'chinley',
         'marple':'marple',
-        // Display variations
         'denton lc':'denton-lib','denton lc.':'denton-lib','denton lib':'denton-lib','denton library':'denton-lib'
       };
       const toId = name => {
         const k = String(name||'').trim().toLowerCase();
         if (ALIAS[k]) return ALIAS[k];
-        // generic fallbacks
+        // generic fallback (kept harmless)
         return k.replace(/\s*&\s*/g,'-and-').replace(/\s+/g,'-').replace(/[^\w-]/g,'');
       };
+      const k = (d,h,a)=>`${d}|${h}|${a}`;
 
-      const [fixtures, matches] = await Promise.all([
-        fetch('data/fixtures.json',{cache:'no-store'}).then(r=>r.json()),
-        fetch('data/matches.json',{cache:'no-store'}).then(r=>r.json()).catch(()=>[])
-      ]);
+      try{
+        const [fixtures, matches] = await Promise.all([
+          fetch('data/fixtures.json',{cache:'no-store'}).then(r=>r.json()),
+          fetch('data/matches.json',{cache:'no-store'}).then(r=>r.json()).catch(()=>[])
+        ]);
 
-      // Build a quick lookup set: "YYYY-MM-DD|homeId|awayId"
-      const key = (d,h,a)=>`${d}|${h}|${a}`;
-      const played = new Set(
-        matches.map(m => key(String(m.date).trim(), String(m.homeTeamId).trim(), String(m.awayTeamId).trim()))
-      );
+        const played = new Set(
+          matches.map(m => k(String(m.date).trim(), String(m.homeTeamId).trim(), String(m.awayTeamId).trim()))
+        );
 
-      // Transform fixtures and mark completion using canonical IDs
-      const rows = fixtures.map(f=>{
-        const homeId = toId(f.home);
-        const awayId = toId(f.away);
-        const completed = played.has(key(String(f.date).trim(), homeId, awayId));
-        return { ...f, homeId, awayId, completed, dateObj:new Date(f.date) };
-      });
+        const rows = fixtures.map(f=>{
+          const homeId = toId(f.home);
+          const awayId = toId(f.away);
+          const completed = played.has(k(String(f.date).trim(), homeId, awayId));
+          return { ...f, homeId, awayId, completed, dateObj:new Date(f.date) };
+        });
 
-      // Sort and group by date
-      rows.sort((a,b)=>a.dateObj - b.dateObj);
-      const grouped = {};
-      rows.forEach(r => (grouped[r.date] ||= []).push(r));
+        rows.sort((a,b)=>a.dateObj - b.dateObj);
+        const grouped = {};
+        rows.forEach(r => (grouped[r.date] ||= []).push(r));
 
-      const container=document.getElementById('fixtures');
-      const toggle=document.getElementById('showPast');
+        const host = document.getElementById('fixtures');
+        const toggle = document.getElementById('showPast');
 
-      function render(){
-        const showPast = toggle.checked;
-        container.innerHTML='';
-        const dates = Object.keys(grouped).sort((a,b)=>new Date(a)-new Date(b));
-        let shown=0;
+        function render(){
+          const showPast = toggle.checked;
+          host.innerHTML='';
+          const dates = Object.keys(grouped).sort((a,b)=>new Date(a)-new Date(b));
+          let anyShown=false;
 
-        for(const d of dates){
-          const games = grouped[d];
+          for(const d of dates){
+            const games = grouped[d];
 
-          // If ALL games that day are completed and "show past" is off, hide whole day
-          if(!showPast && games.every(g=>g.completed)) continue;
+            // hide entire day if all completed and toggle is off
+            if(!showPast && games.every(g=>g.completed)) continue;
 
-          const day=document.createElement('section');
-          day.className='fixture-day';
-          const h=document.createElement('h3');
-          h.className='fixture-date';
-          h.textContent=new Date(d).toLocaleDateString('en-GB',{weekday:'short',day:'2-digit',month:'short',year:'numeric'});
-          day.appendChild(h);
-
-          const wrap=document.createElement('div');
-          wrap.className='table-wrap';
-          const table=document.createElement('table');
-          table.className='fixtures';
-
-          const thead=document.createElement('thead');
-          thead.innerHTML='<tr><th>Home</th><th>Away</th><th>Status</th></tr>';
-          table.appendChild(thead);
-
-          const tbody=document.createElement('tbody');
-          games.forEach(g=>{
-            if(!showPast && g.completed) return; // also hide completed rows on mixed days
-            const tr=document.createElement('tr');
-            tr.innerHTML = `
-              <td>${g.home}</td>
-              <td>${g.away}</td>
-              <td>${g.completed ? '<span class="badge past">Completed</span>' : '<span class="badge upcoming">Upcoming</span>'}</td>
+            const section = document.createElement('section');
+            section.className='fixture-day';
+            section.innerHTML = `
+              <h3 class="fixture-date">${new Date(d).toLocaleDateString('en-GB',{weekday:'short',day:'2-digit',month:'short',year:'numeric'})}</h3>
+              <div class="fixture-rule"></div>
+              <div class="table-wrap">
+                <table class="fixtures" aria-label="Fixtures for ${d}">
+                  <thead>
+                    <tr>
+                      <th>Home</th>
+                      <th>Away</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
             `;
-            tbody.appendChild(tr);
-          });
+            const tbody = section.querySelector('tbody');
 
-          if(!tbody.children.length) continue; // if all rows hidden in a mixed day
+            games.forEach(g=>{
+              if(!showPast && g.completed) return; // hide completed row on mixed days
+              const tr = document.createElement('tr');
+              tr.innerHTML = `
+                <td>${g.home}</td>
+                <td>${g.away}</td>
+                <td>${g.completed ? '<span class="badge past">Completed</span>' : '<span class="badge upcoming">Upcoming</span>'}</td>
+              `;
+              tbody.appendChild(tr);
+            });
 
-          table.appendChild(tbody);
-          wrap.appendChild(table);
-          day.appendChild(wrap);
-          container.appendChild(day);
-          shown++;
+            if(tbody.children.length){
+              host.appendChild(section);
+              anyShown=true;
+            }
+          }
+
+          if(!anyShown){
+            host.innerHTML='<p style="color:#555;">No upcoming fixtures — all completed fixtures are hidden.</p>';
+          }
         }
 
-        if(shown===0){
-          container.innerHTML = '<p style="color:#555;">No upcoming fixtures — all completed fixtures are hidden.</p>';
-        }
+        render();
+        toggle.addEventListener('change',render);
+      }catch(e){
+        document.getElementById('fixtures').textContent='Error loading fixtures.';
+        console.warn(e);
       }
-
-      render();
-      toggle.addEventListener('change',render);
     })();
   </script>
 </body>
