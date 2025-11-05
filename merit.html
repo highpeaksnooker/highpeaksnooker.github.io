@@ -10,18 +10,21 @@
 <link rel="stylesheet" href="style.css" />
 <style>
   :root{
-    --brand-green:#002b19; --banner-height:140px; --page-max:1100px; --accent:#19d36b;
+    --brand-green:#002b19; --banner-height:140px; --page-max:1400px; --accent:#19d36b;
     --bar-dark:#1f1f1f; --bar-border:#2a2a2a; --overlay-bg:rgba(15,17,22,.85);
 
-    /* base widths (JS will auto-fit --w-week) */
-    --w-name:200px; --w-team:180px; --w-hcp:56px; --w-start:56px;
-    --w-week:40px;  /* will be resized dynamically */
-    --w-pwl:44px; --w-diff:54px; --w-25:52px; --w-hi:88px;
-    --grid-font:.92rem;
+    /* grid base widths (week width can be fixed or auto-fit via JS) */
+    --w-name:220px; --w-team:200px; --w-hcp:78px; --w-start:78px;
+    --w-week:36px;  /* default readable fixed width; auto-fit toggle can override */
+    --w-pwl:52px; --w-diff:64px; --w-25:60px; --w-hi:96px;
+
+    --grid-font:.94rem;
+    --row-pad-v:6px; --row-pad-h:8px;
   }
   html,body{margin:0}
   body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#f7f8fb;color:#0b1220}
   .container{max-width:var(--page-max);margin:0 auto;padding:0 12px}
+  .container.wide{max-width:100%}
 
   /* Crest banner */
   header.logo-header{background:var(--brand-green);box-shadow:0 2px 10px rgba(0,0,0,.25);height:var(--banner-height);display:flex;align-items:center;justify-content:center}
@@ -35,6 +38,7 @@
   /* Menu */
   .menu-bar{background:var(--bar-dark);padding:8px 0 10px;position:relative;z-index:110;border-bottom:1px solid var(--bar-border)}
   .menu-inner{max-width:var(--page-max);margin:0 auto;padding:0 12px;position:relative}
+  .menu-inner.wide{max-width:100%}
   .menu-toggle{width:100%;background:var(--bar-dark);color:#fff;padding:10px 12px;border:1px solid var(--bar-border);border-radius:10px;font-weight:800;font-size:1rem;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,.25) inset}
   .menu-toggle:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
   nav.site-nav{position:absolute;left:12px;right:12px;top:calc(100% + 6px);background:var(--overlay-bg);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.08);border-radius:10px;box-shadow:0 18px 36px rgba(0,0,0,.45);padding:6px;z-index:120}
@@ -46,16 +50,21 @@
   /* Page */
   main.container{background:#fff;padding:1rem 12px 1.2rem;border-radius:10px;margin-top:10px;box-shadow:0 1px 2px rgba(0,0,0,.06)}
   h2{margin:.25rem 0 .6rem 0}
-  .legend{margin:.25rem 0 .75rem 0;color:#475569;font-size:.95rem}
+  .legend{margin:.25rem 0 .5rem 0;color:#475569;font-size:.95rem}
+  .legend strong{color:#0b1b0f}
 
-  /* View tabs */
-  .view-tabs{display:flex;gap:.4rem;margin:.25rem 0 .75rem}
-  .view-tabs .view-btn{margin:0;padding:.4em .8em;border:none;border-radius:8px;font-weight:800;cursor:pointer;background:#eef1f5}
-  .view-tabs .view-btn.active{background:var(--accent);color:#0b1b0f}
+  /* Controls row */
+  .controls{display:flex;flex-wrap:wrap;gap:.5rem 1rem;align-items:center;margin:.5rem 0 .9rem}
+  .controls .seg{display:flex;align-items:center;gap:.4rem}
+  .controls label{font-size:.9rem;color:#334155}
+  .controls input[type="checkbox"]{transform:translateY(1px)}
+  .btn{margin:0;padding:.45em .7em;border:1px solid #d7dbe3;border-radius:8px;background:#f3f5f9;font-weight:800;cursor:pointer}
+  .btn.active{background:var(--accent);color:#0b1b0f;border-color:#12b161}
+  .btn:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 
   /* Team filter tabs */
   .tabs{display:flex;flex-wrap:wrap;gap:.35rem;margin:.25rem 0 .75rem}
-  .tab-btn{margin:0;padding:.35em .7em;border:none;border-radius:6px;font-weight:700;cursor:pointer;color:#000}
+  .tab-btn{margin:0;padding:.35em .7em;border:1px solid #d7dbe3;border-radius:6px;font-weight:700;cursor:pointer;color:#000;background:#eef1f5}
   .tab-btn.active{box-shadow:0 0 0 2px #333 inset}
 
   /* Team colour bands */
@@ -74,14 +83,21 @@
   /* Merit grid */
   .table-scroller{overflow-x:auto;-webkit-overflow-scrolling:touch}
   .player-grid{width:100%;border-collapse:separate;border-spacing:0;background:#fff;font-size:var(--grid-font);table-layout:fixed}
-  .player-grid th,.player-grid td{border:1px solid #e4e4e4;padding:5px 6px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .player-grid th,.player-grid td{
+    border:1px solid #e4e4e4;
+    padding:var(--row-pad-v) var(--row-pad-h);
+    text-align:center;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
   .player-grid thead th{background:#f0f0f0;font-weight:700}
   .player-grid th.sticky,.player-grid td.sticky{position:sticky;left:var(--s0,0px);z-index:2;background:inherit}
   .player-grid th.sticky-2,.player-grid td.sticky-2{position:sticky;left:var(--s1,200px);z-index:2;background:inherit}
   .player-grid th.sticky-3,.player-grid td.sticky-3{position:sticky;left:var(--s2,380px);z-index:2;background:inherit}
   .player-grid th.sticky-4,.player-grid td.sticky-4{position:sticky;left:var(--s3,436px);z-index:2;background:inherit}
   .player-grid td.sticky,.player-grid td.sticky-2,.player-grid td.sticky-3,.player-grid td.sticky-4{box-shadow:2px 0 0 rgba(0,0,0,.05)}
-  .col-name,.col-team{text-align:left;line-height:1.15}
+  .col-name,.col-team{text-align:left;line-height:1.15;white-space:normal} /* allow wrap for wide names/teams */
   .col-name{min-width:var(--w-name);font-size:.9em}
   .col-team{min-width:var(--w-team);font-size:.88em}
   .col-hcp{width:var(--w-hcp)}
@@ -96,6 +112,10 @@
   .cell-l{background:#f6903d;color:#5a2a00;font-weight:700}
   .cell-na{background:#111;color:#fff}
   .cell-blank{background:#fff}
+
+  /* HCP change badge */
+  .hcp-badge{display:inline-flex;align-items:center;gap:.25rem;font-size:.78em;font-weight:800;background:#ecfdf5;color:#065f46;border:1px solid #c7f0e3;border-radius:6px;padding:0 .35rem;margin-left:.25rem}
+  .hcp-badge.down{background:#fff7ed;color:#78350f;border-color:#f5d6b3}
 
   /* Clickable player links */
   a.player-link{color:#0b5; font-weight:700; text-decoration:none}
@@ -127,13 +147,14 @@
   @media (max-width:480px){
     :root{
       --banner-height:110px;
-      --w-name:138px; --w-team:116px; --w-hcp:44px; --w-start:44px;
-      --w-week:32px; --w-pwl:36px; --w-diff:46px; --w-25:42px; --w-hi:70px;
-      --grid-font:.82rem;
+      --w-name:160px; --w-team:130px; --w-hcp:60px; --w-start:60px;
+      --w-week:30px; --w-pwl:44px; --w-diff:54px; --w-25:54px; --w-hi:80px;
+      --grid-font:.85rem;
+      --row-pad-v:5px; --row-pad-h:6px;
     }
-    .player-grid th,.player-grid td{padding:4px 5px}
-    .col-name{font-size:.8em}
-    .col-team{font-size:.78em}
+    .player-grid th,.player-grid td{padding:var(--row-pad-v) var(--row-pad-h)}
+    .col-name{font-size:.82em}
+    .col-team{font-size:.8em}
     .col-b-name{min-width:150px}
     .col-b-team{min-width:110px}
     table.breaks{font-size:.88rem}
@@ -154,7 +175,7 @@
 </div>
 
 <div class="menu-bar">
-  <div class="menu-inner">
+  <div id="menuWide" class="menu-inner">
     <button class="menu-toggle" id="menuToggle" aria-expanded="false" aria-controls="siteNav">☰ Menu</button>
     <nav id="siteNav" class="site-nav" hidden>
       <a href="index.html">Home</a>
@@ -169,13 +190,27 @@
   </div>
 </div>
 
-<main class="container">
+<main id="pageContainer" class="container">
   <h2>Merit</h2>
-  <p class="legend">Filter by team or view all players. Week columns auto-shrink (W1–W18). ⭐ marks current high-break holder.</p>
+  <p class="legend">
+    <strong>Matches use <u>Current HCP</u>.</strong> “Start HCP” is shown for reference (original pre-season value).
+    A ▲/▼ badge indicates a review change.
+  </p>
 
-  <div class="view-tabs">
-    <button class="view-btn active" data-view="merit">Merit Table</button>
-    <button class="view-btn" data-view="breaks">Breaks</button>
+  <!-- Controls -->
+  <div class="controls" aria-label="View options">
+    <div class="seg">
+      <button id="btnWide" class="btn" type="button" title="Toggle full-width layout">Wide Mode</button>
+      <button id="btnDensity" class="btn" type="button" title="Toggle row density">Compact</button>
+    </div>
+    <div class="seg">
+      <label><input id="chkAutoFit" type="checkbox"> Auto-fit week columns</label>
+    </div>
+  </div>
+
+  <div class="view-tabs" style="margin:.2rem 0 .6rem">
+    <button class="view-btn btn active" data-view="merit">Merit Table</button>
+    <button class="view-btn btn" data-view="breaks">Breaks</button>
   </div>
 
   <!-- MERIT VIEW -->
@@ -189,7 +224,7 @@
 
   <!-- PLAYER DETAIL VIEW (initially hidden) -->
   <section id="playerDetail" hidden style="margin-top:1rem">
-    <button id="backToMerit" style="margin-bottom:1rem">← Back to Merit Table</button>
+    <button id="backToMerit" class="btn" style="margin-bottom:1rem">← Back to Merit Table</button>
     <h3 id="detailHeader"></h3>
     <table id="playerFrames" style="width:100%;border-collapse:collapse;background:#fff;font-size:0.95rem">
       <thead>
@@ -308,8 +343,11 @@
   const P = {};
   const breaksByPlayer = {};
   players.forEach(p=>{
-    const currentHcp = (p.HCP ?? p.hcp ?? p.handicap ?? 0);
-    const startingHcp = (p.startingHcp ?? p.startHcp ?? p.hcp_start ?? currentHcp ?? 0);
+    // Canonical numeric values with correct fallbacks
+    const currentHcp  = Number(p.HCP ?? p.hcp ?? p.handicap ?? 0);
+    const startingHcp = (p.startHCP !== undefined && p.startHCP !== null)
+      ? Number(p.startHCP)
+      : Number(p.startingHcp ?? p.hcp_start ?? currentHcp);
 
     P[p.id] = {
       id:p.id, name:p.name, teamId:p.teamId,
@@ -364,12 +402,6 @@
     r.totals.winPct = r.totals.played ? (r.totals.won / r.totals.played) : 0;
   });
 
-  // Highest-break star
-  const leagueHigh = Math.max(0, ...Object.values(P).map(r => r.totals.high || 0));
-  const highBreakHolders = new Set(
-    Object.values(P).filter(r => (r.totals.high||0) === leagueHigh && leagueHigh>0).map(r => r.id)
-  );
-
   function sortRows(rows){
     return rows.sort((a,b)=>{
       if (b.totals.won !== a.totals.won) return b.totals.won - a.totals.won;
@@ -408,9 +440,11 @@
   const startBtn=[...tabs.children].find(b=>b.dataset.teamId===startId)||tabs.firstChild;
   startBtn.classList.add('active');
 
-  /* ===== Auto-fit week column width so W1..Wn fit in the viewport ===== */
+  /* ===== Flexible week column width =====
+     If Auto-fit is enabled, we squeeze week columns to fit.
+     If disabled (default), we keep a readable fixed width with horizontal scroll. */
   function autoFitWeekWidth(tbl, weeksCount){
-    const scroller = tbl.parentElement; // .table-scroller
+    const scroller = tbl.parentElement;
     const visible = scroller.clientWidth || scroller.getBoundingClientRect().width || 0;
     if (!visible) return;
     tbl.style.setProperty('--w-week','32px'); // temp for measuring
@@ -420,11 +454,11 @@
 
     let fixedW = 0;
     head.childNodes.forEach((th, idx)=>{
-      // now 4 fixed columns: Name, Team, HCP, Start
+      // 4 fixed columns: Name, Team, Current HCP, Start HCP + trailing totals
       if (idx < 4 || idx >= 4 + weeksCount) { fixedW += th.offsetWidth || 0; }
     });
 
-    const gutter = 8;
+    const gutter = 12;
     const spaceForWeeks = Math.max(0, visible - fixedW - gutter);
     const minW = 18, maxW = 44;
     const perWeek = Math.floor(spaceForWeeks / Math.max(weeksCount,1));
@@ -441,8 +475,8 @@
     thRow.innerHTML =
       `<th class="sticky col-name">Name</th>
        <th class="sticky-2 col-team">Team</th>
-       <th class="sticky-3 col-hcp">HCP</th>
-       <th class="sticky-4 col-start">Start</th>`;
+       <th class="sticky-3 col-hcp"   title="Current handicap after reviews — used in matches">Current HCP</th>
+       <th class="sticky-4 col-start" title="Original/starting handicap (pre-season)">Start HCP</th>`;
 
     weekDates.forEach((d, i)=>{
       const dt = new Date(d);
@@ -476,11 +510,19 @@
       const tr = document.createElement('tr');
       tr.className = `team-color-${teamColorClass[r.teamId] ?? 0}`;
 
+      const changed = (r.HCP !== r.Start);
+      const direction = r.HCP > r.Start ? 'up' : (r.HCP < r.Start ? 'down' : '');
+      const badge = changed
+        ? `<span class="hcp-badge ${direction==='down'?'down':''}" title="${r.HCP>r.Start?'Increased':'Decreased'} from Start">${direction==='up'?'▲':'▼'}</span>`
+        : '';
+
       const nameCell = `<a href="#" class="player-link" data-id="${r.id}" title="View full results">${escapeHtml(r.name)}${star}</a>`;
+      const teamCell = `${escapeHtml(r.teamName)}`;
+
       tr.innerHTML =
        `<td class="sticky col-name">${nameCell}</td>
-        <td class="sticky-2 col-team">${escapeHtml(r.teamName)}</td>
-        <td class="sticky-3 col-hcp">${r.HCP}</td>
+        <td class="sticky-2 col-team">${teamCell}</td>
+        <td class="sticky-3 col-hcp">${r.HCP}${badge}</td>
         <td class="sticky-4 col-start">${r.Start}</td>`;
 
       weekDates.forEach(d=>{
@@ -516,11 +558,67 @@
     tbl.style.setProperty('--s2', (w0+w1)+'px');
     tbl.style.setProperty('--s3', (w0+w1+w2)+'px');
 
-    // finally, auto-fit week width to visible space
-    autoFitWeekWidth(tbl, weekDates.length);
+    // column sizing mode
+    const auto = document.getElementById('chkAutoFit').checked;
+    if (auto) autoFitWeekWidth(tbl, weekDates.length);
+    else tbl.style.setProperty('--w-week', getComputedStyle(document.documentElement).getPropertyValue('--w-week') || '36px');
   }
 
-  // Initial render
+  // Initial UI state
+  const storedAuto = localStorage.getItem('playersAutoFitWeeks');
+  const storedWide = localStorage.getItem('playersWideMode');
+  const storedDense = localStorage.getItem('playersDensity');
+
+  const chkAuto = document.getElementById('chkAutoFit');
+  chkAuto.checked = storedAuto ? (storedAuto === '1') : false; // default OFF
+
+  const pageContainer = document.getElementById('pageContainer');
+  const menuWide = document.getElementById('menuWide');
+
+  function setWide(on){
+    pageContainer.classList.toggle('wide', on);
+    menuWide.classList.toggle('wide', on);
+    localStorage.setItem('playersWideMode', on ? '1' : '0');
+    document.getElementById('btnWide').classList.toggle('active', on);
+    // re-render to recompute widths if auto-fit is on
+    const tbl=document.getElementById('playersGrid');
+    if (tbl && chkAuto.checked){
+      const weeksCount = tbl.querySelectorAll('thead th.col-week').length;
+      autoFitWeekWidth(tbl, weeksCount);
+    }
+  }
+  setWide(storedWide === '1');
+
+  function setDensity(mode){
+    if (mode === 'compact'){
+      document.documentElement.style.setProperty('--grid-font','.90rem');
+      document.documentElement.style.setProperty('--row-pad-v','4px');
+      document.documentElement.style.setProperty('--row-pad-h','6px');
+    }else{
+      document.documentElement.style.setProperty('--grid-font','.94rem');
+      document.documentElement.style.setProperty('--row-pad-v','6px');
+      document.documentElement.style.setProperty('--row-pad-h','8px');
+    }
+    localStorage.setItem('playersDensity', mode);
+    document.getElementById('btnDensity').classList.toggle('active', mode==='compact');
+  }
+  setDensity(storedDense || 'comfort');
+
+  // Wire up controls
+  document.getElementById('btnWide').addEventListener('click',()=>{
+    const on = !pageContainer.classList.contains('wide');
+    setWide(on);
+  });
+  document.getElementById('btnDensity').addEventListener('click',()=>{
+    const nowCompact = !(localStorage.getItem('playersDensity')==='compact');
+    setDensity(nowCompact ? 'compact' : 'comfort');
+  });
+  chkAuto.addEventListener('change',()=>{
+    localStorage.setItem('playersAutoFitWeeks', chkAuto.checked ? '1' : '0');
+    renderMerit(localStorage.getItem('playersTeamFilter') || '__all__');
+  });
+
+  // First render
   renderMerit(startId);
 
   // === Player Detail View ===
@@ -572,7 +670,6 @@
         const youWon = fr.winner === (youAreHome ? 'home' : 'away');
         const result = youWon ? 'W' : 'L';
 
-        // breaks can be recorded per side
         const myBreaks = youAreHome ? fr?.breaks?.home : fr?.breaks?.away;
 
         rows.push({
@@ -614,7 +711,7 @@
     history.replaceState(null,'', `#player=${encodeURIComponent(playerId)}`);
   }
 
-  // Deep-link support (optional)
+  // Deep-link support
   (function(){
     const m = location.hash.match(/#player=([^&]+)/);
     if(m){
@@ -627,7 +724,6 @@
   document.getElementById('backToMerit').addEventListener('click',()=>{
     document.getElementById('playerDetail').hidden = true;
     document.getElementById('view-merit').hidden = false;
-    // clear hash
     if (location.hash.startsWith('#player=')) {
       history.replaceState(null,'', location.pathname + location.search);
     }
@@ -685,10 +781,10 @@
       document.getElementById('view-merit').hidden = (v!=='merit');
       document.getElementById('view-breaks').hidden = (v!=='breaks');
 
-      // recalc when returning to merit view
+      // recalc when returning to merit view (only if auto-fit is on)
       if (v==='merit'){
         const tbl=document.getElementById('playersGrid');
-        if (tbl){
+        if (tbl && document.getElementById('chkAutoFit').checked){
           const weeksCount = tbl.querySelectorAll('thead th.col-week').length;
           autoFitWeekWidth(tbl, weeksCount);
         }
@@ -696,9 +792,10 @@
     });
   });
 
-  // Recompute on resize (debounced)
+  // Recompute on resize (debounced) — only needed when auto-fit is on
   let resizeTimer;
   window.addEventListener('resize', () => {
+    if (!document.getElementById('chkAutoFit').checked) return;
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(()=>{
       const tbl=document.getElementById('playersGrid');
