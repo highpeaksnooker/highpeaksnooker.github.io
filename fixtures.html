@@ -8,57 +8,29 @@
   <link rel="apple-touch-icon" href="/logo.PNG">
   <link rel="preload" as="image" href="/logo.PNG">
   <link rel="stylesheet" href="style.css" />
-
   <style>
-    :root{
-      --brand-green:#002b19;
-      --banner-height:140px;
-      --page-max:1200px;
-      --accent:#19d36b;
-      --bar-dark:#1f1f1f;
-      --bar-border:#2a2a2a;
-      --overlay-bg:rgba(15,17,22,.85);
-      --badge:#0ea5e9;
-    }
-
+    :root{ --brand-green:#002b19; --banner-height:140px; --page-max:1200px; --accent:#19d36b; --bar-dark:#1f1f1f; --bar-border:#2a2a2a; --overlay-bg:rgba(15,17,22,.85); --badge:#0ea5e9; }
     html,body{margin:0}
     body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#f7f8fb;color:#0b1220}
     .container{max-width:var(--page-max);margin:0 auto;padding:0 12px}
 
     /* Banner */
-    header.logo-header{
-      background:var(--brand-green);
-      box-shadow:0 2px 10px rgba(0,0,0,.25);
-      height:var(--banner-height);
-      display:flex;align-items:center;justify-content:center;
-    }
+    header.logo-header{background:var(--brand-green);box-shadow:0 2px 10px rgba(0,0,0,.25);height:var(--banner-height);display:flex;align-items:center;justify-content:center}
     .logo-banner{height:100%;display:flex;align-items:center;justify-content:center}
     .logo-banner img{height:100%;width:auto;object-fit:contain;display:block;filter:drop-shadow(0 0 6px rgba(0,0,0,.4))}
 
     /* Announcement */
-    #announcement-banner{
-      position:sticky;top:0;z-index:100;display:none;background:var(--bar-dark);color:#fff;
-      font-weight:600;font-size:.85rem;padding:.35rem 0;border-top:1px solid rgba(255,255,255,.06);
-      border-bottom:1px solid var(--bar-border)
-    }
+    #announcement-banner{position:sticky;top:0;z-index:100;display:none;background:var(--bar-dark);color:#fff;font-weight:600;font-size:.85rem;padding:.35rem 0;border-top:1px solid rgba(255,255,255,.06);border-bottom:1px solid var(--bar-border)}
     #announcement-inner{max-width:var(--page-max);margin:0 auto;padding:0 12px;text-align:center}
 
     /* Menu */
     .menu-bar{background:var(--bar-dark);padding:8px 0 10px;position:relative;z-index:110;border-bottom:1px solid var(--bar-border)}
     .menu-inner{max-width:var(--page-max);margin:0 auto;padding:0 12px;position:relative}
-    .menu-toggle{
-      width:100%;background:var(--bar-dark);color:#fff;padding:10px 12px;border:1px solid var(--bar-border);
-      border-radius:10px;font-weight:800;font-size:1rem;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,.25) inset
-    }
+    .menu-toggle{width:100%;background:var(--bar-dark);color:#fff;padding:10px 12px;border:1px solid var(--bar-border);border-radius:10px;font-weight:800;font-size:1rem;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,.25) inset}
     .menu-toggle:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
-    nav.site-nav{
-      position:absolute;left:12px;right:12px;top:calc(100% + 6px);background:var(--overlay-bg);backdrop-filter:blur(6px);
-      border:1px solid rgba(255,255,255,.08);border-radius:10px;box-shadow:0 18px 36px rgba(0,0,0,.45);padding:6px;z-index:120
-    }
+    nav.site-nav{position:absolute;left:12px;right:12px;top:calc(100% + 6px);background:var(--overlay-bg);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.08);border-radius:10px;box-shadow:0 18px 36px rgba(0,0,0,.45);padding:6px;z-index:120}
     [hidden]{display:none!important}
-    nav.site-nav a{
-      display:block;color:#e5e7eb;text-decoration:none;font-weight:700;padding:10px 10px;border-radius:8px
-    }
+    nav.site-nav a{display:block;color:#e5e7eb;text-decoration:none;font-weight:700;padding:10px 10px;border-radius:8px}
     nav.site-nav a:hover{background:rgba(255,255,255,.1)}
     nav.site-nav a.active{background:var(--accent);color:#0b1b0f}
 
@@ -66,7 +38,6 @@
     main.container{background:#fff;padding:1rem 12px 1.5rem;border-radius:10px;margin-top:10px;box-shadow:0 1px 2px rgba(0,0,0,.06)}
     h2{margin:.25rem 0 .25rem 0}
     .hint{margin:0 0 10px;color:#475569;font-size:.93rem}
-
     .controls{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap;margin:.5rem 0 0}
     .controls button{padding:.4rem .7rem;border-radius:8px;border:1px solid #d7dce3;background:#eef1f5;font-weight:700;cursor:pointer}
 
@@ -82,32 +53,19 @@
     .fixtures tbody tr:hover{background:#f1f7ff}
 
     footer{text-align:center;padding:1.5rem 1rem;color:#777}
-
-    @media (max-width:480px){
-      :root{--banner-height:110px}
-      .menu-toggle{font-size:.95rem;padding:9px 11px}
-      .fixtures th,.fixtures td{padding:.55rem .6rem}
-      .fixture-date{font-size:1rem}
-    }
+    @media (max-width:480px){ :root{--banner-height:110px} .menu-toggle{font-size:.95rem;padding:9px 11px} .fixtures th,.fixtures td{padding:.55rem .6rem} .fixture-date{font-size:1rem} }
   </style>
 </head>
 <body>
 
-  <!-- Crest banner -->
   <header class="logo-header" role="banner">
-    <div class="logo-banner">
-      <img src="logo.PNG?v=19" alt="High Peak &amp; Marple Snooker League crest">
-    </div>
+    <div class="logo-banner"><img src="logo.PNG?v=22" alt="High Peak &amp; Marple Snooker League crest"></div>
   </header>
 
-  <!-- Announcement bar -->
   <div id="announcement-banner" role="status" aria-live="polite">
-    <div id="announcement-inner" class="container">
-      <span id="announcement-text"></span>
-    </div>
+    <div id="announcement-inner" class="container"><span id="announcement-text"></span></div>
   </div>
 
-  <!-- Menu bar -->
   <div class="menu-bar">
     <div class="menu-inner">
       <button class="menu-toggle" id="menuToggle" aria-expanded="false" aria-controls="siteNav">☰ Menu</button>
@@ -126,7 +84,7 @@
 
   <main class="container">
     <h2>Fixtures</h2>
-    <p class="hint">Completed weeks disappear automatically once results are recorded. Use the toggle to show/hide them.</p>
+    <p class="hint">Completed fixture dates are hidden automatically when a result exists. Toggle to show/hide them.</p>
     <div class="controls">
       <button id="toggleCompleted" aria-pressed="false">Show completed weeks</button>
     </div>
@@ -135,8 +93,8 @@
 
   <footer>&copy; 2025 High Peak &amp; Marple Snooker League</footer>
 
-  <!-- Menu logic -->
   <script>
+    // Menu
     (function(){
       const btn=document.getElementById('menuToggle');
       const nav=document.getElementById('siteNav');
@@ -145,23 +103,14 @@
       document.addEventListener('click',(e)=>{if(!nav.hidden&&!nav.contains(e.target)&&e.target!==btn&&!btn.contains(e.target)){closeNav()}});
       document.addEventListener('keydown',(e)=>{if(e.key==='Escape')closeNav()});
     })();
-  </script>
 
-  <!-- Announcement -->
-  <script>
+    // Announcement
     fetch('data/announcement.json',{cache:'no-store'})
       .then(r=>r.json())
-      .then(d=>{
-        if(d&&d.message&&d.message.trim()){
-          document.getElementById('announcement-text').textContent=d.message.trim();
-          document.getElementById('announcement-banner').style.display='block';
-        }
-      })
+      .then(d=>{ if(d&&d.message&&d.message.trim()){ document.getElementById('announcement-text').textContent=d.message.trim(); document.getElementById('announcement-banner').style.display='block'; }})
       .catch(()=>{});
-  </script>
 
-  <!-- Fixtures logic with robust match detection -->
-  <script>
+    // Fixtures logic
     (async function(){
       const debug = new URLSearchParams(location.search).get('debug') === '1';
       const container = document.getElementById('fixtures');
@@ -175,27 +124,21 @@
         fetch('data/matches.json',{cache:'no-store'}).then(r=>r.json()).catch(()=>[])
       ]);
 
-      // Lookups
+      // Lookups and normalisers
       const teamById = Object.fromEntries((teams||[]).map(t => [t.id, t]));
       const nameToId = {};
-      (teams||[]).forEach(t=>{
-        if (t?.name) nameToId[normName(t.name)] = t.id;
-      });
+      (teams||[]).forEach(t=>{ if(t?.name){ nameToId[normName(t.name)] = t.id; } });
 
-      // === Normalisers ===
-      function normApos(s){ return s.replace(/[’‘`´]/g,"'"); }
-      function normHyphen(s){ return s.replace(/[-–—]/g,' '); }
-      function normSpaces(s){ return s.trim().replace(/\s+/g,' '); }
-      function normName(s){
-        return normSpaces(normHyphen(normApos(String(s||'').toLowerCase())));
-      }
+      function normApos(s){ return String(s||'').replace(/[’‘`´]/g,"'"); }
+      function normHyphen(s){ return String(s||'').replace(/[-–—]/g,' '); }
+      function normSpaces(s){ return String(s||'').trim().replace(/\s+/g,' '); }
+      function normName(s){ return normSpaces(normHyphen(normApos(String(s||'').toLowerCase()))); }
+
       function dateKey(d){
         if(!d) return '';
         if (typeof d === 'string'){
-          // keep only YYYY-MM-DD if present
           const m = d.match(/^(\d{4}-\d{2}-\d{2})/);
           if (m) return m[1];
-          // try to parse
         }
         const dt = new Date(d);
         if (isNaN(dt)) return String(d);
@@ -204,39 +147,27 @@
         const day = String(dt.getDate()).padStart(2,'0');
         return `${y}-${m}-${day}`;
       }
+      function dateObj(d){ const s=dateKey(d); const [y,m,dd]=s.split('-').map(Number); return new Date(y, (m||1)-1, dd||1); }
+      function daysDiff(a,b){ const ms = dateObj(a)-dateObj(b); return Math.round(ms/86400000); }
 
-      // Prefer IDs; if missing, fall back to name->id; if still missing return null
-      function resolveTeamId(side, isHome, obj){
+      function resolveIdFromFixture(side, isHome, obj){
         const idKey = isHome ? 'homeTeamId' : 'awayTeamId';
-        const nameKey = isHome ? 'home' : 'away';
-        // direct id
         if (obj && obj[idKey]) return obj[idKey];
-
-        // object shapes
+        if (typeof side === 'string' && nameToId[normName(side)]) return nameToId[normName(side)];
         if (side && typeof side === 'object'){
           if (side.id) return side.id;
           if (side.teamId) return side.teamId;
           if (side.name && nameToId[normName(side.name)]) return nameToId[normName(side.name)];
         }
-
-        // string name
-        if (typeof side === 'string' && nameToId[normName(side)]) return nameToId[normName(side)];
-
-        // try alternative field
-        if (obj && obj[nameKey] && typeof obj[nameKey] === 'string'){
-          const nm = normName(obj[nameKey]);
-          if (nameToId[nm]) return nameToId[nm];
-        }
+        const nameKey = isHome ? 'home' : 'away';
+        if (obj && obj[nameKey] && nameToId[normName(obj[nameKey])]) return nameToId[normName(obj[nameKey])];
         return null;
       }
-
-      function printLabelFromRef(ref){
-        if (teamById[ref]?.name) return teamById[ref].name;
-        if (typeof ref === 'string') return ref;
-        return String(ref||'');
+      function labelFromIdOrRaw(id, raw){
+        if (id && teamById[id]?.name) return teamById[id].name;
+        return raw ?? id ?? '';
       }
 
-      // Completed definition (as per Results visibility)
       function isComplete(m){
         if (!m) return false;
         if (m.status === 'postponed' || m.status === 'void') return true;
@@ -245,73 +176,63 @@
         return false;
       }
 
-      // === Build match key index (both id-based and name-based) ===
-      // Key shapes:
-      //  A) id key:    date|id:HOME|id:AWAY
-      //  B) name key:  date|nm:home name|nm:away name
-      const completedKeys = new Set();
-      const whyKey = debug ? new Map() : null;
+      // Build indexes of completed matches
+      // 1) exact fixtureId linkage (best)
+      const completedByFixtureId = new Set();
+      // 2) by pair id/name with their dates (for ±7 day heuristic)
+      const completedByPair = new Map();      // key: "id|homeId|awayId" -> [dates]
+      const completedByPairName = new Map();  // key: "nm|homeName|awayName" -> [dates]
 
-      function addKey(key, origin){
-        completedKeys.add(key);
-        if (whyKey) whyKey.set(key, origin);
-      }
+      function push(map,key,val){ if(!map.has(key)) map.set(key,[]); map.get(key).push(val); }
 
       (matches||[]).forEach(m=>{
-        if (!isComplete(m)) return;
-        const d = dateKey(m.date);
+        if(!isComplete(m)) return;
+        if (m.fixtureId) completedByFixtureId.add(String(m.fixtureId));
 
-        // Try resolve ids
+        const d = dateKey(m.date);
         const hId = m.homeTeamId || null;
         const aId = m.awayTeamId || null;
+        const hName = teamById[hId]?.name ?? (typeof m.home === 'string' ? m.home : (m.home?.name || m.home)) ?? hId ?? '';
+        const aName = teamById[aId]?.name ?? (typeof m.away === 'string' ? m.away : (m.away?.name || m.away)) ?? aId ?? '';
 
-        if (hId && aId){
-          addKey(`${d}|id:${hId}|id:${aId}`, 'match(id)');
-        }
-
-        // Build printable names for name-based key
-        // Priority: teamById name -> fallback to raw
-        const hNameRaw = teamById[hId]?.name ?? (typeof m.home === 'string' ? m.home : (m.home?.name || m.home)) ?? hId;
-        const aNameRaw = teamById[aId]?.name ?? (typeof m.away === 'string' ? m.away : (m.away?.name || m.away)) ?? aId;
-        const hNm = normName(hNameRaw);
-        const aNm = normName(aNameRaw);
-        addKey(`${d}|nm:${hNm}|nm:${aNm}`, 'match(name)');
-
-        // If match stored ONLY with names (no ids)
-        if (!hId || !aId){
-          const hAlt = normName(typeof m.home === 'string' ? m.home : (m.home?.name || m.home || ''));
-          const aAlt = normName(typeof m.away === 'string' ? m.away : (m.away?.name || m.away || ''));
-          if (hAlt && aAlt){
-            addKey(`${d}|nm:${hAlt}|nm:${aAlt}`, 'match(name-only)');
-          }
-        }
+        if (hId && aId) push(completedByPair, `id|${hId}|${aId}`, d);
+        push(completedByPairName, `nm|${normName(hName)}|${normName(aName)}`, d);
       });
 
-      // === Group fixtures and filter completed ones ===
+      // Group fixtures by date, hiding rows that are complete (exact or ±7 days)
       const byDate = {};
       (fixtures||[]).forEach(f=>{
         const d = dateKey(f.date);
+        const hId = resolveIdFromFixture(f.home, true, f);
+        const aId = resolveIdFromFixture(f.away, false, f);
+        const homeLabel = labelFromIdOrRaw(hId, f.home);
+        const awayLabel = labelFromIdOrRaw(aId, f.away);
 
-        const hId = resolveTeamId(f.home, true, f);
-        const aId = resolveTeamId(f.away, false, f);
+        // 1) Exact fixtureId link check
+        const linkedDone = f.fixtureId && completedByFixtureId.has(String(f.fixtureId));
 
-        // printable labels
-        const homeLabel = f.home ? printLabelFromRef(hId || f.home) : printLabelFromRef(hId || f.homeTeamId || 'Home');
-        const awayLabel = f.away ? printLabelFromRef(aId || f.away) : printLabelFromRef(aId || f.awayTeamId || 'Away');
+        // 2) Exact same date + pair id or name
+        const idDates = (hId && aId) ? (completedByPair.get(`id|${hId}|${aId}`) || []) : [];
+        const nmDates = completedByPairName.get(`nm|${normName(homeLabel)}|${normName(awayLabel)}`) || [];
+        const exactSameDate =
+          idDates.some(md => dateKey(md) === d) ||
+          nmDates.some(md => dateKey(md) === d);
 
-        // keys to try: id then name
-        const idKey = (hId && aId) ? `${d}|id:${hId}|id:${aId}` : null;
-        const nmKey = `${d}|nm:${normName(homeLabel)}|nm:${normName(awayLabel)}`;
+        // 3) Heuristic: within ±7 days (postponed/rescheduled within the week)
+        const withinWindow = (arr) => arr.some(md => Math.abs(daysDiff(md, d)) <= 7);
+        const nearSameWeek = withinWindow(idDates) || withinWindow(nmDates);
 
-        const completed = (idKey && completedKeys.has(idKey)) || completedKeys.has(nmKey);
+        const completed = !!(linkedDone || exactSameDate || nearSameWeek);
 
         (byDate[d] ||= []).push({
-          date:d,
-          hId,aId,
-          homeLabel, awayLabel,
-          completed,
-          debugIdKey:idKey,
-          debugNmKey:nmKey
+          date:d, hId, aId, homeLabel, awayLabel, completed,
+          dbg: debug ? {
+            fixtureId: f.fixtureId ?? null,
+            linkedDone, exactSameDate, nearSameWeek,
+            idKey: hId&&aId ? `id|${hId}|${aId}` : null,
+            nmKey: `nm|${normName(homeLabel)}|${normName(awayLabel)}`,
+            idDates, nmDates
+          } : null
         });
       });
 
@@ -328,61 +249,56 @@
 
           if (allDone && !showCompleted) return;
 
-          const day = document.createElement('section');
-          day.className = 'fixture-day';
+          const sec = document.createElement('section');
+          sec.className = 'fixture-day';
 
           const h = document.createElement('h3');
           h.className = 'fixture-date';
-          const dateStr = new Date(d).toLocaleDateString('en-GB',{weekday:'short',day:'2-digit',month:'short',year:'numeric'});
-          h.textContent = dateStr;
+          h.textContent = new Date(d).toLocaleDateString('en-GB',{weekday:'short',day:'2-digit',month:'short',year:'numeric'});
 
           if (!allDone && !firstUpcomingMarked){
-            const badge = document.createElement('span');
-            badge.className = 'badge';
-            badge.textContent = 'Next up';
-            h.appendChild(badge);
-            firstUpcomingMarked = true;
+            const badge = document.createElement('span'); badge.className='badge'; badge.textContent='Next up';
+            h.appendChild(badge); firstUpcomingMarked = true;
           }
           if (allDone && showCompleted){
-            const badge = document.createElement('span');
-            badge.className = 'badge';
-            badge.style.background = '#64748b';
-            badge.textContent = 'Completed';
+            const badge = document.createElement('span'); badge.className='badge'; badge.style.background='#64748b'; badge.textContent='Completed';
             h.appendChild(badge);
           }
 
-          day.appendChild(h);
+          sec.appendChild(h);
 
-          const wrap = document.createElement('div');
-          wrap.className = 'table-wrap';
-          const table = document.createElement('table');
-          table.className = 'fixtures';
+          const wrap = document.createElement('div'); wrap.className='table-wrap';
+          const table = document.createElement('table'); table.className='fixtures';
 
           const rows = (showCompleted && allDone) ? games : remaining;
-
           table.innerHTML = `
             <thead>
-              <tr><th>Home</th><th>Away</th>${debug?'<th style="width:38%">Debug</th>':''}</tr>
+              <tr><th>Home</th><th>Away</th>${debug?'<th style="width:40%">Debug</th>':''}</tr>
             </thead>
             <tbody>
               ${
                 rows.length
                   ? rows.map(g=>`
-                    <tr>
-                      <td title="${g.homeLabel}">${g.homeLabel}</td>
-                      <td title="${g.awayLabel}">${g.awayLabel}</td>
-                      ${debug?`<td style="font-size:.8rem;color:#475569">
-                        idKey: ${g.debugIdKey?'<code>'+g.debugIdKey+'</code>':'—'}<br>
-                        nmKey: <code>${g.debugNmKey}</code><br>
-                        matched? ${g.completed?'✅':'❌'}${g.completed && whyKey && (whyKey.get(g.debugIdKey)||whyKey.get(g.debugNmKey)) ? ' via '+(whyKey.get(g.debugIdKey)||whyKey.get(g.debugNmKey)) : ''}
-                      </td>`:''}
-                    </tr>`).join('')
+                      <tr>
+                        <td title="${g.homeLabel}">${g.homeLabel}</td>
+                        <td title="${g.awayLabel}">${g.awayLabel}</td>
+                        ${
+                          debug ? `<td style="font-size:.8rem;color:#475569">
+                            fixtureId: ${g.dbg?.fixtureId ?? '—'} ${g.dbg?.linkedDone ? '✅' : ''}<br>
+                            exactSameDate: ${g.dbg?.exactSameDate ? '✅' : '—'}<br>
+                            nearSameWeek (±7d): ${g.dbg?.nearSameWeek ? '✅' : '—'}<br>
+                            idKey: ${g.dbg?.idKey ?? '—'} dates: ${(g.dbg?.idDates||[]).join(', ') || '—'}<br>
+                            nmKey: ${g.dbg?.nmKey} dates: ${(g.dbg?.nmDates||[]).join(', ') || '—'}
+                          </td>` : ''
+                        }
+                      </tr>
+                    `).join('')
                   : `<tr><td colspan="${debug?3:2}" style="color:#64748b">All fixtures for this date are completed.</td></tr>`
               }
             </tbody>`;
           wrap.appendChild(table);
-          day.appendChild(wrap);
-          container.appendChild(day);
+          sec.appendChild(wrap);
+          container.appendChild(sec);
         });
 
         if (!container.children.length){
