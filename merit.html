@@ -14,7 +14,7 @@
     --bar-dark:#1f1f1f; --bar-border:#2a2a2a; --overlay-bg:rgba(15,17,22,.85);
 
     /* base widths (JS will auto-fit --w-week) */
-    --w-name:200px; --w-team:180px; --w-hcp:74px; --w-start:64px;
+    --w-name:220px; --w-team:180px; --w-hcp:62px;
     --w-week:40px;  /* will be resized dynamically */
     --w-pwl:44px; --w-diff:54px; --w-25:52px; --w-hi:88px;
     --grid-font:.92rem;
@@ -83,21 +83,22 @@
   tr.team-color-9{background-color:#e0f7fa}
   .tab-btn.color-0{background:#cce8ff}.tab-btn.color-1{background:#bfffbf}.tab-btn.color-2{background:#ffd4b3}.tab-btn.color-3{background:#ebccff}.tab-btn.color-4{background:#fff9b3}.tab-btn.color-5{background:#d6d6ff}.tab-btn.color-6{background:#b3ffe0}.tab-btn.color-7{background:#ffcce0}.tab-btn.color-8{background:#dddddd}.tab-btn.color-9{background:#b2ebf2}
 
-  /* Merit grid */
+  /* Tables */
   .table-scroller{overflow-x:auto;-webkit-overflow-scrolling:touch;position:relative}
-  .player-grid{width:100%;border-collapse:separate;border-spacing:0;background:#fff;font-size:var(--grid-font);table-layout:fixed}
-  .player-grid th,.player-grid td{border:1px solid #e4e4e4;padding:var(--cell-pad-y) var(--cell-pad-x);text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .player-grid thead th{background:#f0f0f0;font-weight:700}
-  .player-grid th.sticky,   .player-grid td.sticky   { position:sticky; left:var(--s0,0px); z-index:2; background:inherit }
-  .player-grid th.sticky-2, .player-grid td.sticky-2{ position:sticky; left:var(--s1,0px); z-index:2; background:inherit }
-  .player-grid th.sticky-3, .player-grid td.sticky-3{ position:sticky; left:var(--s2,0px); z-index:2; background:inherit }
-  .player-grid th.sticky-4, .player-grid td.sticky-4{ position:sticky; left:var(--s3,0px); z-index:2; background:inherit }
-  .player-grid td.sticky,.player-grid td.sticky-2,.player-grid td.sticky-3,.player-grid td.sticky-4{box-shadow:2px 0 0 rgba(0,0,0,.05)}
+  table.grid{width:100%;border-collapse:separate;border-spacing:0;background:#fff;font-size:var(--grid-font);table-layout:fixed}
+  table.grid th,table.grid td{border:1px solid #e4e4e4;padding:var(--cell-pad-y) var(--cell-pad-x);text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  table.grid thead th{background:#f0f0f0;font-weight:700}
+
+  /* Sticky cols for Merit */
+  #playersGrid th.sticky,   #playersGrid td.sticky   { position:sticky; left:var(--s0,0px); z-index:2; background:inherit }
+  #playersGrid th.sticky-2, #playersGrid td.sticky-2{ position:sticky; left:var(--s1,0px); z-index:2; background:inherit }
+  #playersGrid th.sticky-3, #playersGrid td.sticky-3{ position:sticky; left:var(--s2,0px); z-index:2; background:inherit }
+  #playersGrid td.sticky,#playersGrid td.sticky-2,#playersGrid td.sticky-3{box-shadow:2px 0 0 rgba(0,0,0,.05)}
+
   .col-name,.col-team{text-align:left;line-height:1.15}
   .col-name{min-width:var(--w-name);font-size:.9em}
   .col-team{min-width:var(--w-team);font-size:.88em}
   .col-hcp{width:var(--w-hcp)}
-  .col-start{width:var(--w-start)}
   .col-week{width:var(--w-week);min-width:var(--w-week);font-variant-numeric:tabular-nums}
   .col-p,.col-w,.col-l{width:var(--w-pwl)}
   .col-diff{width:var(--w-diff)}
@@ -109,31 +110,40 @@
   .cell-na{background:#111;color:#fff}
   .cell-blank{background:#fff}
 
-  /* Handicap labels & delta */
+  /* Handicaps table (separate view) */
+  #handicapsGrid th.sticky,   #handicapsGrid td.sticky   { position:sticky; left:0; z-index:2; background:inherit }
+  #handicapsGrid th.sticky-2, #handicapsGrid td.sticky-2{ position:sticky; left:var(--h1,240px); z-index:2; background:inherit }
+  #handicapsGrid th.sticky-3, #handicapsGrid td.sticky-3{ position:sticky; left:var(--h2,420px); z-index:2; background:inherit }
+
+  /* Handicap visuals */
   .sub{display:block;font-size:.75em;color:#64748b;font-weight:600}
   .hcp-now{font-weight:800}
-  .delta{display:inline-block;min-width:2.2ch;padding:.05rem .35rem;border-radius:999px;font-size:.78em;font-weight:800;vertical-align:baseline;margin-left:.3rem}
+  .delta{display:inline-block;min-width:2.2ch;padding:.05rem .35rem;border-radius:999px;font-size:.78em;font-weight:800;vertical-align:baseline;margin-left:.35rem}
   .delta.up{background:#e7f7ef;color:#0a7a2a;border:1px solid #bfead1}
   .delta.down{background:#fde8e8;color:#a32020;border:1px solid #f5bebe}
   .delta.flat{background:#eef1f5;color:#444;border:1px solid #dde2ea}
 
+  /* Links */
+  a.player-link{color:#0b5; font-weight:700; text-decoration:none}
+  a.player-link:hover, a.player-link:focus{ text-decoration:underline; outline:none }
+
   footer{text-align:center;padding:1.2rem 1rem;color:#777}
 
   /* Compact mode */
-  .compact .player-grid{font-size:.86rem}
+  .compact table.grid{font-size:.86rem}
   .compact :root, .compact{--cell-pad-y:3px; --cell-pad-x:5px}
-  .compact .col-name{min-width:170px}
+  .compact .col-name{min-width:190px}
   .compact .col-team{min-width:150px}
 
   /* Mobile tweaks */
   @media (max-width:480px){
     :root{
       --banner-height:110px;
-      --w-name:138px; --w-team:116px; --w-hcp:58px; --w-start:50px;
+      --w-name:160px; --w-team:128px; --w-hcp:54px;
       --w-week:30px; --w-pwl:36px; --w-diff:46px; --w-25:42px; --w-hi:70px;
       --grid-font:.84rem;
     }
-    .player-grid th,.player-grid td{padding:4px 5px}
+    table.grid th,table.grid td{padding:4px 5px}
     .col-name{font-size:.8em}
     .col-team{font-size:.78em}
   }
@@ -142,7 +152,7 @@
 <body>
 <header class="logo-header" role="banner">
   <div class="logo-banner">
-    <img src="logo.PNG?v=17" alt="High Peak &amp; Marple Snooker League crest">
+    <img src="logo.PNG?v=18" alt="High Peak &amp; Marple Snooker League crest">
   </div>
 </header>
 
@@ -171,8 +181,8 @@
 <main class="container" id="pageContainer">
   <h2>Merit</h2>
   <p class="legend">
-    <strong>Use current handicap</strong> (shown under <em>HCP (Now)</em> with any change since the start as Δ).
-    <br />Filter by team or view all players. Week columns auto-shrink (W1–W18). ⭐ marks current high-break holder.
+    <strong>Merit table uses each player’s <em>current handicap</em> (HCP)</strong>.  
+    The new <strong>Handicaps</strong> tab lists all players whose handicap changed, with start → now → Δ.
   </p>
 
   <div class="controls" aria-label="Display options">
@@ -185,51 +195,38 @@
 
   <div class="view-tabs">
     <button class="view-btn active" data-view="merit">Merit Table</button>
+    <button class="view-btn" data-view="handicaps">Handicaps</button>
     <button class="view-btn" data-view="breaks">Breaks</button>
   </div>
 
   <!-- MERIT VIEW -->
   <section id="view-merit">
-    <div class="tabs" id="teamTabs"></div>
+    <div class="tabs" id="teamTabsMerit"></div>
     <div class="table-scroller">
-      <table id="playersGrid" class="player-grid" aria-describedby="meritHeatmap"></table>
+      <table id="playersGrid" class="grid" aria-describedby="meritHeatmap"></table>
     </div>
     <p id="meritHeatmap" class="visually-hidden">Player weekly results grid with wins/losses by week (W1..W18) and totals.</p>
   </section>
 
-  <!-- PLAYER DETAIL VIEW (initially hidden) -->
-  <section id="playerDetail" hidden style="margin-top:1rem">
-    <button id="backToMerit" style="margin-bottom:1rem">← Back to Merit Table</button>
-    <h3 id="detailHeader"></h3>
-    <table id="playerFrames" style="width:100%;border-collapse:collapse;background:#fff;font-size:0.95rem">
-      <thead>
-        <tr>
-          <th>Date</th>
-          <th>Fixture</th>
-          <th>Home/Away</th>
-          <th>Opponent</th>
-          <th>Opponent Team</th>
-          <th>Score</th>
-          <th>Result</th>
-          <th>Breaks</th>
-        </tr>
-      </thead>
-      <tbody id="playerFramesBody"></tbody>
-    </table>
-    <p id="noFrames" style="display:none;color:#666">No frame data for this player yet.</p>
+  <!-- HANDICAPS VIEW -->
+  <section id="view-handicaps" hidden>
+    <div class="tabs" id="teamTabsHcp"></div>
+    <div class="table-scroller">
+      <table id="handicapsGrid" class="grid"></table>
+    </div>
   </section>
 
   <!-- BREAKS VIEW -->
   <section id="view-breaks" hidden>
-    <div class="breaks-wrap">
-      <table class="breaks" id="breaksTable">
+    <div class="table-scroller">
+      <table class="grid" id="breaksTable">
         <thead>
           <tr>
-            <th class="col-b-name">Player</th>
-            <th class="col-b-team">Team</th>
-            <th class="col-b-count">25+</th>
-            <th class="col-b-high">High</th>
-            <th class="col-b-list">Breaks</th>
+            <th style="min-width:220px;text-align:left">Player</th>
+            <th style="min-width:160px;text-align:left">Team</th>
+            <th style="width:70px">25+</th>
+            <th style="width:90px">High</th>
+            <th>Breaks</th>
           </tr>
         </thead>
         <tbody id="breaksBody"></tbody>
@@ -271,10 +268,10 @@
     .catch(()=>{});
 </script>
 
-<!-- Merit / Breaks / Player Detail logic -->
+<!-- Main logic -->
 <script>
 (async function () {
-  const WEEK_MAX = 18; // render W1..W18
+  const WEEK_MAX = 18;
 
   const [teams, players, fixtures, matches] = await Promise.all([
     fetch('data/teams.json',{cache:'no-store'}).then(r=>r.json()),
@@ -296,40 +293,29 @@
     menuContainer.classList.toggle('wide', on);
     localStorage.setItem('playersWideMode', on ? '1' : '0');
     btnWide.classList.toggle('active', on);
-    computeStickyOffsets();
-    if (chkAuto.checked){
-      const tbl=document.getElementById('playersGrid');
-      if (tbl){
-        const weeksCount = tbl.querySelectorAll('thead th.col-week').length;
-        autoFitWeekWidth(tbl, weeksCount);
-      }
-    }
+    computeStickyOffsetsMerit();
+    if (chkAuto.checked) fitWeeks();
   }
   function setDensity(compact){
     document.body.classList.toggle('compact', compact);
     localStorage.setItem('playersCompactMode', compact ? '1' : '0');
     btnDensity.classList.toggle('active', compact);
-    computeStickyOffsets();
-    if (chkAuto.checked){
-      const tbl=document.getElementById('playersGrid');
-      if (tbl){
-        const weeksCount = tbl.querySelectorAll('thead th.col-week').length;
-        autoFitWeekWidth(tbl, weeksCount);
-      }
-    }
+    computeStickyOffsetsMerit();
+    if (chkAuto.checked) fitWeeks();
   }
 
-  // initial states from storage
   setWide(localStorage.getItem('playersWideMode') === '1');
   setDensity(localStorage.getItem('playersCompactMode') === '1');
 
   btnWide.addEventListener('click', ()=> setWide(!btnWide.classList.contains('active')));
   btnDensity.addEventListener('click', ()=> setDensity(!btnDensity.classList.contains('active')));
 
+  /* === Basic maps === */
   const teamById = Object.fromEntries(teams.map(t => [t.id, t]));
   const playerById = Object.fromEntries(players.map(p => [p.id, p]));
   const teamColorClass = {}; teams.forEach((t,i)=> teamColorClass[t.id] = i % 10);
 
+  /* === Helpers === */
   function isComplete(m){
     if (!m) return false;
     if (m.status === 'postponed' || m.status === 'void') return true;
@@ -344,19 +330,18 @@
     return arr.filter(n=>typeof n==='number');
   }
 
-  // Confirmed dates from completed matches
+  /* === Dates / weeks === */
   const completedMatches = matches.filter(isComplete);
   const dateSet = new Set(completedMatches.map(m => m.date));
   const confirmedDatesAll = Array.from(dateSet).sort((a,b)=>new Date(a)-new Date(b));
-  const weekDates = confirmedDatesAll.slice(0, WEEK_MAX); // cap at 18
+  const weekDates = confirmedDatesAll.slice(0, WEEK_MAX);
 
-  // Which teams had fixtures on those dates
   const teamHasFixture = {};
   for (const d of weekDates){ teamHasFixture[d] = {}; teams.forEach(t=>teamHasFixture[d][t.id]=false); }
   completedMatches.forEach(m=>{ if(teamHasFixture[m.date]){ teamHasFixture[m.date][m.homeTeamId]=true; teamHasFixture[m.date][m.awayTeamId]=true; }});
   fixtures.forEach(f=>{ if(teamHasFixture[f.date]){ teamHasFixture[f.date][f.homeTeamId]=true; teamHasFixture[f.date][f.awayTeamId]=true; }});
 
-  // Player rows + breaks accumulator
+  /* === Build player rows === */
   const P = {};
   const breaksByPlayer = {};
   players.forEach(p=>{
@@ -416,7 +401,6 @@
     r.totals.winPct = r.totals.played ? (r.totals.won / r.totals.played) : 0;
   });
 
-  // Highest-break star
   const leagueHigh = Math.max(0, ...Object.values(P).map(r => r.totals.high || 0));
 
   function sortRows(rows){
@@ -429,48 +413,20 @@
     });
   }
 
-  // Team tabs
-  const tabs = document.getElementById('teamTabs');
-  const ALL='__all__';
-  function mkBtn(id,label,colorClass){
-    const b=document.createElement('button');
-    b.type='button';
-    b.className='tab-btn'+(colorClass!==null?` color-${colorClass}`:'');
-    b.dataset.teamId=id;
-    b.textContent=label;
-    b.addEventListener('click',()=>{
-      document.querySelectorAll('.tab-btn').forEach(x=>x.classList.remove('active'));
-      b.classList.add('active');
-      localStorage.setItem('playersTeamFilter',id);
-      const newUrl = id && id!==ALL ? `?team=${encodeURIComponent(id)}` : location.pathname;
-      history.replaceState(null,'',newUrl);
-      renderMerit(id);
-    });
-    return b;
-  }
-  tabs.appendChild(mkBtn(ALL,'All Teams',null));
-  teams.forEach(t=> tabs.appendChild(mkBtn(t.id,t.name,teamColorClass[t.id])));
-
-  const urlTeam=new URLSearchParams(location.search).get('team');
-  const stored=localStorage.getItem('playersTeamFilter');
-  const startId=(urlTeam&&teamById[urlTeam])?urlTeam:(stored&&teamById[stored]?stored:ALL);
-  const startBtn=[...tabs.children].find(b=>b.dataset.teamId===startId)||tabs.firstChild;
-  startBtn.classList.add('active');
-
-  /* ===== Auto-fit week column width so W1..Wn fit in the viewport ===== */
+  /* ========== MERIT TABLE RENDER ========== */
   function autoFitWeekWidth(tbl, weeksCount){
-    const scroller = tbl.parentElement; // .table-scroller
+    const scroller = tbl.parentElement;
     const visible = scroller.clientWidth || scroller.getBoundingClientRect().width || 0;
     if (!visible) return;
-    tbl.style.setProperty('--w-week','32px'); // temp for measuring
+    tbl.style.setProperty('--w-week','32px');
 
     const head = tbl.querySelector('thead tr');
     if (!head) return;
 
     let fixedW = 0;
     head.childNodes.forEach((th, idx)=>{
-      // 4 fixed columns: Name, Team, HCP (Now), Start
-      if (idx < 4 || idx >= 4 + weeksCount) { fixedW += th.offsetWidth || 0; }
+      // 3 fixed columns: Name, Team, HCP (Now)
+      if (idx < 3 || idx >= 3 + weeksCount) { fixedW += th.offsetWidth || 0; }
     });
 
     const gutter = 8;
@@ -480,9 +436,7 @@
     const target = Math.max(minW, Math.min(maxW, perWeek));
     tbl.style.setProperty('--w-week', target + 'px');
   }
-
-  // NEW: centralised sticky-offset calculator
-  function computeStickyOffsets() {
+  function computeStickyOffsetsMerit(){
     const tbl = document.getElementById('playersGrid');
     if (!tbl) return;
     const head = tbl.querySelector('thead tr');
@@ -492,50 +446,65 @@
       (head?.children[i]?.getBoundingClientRect().width) ||
       (row ?.children[i]?.getBoundingClientRect().width) || 0;
 
-    const w0 = w(0), w1 = w(1), w2 = w(2);
+    const w0 = w(0), w1 = w(1);
     tbl.style.setProperty('--s0','0px');
     tbl.style.setProperty('--s1', w0 + 'px');
     tbl.style.setProperty('--s2', (w0 + w1) + 'px');
-    tbl.style.setProperty('--s3', (w0 + w1 + w2) + 'px');
+  }
+  function fitWeeks(){
+    const tbl=document.getElementById('playersGrid');
+    if (!tbl) return;
+    const weeksCount = tbl.querySelectorAll('thead th.col-week').length;
+    autoFitWeekWidth(tbl, weeksCount);
   }
 
-  // Render Merit (with W1..Wn headers)
+  const tabsMerit = document.getElementById('teamTabsMerit');
+  const ALL='__all__';
+  function mkBtn(id,label,colorClass, onClick){
+    const b=document.createElement('button');
+    b.type='button';
+    b.className='tab-btn'+(colorClass!==null?` color-${colorClass}`:'');
+    b.dataset.teamId=id;
+    b.textContent=label;
+    b.addEventListener('click',()=>{
+      [...b.parentElement.children].forEach(x=>x.classList.remove('active'));
+      b.classList.add('active');
+      onClick(id);
+    });
+    return b;
+  }
+
   function renderMerit(teamFilter){
     const tbl = document.getElementById('playersGrid');
 
     const thead = document.createElement('thead');
-    const thRow = document.createElement('tr');
-    thRow.innerHTML =
+    const trh = document.createElement('tr');
+    trh.innerHTML =
       `<th class="sticky col-name">Name</th>
        <th class="sticky-2 col-team">Team</th>
-       <th class="sticky-3 col-hcp">
-         HCP (Now)<span class="sub">use this</span>
-       </th>
-       <th class="sticky-4 col-start">
-         Start<span class="sub">season start</span>
-       </th>`;
+       <th class="sticky-3 col-hcp">HCP</th>`;
 
     weekDates.forEach((d, i)=>{
       const dt = new Date(d);
       const ddmmyyLong = isNaN(dt) ? d : dt.toLocaleDateString('en-GB',{day:'2-digit',month:'long',year:'numeric'});
       const th=document.createElement('th');
       th.className='col-week';
-      th.title = ddmmyyLong;        // full date on tooltip
-      th.textContent = 'W' + (i+1); // header label
-      thRow.appendChild(th);
+      th.title = ddmmyyLong;
+      th.textContent = 'W' + (i+1);
+      trh.appendChild(th);
     });
 
     [['P','col-p'],['W','col-w'],['L','col-l'],['+/-','col-diff'],['25+','col-25'],['High Break','col-hi']]
       .forEach(([label,cls])=>{
-        const th=document.createElement('th'); th.textContent=label; th.className=cls; thRow.appendChild(th);
+        const th=document.createElement('th'); th.textContent=label; th.className=cls; trh.appendChild(th);
       });
 
-    thead.appendChild(thRow);
+    thead.appendChild(trh);
 
     const tbody = document.createElement('tbody');
     let rows = Object.values(P);
-    rows = (!teamFilter || teamFilter === '__all__') ? rows.filter(r => r.totals.played > 0)
-                                                     : rows.filter(r => r.teamId === teamFilter && r.totals.played > 0);
+    rows = (!teamFilter || teamFilter === ALL) ? rows.filter(r => r.totals.played > 0)
+                                              : rows.filter(r => r.teamId === teamFilter && r.totals.played > 0);
     rows = sortRows(rows);
 
     rows.forEach(r=>{
@@ -545,19 +514,11 @@
       const tr = document.createElement('tr');
       tr.className = `team-color-${teamColorClass[r.teamId] ?? 0}`;
 
-      const delta = (r.HCP - r.Start);
-      const deltaTxt = delta>0?`+${delta}`:`${delta}`;
-      const deltaClass = delta>0?'up':(delta<0?'down':'flat');
-
       const nameCell = `<a href="#" class="player-link" data-id="${r.id}" title="View full results">${escapeHtml(r.name)}${star}</a>`;
       tr.innerHTML =
        `<td class="sticky col-name">${nameCell}</td>
         <td class="sticky-2 col-team">${escapeHtml(r.teamName)}</td>
-        <td class="sticky-3 col-hcp">
-          <span class="hcp-now">${r.HCP}</span>
-          <span class="delta ${deltaClass}" title="Change since start">${deltaTxt}</span>
-        </td>
-        <td class="sticky-4 col-start">${r.Start}</td>`;
+        <td class="sticky-3 col-hcp">${r.HCP}</td>`;
 
       weekDates.forEach(d=>{
         const v = r.perDate[d];
@@ -581,23 +542,128 @@
 
     tbl.replaceChildren(thead, tbody);
 
-    // sticky offsets for first 4 cols
-    computeStickyOffsets();
-
-    // finally, auto-fit week width to visible space (if enabled)
-    if (chkAuto.checked){
-      autoFitWeekWidth(tbl, weekDates.length);
-    }
+    computeStickyOffsetsMerit();
+    if (chkAuto.checked) fitWeeks();
   }
 
-  // Initial render
-  renderMerit(startId);
+  // Merit team tabs
+  (function initMeritTabs(){
+    const tabs = tabsMerit;
+    tabs.innerHTML = '';
+    tabs.appendChild(mkBtn(ALL,'All Teams',null,(id)=>{ localStorage.setItem('playersTeamFilter',id); renderMerit(id); }));
+    teams.forEach(t=> tabs.appendChild(mkBtn(t.id,t.name,teamColorClass[t.id],(id)=>{ localStorage.setItem('playersTeamFilter',id); renderMerit(id); })));
+    const urlTeam=new URLSearchParams(location.search).get('team');
+    const stored=localStorage.getItem('playersTeamFilter');
+    const startId=(urlTeam&&teamById[urlTeam])?urlTeam:(stored&&teamById[stored]?stored:ALL);
+    const startBtn=[...tabs.children].find(b=>b.dataset.teamId===startId)||tabs.firstChild;
+    startBtn.classList.add('active');
+    renderMerit(startId);
+  })();
 
-  // === Player Detail View ===
+  /* ========== HANDICAPS VIEW RENDER ========== */
+  function renderHandicaps(teamFilter){
+    const tbl = document.getElementById('handicapsGrid');
+
+    const thead = document.createElement('thead');
+    const trh = document.createElement('tr');
+    trh.innerHTML =
+      `<th class="sticky" style="min-width:220px;text-align:left">Name</th>
+       <th class="sticky-2" style="min-width:180px;text-align:left">Team</th>
+       <th class="sticky-3" style="width:90px">Start</th>
+       <th style="width:90px">HCP (Now)</th>
+       <th style="width:90px">Δ</th>`;
+    thead.appendChild(trh);
+
+    const tbody = document.createElement('tbody');
+
+    let rows = Object.values(P)
+      .filter(r => r.HCP !== r.Start); // only changed handicaps
+
+    rows = (!teamFilter || teamFilter === ALL) ? rows
+                                              : rows.filter(r => r.teamId === teamFilter);
+
+    // Sort by magnitude of change, then name
+    rows.sort((a,b)=>{
+      const da = Math.abs(a.HCP - a.Start);
+      const db = Math.abs(b.HCP - b.Start);
+      if (db!==da) return db-da;
+      return a.name.localeCompare(b.name);
+    });
+
+    rows.forEach(r=>{
+      const delta = r.HCP - r.Start;
+      const deltaTxt = (delta>0?'+':'') + delta;
+      const deltaClass = delta>0?'up':(delta<0?'down':'flat');
+
+      const tr = document.createElement('tr');
+      tr.className = `team-color-${teamColorClass[r.teamId] ?? 0}`;
+      tr.innerHTML =
+        `<td class="sticky" style="text-align:left"><a href="#" class="player-link" data-id="${r.id}" title="View full results">${escapeHtml(r.name)}</a></td>
+         <td class="sticky-2" style="text-align:left">${escapeHtml(r.teamName)}</td>
+         <td class="sticky-3">${r.Start}</td>
+         <td class="hcp-now">${r.HCP}</td>
+         <td><span class="delta ${deltaClass}" title="Change since start">${deltaTxt}</span></td>`;
+      tbody.appendChild(tr);
+    });
+
+    tbl.replaceChildren(thead, tbody);
+
+    // Sticky offsets for first three columns in Handicaps table
+    const head = tbl.querySelector('thead tr');
+    const row  = tbl.querySelector('tbody tr');
+    const w = i =>
+      (head?.children[i]?.getBoundingClientRect().width) ||
+      (row ?.children[i]?.getBoundingClientRect().width) || 0;
+    tbl.style.setProperty('--h1', (w(0)) + 'px');
+    tbl.style.setProperty('--h2', (w(0)+w(1)) + 'px');
+  }
+
+  // Handicaps team tabs
+  (function initHcpTabs(){
+    const tabs = document.getElementById('teamTabsHcp');
+    tabs.innerHTML = '';
+    tabs.appendChild(mkBtn(ALL,'All Teams',null,(id)=>{ localStorage.setItem('hcpTeamFilter',id); renderHandicaps(id); }));
+    teams.forEach(t=> tabs.appendChild(mkBtn(t.id,t.name,teamColorClass[t.id],(id)=>{ localStorage.setItem('hcpTeamFilter',id); renderHandicaps(id); })));
+    const stored=localStorage.getItem('hcpTeamFilter') || ALL;
+    const startBtn=[...tabs.children].find(b=>b.dataset.teamId===stored)||tabs.firstChild;
+    startBtn.classList.add('active');
+    renderHandicaps(stored);
+  })();
+
+  /* ========== BREAKS VIEW ========== */
+  function renderBreaks(){
+    const body = document.getElementById('breaksBody');
+    body.innerHTML = '';
+
+    const seriesHigh = Math.max(0, ...Object.values(breaksByPlayer).map(b => b.high || 0));
+    const rows = Object.entries(breaksByPlayer)
+      .map(([pid,info])=>{
+        const list = [...info.list].sort((a,b)=>b-a);
+        return { pid, name:info.name, team:info.teamName, count:list.length, high:list[0]||0, list };
+      })
+      .filter(r=>r.count>0)
+      .sort((a,b)=> (b.high-a.high)||(b.count-a.count)||a.name.localeCompare(b.name));
+
+    rows.forEach(r=>{
+      const isHigh = r.high === seriesHigh && seriesHigh>0;
+      const star = isHigh ? ' <span class="star" aria-hidden="true">⭐</span>' : '';
+      const tr=document.createElement('tr');
+      tr.innerHTML = `
+        <td style="text-align:left;min-width:220px">${escapeHtml(r.name)}${star}</td>
+        <td style="text-align:left;min-width:160px">${escapeHtml(r.team)}</td>
+        <td style="text-align:center">${r.count}</td>
+        <td style="text-align:center">${r.high}${isHigh ? ' ⭐' : ''}</td>
+        <td>${r.list.join(' · ')}</td>`;
+      body.appendChild(tr);
+    });
+  }
+  renderBreaks();
+
+  /* ========== Player detail (click from any table) ========== */
   function formatDate(d){
     if(!d) return '';
     const dt = new Date(d);
-    if (isNaN(dt)) return d; // fallback to raw
+    if (isNaN(dt)) return d;
     return dt.toLocaleDateString('en-GB',{weekday:'short', day:'2-digit', month:'short', year:'numeric'});
   }
   function listBreaks(b){
@@ -608,19 +674,12 @@
   }
 
   function showPlayerDetail(playerId){
-    const section = document.getElementById('playerDetail');
-    const tableBody = document.getElementById('playerFramesBody');
-    const header = document.getElementById('detailHeader');
-    const meritSection = document.getElementById('view-merit');
-    const p = playerById[playerId];
-    if(!p){ return; }
+    const section = document.getElementById('view-merit'); // keep focus on main section
+    const detail = document.createElement('div'); // lightweight modal-ish table
+    detail.id='playerDetailTemp';
+    detail.style.marginTop='1rem';
 
-    // Hide main merit view, show detail view
-    meritSection.hidden = true;
-    section.hidden = false;
-    header.textContent = `${p.name} — ${teamById[p.teamId]?.name || p.teamId}`;
-
-    // Gather all frames from matches.json
+    // rows
     const rows = [];
     for(const m of matches){
       const frames = Array.isArray(m.frames) ? m.frames : [];
@@ -658,47 +717,39 @@
     }
 
     rows.sort((a,b)=> a.date.localeCompare(b.date));
-    tableBody.innerHTML = '';
-    if(!rows.length){
-      document.getElementById('noFrames').style.display = '';
-      return;
-    }
-    document.getElementById('noFrames').style.display = 'none';
 
-    rows.forEach(r=>{
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
-        <td>${escapeHtml(formatDate(r.date))}</td>
-        <td>${escapeHtml(r.fixture)}</td>
-        <td>${escapeHtml(r.hoa)}</td>
-        <td>${escapeHtml(r.opponent)}</td>
-        <td>${escapeHtml(r.oppTeam)}</td>
-        <td>${escapeHtml(r.score)}</td>
-        <td class="${r.result==='W'?'result-win':'result-loss'}">${r.result}</td>
-        <td>${escapeHtml(r.breaks)}</td>`;
-      tableBody.appendChild(tr);
-    });
-
+    const html = `
+      <div style="border:1px solid #e5e5e5;padding:10px;border-radius:8px;background:#fff">
+        <button id="closeDetail" style="float:right">✕</button>
+        <h3 style="margin:.2rem 0 .8rem">${escapeHtml(playerById[playerId]?.name||'Player')} — ${escapeHtml(teamById[playerById[playerId]?.teamId||'']?.name||'')}</h3>
+        <div class="table-scroller">
+          <table class="grid" style="width:100%;font-size:.95rem">
+            <thead><tr>
+              <th>Date</th><th>Fixture</th><th>Home/Away</th><th>Opponent</th><th>Opponent Team</th><th>Score</th><th>Result</th><th>Breaks</th>
+            </tr></thead>
+            <tbody>
+              ${rows.map(r=>`
+                <tr>
+                  <td>${escapeHtml(formatDate(r.date))}</td>
+                  <td style="text-align:left">${escapeHtml(r.fixture)}</td>
+                  <td>${escapeHtml(r.hoa)}</td>
+                  <td>${escapeHtml(r.opponent)}</td>
+                  <td>${escapeHtml(r.oppTeam)}</td>
+                  <td>${escapeHtml(r.score)}</td>
+                  <td style="font-weight:700;${r.result==='W'?'color:#0a7a2a':'color:#b02a0a'}">${r.result}</td>
+                  <td>${escapeHtml(r.breaks)}</td>
+                </tr>`).join('')}
+            </tbody>
+          </table>
+        </div>
+        <div style="clear:both"></div>
+      </div>`;
+    detail.innerHTML = html;
+    document.querySelector('#playerDetailTemp')?.remove();
+    section.appendChild(detail);
+    document.getElementById('closeDetail').addEventListener('click',()=> detail.remove());
     history.replaceState(null,'', `#player=${encodeURIComponent(playerId)}`);
   }
-
-  // Deep-link support (optional)
-  (function(){
-    const m = location.hash.match(/#player=([^&]+)/);
-    if(m){
-      const pid = decodeURIComponent(m[1]);
-      if(playerById[pid]) showPlayerDetail(pid);
-    }
-  })();
-
-  // Back button
-  document.getElementById('backToMerit').addEventListener('click',()=>{
-    document.getElementById('playerDetail').hidden = true;
-    document.getElementById('view-merit').hidden = false;
-    if (location.hash.startsWith('#player=')) {
-      history.replaceState(null,'', location.pathname + location.search);
-    }
-  });
 
   // Delegate clicks on player links
   document.addEventListener('click', e=>{
@@ -710,56 +761,28 @@
     }
   });
 
-  // Breaks view
-  function renderBreaks(){
-    const body = document.getElementById('breaksBody');
-    body.innerHTML = '';
+  // Deep link
+  (function(){
+    const m = location.hash.match(/#player=([^&]+)/);
+    if(m){
+      const pid = decodeURIComponent(m[1]);
+      if(playerById[pid]) showPlayerDetail(pid);
+    }
+  })();
 
-    const seriesHigh = Math.max(0, ...Object.values(breaksByPlayer).map(b => b.high || 0));
-    const rows = Object.entries(breaksByPlayer)
-      .map(([pid,info])=>{
-        const list = [...info.list].sort((a,b)=>b-a);
-        return { pid, name:info.name, team:info.teamName, count:list.length, high:list[0]||0, list };
-      })
-      .filter(r=>r.count>0)
-      .sort((a,b)=> (b.high-a.high)||(b.count-a.count)||a.name.localeCompare(b.name));
-
-    rows.forEach(r=>{
-      const isHigh = r.high === seriesHigh && seriesHigh>0;
-      const star = isHigh ? ' <span class="star" aria-hidden="true">⭐</span>' : '';
-      const tr=document.createElement('tr');
-      tr.innerHTML = `
-        <td class="col-b-name">${escapeHtml(r.name)}${star}</td>
-        <td class="col-b-team">${escapeHtml(r.team)}</td>
-        <td class="col-b-count">${r.count}</td>
-        <td class="col-b-high">${r.high}${isHigh ? ' ⭐' : ''}</td>
-        <td class="col-b-list">${r.list.join(' · ')}</td>`;
-      body.appendChild(tr);
-    });
-  }
-  renderBreaks();
-
-  // View switcher
+  /* ========== View switcher ========== */
   document.querySelectorAll('.view-btn').forEach(btn=>{
     btn.addEventListener('click',()=>{
       document.querySelectorAll('.view-btn').forEach(b=>b.classList.remove('active'));
       btn.classList.add('active');
       const v = btn.dataset.view;
 
-      // If a player detail is open and user switches tabs, hide it
-      document.getElementById('playerDetail').hidden = true;
+      document.getElementById('view-merit').hidden      = (v!=='merit');
+      document.getElementById('view-handicaps').hidden  = (v!=='handicaps');
+      document.getElementById('view-breaks').hidden     = (v!=='breaks');
 
-      document.getElementById('view-merit').hidden = (v!=='merit');
-      document.getElementById('view-breaks').hidden = (v!=='breaks');
-
-      if (v==='merit'){
-        const tbl=document.getElementById('playersGrid');
-        computeStickyOffsets();
-        if (chkAuto.checked && tbl){
-          const weeksCount = tbl.querySelectorAll('thead th.col-week').length;
-          autoFitWeekWidth(tbl, weeksCount);
-        }
-      }
+      // Keep stickies aligned and weeks fitted when switching back
+      if (v==='merit'){ computeStickyOffsetsMerit(); if (chkAuto.checked) fitWeeks(); }
     });
   });
 
@@ -768,14 +791,8 @@
   window.addEventListener('resize', () => {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(()=>{
-      computeStickyOffsets(); // always keep sticky aligned
-      if (chkAuto.checked){
-        const tbl=document.getElementById('playersGrid');
-        if (tbl){
-          const weeksCount = tbl.querySelectorAll('thead th.col-week').length;
-          autoFitWeekWidth(tbl, weeksCount);
-        }
-      }
+      computeStickyOffsetsMerit();
+      if (chkAuto.checked) fitWeeks();
     }, 100);
   }, { passive:true });
 
