@@ -13,7 +13,7 @@
     :root{
       --brand-green:#002b19;
       --banner-height:140px;
-      --page-max:1200px;    /* a little wider so names don't truncate */
+      --page-max:1200px;
       --accent:#19d36b;
       --bar-dark:#1f1f1f;
       --bar-border:#2a2a2a;
@@ -25,7 +25,7 @@
     body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#f7f8fb;color:#0b1220}
     .container{max-width:var(--page-max);margin:0 auto;padding:0 12px}
 
-    /* ===== Crest banner ===== */
+    /* Banner */
     header.logo-header{
       background:var(--brand-green);
       box-shadow:0 2px 10px rgba(0,0,0,.25);
@@ -35,7 +35,7 @@
     .logo-banner{height:100%;display:flex;align-items:center;justify-content:center}
     .logo-banner img{height:100%;width:auto;object-fit:contain;display:block;filter:drop-shadow(0 0 6px rgba(0,0,0,.4))}
 
-    /* ===== Announcement bar ===== */
+    /* Announcement */
     #announcement-banner{
       position:sticky;top:0;z-index:100;display:none;background:var(--bar-dark);color:#fff;
       font-weight:600;font-size:.85rem;padding:.35rem 0;border-top:1px solid rgba(255,255,255,.06);
@@ -43,7 +43,7 @@
     }
     #announcement-inner{max-width:var(--page-max);margin:0 auto;padding:0 12px;text-align:center}
 
-    /* ===== Menu bar ===== */
+    /* Menu */
     .menu-bar{background:var(--bar-dark);padding:8px 0 10px;position:relative;z-index:110;border-bottom:1px solid var(--bar-border)}
     .menu-inner{max-width:var(--page-max);margin:0 auto;padding:0 12px;position:relative}
     .menu-toggle{
@@ -62,15 +62,13 @@
     nav.site-nav a:hover{background:rgba(255,255,255,.1)}
     nav.site-nav a.active{background:var(--accent);color:#0b1b0f}
 
-    /* ===== Fixtures page content ===== */
+    /* Page */
     main.container{background:#fff;padding:1rem 12px 1.5rem;border-radius:10px;margin-top:10px;box-shadow:0 1px 2px rgba(0,0,0,.06)}
     h2{margin:.25rem 0 .25rem 0}
     .hint{margin:0 0 10px;color:#475569;font-size:.93rem}
 
     .controls{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap;margin:.5rem 0 0}
-    .controls button{
-      padding:.4rem .7rem;border-radius:8px;border:1px solid #d7dce3;background:#eef1f5;font-weight:700;cursor:pointer
-    }
+    .controls button{padding:.4rem .7rem;border-radius:8px;border:1px solid #d7dce3;background:#eef1f5;font-weight:700;cursor:pointer}
 
     .fixture-day{margin:22px 0 26px}
     .fixture-date{display:flex;align-items:center;gap:.5rem;margin:0 0 10px;font-weight:800;color:#0f172a;font-size:1.05rem;padding-bottom:6px;border-bottom:2px solid var(--accent)}
@@ -98,7 +96,7 @@
   <!-- Crest banner -->
   <header class="logo-header" role="banner">
     <div class="logo-banner">
-      <img src="logo.PNG?v=18" alt="High Peak &amp; Marple Snooker League crest">
+      <img src="logo.PNG?v=19" alt="High Peak &amp; Marple Snooker League crest">
     </div>
   </header>
 
@@ -162,9 +160,10 @@
       .catch(()=>{});
   </script>
 
-  <!-- Fixtures logic (auto-hide completed) -->
+  <!-- Fixtures logic with robust match detection -->
   <script>
     (async function(){
+      const debug = new URLSearchParams(location.search).get('debug') === '1';
       const container = document.getElementById('fixtures');
       const toggleBtn = document.getElementById('toggleCompleted');
       let showCompleted = false;
@@ -178,124 +177,173 @@
 
       // Lookups
       const teamById = Object.fromEntries((teams||[]).map(t => [t.id, t]));
-      const nameToId  = {};
+      const nameToId = {};
       (teams||[]).forEach(t=>{
-        if (t?.name) nameToId[t.name.trim().toLowerCase()] = t.id;
+        if (t?.name) nameToId[normName(t.name)] = t.id;
       });
 
-      // Helpers
-      function normName(n){ return (n||'').toString().trim().toLowerCase().replace(/\s+/g,' '); }
-      function getTeamIdFromFixtureSide(side){
-        // Prefer id fields if present, otherwise map the provided name to an id
-        if (side?.id) return side.id;
-        if (typeof side === 'string' && nameToId[normName(side)]) return nameToId[normName(side)];
-        if (typeof side === 'object' && side.teamId) return side.teamId;
-        return null;
+      // === Normalisers ===
+      function normApos(s){ return s.replace(/[’‘`´]/g,"'"); }
+      function normHyphen(s){ return s.replace(/[-–—]/g,' '); }
+      function normSpaces(s){ return s.trim().replace(/\s+/g,' '); }
+      function normName(s){
+        return normSpaces(normHyphen(normApos(String(s||'').toLowerCase())));
       }
-      function teamIdFromFields(obj, home){
-        // Try common shapes
-        const idKey = home ? 'homeTeamId' : 'awayTeamId';
-        const nameKey = home ? 'home' : 'away';
-        if (obj[idKey]) return obj[idKey];
-        if (obj[nameKey]){
-          return (typeof obj[nameKey] === 'string')
-            ? (nameToId[normName(obj[nameKey])] || obj[nameKey])    // fall back to name string
-            : getTeamIdFromFixtureSide(obj[nameKey]) || null;
+      function dateKey(d){
+        if(!d) return '';
+        if (typeof d === 'string'){
+          // keep only YYYY-MM-DD if present
+          const m = d.match(/^(\d{4}-\d{2}-\d{2})/);
+          if (m) return m[1];
+          // try to parse
+        }
+        const dt = new Date(d);
+        if (isNaN(dt)) return String(d);
+        const y = dt.getFullYear();
+        const m = String(dt.getMonth()+1).padStart(2,'0');
+        const day = String(dt.getDate()).padStart(2,'0');
+        return `${y}-${m}-${day}`;
+      }
+
+      // Prefer IDs; if missing, fall back to name->id; if still missing return null
+      function resolveTeamId(side, isHome, obj){
+        const idKey = isHome ? 'homeTeamId' : 'awayTeamId';
+        const nameKey = isHome ? 'home' : 'away';
+        // direct id
+        if (obj && obj[idKey]) return obj[idKey];
+
+        // object shapes
+        if (side && typeof side === 'object'){
+          if (side.id) return side.id;
+          if (side.teamId) return side.teamId;
+          if (side.name && nameToId[normName(side.name)]) return nameToId[normName(side.name)];
+        }
+
+        // string name
+        if (typeof side === 'string' && nameToId[normName(side)]) return nameToId[normName(side)];
+
+        // try alternative field
+        if (obj && obj[nameKey] && typeof obj[nameKey] === 'string'){
+          const nm = normName(obj[nameKey]);
+          if (nameToId[nm]) return nameToId[nm];
         }
         return null;
       }
 
-      function labelFromTeamRef(ref){
-        // ref might be id or plain name; resolve to printable name
+      function printLabelFromRef(ref){
         if (teamById[ref]?.name) return teamById[ref].name;
-        // try reverse by name map (already a name)
-        return (typeof ref === 'string') ? ref : String(ref||'');
+        if (typeof ref === 'string') return ref;
+        return String(ref||'');
       }
 
-      // Build a quick index of matches by (date | homeId | awayId)
+      // Completed definition (as per Results visibility)
       function isComplete(m){
         if (!m) return false;
-        if (m.status === 'postponed' || m.status === 'void') return true; // considered resolved for fixtures list
-        if (typeof m.homeFrames === 'number' && typeof m.awayFrames === 'number') return true;
+        if (m.status === 'postponed' || m.status === 'void') return true;
+        if (Number.isFinite(m.homeFrames) && Number.isFinite(m.awayFrames)) return true;
         if (Array.isArray(m.frames) && m.frames.some(fr => fr.winner==='home' || fr.winner==='away')) return true;
         return false;
       }
-      const matchIndex = new Map();
-      (matches||[]).forEach(m=>{
-        const key = [m.date, m.homeTeamId, m.awayTeamId].join('|');
-        matchIndex.set(key, m);
-      });
 
-      function hasCompletedMatch(date, homeId, awayId){
-        const key = [date, homeId, awayId].join('|');
-        const m = matchIndex.get(key);
-        return isComplete(m);
+      // === Build match key index (both id-based and name-based) ===
+      // Key shapes:
+      //  A) id key:    date|id:HOME|id:AWAY
+      //  B) name key:  date|nm:home name|nm:away name
+      const completedKeys = new Set();
+      const whyKey = debug ? new Map() : null;
+
+      function addKey(key, origin){
+        completedKeys.add(key);
+        if (whyKey) whyKey.set(key, origin);
       }
 
-      // Group fixtures by date and filter completed items
+      (matches||[]).forEach(m=>{
+        if (!isComplete(m)) return;
+        const d = dateKey(m.date);
+
+        // Try resolve ids
+        const hId = m.homeTeamId || null;
+        const aId = m.awayTeamId || null;
+
+        if (hId && aId){
+          addKey(`${d}|id:${hId}|id:${aId}`, 'match(id)');
+        }
+
+        // Build printable names for name-based key
+        // Priority: teamById name -> fallback to raw
+        const hNameRaw = teamById[hId]?.name ?? (typeof m.home === 'string' ? m.home : (m.home?.name || m.home)) ?? hId;
+        const aNameRaw = teamById[aId]?.name ?? (typeof m.away === 'string' ? m.away : (m.away?.name || m.away)) ?? aId;
+        const hNm = normName(hNameRaw);
+        const aNm = normName(aNameRaw);
+        addKey(`${d}|nm:${hNm}|nm:${aNm}`, 'match(name)');
+
+        // If match stored ONLY with names (no ids)
+        if (!hId || !aId){
+          const hAlt = normName(typeof m.home === 'string' ? m.home : (m.home?.name || m.home || ''));
+          const aAlt = normName(typeof m.away === 'string' ? m.away : (m.away?.name || m.away || ''));
+          if (hAlt && aAlt){
+            addKey(`${d}|nm:${hAlt}|nm:${aAlt}`, 'match(name-only)');
+          }
+        }
+      });
+
+      // === Group fixtures and filter completed ones ===
       const byDate = {};
       (fixtures||[]).forEach(f=>{
-        const date = f.date;
-        const hId  = teamIdFromFields(f, true);
-        const aId  = teamIdFromFields(f, false);
+        const d = dateKey(f.date);
 
-        // Store original printable labels for table
-        const homeLabel = f.home ? labelFromTeamRef(f.home) : (teamById[hId]?.name || hId || '');
-        const awayLabel = f.away ? labelFromTeamRef(f.away) : (teamById[aId]?.name || aId || '');
+        const hId = resolveTeamId(f.home, true, f);
+        const aId = resolveTeamId(f.away, false, f);
 
-        // If we can't resolve ids, we still allow printing but can't auto-hide on result
-        const completed = (date && hId && aId) ? hasCompletedMatch(date, hId, aId) : false;
+        // printable labels
+        const homeLabel = f.home ? printLabelFromRef(hId || f.home) : printLabelFromRef(hId || f.homeTeamId || 'Home');
+        const awayLabel = f.away ? printLabelFromRef(aId || f.away) : printLabelFromRef(aId || f.awayTeamId || 'Away');
 
-        (byDate[date] ||= []).push({
-          date,
-          homeId:hId, awayId:aId,
+        // keys to try: id then name
+        const idKey = (hId && aId) ? `${d}|id:${hId}|id:${aId}` : null;
+        const nmKey = `${d}|nm:${normName(homeLabel)}|nm:${normName(awayLabel)}`;
+
+        const completed = (idKey && completedKeys.has(idKey)) || completedKeys.has(nmKey);
+
+        (byDate[d] ||= []).push({
+          date:d,
+          hId,aId,
           homeLabel, awayLabel,
-          completed
+          completed,
+          debugIdKey:idKey,
+          debugNmKey:nmKey
         });
       });
 
-      // Sort dates (ascending) then decide which sections to hide
       const dates = Object.keys(byDate).sort((a,b)=> new Date(a) - new Date(b));
 
-      // Build DOM with hidden completed weeks optionally
       function render(){
         container.innerHTML = '';
-        let firstVisibleDateRendered = false;
+        let firstUpcomingMarked = false;
 
         dates.forEach(d=>{
           const games = byDate[d];
+          const remaining = games.filter(g=>!g.completed);
+          const allDone = remaining.length === 0;
 
-          // Remove completed fixtures for that date
-          const remaining = games.filter(g => !g.completed);
-
-          // If a date has no remaining games AND showCompleted == false, skip entire section
-          const hideWhole = (remaining.length === 0) && (showCompleted === false);
-
-          // If section hidden, skip
-          if (hideWhole) return;
+          if (allDone && !showCompleted) return;
 
           const day = document.createElement('section');
           day.className = 'fixture-day';
 
           const h = document.createElement('h3');
           h.className = 'fixture-date';
-
-          // Badge “Next up” for the earliest section that is not fully completed
-          const isAllCompleted = remaining.length === 0;
-          const showBadge = !firstVisibleDateRendered && !isAllCompleted;
-          if (!isAllCompleted && !firstVisibleDateRendered) firstVisibleDateRendered = true;
-
           const dateStr = new Date(d).toLocaleDateString('en-GB',{weekday:'short',day:'2-digit',month:'short',year:'numeric'});
           h.textContent = dateStr;
 
-          if (showBadge){
+          if (!allDone && !firstUpcomingMarked){
             const badge = document.createElement('span');
             badge.className = 'badge';
             badge.textContent = 'Next up';
             h.appendChild(badge);
+            firstUpcomingMarked = true;
           }
-          // If we are showing completed weeks (toggle on), note it
-          if (isAllCompleted && showCompleted){
+          if (allDone && showCompleted){
             const badge = document.createElement('span');
             badge.className = 'badge';
             badge.style.background = '#64748b';
@@ -310,18 +358,26 @@
           const table = document.createElement('table');
           table.className = 'fixtures';
 
-          // Decide which set of rows to render (remaining or all, based on toggle)
-          const rows = (showCompleted && isAllCompleted) ? games : remaining;
+          const rows = (showCompleted && allDone) ? games : remaining;
 
           table.innerHTML = `
             <thead>
-              <tr><th>Home</th><th>Away</th></tr>
+              <tr><th>Home</th><th>Away</th>${debug?'<th style="width:38%">Debug</th>':''}</tr>
             </thead>
             <tbody>
               ${
                 rows.length
-                ? rows.map(g=>`<tr><td title="${g.homeLabel}">${g.homeLabel}</td><td title="${g.awayLabel}">${g.awayLabel}</td></tr>`).join('')
-                : `<tr><td colspan="2" style="color:#64748b">All fixtures for this date are completed.</td></tr>`
+                  ? rows.map(g=>`
+                    <tr>
+                      <td title="${g.homeLabel}">${g.homeLabel}</td>
+                      <td title="${g.awayLabel}">${g.awayLabel}</td>
+                      ${debug?`<td style="font-size:.8rem;color:#475569">
+                        idKey: ${g.debugIdKey?'<code>'+g.debugIdKey+'</code>':'—'}<br>
+                        nmKey: <code>${g.debugNmKey}</code><br>
+                        matched? ${g.completed?'✅':'❌'}${g.completed && whyKey && (whyKey.get(g.debugIdKey)||whyKey.get(g.debugNmKey)) ? ' via '+(whyKey.get(g.debugIdKey)||whyKey.get(g.debugNmKey)) : ''}
+                      </td>`:''}
+                    </tr>`).join('')
+                  : `<tr><td colspan="${debug?3:2}" style="color:#64748b">All fixtures for this date are completed.</td></tr>`
               }
             </tbody>`;
           wrap.appendChild(table);
@@ -329,7 +385,6 @@
           container.appendChild(day);
         });
 
-        // If no sections were rendered at all (everything completed and toggle off)
         if (!container.children.length){
           container.innerHTML = `<p style="color:#64748b;margin:.8rem 0 0">No upcoming fixtures — all recorded fixtures are completed.</p>`;
         }
@@ -337,7 +392,7 @@
 
       render();
 
-      // Toggle completed weeks visibility
+      // Toggle completed weeks
       toggleBtn.addEventListener('click', ()=>{
         showCompleted = !showCompleted;
         toggleBtn.setAttribute('aria-pressed', String(showCompleted));
