@@ -9,7 +9,7 @@
   { "id": "p-john-gordon", "name": "John Gordon", "teamId": "whaley-1", "startHCP": 0, "HCP": -7, "captain": false, "aliases": ["J Gordon", "Gordon"] },
   { "id": "p-pete-gregg", "name": "Pete Gregg", "teamId": "whaley-1", "startHCP": 14, "HCP": 14, "captain": false, "aliases": ["P Gregg", "Gregg"] },
   { "id": "p-steve-hallows", "name": "Steve Hallows", "teamId": "whaley-1", "startHCP": 0, "HCP": 0, "captain": false, "aliases": ["S Hallows", "Hallows"] },
-  { "id": "p-jack-howard", "name": "Jack Howard", "teamId": "whaley-1", "startHCP": 14, "HCP": 14, "captain": false, "aliases": ["J Howard", "Howard"] },
+  { "id": "p-jack-howard", "name": "Jack Howard", "teamId": "whaley-1", "startHCP": 14, "HCP": 7, "captain": false, "aliases": ["J Howard", "Howard"] },
   { "id": "p-rob-larkin", "name": "Rob Larkin", "teamId": "whaley-1", "startHCP": -7, "HCP": -14, "captain": false, "aliases": ["R Larkin", "Larkin"] },
   { "id": "p-adam-rogers", "name": "Adam Rogers", "teamId": "whaley-1", "startHCP": 7, "HCP": 7, "captain": false, "aliases": ["A Rogers", "Rogers"] },
   { "id": "p-jack-scowen", "name": "Jack Scowen", "teamId": "whaley-1", "startHCP": 21, "HCP": 14, "captain": false, "aliases": ["J Scowen", "Scowen"] },
