@@ -1769,7 +1769,7 @@
         "homePoints": 61,
         "awayPoints": 82,
         "winner": "away",
-        "breaks": { "home": 28 }
+        "breaks": { "home": [28] }
       },
       {
         "homePlayerId": "p-s-crook",
