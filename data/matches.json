@@ -1515,7 +1515,7 @@
     "image": null,
     "frames": [
       {
-        "homePlayerId": "p-c-joy",
+        "homePlayerId": "p-chris-joy",
         "awayPlayerId": "p-paul-smith",
         "homePoints": 62,
         "awayPoints": 70,
@@ -1905,7 +1905,7 @@
       "breaks": { "home": [25] }
     },
     {
-      "homePlayerId": "p-s-bernard",
+      "homePlayerId": "p-scott-barnard",
       "awayPlayerId": "p-c-lee",
       "homePoints": 23,
       "awayPoints": 70,
@@ -2106,3 +2106,5 @@
       "winner": "home"
     }
   ]
+}
+]
