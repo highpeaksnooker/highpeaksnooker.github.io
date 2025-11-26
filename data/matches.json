@@ -793,7 +793,7 @@
         "winner": "away"
       },
       {
-        "homePlayerId": "p-s-lnd",
+        "homePlayerId": "p-s-lund",
         "awayPlayerId": "p-paul-glover",
         "homePoints": 42,
         "awayPoints": 59,
@@ -1747,7 +1747,7 @@
         "homePoints": 69,
         "awayPoints": 62,
         "winner": "home",
-        "breaks": { "home": 25 }
+        "breaks": { "home": [25] }
       },
       {
         "homePlayerId": "p-a-lawton",
