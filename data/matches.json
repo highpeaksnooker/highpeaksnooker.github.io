@@ -1816,7 +1816,7 @@
         "homePoints": 31,
         "awayPoints": 80,
         "winner": "away",
-        "breaks": { "home": 25 }
+        "breaks": { "home": [25] }
       },
       {
         "homePlayerId": "p-i-holland",
@@ -2106,4 +2106,4 @@
       "winner": "home"
     }
   ]
-
+}
