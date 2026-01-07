@@ -2627,8 +2627,8 @@
   "date": "2025-12-10",
   "homeTeamId": "marple",
   "awayTeamId": "hayfield-1",
-  "homeFrames": 5,
-  "awayFrames": 0,
+  "homeFrames": 4,
+  "awayFrames": 1,
   "image": null,
   "frames": [
     {
