@@ -2806,6 +2806,240 @@
       "winner": "away"
     }
   ]
+},
+{
+  "id": "m-2025-12-17-whaley-1-v-denton-lib",
+  "date": "2025-12-17",
+  "homeTeamId": "whaley-1",
+  "awayTeamId": "denton-lib",
+  "homeFrames": 4,
+  "awayFrames": 1,
+  "image": null,
+  "frames": [
+    {
+      "homePlayerId": "p-jack-howard",
+      "awayPlayerId": "p-r-green",
+      "homePoints": 61,
+      "awayPoints": 9,
+      "winner": "home"
+    },
+    {
+      "homePlayerId": "p-jack-scowen",
+      "awayPlayerId": "p-m-derbyshire",
+      "homePoints": 43,
+      "awayPoints": 82,
+      "winner": "away"
+    },
+    {
+      "homePlayerId": "p-adam-rogers",
+      "awayPlayerId": "p-c-bailey",
+      "homePoints": 64,
+      "awayPoints": 8,
+      "winner": "home"
+    },
+    {
+      "homePlayerId": "p-rob-larkin",
+      "awayPlayerId": "p-s-mistry",
+      "homePoints": 92,
+      "awayPoints": 40,
+      "winner": "home",
+      "breaks": { "home": [31] }
+    },
+    {
+      "homePlayerId": "p-dan-golpin",
+      "awayPlayerId": "p-eric-kwan",
+      "homePoints": 68,
+      "awayPoints": 47,
+      "winner": "home"
+    }
+  ]
+},
+{
+  "id": "m-2025-12-17-tintwistle1-v-hayfield-2",
+  "date": "2025-12-17",
+  "homeTeamId": "tintwistle1",
+  "awayTeamId": "hayfield-2",
+  "homeFrames": 3,
+  "awayFrames": 2,
+  "image": null,
+  "frames": [
+    {
+      "homePlayerId": "p-paul-smith",
+      "awayPlayerId": "p-mark-enright",
+      "homePoints": 63,
+      "awayPoints": 96,
+      "winner": "away"
+    },
+    {
+      "homePlayerId": "p-f-sidebottom",
+      "awayPlayerId": "p-d-bloomfield",
+      "homePoints": 66,
+      "awayPoints": 31,
+      "winner": "home"
+    },
+    {
+      "homePlayerId": "p-n-wilson",
+      "awayPlayerId": "p-t-ryan",
+      "homePoints": 79,
+      "awayPoints": 45,
+      "winner": "home",
+      "breaks": { "home": [27] }
+    },
+    {
+      "homePlayerId": "p-a-lawton",
+      "awayPlayerId": "p-d-hayes",
+      "homePoints": 17,
+      "awayPoints": 52,
+      "winner": "away"
+    },
+    {
+      "homePlayerId": "p-s-crook",
+      "awayPlayerId": "p-brendan-buckley",
+      "homePoints": 94,
+      "awayPoints": 66,
+      "winner": "home",
+      "breaks": { "home": [35, 27] }
+    }
+  ]
+},
+{
+  "id": "m-2025-12-17-hayfield-1-v-whaley-2",
+  "date": "2025-12-17",
+  "homeTeamId": "hayfield-1",
+  "awayTeamId": "whaley-2",
+  "homeFrames": 4,
+  "awayFrames": 1,
+  "image": null,
+  "frames": [
+    {
+      "homePlayerId": "p-a-brooks",
+      "awayPlayerId": "p-f-lee",
+      "homePoints": 57,
+      "awayPoints": 43,
+      "winner": "home"
+    },
+    {
+      "homePlayerId": "p-sam-lomas",
+      "awayPlayerId": "p-s-tuppen",
+      "homePoints": 56,
+      "awayPoints": 37,
+      "winner": "home"
+    },
+    {
+      "homePlayerId": "p-tony-watkinson",
+      "awayPlayerId": "p-p-walker",
+      "homePoints": 77,
+      "awayPoints": 50,
+      "winner": "home"
+    },
+    {
+      "homePlayerId": "p-scott-lomas",
+      "awayPlayerId": "p-b-walker",
+      "homePoints": 59,
+      "awayPoints": 18,
+      "winner": "home"
+    },
+    {
+      "homePlayerId": "p-p-lomas",
+      "awayPlayerId": "p-lee-jones",
+      "homePoints": 55,
+      "awayPoints": 61,
+      "winner": "away"
+    }
+  ]
+},
+{
+  "id": "m-2025-12-17-alexashton-v-marple",
+  "date": "2025-12-17",
+  "homeTeamId": "alexashton",
+  "awayTeamId": "marple",
+  "homeFrames": 0,
+  "awayFrames": 5,
+  "image": null,
+  "frames": [
+    {
+      "homePlayerId": "p-nigel-cave",
+      "awayPlayerId": "p-d-burrows",
+      "homePoints": 48,
+      "awayPoints": 84,
+      "winner": "away"
+    },
+    {
+      "homePlayerId": "p-p-leigh",
+      "awayPlayerId": "p-glynn-evans",
+      "homePoints": 61,
+      "awayPoints": 87,
+      "winner": "away",
+      "breaks": { "away": [31] }
+    },
+    {
+      "homePlayerId": "p-c-patel",
+      "awayPlayerId": "p-geoff-flavell",
+      "homePoints": 54,
+      "awayPoints": 80,
+      "winner": "away"
+    },
+    {
+      "homePlayerId": "p-k-mistry",
+      "awayPlayerId": "p-gareth-ritchie",
+      "homePoints": 82,
+      "awayPoints": 99,
+      "winner": "away"
+    },
+    {
+      "homePlayerId": "p-b-pregnall",
+      "awayPlayerId": "p-c-lee",
+      "homePoints": 60,
+      "awayPoints": 61,
+      "winner": "away"
+    }
+  ]
+},
+{
+  "id": "m-2025-12-17-chinley-v-tintwistle2",
+  "date": "2025-12-17",
+  "homeTeamId": "chinley",
+  "awayTeamId": "tintwistle2",
+  "homeFrames": 5,
+  "awayFrames": 0,
+  "image": null,
+  "frames": [
+    {
+      "homePlayerId": "p-d-thomas",
+      "awayPlayerId": "p-d-corbally",
+      "homePoints": 65,
+      "awayPoints": 33,
+      "winner": "home"
+    },
+    {
+      "homePlayerId": "p-b-doherty",
+      "awayPlayerId": "p-k-oliver",
+      "homePoints": 59,
+      "awayPoints": 38,
+      "winner": "home"
+    },
+    {
+      "homePlayerId": "p-i-holland",
+      "awayPlayerId": "p-chris-joy",
+      "homePoints": 63,
+      "awayPoints": 32,
+      "winner": "home"
+    },
+    {
+      "homePlayerId": "p-d-rowland",
+      "awayPlayerId": "p-j-cutt",
+      "homePoints": 50,
+      "awayPoints": 15,
+      "winner": "home"
+    },
+    {
+      "homePlayerId": "p-l-carr",
+      "awayPlayerId": "p-d-rushby",
+      "homePoints": 94,
+      "awayPoints": 53,
+      "winner": "home"
+    }
+  ]
 }
 ]
 
