@@ -3093,8 +3093,8 @@
     "date": "2026-01-07",
     "homeTeamId": "denton-lib",
     "awayTeamId": "tintwistle1",
-    "homeFrames": 3,
-    "awayFrames": 2,
+    "homeFrames": 2,
+    "awayFrames": 3,
     "image": null,
     "frames": [
       {
@@ -3235,8 +3235,8 @@
     "date": "2026-01-07",
     "homeTeamId": "whaley-2",
     "awayTeamId": "alexashton",
-    "homeFrames": 1,
-    "awayFrames": 4,
+    "homeFrames": 2,
+    "awayFrames": 3,
     "image": null,
     "frames": [
       {
