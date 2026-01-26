@@ -1490,7 +1490,7 @@
         "winner": "home"
       },
       {
-        "homePlayerId": "p-t-candlin",
+        "homePlayerId": "p-todd-candlin",
         "awayPlayerId": "p-c-bailey",
         "homePoints": 65,
         "awayPoints": 36,
@@ -1536,7 +1536,7 @@
         "winner": "home"
       },
       {
-        "homePlayerId": "p-d-corbally",
+        "homePlayerId": "p-dan-corbally",
         "awayPlayerId": "p-a-lawton",
         "homePoints": 60,
         "awayPoints": 77,
@@ -2327,7 +2327,7 @@
     },
     {
       "homePlayerId": "p-gareth-ritchie",
-      "awayPlayerId": "p-s-bernard",
+      "awayPlayerId": "p-scott-barnard",
       "homePoints": 71,
       "awayPoints": 36,
       "winner": "home"
@@ -2408,7 +2408,7 @@
     },
     {
       "homePlayerId": "p-a-garbett",
-      "awayPlayerId": "p-b-buckley",
+      "awayPlayerId": "p-brendan-buckley",
       "homePoints": 81,
       "awayPoints": 39,
       "winner": "home"
@@ -3168,7 +3168,7 @@
         "winner": "away"
       },
       {
-        "homePlayerId": "p-b-brendan-buckley",
+        "homePlayerId": "p-brendan-buckley",
         "awayPlayerId": "p-d-rowland",
         "homePoints": 31,
         "awayPoints": 58,
