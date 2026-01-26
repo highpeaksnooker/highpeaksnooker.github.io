@@ -39,7 +39,6 @@
   { "id": "p-joe-brennan", "name": "Joe Brennan", "teamId": "tintwistle1", "startHCP": -35, "HCP": -28, "captain": false, "aliases": ["J Brennan"] },
   { "id": "p-a-clark", "name": "A Clark", "teamId": "tintwistle1", "startHCP": -7, "HCP": -7, "captain": false, "aliases": ["A Clark"] },
   { "id": "p-s-crook", "name": "S Crook", "teamId": "tintwistle1", "startHCP": -28, "HCP": -35, "captain": true, "aliases": ["S Crook"] },
-  { "id": "p-danny-harrison", "name": "Danny Harrison", "teamId": "tintwistle1", "startHCP": 14, "HCP": 14, "captain": false, "aliases": ["D Harrison", "D Harrison (Tintwistle 1)"] },
   { "id": "p-c-heyes", "name": "C Heyes", "teamId": "tintwistle1", "startHCP": -28, "HCP": -28, "captain": false, "aliases": ["C Heyes"] },
   { "id": "p-a-kershaw", "name": "A Kershaw", "teamId": "tintwistle1", "startHCP": 35, "HCP": 35, "captain": false, "aliases": ["A Kershaw"] },
   { "id": "p-a-lawton", "name": "A Lawton", "teamId": "tintwistle1", "startHCP": 14, "HCP": 14, "captain": false, "aliases": ["A Lawton"] },
