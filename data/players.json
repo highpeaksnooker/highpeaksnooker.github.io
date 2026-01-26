@@ -25,36 +25,4 @@
   { "id": "p-s-mistry", "name": "S Mistry", "teamId": "denton-lib", "startHCP": 7, "HCP": 7, "captain": false, "aliases": ["S Mistry"] },
   { "id": "p-aj-patel", "name": "A.J. Patel", "teamId": "denton-lib", "startHCP": -21, "HCP": -21, "captain": false, "aliases": ["A Patel", "AJ Patel"] },
 
-  { "id": "p-j-barkess", "name": "J Barkess", "teamId": "whaley-2", "startHCP": 14, "HCP": 14, "captain": false, "aliases": ["J Barkess"] },
-  { "id": "p-scott-barnard", "name": "Scott Barnard", "teamId": "whaley-2", "startHCP": -7, "HCP": -7, "captain": false, "aliases": ["S Barnard"] },
-  { "id": "p-a-greaves", "name": "A Greaves", "teamId": "whaley-2", "startHCP": 14, "HCP": 14, "captain": false, "aliases": ["A Greaves"] },
-  { "id": "p-mike-ingham", "name": "Mike Ingham", "teamId": "whaley-2", "startHCP": 35, "HCP": 35, "captain": true, "aliases": ["M Ingham"] },
-  { "id": "p-lee-jones", "name": "Lee Jones", "teamId": "whaley-2", "startHCP": 14, "HCP": 7, "captain": false, "aliases": ["L Jones"] },
-  { "id": "p-f-lee", "name": "F Lee", "teamId": "whaley-2", "startHCP": 7, "HCP": 14, "captain": false, "aliases": ["F Lee"] },
-  { "id": "p-s-renshaw", "name": "S Renshaw", "teamId": "whaley-2", "startHCP": 0, "HCP": 7, "captain": false, "aliases": ["S Renshaw"] },
-  { "id": "p-s-tuppen", "name": "S Tuppen", "teamId": "whaley-2", "startHCP": 14, "HCP": 14, "captain": false, "aliases": ["S Tuppen"] },
-  { "id": "p-b-walker", "name": "B Walker", "teamId": "whaley-2", "startHCP": 7, "HCP": 7, "captain": false, "aliases": ["B Walker"] },
-  { "id": "p-p-walker", "name": "P Walker", "teamId": "whaley-2", "startHCP": 7, "HCP": 14, "captain": false, "aliases": ["P Walker"] },
-
-  { "id": "p-joe-brennan", "name": "Joe Brennan", "teamId": "tintwistle1", "startHCP": -35, "HCP": -28, "captain": false, "aliases": ["J Brennan"] },
-  { "id": "p-s-crook", "name": "S Crook", "teamId": "tintwistle1", "startHCP": -28, "HCP": -35, "captain": true, "aliases": ["S Crook"] },
-  { "id": "p-danny-harrison", "name": "Danny Harrison", "teamId": "tintwistle1", "startHCP": 14, "HCP": 14, "captain": false, "aliases": ["D Harrison (Tintwistle 1)"] },
-  { "id": "p-shaun-robinson", "name": "Shaun Robinson", "teamId": "tintwistle1", "startHCP": -28, "HCP": -28, "captain": false, "aliases": ["S Robinson"] },
-  { "id": "p-paul-smith", "name": "Paul Smith", "teamId": "tintwistle1", "startHCP": -35, "HCP": -35, "captain": false, "aliases": ["P Smith"] },
-  { "id": "p-n-wilson", "name": "N Wilson", "teamId": "tintwistle1", "startHCP": -21, "HCP": -21, "captain": false, "aliases": ["N Wilson"] },
-
-  { "id": "p-dan-corbally", "name": "Dan Corbally", "teamId": "tintwistle2", "startHCP": -7, "HCP": 0, "captain": true, "aliases": ["D Corbally"] },
-  { "id": "p-james-cutt", "name": "James Cutt", "teamId": "tintwistle2", "startHCP": -7, "HCP": -7, "captain": false, "aliases": ["J Cutt"] },
-  { "id": "p-k-hardman", "name": "K Hardman", "teamId": "tintwistle2", "startHCP": 0, "HCP": -14, "captain": false, "aliases": ["K Hardman"] },
-  { "id": "p-d-harrison", "name": "D Harrison", "teamId": "tintwistle2", "startHCP": 21, "HCP": 21, "captain": false, "aliases": ["D Harrison (Tintwistle 2)"] },
-  { "id": "p-nick-small", "name": "Nick Small", "teamId": "tintwistle2", "startHCP": 21, "HCP": 14, "captain": false, "aliases": ["N Small"] },
-
-  { "id": "p-glynn-evans", "name": "Glynn Evans", "teamId": "marple", "startHCP": 14, "HCP": 14, "captain": true, "aliases": ["G Evans"] },
-  { "id": "p-geoff-flavell", "name": "Geoff Flavell", "teamId": "marple", "startHCP": -14, "HCP": -14, "captain": false, "aliases": ["G Flavell"] },
-  { "id": "p-gareth-ritchie", "name": "Gareth Ritchie", "teamId": "marple", "startHCP": 7, "HCP": 7, "captain": false, "aliases": ["G Ritchie"] },
-  { "id": "p-ryan-ritchie", "name": "Ryan Ritchie", "teamId": "marple", "startHCP": 35, "HCP": 35, "captain": false, "aliases": ["R Ritchie"] },
-
-  { "id": "p-p-leigh", "name": "P Leigh", "teamId": "alexashton", "startHCP": 28, "HCP": 35, "captain": true, "aliases": ["P Leigh"] },
-  { "id": "p-dave-harrison", "name": "Dave Harrison", "teamId": "alexashton", "startHCP": 28, "HCP": 28, "captain": false, "aliases": ["D Harrison (Alex Ashton)"] },
-  { "id": "p-chris-joy", "name": "Chris Joy", "teamId": "tintwistle2", "startHCP": 14, "HCP": 21, "captain": false, "aliases": ["C Joy"] }
-]
+  { "id": "p-j-barkess", "name": "J Barkess", "team
