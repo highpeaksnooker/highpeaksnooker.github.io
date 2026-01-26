@@ -63,7 +63,7 @@
   { "id": "p-j-goddard", "name": "J Goddard", "teamId": "tintwistle2", "startHCP": 21, "HCP": 21, "captain": false, "aliases": ["J Goddard"] },
   { "id": "p-elliot-hall", "name": "Elliot Hall", "teamId": "tintwistle2", "startHCP": 28, "HCP": 28, "captain": false, "aliases": ["E Hall"] },
   { "id": "p-k-hardman", "name": "K Hardman", "teamId": "tintwistle2", "startHCP": 0, "HCP": -14, "captain": false, "aliases": ["K Hardman"] },
-  { "id": "p-d-harrison", "name": "D Harrison", "teamId": "tintwistle2", "startHCP": 21, "HCP": 21, "captain": false, "aliases": ["D Harrison", "D Harrison (Tintwistle 2)"] },
+  { "id": "p-danny-harrison", "name": "Danny Harrison", "teamId": "tintwistle2", "startHCP": 21, "HCP": 21, "captain": false, "aliases": ["D Harrison"] },
   { "id": "p-p-irving", "name": "P Irving", "teamId": "tintwistle2", "startHCP": -14, "HCP": -14, "captain": false, "aliases": ["P Irving"] },
   { "id": "p-ryan-lutener", "name": "Ryan Lutener", "teamId": "tintwistle2", "startHCP": 14, "HCP": 14, "captain": false, "aliases": ["R Lutener"] },
   { "id": "p-d-pennington", "name": "D Pennington", "teamId": "tintwistle2", "startHCP": 14, "HCP": 14, "captain": false, "aliases": ["D Pennington"] },
