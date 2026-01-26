@@ -23,7 +23,7 @@
         "winner": "home"
       },
       {
-        "homePlayerId": "p-c-lee",
+        "homePlayerId": "p-c-lee-marple",
         "awayPlayerId": "p-g-davis",
         "homePoints": 27,
         "awayPoints": 53,
@@ -398,7 +398,7 @@
       },
       {
         "homePlayerId": "p-p-lomas",
-        "awayPlayerId": "p-c-lee",
+        "awayPlayerId": "p-c-lee-marple",
         "homePoints": 71,
         "awayPoints": 65,
         "winner": "home"
@@ -833,7 +833,7 @@
       },
       {
         "homePlayerId": "p-adam-rogers",
-        "awayPlayerId": "p-c-lee",
+        "awayPlayerId": "p-c-lee-marple",
         "homePoints": 56,
         "awayPoints": 36,
         "winner": "home"
@@ -1356,7 +1356,7 @@
       },
       {
         "homePlayerId": "p-mark-snelling",
-        "awayPlayerId": "p-c-lee",
+        "awayPlayerId": "p-c-lee-marple",
         "homePoints": 49,
         "awayPoints": 68,
         "winner": "away"
@@ -1483,7 +1483,7 @@
         "winner": "home"
       },
       {
-        "homePlayerId": "p-c-lee",
+        "homePlayerId": "p-c-lee-marple",
         "awayPlayerId": "p-aj-patel",
         "homePoints": 87,
         "awayPoints": 72,
@@ -1812,7 +1812,7 @@
       },
       {
         "homePlayerId": "p-l-carr",
-        "awayPlayerId": "p-c-lee",
+        "awayPlayerId": "p-c-lee-marple",
         "homePoints": 31,
         "awayPoints": 80,
         "winner": "away",
@@ -1906,7 +1906,7 @@
     },
     {
       "homePlayerId": "p-scott-barnard",
-      "awayPlayerId": "p-c-lee",
+      "awayPlayerId": "p-c-lee-marple",
       "homePoints": 23,
       "awayPoints": 70,
       "winner": "away"
@@ -2333,7 +2333,7 @@
       "winner": "home"
     },
     {
-      "homePlayerId": "p-c-lee",
+      "homePlayerId": "p-c-lee-marple",
       "awayPlayerId": "p-b-walker",
       "homePoints": 61,
       "awayPoints": 32,
@@ -2515,7 +2515,7 @@
     },
     {
       "homePlayerId": "p-nick-small",
-      "awayPlayerId": "p-c-lee",
+      "awayPlayerId": "p-c-lee-marple",
       "homePoints": 34,
       "awayPoints": 50,
       "winner": "away"
@@ -2646,7 +2646,7 @@
       "winner": "home"
     },
     {
-      "homePlayerId": "p-c-lee",
+      "homePlayerId": "p-c-lee-marple",
       "awayPlayerId": "p-a-brooks",
       "homePoints": 41,
       "awayPoints": 50,
@@ -2988,7 +2988,7 @@
     },
     {
       "homePlayerId": "p-b-pregnall",
-      "awayPlayerId": "p-c-lee",
+      "awayPlayerId": "p-c-lee-marple",
       "homePoints": 60,
       "awayPoints": 61,
       "winner": "away"
@@ -3065,7 +3065,7 @@
         "winner": "away"
       },
       {
-        "homePlayerId": "p-c-lee",
+        "homePlayerId": "p-c-lee-marple",
         "awayPlayerId": "p-adam-rogers",
         "homePoints": 32,
         "awayPoints": 59,
@@ -3316,7 +3316,7 @@
       },
       {
         "homePlayerId": "p-s-crook",
-        "awayPlayerId": "p-c-lee",
+        "awayPlayerId": "p-c-lee-marple",
         "homePoints": 74,
         "awayPoints": 64,
         "winner": "home"
