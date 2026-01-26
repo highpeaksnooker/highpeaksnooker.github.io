@@ -497,6 +497,7 @@
     "captain": true,
     "aliases": ["D Corbally", "Dan Corbally", "D. Corbally", "DCorbally"]
   },
+  
   {
     "id": "p-james-cutt",
     "name": "James Cutt",
@@ -506,6 +507,17 @@
     "captain": false,
     "aliases": ["J Cutt", "James Cutt", "J. Cutt", "JCutt"]
   },
+  
+  {
+  "id": "p-nat-small",
+  "name": "Nat Small",
+  "teamId": "tintwistle2",
+  "startHCP": 21,
+  "HCP": 21,
+  "captain": false,
+  "aliases": ["Nat Small", "N Small", "N. Small"]
+},
+  
   {
     "id": "p-g-davis",
     "name": "G Davis",
