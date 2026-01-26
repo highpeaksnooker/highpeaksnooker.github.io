@@ -1,5 +1,3 @@
-This is the correct players.json
-
 [
   { "id": "p-brian-ashton", "name": "Brian Ashton", "teamId": "whaley-1", "startHCP": 14, "HCP": 14, "captain": false, "aliases": ["B Ashton"] },
   { "id": "p-callum-bridden", "name": "Callum Bridden", "teamId": "whaley-1", "startHCP": 21, "HCP": 21, "captain": false, "aliases": ["C Bridden"] },
