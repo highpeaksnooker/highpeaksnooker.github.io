@@ -84,7 +84,7 @@
   { "id": "p-glynn-evans", "name": "Glynn Evans", "teamId": "marple", "startHCP": 14, "HCP": 14, "captain": true, "aliases": ["G Evans", "Glyn Evans"] },
   { "id": "p-geoff-flavell", "name": "Geoff Flavell", "teamId": "marple", "startHCP": -14, "HCP": -14, "captain": false, "aliases": ["G Flavell"] },
   { "id": "p-g-gaskell", "name": "G Gaskell", "teamId": "marple", "startHCP": 14, "HCP": 21, "captain": false, "aliases": ["G Gaskell"] },
-  { "id": "p-c-lee", "name": "C Lee", "teamId": "marple", "startHCP": 7, "HCP": 7, "captain": false, "aliases": ["C Lee", "C Lee (Marple)", "Chris Lee"] },
+  { "id": "p-c-lee", "name": "C Lee", "teamId": "marple", "startHCP": 7, "HCP": 7, "captain": false, "aliases": ["C Lee (Marple)"] },
   { "id": "p-dave-martin", "name": "Dave Martin", "teamId": "marple", "startHCP": 0, "HCP": 0, "captain": false, "aliases": ["D Martin"] },
   { "id": "p-paul-massey", "name": "Paul Massey", "teamId": "marple", "startHCP": 14, "HCP": 14, "captain": false, "aliases": ["P Massey"] },
   { "id": "p-d-riley", "name": "D Riley", "teamId": "marple", "startHCP": 7, "HCP": 7, "captain": false, "aliases": ["D Riley"] },
