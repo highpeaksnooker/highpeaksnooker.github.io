@@ -1,164 +1,1388 @@
 [
-  { "id": "p-brian-ashton", "name": "Brian Ashton", "teamId": "whaley-1", "startHCP": 14, "HCP": 14, "captain": false, "aliases": ["B Ashton"] },
-  { "id": "p-callum-bridden", "name": "Callum Bridden", "teamId": "whaley-1", "startHCP": 21, "HCP": 21, "captain": false, "aliases": ["C Bridden"] },
-  { "id": "p-g-carpenter", "name": "G Carpenter", "teamId": "whaley-1", "startHCP": 14, "HCP": 14, "captain": false, "aliases": ["G Carpenter"] },
-  { "id": "p-dan-golpin", "name": "Dan Golpin", "teamId": "whaley-1", "startHCP": -21, "HCP": -14, "captain": true, "aliases": ["D Golpin", "Dan G"] },
-  { "id": "p-james-golpin", "name": "James Golpin", "teamId": "whaley-1", "startHCP": 0, "HCP": -7, "captain": false, "aliases": ["James Golpin"] },
-  { "id": "p-john-golpin", "name": "John Golpin", "teamId": "whaley-1", "startHCP": -14, "HCP": -14, "captain": false, "aliases": ["John Golpin"] },
-  { "id": "p-josh-golpin", "name": "Josh Golpin", "teamId": "whaley-1", "startHCP": 35, "HCP": 35, "captain": false, "aliases": ["Josh Golpin"] },
-  { "id": "p-john-gordon", "name": "John Gordon", "teamId": "whaley-1", "startHCP": 0, "HCP": 0, "captain": false, "aliases": ["J Gordon"] },
-  { "id": "p-pete-gregg", "name": "Pete Gregg", "teamId": "whaley-1", "startHCP": 14, "HCP": 14, "captain": false, "aliases": ["P Gregg"] },
-  { "id": "p-steve-hallows", "name": "Steve Hallows", "teamId": "whaley-1", "startHCP": 0, "HCP": 0, "captain": false, "aliases": ["S Hallows"] },
-  { "id": "p-jack-howard", "name": "Jack Howard", "teamId": "whaley-1", "startHCP": 14, "HCP": 7, "captain": false, "aliases": ["J Howard"] },
-  { "id": "p-rob-larkin", "name": "Rob Larkin", "teamId": "whaley-1", "startHCP": -7, "HCP": -7, "captain": false, "aliases": ["R Larkin"] },
-  { "id": "p-adam-rogers", "name": "Adam Rogers", "teamId": "whaley-1", "startHCP": 7, "HCP": 7, "captain": false, "aliases": ["A Rogers"] },
-  { "id": "p-jack-scowen", "name": "Jack Scowen", "teamId": "whaley-1", "startHCP": 21, "HCP": 21, "captain": false, "aliases": ["J Scowen"] },
-  { "id": "p-alex-sweet", "name": "Alex Sweet", "teamId": "whaley-1", "startHCP": 21, "HCP": 21, "captain": false, "aliases": ["A Sweet"] },
-  { "id": "p-matt-wing", "name": "Matt Wing", "teamId": "whaley-1", "startHCP": 21, "HCP": 21, "captain": false, "aliases": ["M Wing"] },
+  {
+    "id": "p-brian-ashton",
+    "name": "Brian Ashton",
+    "teamId": "whaley-1",
+    "startHCP": 14,
+    "HCP": 14,
+    "captain": false,
+    "aliases": ["B Ashton", "Brian Ashton", "Brian A", "B. Ashton", "BAshton"]
+  },
+  {
+    "id": "p-callum-bridden",
+    "name": "Callum Bridden",
+    "teamId": "whaley-1",
+    "startHCP": 21,
+    "HCP": 21,
+    "captain": false,
+    "aliases": ["C Bridden", "Callum Bridden", "Callum B", "C. Bridden", "CBridden"]
+  },
+  {
+    "id": "p-g-carpenter",
+    "name": "G Carpenter",
+    "teamId": "whaley-1",
+    "startHCP": 14,
+    "HCP": 14,
+    "captain": false,
+    "aliases": ["G Carpenter", "G. Carpenter", "GCarpenter"]
+  },
+  {
+    "id": "p-dan-golpin",
+    "name": "Dan Golpin",
+    "teamId": "whaley-1",
+    "startHCP": -21,
+    "HCP": -14,
+    "captain": true,
+    "aliases": ["D Golpin", "Dan G", "Dan Golpin", "D. Golpin", "DGolpin"]
+  },
+  {
+    "id": "p-james-golpin",
+    "name": "James Golpin",
+    "teamId": "whaley-1",
+    "startHCP": 0,
+    "HCP": -7,
+    "captain": false,
+    "aliases": ["James Golpin", "J Golpin", "J. Golpin", "JGolpin"]
+  },
+  {
+    "id": "p-john-golpin",
+    "name": "John Golpin",
+    "teamId": "whaley-1",
+    "startHCP": -14,
+    "HCP": -14,
+    "captain": false,
+    "aliases": ["John Golpin", "J Golpin (Whaley 1)", "J. Golpin (Whaley 1)", "John G", "JohnG"]
+  },
+  {
+    "id": "p-josh-golpin",
+    "name": "Josh Golpin",
+    "teamId": "whaley-1",
+    "startHCP": 35,
+    "HCP": 35,
+    "captain": false,
+    "aliases": ["Josh Golpin", "J Golpin (Josh)", "J. Golpin (Josh)", "Josh G", "JoshG"]
+  },
+  {
+    "id": "p-john-gordon",
+    "name": "John Gordon",
+    "teamId": "whaley-1",
+    "startHCP": 0,
+    "HCP": 0,
+    "captain": false,
+    "aliases": ["J Gordon", "John Gordon", "J. Gordon", "JGordon"]
+  },
+  {
+    "id": "p-pete-gregg",
+    "name": "Pete Gregg",
+    "teamId": "whaley-1",
+    "startHCP": 14,
+    "HCP": 14,
+    "captain": false,
+    "aliases": ["P Gregg", "Pete Gregg", "Peter Gregg", "P. Gregg", "PGregg"]
+  },
+  {
+    "id": "p-steve-hallows",
+    "name": "Steve Hallows",
+    "teamId": "whaley-1",
+    "startHCP": 0,
+    "HCP": 0,
+    "captain": false,
+    "aliases": ["S Hallows", "Steve Hallows", "S. Hallows", "SHallows"]
+  },
+  {
+    "id": "p-jack-howard",
+    "name": "Jack Howard",
+    "teamId": "whaley-1",
+    "startHCP": 14,
+    "HCP": 7,
+    "captain": false,
+    "aliases": ["J Howard", "Jack Howard", "J. Howard", "JHoward"]
+  },
+  {
+    "id": "p-rob-larkin",
+    "name": "Rob Larkin",
+    "teamId": "whaley-1",
+    "startHCP": -7,
+    "HCP": -7,
+    "captain": false,
+    "aliases": ["R Larkin", "Rob Larkin", "Robert Larkin", "R. Larkin", "RLarkin"]
+  },
+  {
+    "id": "p-adam-rogers",
+    "name": "Adam Rogers",
+    "teamId": "whaley-1",
+    "startHCP": 7,
+    "HCP": 7,
+    "captain": false,
+    "aliases": ["A Rogers", "Adam Rogers", "A. Rogers", "ARogers"]
+  },
+  {
+    "id": "p-jack-scowen",
+    "name": "Jack Scowen",
+    "teamId": "whaley-1",
+    "startHCP": 21,
+    "HCP": 21,
+    "captain": false,
+    "aliases": ["J Scowen", "Jack Scowen", "J. Scowen", "JScowen"]
+  },
+  {
+    "id": "p-alex-sweet",
+    "name": "Alex Sweet",
+    "teamId": "whaley-1",
+    "startHCP": 21,
+    "HCP": 21,
+    "captain": false,
+    "aliases": ["A Sweet", "Alex Sweet", "A. Sweet", "ASweet"]
+  },
+  {
+    "id": "p-matt-wing",
+    "name": "Matt Wing",
+    "teamId": "whaley-1",
+    "startHCP": 21,
+    "HCP": 21,
+    "captain": false,
+    "aliases": ["M Wing", "Matt Wing", "Matthew Wing", "M. Wing", "MWing"]
+  },
 
-  { "id": "p-c-bailey", "name": "C Bailey", "teamId": "denton-lib", "startHCP": -7, "HCP": -7, "captain": true, "aliases": ["C Bailey"] },
-  { "id": "p-r-chandarana", "name": "R Chandarana", "teamId": "denton-lib", "startHCP": 7, "HCP": 14, "captain": false, "aliases": ["R Chandarana"] },
-  { "id": "p-m-derbyshire", "name": "M Derbyshire", "teamId": "denton-lib", "startHCP": 0, "HCP": 0, "captain": false, "aliases": ["M Derbyshire"] },
-  { "id": "p-ash-garside", "name": "Ash Garside", "teamId": "denton-lib", "startHCP": -35, "HCP": -35, "captain": false, "aliases": ["A Garside"] },
-  { "id": "p-r-green", "name": "R Green", "teamId": "denton-lib", "startHCP": 0, "HCP": 0, "captain": false, "aliases": ["R Green"] },
-  { "id": "p-eric-kwan", "name": "Eric Kwan", "teamId": "denton-lib", "startHCP": -35, "HCP": -35, "captain": false, "aliases": ["E Kwan"] },
-  { "id": "p-s-mistry", "name": "S Mistry", "teamId": "denton-lib", "startHCP": 7, "HCP": 7, "captain": false, "aliases": ["S Mistry"] },
-  { "id": "p-aj-patel", "name": "A.J. Patel", "teamId": "denton-lib", "startHCP": -21, "HCP": -21, "captain": false, "aliases": ["A Patel", "AJ Patel"] },
+  {
+    "id": "p-c-bailey",
+    "name": "C Bailey",
+    "teamId": "denton-lib",
+    "startHCP": -7,
+    "HCP": -7,
+    "captain": true,
+    "aliases": ["C Bailey", "C. Bailey", "CBailey"]
+  },
+  {
+    "id": "p-r-chandarana",
+    "name": "R Chandarana",
+    "teamId": "denton-lib",
+    "startHCP": 7,
+    "HCP": 14,
+    "captain": false,
+    "aliases": ["R Chandarana", "R. Chandarana", "RChandarana", "Raj Chandarana", "R Chandrana"]
+  },
+  {
+    "id": "p-m-derbyshire",
+    "name": "M Derbyshire",
+    "teamId": "denton-lib",
+    "startHCP": 0,
+    "HCP": 0,
+    "captain": false,
+    "aliases": ["M Derbyshire", "M. Derbyshire", "MDerbyshire"]
+  },
+  {
+    "id": "p-ash-garside",
+    "name": "Ash Garside",
+    "teamId": "denton-lib",
+    "startHCP": -35,
+    "HCP": -35,
+    "captain": false,
+    "aliases": ["A Garside", "Ash Garside", "Ash G", "A. Garside", "AGarside"]
+  },
+  {
+    "id": "p-r-green",
+    "name": "R Green",
+    "teamId": "denton-lib",
+    "startHCP": 0,
+    "HCP": 0,
+    "captain": false,
+    "aliases": ["R Green", "R. Green", "RGreen", "Rob Green", "Robert Green"]
+  },
+  {
+    "id": "p-eric-kwan",
+    "name": "Eric Kwan",
+    "teamId": "denton-lib",
+    "startHCP": -35,
+    "HCP": -35,
+    "captain": false,
+    "aliases": ["E Kwan", "Eric Kwan", "E. Kwan", "EKwan"]
+  },
+  {
+    "id": "p-s-mistry",
+    "name": "S Mistry",
+    "teamId": "denton-lib",
+    "startHCP": 7,
+    "HCP": 7,
+    "captain": false,
+    "aliases": ["S Mistry", "S. Mistry", "SMistry"]
+  },
+  {
+    "id": "p-aj-patel",
+    "name": "A.J. Patel",
+    "teamId": "denton-lib",
+    "startHCP": -21,
+    "HCP": -21,
+    "captain": false,
+    "aliases": ["A Patel", "AJ Patel", "A.J. Patel", "A.J Patel", "A J Patel", "AJPatel"]
+  },
 
-  { "id": "p-j-barkess", "name": "J Barkess", "teamId": "whaley-2", "startHCP": 14, "HCP": 14, "captain": false, "aliases": ["J Barkess"] },
-  { "id": "p-scott-barnard", "name": "Scott Barnard", "teamId": "whaley-2", "startHCP": -7, "HCP": -7, "captain": false, "aliases": ["S Barnard"] },
-  { "id": "p-a-greaves", "name": "A Greaves", "teamId": "whaley-2", "startHCP": 14, "HCP": 14, "captain": false, "aliases": ["A Greaves"] },
-  { "id": "p-mike-ingham", "name": "Mike Ingham", "teamId": "whaley-2", "startHCP": 35, "HCP": 35, "captain": true, "aliases": ["M Ingham"] },
-  { "id": "p-lee-jones", "name": "Lee Jones", "teamId": "whaley-2", "startHCP": 14, "HCP": 7, "captain": false, "aliases": ["L Jones"] },
-  { "id": "p-f-lee", "name": "F Lee", "teamId": "whaley-2", "startHCP": 7, "HCP": 14, "captain": false, "aliases": ["F Lee"] },
-  { "id": "p-s-renshaw", "name": "S Renshaw", "teamId": "whaley-2", "startHCP": 0, "HCP": 7, "captain": false, "aliases": ["S Renshaw"] },
-  { "id": "p-s-tuppen", "name": "S Tuppen", "teamId": "whaley-2", "startHCP": 14, "HCP": 14, "captain": false, "aliases": ["S Tuppen"] },
-  { "id": "p-b-walker", "name": "B Walker", "teamId": "whaley-2", "startHCP": 7, "HCP": 7, "captain": false, "aliases": ["B Walker"] },
-  { "id": "p-p-walker", "name": "P Walker", "teamId": "whaley-2", "startHCP": 7, "HCP": 14, "captain": false, "aliases": ["P Walker"] },
+  {
+    "id": "p-j-barkess",
+    "name": "J Barkess",
+    "teamId": "whaley-2",
+    "startHCP": 14,
+    "HCP": 14,
+    "captain": false,
+    "aliases": ["J Barkess", "J. Barkess", "JBarkess"]
+  },
+  {
+    "id": "p-scott-barnard",
+    "name": "Scott Barnard",
+    "teamId": "whaley-2",
+    "startHCP": -7,
+    "HCP": -7,
+    "captain": false,
+    "aliases": ["S Barnard", "Scott Barnard", "S. Barnard", "SBarnard"]
+  },
+  {
+    "id": "p-a-greaves",
+    "name": "A Greaves",
+    "teamId": "whaley-2",
+    "startHCP": 14,
+    "HCP": 14,
+    "captain": false,
+    "aliases": ["A Greaves", "A. Greaves", "AGreaves"]
+  },
+  {
+    "id": "p-mike-ingham",
+    "name": "Mike Ingham",
+    "teamId": "whaley-2",
+    "startHCP": 35,
+    "HCP": 35,
+    "captain": true,
+    "aliases": ["M Ingham", "Mike Ingham", "Michael Ingham", "M. Ingham", "MIngham"]
+  },
+  {
+    "id": "p-lee-jones",
+    "name": "Lee Jones",
+    "teamId": "whaley-2",
+    "startHCP": 14,
+    "HCP": 7,
+    "captain": false,
+    "aliases": ["L Jones", "Lee Jones", "L. Jones", "LJones"]
+  },
+  {
+    "id": "p-f-lee",
+    "name": "F Lee",
+    "teamId": "whaley-2",
+    "startHCP": 7,
+    "HCP": 14,
+    "captain": false,
+    "aliases": ["F Lee", "F. Lee", "FLee"]
+  },
+  {
+    "id": "p-s-renshaw",
+    "name": "S Renshaw",
+    "teamId": "whaley-2",
+    "startHCP": 0,
+    "HCP": 7,
+    "captain": false,
+    "aliases": ["S Renshaw", "S. Renshaw", "SRenshaw"]
+  },
+  {
+    "id": "p-s-tuppen",
+    "name": "S Tuppen",
+    "teamId": "whaley-2",
+    "startHCP": 14,
+    "HCP": 14,
+    "captain": false,
+    "aliases": ["S Tuppen", "S. Tuppen", "STuppen"]
+  },
+  {
+    "id": "p-b-walker",
+    "name": "B Walker",
+    "teamId": "whaley-2",
+    "startHCP": 7,
+    "HCP": 7,
+    "captain": false,
+    "aliases": ["B Walker", "B. Walker", "BWalker"]
+  },
+  {
+    "id": "p-p-walker",
+    "name": "P Walker",
+    "teamId": "whaley-2",
+    "startHCP": 7,
+    "HCP": 14,
+    "captain": false,
+    "aliases": ["P Walker", "P. Walker", "PWalker"]
+  },
 
-  { "id": "p-joe-brennan", "name": "Joe Brennan", "teamId": "tintwistle1", "startHCP": -35, "HCP": -28, "captain": false, "aliases": ["J Brennan"] },
-  { "id": "p-a-clark", "name": "A Clark", "teamId": "tintwistle1", "startHCP": -7, "HCP": -7, "captain": false, "aliases": ["A Clark"] },
-  { "id": "p-s-crook", "name": "S Crook", "teamId": "tintwistle1", "startHCP": -28, "HCP": -35, "captain": true, "aliases": ["S Crook"] },
-  { "id": "p-c-heyes", "name": "C Heyes", "teamId": "tintwistle1", "startHCP": -28, "HCP": -28, "captain": false, "aliases": ["C Heyes"] },
-  { "id": "p-a-kershaw", "name": "A Kershaw", "teamId": "tintwistle1", "startHCP": 35, "HCP": 35, "captain": false, "aliases": ["A Kershaw"] },
-  { "id": "p-a-lawton", "name": "A Lawton", "teamId": "tintwistle1", "startHCP": 14, "HCP": 14, "captain": false, "aliases": ["A Lawton"] },
-  { "id": "p-jon-matthews", "name": "Jon Matthews", "teamId": "tintwistle1", "startHCP": -7, "HCP": -7, "captain": false, "aliases": ["J Matthews"] },
-  { "id": "p-p-osullivan", "name": "P O'Sullivan", "teamId": "tintwistle1", "startHCP": -28, "HCP": -14, "captain": false, "aliases": ["P O'Sullivan"] },
-  { "id": "p-shaun-robinson", "name": "Shaun Robinson", "teamId": "tintwistle1", "startHCP": -28, "HCP": -28, "captain": false, "aliases": ["S Robinson"] },
-  { "id": "p-f-sidebottom", "name": "F Sidebottom", "teamId": "tintwistle1", "startHCP": 0, "HCP": 0, "captain": false, "aliases": ["F Sidebottom"] },
-  { "id": "p-paul-smith", "name": "Paul Smith", "teamId": "tintwistle1", "startHCP": -35, "HCP": -35, "captain": false, "aliases": ["P Smith"] },
-  { "id": "p-elliot-spencer", "name": "Elliot Spencer", "teamId": "tintwistle1", "startHCP": 14, "HCP": 21, "captain": false, "aliases": ["E Spencer"] },
-  { "id": "p-l-walker", "name": "L Walker", "teamId": "tintwistle1", "startHCP": 28, "HCP": 28, "captain": false, "aliases": ["L Walker"] },
-  { "id": "p-n-wilson", "name": "N Wilson", "teamId": "tintwistle1", "startHCP": -21, "HCP": -21, "captain": false, "aliases": ["N Wilson"] },
+  {
+    "id": "p-joe-brennan",
+    "name": "Joe Brennan",
+    "teamId": "tintwistle1",
+    "startHCP": -35,
+    "HCP": -28,
+    "captain": false,
+    "aliases": ["J Brennan", "Joe Brennan", "Joseph Brennan", "J. Brennan", "JBrennan"]
+  },
+  {
+    "id": "p-a-clark",
+    "name": "A Clark",
+    "teamId": "tintwistle1",
+    "startHCP": -7,
+    "HCP": -7,
+    "captain": false,
+    "aliases": ["A Clark", "A. Clark", "AClark"]
+  },
+  {
+    "id": "p-s-crook",
+    "name": "S Crook",
+    "teamId": "tintwistle1",
+    "startHCP": -28,
+    "HCP": -35,
+    "captain": true,
+    "aliases": ["S Crook", "S. Crook", "SCrook"]
+  },
+  {
+    "id": "p-c-heyes",
+    "name": "C Heyes",
+    "teamId": "tintwistle1",
+    "startHCP": -28,
+    "HCP": -28,
+    "captain": false,
+    "aliases": ["C Heyes", "C. Heyes", "CHeyes"]
+  },
+  {
+    "id": "p-a-kershaw",
+    "name": "A Kershaw",
+    "teamId": "tintwistle1",
+    "startHCP": 35,
+    "HCP": 35,
+    "captain": false,
+    "aliases": ["A Kershaw", "A. Kershaw", "AKershaw"]
+  },
+  {
+    "id": "p-a-lawton",
+    "name": "A Lawton",
+    "teamId": "tintwistle1",
+    "startHCP": 14,
+    "HCP": 14,
+    "captain": false,
+    "aliases": ["A Lawton", "A. Lawton", "ALawton"]
+  },
+  {
+    "id": "p-jon-matthews",
+    "name": "Jon Matthews",
+    "teamId": "tintwistle1",
+    "startHCP": -7,
+    "HCP": -7,
+    "captain": false,
+    "aliases": ["J Matthews", "Jon Matthews", "John Matthews", "J. Matthews", "JMatthews"]
+  },
+  {
+    "id": "p-p-osullivan",
+    "name": "P O'Sullivan",
+    "teamId": "tintwistle1",
+    "startHCP": -28,
+    "HCP": -14,
+    "captain": false,
+    "aliases": [
+      "P O'Sullivan",
+      "P O Sullivan",
+      "P OSullivan",
+      "P. O'Sullivan",
+      "P. O Sullivan",
+      "PO'Sullivan",
+      "POSullivan"
+    ]
+  },
+  {
+    "id": "p-shaun-robinson",
+    "name": "Shaun Robinson",
+    "teamId": "tintwistle1",
+    "startHCP": -28,
+    "HCP": -28,
+    "captain": false,
+    "aliases": ["S Robinson", "Shaun Robinson", "Shawn Robinson", "S. Robinson", "SRobinson"]
+  },
+  {
+    "id": "p-f-sidebottom",
+    "name": "F Sidebottom",
+    "teamId": "tintwistle1",
+    "startHCP": 0,
+    "HCP": 0,
+    "captain": false,
+    "aliases": ["F Sidebottom", "F. Sidebottom", "FSidebottom"]
+  },
+  {
+    "id": "p-paul-smith",
+    "name": "Paul Smith",
+    "teamId": "tintwistle1",
+    "startHCP": -35,
+    "HCP": -35,
+    "captain": false,
+    "aliases": ["P Smith", "Paul Smith", "P. Smith", "PSmith"]
+  },
+  {
+    "id": "p-elliot-spencer",
+    "name": "Elliot Spencer",
+    "teamId": "tintwistle1",
+    "startHCP": 14,
+    "HCP": 21,
+    "captain": false,
+    "aliases": ["E Spencer", "Elliot Spencer", "Elliott Spencer", "E. Spencer", "ESpencer"]
+  },
+  {
+    "id": "p-l-walker",
+    "name": "L Walker",
+    "teamId": "tintwistle1",
+    "startHCP": 28,
+    "HCP": 28,
+    "captain": false,
+    "aliases": ["L Walker", "L. Walker", "LWalker"]
+  },
+  {
+    "id": "p-n-wilson",
+    "name": "N Wilson",
+    "teamId": "tintwistle1",
+    "startHCP": -21,
+    "HCP": -21,
+    "captain": false,
+    "aliases": ["N Wilson", "N. Wilson", "NWilson"]
+  },
 
-  { "id": "p-d-bardsley", "name": "D Bardsley", "teamId": "tintwistle2", "startHCP": 7, "HCP": 7, "captain": false, "aliases": ["D Bardsley"] },
-  { "id": "p-chris-bethel", "name": "Chris Bethel", "teamId": "tintwistle2", "startHCP": 7, "HCP": 7, "captain": false, "aliases": ["C Bethel"] },
-  { "id": "p-brian-bethel", "name": "Brian Bethel", "teamId": "tintwistle2", "startHCP": 21, "HCP": 21, "captain": false, "aliases": ["B Bethel"] },
-  { "id": "p-perri-bethel", "name": "Perri Bethel", "teamId": "tintwistle2", "startHCP": -7, "HCP": -7, "captain": false, "aliases": ["P Bethel", "P Bethell"] },
-  { "id": "p-c-coggins", "name": "C Coggins", "teamId": "tintwistle2", "startHCP": 21, "HCP": 21, "captain": false, "aliases": ["C Coggins"] },
-  { "id": "p-dan-corbally", "name": "Dan Corbally", "teamId": "tintwistle2", "startHCP": -7, "HCP": 0, "captain": true, "aliases": ["D Corbally"] },
-  { "id": "p-james-cutt", "name": "James Cutt", "teamId": "tintwistle2", "startHCP": -7, "HCP": -7, "captain": false, "aliases": ["J Cutt"] },
-  { "id": "p-g-davis", "name": "G Davis", "teamId": "tintwistle2", "startHCP": 7, "HCP": 14, "captain": false, "aliases": ["G Davis", "Graham Davis"] },
-  { "id": "p-j-goddard", "name": "J Goddard", "teamId": "tintwistle2", "startHCP": 21, "HCP": 21, "captain": false, "aliases": ["J Goddard"] },
-  { "id": "p-elliot-hall", "name": "Elliot Hall", "teamId": "tintwistle2", "startHCP": 28, "HCP": 28, "captain": false, "aliases": ["E Hall"] },
-  { "id": "p-k-hardman", "name": "K Hardman", "teamId": "tintwistle2", "startHCP": 0, "HCP": -14, "captain": false, "aliases": ["K Hardman"] },
-  { "id": "p-danny-harrison", "name": "Danny Harrison", "teamId": "tintwistle2", "startHCP": 21, "HCP": 21, "captain": false, "aliases": ["D Harrison"] },
-  { "id": "p-p-irving", "name": "P Irving", "teamId": "tintwistle2", "startHCP": -14, "HCP": -14, "captain": false, "aliases": ["P Irving"] },
-  { "id": "p-ryan-lutener", "name": "Ryan Lutener", "teamId": "tintwistle2", "startHCP": 14, "HCP": 14, "captain": false, "aliases": ["R Lutener"] },
-  { "id": "p-d-pennington", "name": "D Pennington", "teamId": "tintwistle2", "startHCP": 14, "HCP": 14, "captain": false, "aliases": ["D Pennington"] },
-  { "id": "p-jason-ray", "name": "Jason Ray", "teamId": "tintwistle2", "startHCP": 28, "HCP": 28, "captain": false, "aliases": ["J Ray"] },
-  { "id": "p-d-rushby", "name": "D Rushby", "teamId": "tintwistle2", "startHCP": 21, "HCP": 21, "captain": false, "aliases": ["D Rushby"] },
-  { "id": "p-nick-small", "name": "Nick Small", "teamId": "tintwistle2", "startHCP": 21, "HCP": 14, "captain": false, "aliases": ["N Small"] },
-  { "id": "p-george-thirsk", "name": "George Thirsk", "teamId": "tintwistle2", "startHCP": 35, "HCP": 35, "captain": false, "aliases": ["G Thirsk"] },
-  { "id": "p-r-wilkinson", "name": "R Wilkinson", "teamId": "tintwistle2", "startHCP": -14, "HCP": -14, "captain": false, "aliases": ["R Wilkinson"] },
-  { "id": "p-jack-wrigley", "name": "Jack Wrigley", "teamId": "tintwistle2", "startHCP": 7, "HCP": 7, "captain": false, "aliases": ["J Wrigley", "Jack W"] },
-  { "id": "p-a-wright", "name": "A Wright", "teamId": "tintwistle2", "startHCP": 0, "HCP": 0, "captain": false, "aliases": ["A Wright"] },
+  {
+    "id": "p-d-bardsley",
+    "name": "D Bardsley",
+    "teamId": "tintwistle2",
+    "startHCP": 7,
+    "HCP": 7,
+    "captain": false,
+    "aliases": ["D Bardsley", "D. Bardsley", "DBardsley"]
+  },
+  {
+    "id": "p-chris-bethel",
+    "name": "Chris Bethel",
+    "teamId": "tintwistle2",
+    "startHCP": 7,
+    "HCP": 7,
+    "captain": false,
+    "aliases": ["C Bethel", "Chris Bethel", "C. Bethel", "CBethel"]
+  },
+  {
+    "id": "p-brian-bethel",
+    "name": "Brian Bethel",
+    "teamId": "tintwistle2",
+    "startHCP": 21,
+    "HCP": 21,
+    "captain": false,
+    "aliases": ["B Bethel", "Brian Bethel", "B. Bethel", "BBethel"]
+  },
+  {
+    "id": "p-perri-bethel",
+    "name": "Perri Bethel",
+    "teamId": "tintwistle2",
+    "startHCP": -7,
+    "HCP": -7,
+    "captain": false,
+    "aliases": ["P Bethel", "P Bethell", "Perri Bethel", "Perri Bethell", "P. Bethel", "PBethel"]
+  },
+  {
+    "id": "p-c-coggins",
+    "name": "C Coggins",
+    "teamId": "tintwistle2",
+    "startHCP": 21,
+    "HCP": 21,
+    "captain": false,
+    "aliases": ["C Coggins", "C. Coggins", "CCoggins"]
+  },
+  {
+    "id": "p-dan-corbally",
+    "name": "Dan Corbally",
+    "teamId": "tintwistle2",
+    "startHCP": -7,
+    "HCP": 0,
+    "captain": true,
+    "aliases": ["D Corbally", "Dan Corbally", "D. Corbally", "DCorbally"]
+  },
+  {
+    "id": "p-james-cutt",
+    "name": "James Cutt",
+    "teamId": "tintwistle2",
+    "startHCP": -7,
+    "HCP": -7,
+    "captain": false,
+    "aliases": ["J Cutt", "James Cutt", "J. Cutt", "JCutt"]
+  },
+  {
+    "id": "p-g-davis",
+    "name": "G Davis",
+    "teamId": "tintwistle2",
+    "startHCP": 7,
+    "HCP": 14,
+    "captain": false,
+    "aliases": ["G Davis", "Graham Davis", "G. Davis", "GDavis"]
+  },
+  {
+    "id": "p-j-goddard",
+    "name": "J Goddard",
+    "teamId": "tintwistle2",
+    "startHCP": 21,
+    "HCP": 21,
+    "captain": false,
+    "aliases": ["J Goddard", "J. Goddard", "JGoddard"]
+  },
+  {
+    "id": "p-elliot-hall",
+    "name": "Elliot Hall",
+    "teamId": "tintwistle2",
+    "startHCP": 28,
+    "HCP": 28,
+    "captain": false,
+    "aliases": ["E Hall", "Elliot Hall", "Elliott Hall", "E. Hall", "EHall"]
+  },
+  {
+    "id": "p-k-hardman",
+    "name": "K Hardman",
+    "teamId": "tintwistle2",
+    "startHCP": 0,
+    "HCP": -14,
+    "captain": false,
+    "aliases": ["K Hardman", "K. Hardman", "KHardman"]
+  },
+  {
+    "id": "p-danny-harrison",
+    "name": "Danny Harrison",
+    "teamId": "tintwistle2",
+    "startHCP": 21,
+    "HCP": 21,
+    "captain": false,
+    "aliases": ["D Harrison", "Danny Harrison", "Dan Harrison", "D. Harrison", "DHarrison"]
+  },
+  {
+    "id": "p-p-irving",
+    "name": "P Irving",
+    "teamId": "tintwistle2",
+    "startHCP": -14,
+    "HCP": -14,
+    "captain": false,
+    "aliases": ["P Irving", "P. Irving", "PIrving"]
+  },
+  {
+    "id": "p-ryan-lutener",
+    "name": "Ryan Lutener",
+    "teamId": "tintwistle2",
+    "startHCP": 14,
+    "HCP": 14,
+    "captain": false,
+    "aliases": ["R Lutener", "Ryan Lutener", "R. Lutener", "RLutener", "Ryan Lutner"]
+  },
+  {
+    "id": "p-d-pennington",
+    "name": "D Pennington",
+    "teamId": "tintwistle2",
+    "startHCP": 14,
+    "HCP": 14,
+    "captain": false,
+    "aliases": ["D Pennington", "D. Pennington", "DPennington"]
+  },
+  {
+    "id": "p-jason-ray",
+    "name": "Jason Ray",
+    "teamId": "tintwistle2",
+    "startHCP": 28,
+    "HCP": 28,
+    "captain": false,
+    "aliases": ["J Ray", "Jason Ray", "J. Ray", "JRay"]
+  },
+  {
+    "id": "p-d-rushby",
+    "name": "D Rushby",
+    "teamId": "tintwistle2",
+    "startHCP": 21,
+    "HCP": 21,
+    "captain": false,
+    "aliases": ["D Rushby", "D. Rushby", "DRushby"]
+  },
+  {
+    "id": "p-nick-small",
+    "name": "Nick Small",
+    "teamId": "tintwistle2",
+    "startHCP": 21,
+    "HCP": 14,
+    "captain": false,
+    "aliases": ["N Small", "Nick Small", "Nicholas Small", "N. Small", "NSmall"]
+  },
+  {
+    "id": "p-george-thirsk",
+    "name": "George Thirsk",
+    "teamId": "tintwistle2",
+    "startHCP": 35,
+    "HCP": 35,
+    "captain": false,
+    "aliases": ["G Thirsk", "George Thirsk", "G. Thirsk", "GThirsk"]
+  },
+  {
+    "id": "p-r-wilkinson",
+    "name": "R Wilkinson",
+    "teamId": "tintwistle2",
+    "startHCP": -14,
+    "HCP": -14,
+    "captain": false,
+    "aliases": ["R Wilkinson", "R. Wilkinson", "RWilkinson"]
+  },
+  {
+    "id": "p-jack-wrigley",
+    "name": "Jack Wrigley",
+    "teamId": "tintwistle2",
+    "startHCP": 7,
+    "HCP": 7,
+    "captain": false,
+    "aliases": ["J Wrigley", "Jack W", "Jack Wrigley", "J. Wrigley", "JWrigley"]
+  },
+  {
+    "id": "p-a-wright",
+    "name": "A Wright",
+    "teamId": "tintwistle2",
+    "startHCP": 0,
+    "HCP": 0,
+    "captain": false,
+    "aliases": ["A Wright", "A. Wright", "AWright"]
+  },
 
-  { "id": "p-mike-alford", "name": "Mike Alford", "teamId": "marple", "startHCP": 21, "HCP": 21, "captain": false, "aliases": ["M Alford"] },
-  { "id": "p-tony-arnott", "name": "Tony Arnott", "teamId": "marple", "startHCP": -14, "HCP": -14, "captain": false, "aliases": ["T Arnott"] },
-  { "id": "p-c-brown", "name": "C Brown", "teamId": "marple", "startHCP": 21, "HCP": 21, "captain": false, "aliases": ["C Brown"] },
-  { "id": "p-d-burrows", "name": "D Burrows", "teamId": "marple", "startHCP": 35, "HCP": 35, "captain": false, "aliases": ["D Burrows"] },
-  { "id": "p-todd-candlin", "name": "Todd Candlin", "teamId": "marple", "startHCP": 14, "HCP": 7, "captain": false, "aliases": ["T Candlin"] },
-  { "id": "p-lydon-conway", "name": "Lydon Conway", "teamId": "marple", "startHCP": 21, "HCP": 21, "captain": false, "aliases": ["L Conway"] },
-  { "id": "p-glynn-evans", "name": "Glynn Evans", "teamId": "marple", "startHCP": 14, "HCP": 14, "captain": true, "aliases": ["G Evans", "Glyn Evans"] },
-  { "id": "p-geoff-flavell", "name": "Geoff Flavell", "teamId": "marple", "startHCP": -14, "HCP": -14, "captain": false, "aliases": ["G Flavell"] },
-  { "id": "p-g-gaskell", "name": "G Gaskell", "teamId": "marple", "startHCP": 14, "HCP": 21, "captain": false, "aliases": ["G Gaskell"] },
-  { "id": "p-c-lee-marple", "name": "C Lee", "teamId": "marple", "startHCP": 7, "HCP": 7, "captain": false, "aliases": ["C Lee (Marple)"] },
-  { "id": "p-dave-martin", "name": "Dave Martin", "teamId": "marple", "startHCP": 0, "HCP": 0, "captain": false, "aliases": ["D Martin"] },
-  { "id": "p-paul-massey", "name": "Paul Massey", "teamId": "marple", "startHCP": 14, "HCP": 14, "captain": false, "aliases": ["P Massey"] },
-  { "id": "p-d-riley", "name": "D Riley", "teamId": "marple", "startHCP": 7, "HCP": 7, "captain": false, "aliases": ["D Riley"] },
-  { "id": "p-gareth-ritchie", "name": "Gareth Ritchie", "teamId": "marple", "startHCP": 7, "HCP": 7, "captain": false, "aliases": ["G Ritchie"] },
-  { "id": "p-ryan-ritchie", "name": "Ryan Ritchie", "teamId": "marple", "startHCP": 35, "HCP": 35, "captain": false, "aliases": ["R Ritchie"] },
-  { "id": "p-frank-stone", "name": "Frank Stone", "teamId": "marple", "startHCP": 21, "HCP": 28, "captain": false, "aliases": ["F Stone"] },
-  { "id": "p-p-taylor", "name": "P Taylor", "teamId": "marple", "startHCP": 14, "HCP": 14, "captain": false, "aliases": ["P Taylor"] },
-  { "id": "p-h-walton", "name": "H Walton", "teamId": "marple", "startHCP": 35, "HCP": 35, "captain": false, "aliases": ["H Walton"] },
-  { "id": "p-nick-wilbourne", "name": "Nick Wilbourne", "teamId": "marple", "startHCP": 21, "HCP": 28, "captain": false, "aliases": ["N Wilbourne"] },
+  {
+    "id": "p-mike-alford",
+    "name": "Mike Alford",
+    "teamId": "marple",
+    "startHCP": 21,
+    "HCP": 21,
+    "captain": false,
+    "aliases": ["M Alford", "Mike Alford", "Michael Alford", "M. Alford", "MAlford"]
+  },
+  {
+    "id": "p-tony-arnott",
+    "name": "Tony Arnott",
+    "teamId": "marple",
+    "startHCP": -14,
+    "HCP": -14,
+    "captain": false,
+    "aliases": ["T Arnott", "Tony Arnott", "T. Arnott", "TArnott"]
+  },
+  {
+    "id": "p-c-brown",
+    "name": "C Brown",
+    "teamId": "marple",
+    "startHCP": 21,
+    "HCP": 21,
+    "captain": false,
+    "aliases": ["C Brown", "C. Brown", "CBrown"]
+  },
+  {
+    "id": "p-d-burrows",
+    "name": "D Burrows",
+    "teamId": "marple",
+    "startHCP": 35,
+    "HCP": 35,
+    "captain": false,
+    "aliases": ["D Burrows", "D. Burrows", "DBurrows"]
+  },
+  {
+    "id": "p-todd-candlin",
+    "name": "Todd Candlin",
+    "teamId": "marple",
+    "startHCP": 14,
+    "HCP": 7,
+    "captain": false,
+    "aliases": ["T Candlin", "Todd Candlin", "T. Candlin", "TCandlin", "Todd Candlyn"]
+  },
+  {
+    "id": "p-lydon-conway",
+    "name": "Lydon Conway",
+    "teamId": "marple",
+    "startHCP": 21,
+    "HCP": 21,
+    "captain": false,
+    "aliases": ["L Conway", "Lydon Conway", "L. Conway", "LConway"]
+  },
+  {
+    "id": "p-glynn-evans",
+    "name": "Glynn Evans",
+    "teamId": "marple",
+    "startHCP": 14,
+    "HCP": 14,
+    "captain": true,
+    "aliases": ["G Evans", "Glyn Evans", "Glynn Evans", "G. Evans", "GEvans"]
+  },
+  {
+    "id": "p-geoff-flavell",
+    "name": "Geoff Flavell",
+    "teamId": "marple",
+    "startHCP": -14,
+    "HCP": -14,
+    "captain": false,
+    "aliases": ["G Flavell", "Geoff Flavell", "Jeff Flavell", "G. Flavell", "GFlavell"]
+  },
+  {
+    "id": "p-g-gaskell",
+    "name": "G Gaskell",
+    "teamId": "marple",
+    "startHCP": 14,
+    "HCP": 21,
+    "captain": false,
+    "aliases": ["G Gaskell", "G. Gaskell", "GGaskell"]
+  },
+  {
+    "id": "p-c-lee-marple",
+    "name": "C Lee",
+    "teamId": "marple",
+    "startHCP": 7,
+    "HCP": 7,
+    "captain": false,
+    "aliases": ["C Lee", "C Lee (Marple)", "C. Lee", "CLee", "C Lee - Marple"]
+  },
+  {
+    "id": "p-dave-martin",
+    "name": "Dave Martin",
+    "teamId": "marple",
+    "startHCP": 0,
+    "HCP": 0,
+    "captain": false,
+    "aliases": ["D Martin", "Dave Martin", "David Martin", "D. Martin", "DMartin"]
+  },
+  {
+    "id": "p-paul-massey",
+    "name": "Paul Massey",
+    "teamId": "marple",
+    "startHCP": 14,
+    "HCP": 14,
+    "captain": false,
+    "aliases": ["P Massey", "Paul Massey", "P. Massey", "PMassey"]
+  },
+  {
+    "id": "p-d-riley",
+    "name": "D Riley",
+    "teamId": "marple",
+    "startHCP": 7,
+    "HCP": 7,
+    "captain": false,
+    "aliases": ["D Riley", "D. Riley", "DRiley"]
+  },
+  {
+    "id": "p-gareth-ritchie",
+    "name": "Gareth Ritchie",
+    "teamId": "marple",
+    "startHCP": 7,
+    "HCP": 7,
+    "captain": false,
+    "aliases": ["G Ritchie", "Gareth Ritchie", "G. Ritchie", "GRitchie"]
+  },
+  {
+    "id": "p-ryan-ritchie",
+    "name": "Ryan Ritchie",
+    "teamId": "marple",
+    "startHCP": 35,
+    "HCP": 35,
+    "captain": false,
+    "aliases": ["R Ritchie", "Ryan Ritchie", "R. Ritchie", "RRitchie"]
+  },
+  {
+    "id": "p-frank-stone",
+    "name": "Frank Stone",
+    "teamId": "marple",
+    "startHCP": 21,
+    "HCP": 28,
+    "captain": false,
+    "aliases": ["F Stone", "Frank Stone", "F. Stone", "FStone"]
+  },
+  {
+    "id": "p-p-taylor",
+    "name": "P Taylor",
+    "teamId": "marple",
+    "startHCP": 14,
+    "HCP": 14,
+    "captain": false,
+    "aliases": ["P Taylor", "P. Taylor", "PTaylor"]
+  },
+  {
+    "id": "p-h-walton",
+    "name": "H Walton",
+    "teamId": "marple",
+    "startHCP": 35,
+    "HCP": 35,
+    "captain": false,
+    "aliases": ["H Walton", "H. Walton", "HWalton"]
+  },
+  {
+    "id": "p-nick-wilbourne",
+    "name": "Nick Wilbourne",
+    "teamId": "marple",
+    "startHCP": 21,
+    "HCP": 28,
+    "captain": false,
+    "aliases": ["N Wilbourne", "Nick Wilbourne", "N. Wilbourne", "NWilbourne", "Nick Wilbourn"]
+  },
 
-  { "id": "p-s-abell", "name": "S Abell", "teamId": "hayfield-1", "startHCP": 28, "HCP": 28, "captain": false, "aliases": ["S Abell"] },
-  { "id": "p-b-allen", "name": "B Allen", "teamId": "hayfield-1", "startHCP": 0, "HCP": 0, "captain": false, "aliases": ["B Allen"] },
-  { "id": "p-j-adamson", "name": "J Adamson", "teamId": "hayfield-1", "startHCP": 14, "HCP": 14, "captain": false, "aliases": ["J Adamson"] },
-  { "id": "p-a-barnes", "name": "A Barnes", "teamId": "hayfield-1", "startHCP": 0, "HCP": 0, "captain": false, "aliases": ["A Barnes"] },
-  { "id": "p-andy-brooks", "name": "Andy Brooks", "teamId": "hayfield-1", "startHCP": 0, "HCP": 0, "captain": false, "aliases": ["A Brooks"] },
-  { "id": "p-d-evans", "name": "D Evans", "teamId": "hayfield-1", "startHCP": 7, "HCP": 0, "captain": false, "aliases": ["D Evans"] },
-  { "id": "p-n-evans", "name": "N Evans", "teamId": "hayfield-1", "startHCP": 0, "HCP": 0, "captain": false, "aliases": ["N Evans"] },
-  { "id": "p-s-harrison", "name": "S Harrison", "teamId": "hayfield-1", "startHCP": -21, "HCP": -21, "captain": false, "aliases": ["S Harrison"] },
-  { "id": "p-p-lomas", "name": "P Lomas", "teamId": "hayfield-1", "startHCP": -7, "HCP": -7, "captain": true, "aliases": ["P Lomas", "Paul Lomas"] },
-  { "id": "p-sam-lomas", "name": "Sam Lomas", "teamId": "hayfield-1", "startHCP": 21, "HCP": 14, "captain": false, "aliases": ["Sam Lomas"] },
-  { "id": "p-scott-lomas", "name": "Scott Lomas", "teamId": "hayfield-1", "startHCP": 7, "HCP": 0, "captain": false, "aliases": ["Scott Lomas"] },
-  { "id": "p-b-lonsdale", "name": "B Lonsdale", "teamId": "hayfield-1", "startHCP": 35, "HCP": 35, "captain": false, "aliases": ["B Lonsdale"] },
-  { "id": "p-tony-watkinson", "name": "Tony Watkinson", "teamId": "hayfield-1", "startHCP": 35, "HCP": 28, "captain": false, "aliases": ["T Watkinson"] },
-  { "id": "p-d-winterbottom", "name": "D Winterbottom", "teamId": "hayfield-1", "startHCP": 0, "HCP": 0, "captain": false, "aliases": ["D Winterbottom"] },
-  { "id": "p-c-lee-hayfield-1", "name": "C Lee", "teamId": "hayfield-1", "startHCP": 14, "HCP": 14, "captain": false, "aliases": ["C Lee", "C Lee (Hayfield 1)"] },
-  { "id": "p-j-bradbury", "name": "J Bradbury", "teamId": "hayfield-1", "startHCP": 14, "HCP": 14, "captain": false, "aliases": ["J Bradbury"] },
+  {
+    "id": "p-s-abell",
+    "name": "S Abell",
+    "teamId": "hayfield-1",
+    "startHCP": 28,
+    "HCP": 28,
+    "captain": false,
+    "aliases": ["S Abell", "S. Abell", "SAbell"]
+  },
+  {
+    "id": "p-b-allen",
+    "name": "B Allen",
+    "teamId": "hayfield-1",
+    "startHCP": 0,
+    "HCP": 0,
+    "captain": false,
+    "aliases": ["B Allen", "B. Allen", "BAllen"]
+  },
+  {
+    "id": "p-j-adamson",
+    "name": "J Adamson",
+    "teamId": "hayfield-1",
+    "startHCP": 14,
+    "HCP": 14,
+    "captain": false,
+    "aliases": ["J Adamson", "J. Adamson", "JAdamson"]
+  },
+  {
+    "id": "p-a-barnes",
+    "name": "A Barnes",
+    "teamId": "hayfield-1",
+    "startHCP": 0,
+    "HCP": 0,
+    "captain": false,
+    "aliases": ["A Barnes", "A. Barnes", "ABarnes"]
+  },
+  {
+    "id": "p-andy-brooks",
+    "name": "Andy Brooks",
+    "teamId": "hayfield-1",
+    "startHCP": 0,
+    "HCP": 0,
+    "captain": false,
+    "aliases": ["A Brooks", "Andy Brooks", "Andrew Brooks", "A. Brooks", "ABrooks"]
+  },
+  {
+    "id": "p-d-evans",
+    "name": "D Evans",
+    "teamId": "hayfield-1",
+    "startHCP": 7,
+    "HCP": 0,
+    "captain": false,
+    "aliases": ["D Evans", "D. Evans", "DEvans"]
+  },
+  {
+    "id": "p-n-evans",
+    "name": "N Evans",
+    "teamId": "hayfield-1",
+    "startHCP": 0,
+    "HCP": 0,
+    "captain": false,
+    "aliases": ["N Evans", "N. Evans", "NEvans"]
+  },
+  {
+    "id": "p-s-harrison",
+    "name": "S Harrison",
+    "teamId": "hayfield-1",
+    "startHCP": -21,
+    "HCP": -21,
+    "captain": false,
+    "aliases": ["S Harrison", "S. Harrison", "SHarrison"]
+  },
+  {
+    "id": "p-p-lomas",
+    "name": "P Lomas",
+    "teamId": "hayfield-1",
+    "startHCP": -7,
+    "HCP": -7,
+    "captain": true,
+    "aliases": ["P Lomas", "Paul Lomas", "P. Lomas", "PLomas"]
+  },
+  {
+    "id": "p-sam-lomas",
+    "name": "Sam Lomas",
+    "teamId": "hayfield-1",
+    "startHCP": 21,
+    "HCP": 14,
+    "captain": false,
+    "aliases": ["Sam Lomas", "S Lomas", "S. Lomas", "SLomas"]
+  },
+  {
+    "id": "p-scott-lomas",
+    "name": "Scott Lomas",
+    "teamId": "hayfield-1",
+    "startHCP": 7,
+    "HCP": 0,
+    "captain": false,
+    "aliases": ["Scott Lomas", "S Lomas (Scott)", "S. Lomas (Scott)", "Scott L", "ScottL"]
+  },
+  {
+    "id": "p-b-lonsdale",
+    "name": "B Lonsdale",
+    "teamId": "hayfield-1",
+    "startHCP": 35,
+    "HCP": 35,
+    "captain": false,
+    "aliases": ["B Lonsdale", "B. Lonsdale", "BLonsdale"]
+  },
+  {
+    "id": "p-tony-watkinson",
+    "name": "Tony Watkinson",
+    "teamId": "hayfield-1",
+    "startHCP": 35,
+    "HCP": 28,
+    "captain": false,
+    "aliases": ["T Watkinson", "Tony Watkinson", "T. Watkinson", "TWatkinson"]
+  },
+  {
+    "id": "p-d-winterbottom",
+    "name": "D Winterbottom",
+    "teamId": "hayfield-1",
+    "startHCP": 0,
+    "HCP": 0,
+    "captain": false,
+    "aliases": ["D Winterbottom", "D. Winterbottom", "DWinterbottom", "D Winterbotom"]
+  },
+  {
+    "id": "p-c-lee-hayfield-1",
+    "name": "C Lee",
+    "teamId": "hayfield-1",
+    "startHCP": 14,
+    "HCP": 14,
+    "captain": false,
+    "aliases": ["C Lee", "C Lee (Hayfield 1)", "C. Lee", "CLee", "C Lee - Hayfield", "C Lee - Hayfield 1"]
+  },
+  {
+    "id": "p-j-bradbury",
+    "name": "J Bradbury",
+    "teamId": "hayfield-1",
+    "startHCP": 14,
+    "HCP": 14,
+    "captain": false,
+    "aliases": ["J Bradbury", "J. Bradbury", "JBradbury"]
+  },
 
-  { "id": "p-steve-ashby", "name": "Steve Ashby", "teamId": "hayfield-2", "startHCP": 14, "HCP": 14, "captain": false, "aliases": ["S Ashby"] },
-  { "id": "p-d-bloomfield", "name": "D Bloomfield", "teamId": "hayfield-2", "startHCP": 21, "HCP": 28, "captain": false, "aliases": ["D Bloomfield"] },
-  { "id": "p-geoff-edge", "name": "Geoff Edge", "teamId": "hayfield-2", "startHCP": 7, "HCP": 7, "captain": false, "aliases": ["G Edge"] },
-  { "id": "p-mark-enright", "name": "Mark Enright", "teamId": "hayfield-2", "startHCP": 35, "HCP": 28, "captain": false, "aliases": ["M Enright"] },
-  { "id": "p-paul-glover", "name": "Paul Glover", "teamId": "hayfield-2", "startHCP": 14, "HCP": 7, "captain": false, "aliases": ["P Glover"] },
-  { "id": "p-fletcher-glover", "name": "Fletcher Glover", "teamId": "hayfield-2", "startHCP": 14, "HCP": 21, "captain": false, "aliases": ["F Glover"] },
-  { "id": "p-g-fairclough", "name": "G Fairclough", "teamId": "hayfield-2", "startHCP": 14, "HCP": 14, "captain": false, "aliases": ["G Fairclough"] },
-  { "id": "p-a-mckay", "name": "A McKay", "teamId": "hayfield-2", "startHCP": 14, "HCP": 14, "captain": false, "aliases": ["A McKay"] },
-  { "id": "p-kieron-mcloughlan", "name": "Kieron McLoughlan", "teamId": "hayfield-2", "startHCP": 14, "HCP": 14, "captain": false, "aliases": ["K McLoughlan"] },
-  { "id": "p-b-monaghan", "name": "B Monaghan", "teamId": "hayfield-2", "startHCP": 14, "HCP": 14, "captain": false, "aliases": ["B Monaghan"] },
-  { "id": "p-tony-ryan", "name": "Tony Ryan", "teamId": "hayfield-2", "startHCP": 14, "HCP": 14, "captain": false, "aliases": ["T Ryan"] },
-  { "id": "p-mark-snelling", "name": "Mark Snelling", "teamId": "hayfield-2", "startHCP": 21, "HCP": 14, "captain": false, "aliases": ["M Snelling"] },
-  { "id": "p-dean-taylor", "name": "Dean Taylor", "teamId": "hayfield-2", "startHCP": 14, "HCP": 28, "captain": true, "aliases": ["D Taylor"] },
-  { "id": "p-d-hayes", "name": "Dan Hayes", "teamId": "hayfield-2", "startHCP": 14, "HCP": 21, "captain": false, "aliases": ["D Hayes"] },
+  {
+    "id": "p-steve-ashby",
+    "name": "Steve Ashby",
+    "teamId": "hayfield-2",
+    "startHCP": 14,
+    "HCP": 14,
+    "captain": false,
+    "aliases": ["S Ashby", "Steve Ashby", "S. Ashby", "SAshby"]
+  },
+  {
+    "id": "p-d-bloomfield",
+    "name": "D Bloomfield",
+    "teamId": "hayfield-2",
+    "startHCP": 21,
+    "HCP": 28,
+    "captain": false,
+    "aliases": ["D Bloomfield", "D. Bloomfield", "DBloomfield"]
+  },
+  {
+    "id": "p-geoff-edge",
+    "name": "Geoff Edge",
+    "teamId": "hayfield-2",
+    "startHCP": 7,
+    "HCP": 7,
+    "captain": false,
+    "aliases": ["G Edge", "Geoff Edge", "Jeff Edge", "G. Edge", "GEdge"]
+  },
+  {
+    "id": "p-mark-enright",
+    "name": "Mark Enright",
+    "teamId": "hayfield-2",
+    "startHCP": 35,
+    "HCP": 28,
+    "captain": false,
+    "aliases": ["M Enright", "Mark Enright", "M. Enright", "MEnright", "Mark Enrght"]
+  },
+  {
+    "id": "p-paul-glover",
+    "name": "Paul Glover",
+    "teamId": "hayfield-2",
+    "startHCP": 14,
+    "HCP": 7,
+    "captain": false,
+    "aliases": ["P Glover", "Paul Glover", "P. Glover", "PGlover"]
+  },
+  {
+    "id": "p-fletcher-glover",
+    "name": "Fletcher Glover",
+    "teamId": "hayfield-2",
+    "startHCP": 14,
+    "HCP": 21,
+    "captain": false,
+    "aliases": ["F Glover", "Fletcher Glover", "Fletch Glover", "F. Glover", "FGlover"]
+  },
+  {
+    "id": "p-g-fairclough",
+    "name": "G Fairclough",
+    "teamId": "hayfield-2",
+    "startHCP": 14,
+    "HCP": 14,
+    "captain": false,
+    "aliases": ["G Fairclough", "G. Fairclough", "GFairclough", "G Fairclogh"]
+  },
+  {
+    "id": "p-a-mckay",
+    "name": "A McKay",
+    "teamId": "hayfield-2",
+    "startHCP": 14,
+    "HCP": 14,
+    "captain": false,
+    "aliases": ["A McKay", "A. McKay", "AMcKay", "A Mckay"]
+  },
+  {
+    "id": "p-kieron-mcloughlan",
+    "name": "Kieron McLoughlan",
+    "teamId": "hayfield-2",
+    "startHCP": 14,
+    "HCP": 14,
+    "captain": false,
+    "aliases": ["K McLoughlan", "Kieron McLoughlan", "K. McLoughlan", "KMcLoughlan", "Kieran McLoughlan", "K McLoughlin"]
+  },
+  {
+    "id": "p-b-monaghan",
+    "name": "B Monaghan",
+    "teamId": "hayfield-2",
+    "startHCP": 14,
+    "HCP": 14,
+    "captain": false,
+    "aliases": ["B Monaghan", "B. Monaghan", "BMonaghan"]
+  },
+  {
+    "id": "p-tony-ryan",
+    "name": "Tony Ryan",
+    "teamId": "hayfield-2",
+    "startHCP": 14,
+    "HCP": 14,
+    "captain": false,
+    "aliases": ["T Ryan", "Tony Ryan", "T. Ryan", "TRyan"]
+  },
+  {
+    "id": "p-mark-snelling",
+    "name": "Mark Snelling",
+    "teamId": "hayfield-2",
+    "startHCP": 21,
+    "HCP": 14,
+    "captain": false,
+    "aliases": ["M Snelling", "Mark Snelling", "M. Snelling", "MSnelling"]
+  },
+  {
+    "id": "p-dean-taylor",
+    "name": "Dean Taylor",
+    "teamId": "hayfield-2",
+    "startHCP": 14,
+    "HCP": 28,
+    "captain": true,
+    "aliases": ["D Taylor", "Dean Taylor", "D. Taylor", "DTaylor"]
+  },
+  {
+    "id": "p-d-hayes",
+    "name": "Dan Hayes",
+    "teamId": "hayfield-2",
+    "startHCP": 14,
+    "HCP": 21,
+    "captain": false,
+    "aliases": ["D Hayes", "Dan Hayes", "Danny Hayes", "D. Hayes", "DHayes"]
+  },
 
-  { "id": "p-l-benstead", "name": "L Benstead", "teamId": "chinley", "startHCP": 14, "HCP": 14, "captain": false, "aliases": ["L Benstead"] },
-  { "id": "p-a-carr", "name": "A Carr", "teamId": "chinley", "startHCP": 14, "HCP": 14, "captain": false, "aliases": ["A Carr"] },
-  { "id": "p-l-carr", "name": "L Carr", "teamId": "chinley", "startHCP": -14, "HCP": -14, "captain": false, "aliases": ["L Carr"] },
-  { "id": "p-m-chetwood", "name": "M Chetwood", "teamId": "chinley", "startHCP": 7, "HCP": 7, "captain": false, "aliases": ["M Chetwood"] },
-  { "id": "p-b-doherty", "name": "B Doherty", "teamId": "chinley", "startHCP": 7, "HCP": 0, "captain": false, "aliases": ["B Doherty", "Billy Doherty"] },
-  { "id": "p-dan-fell", "name": "Dan Fell", "teamId": "chinley", "startHCP": 14, "HCP": 14, "captain": false, "aliases": ["D Fell"] },
-  { "id": "p-i-foster", "name": "I Foster", "teamId": "chinley", "startHCP": 14, "HCP": 14, "captain": false, "aliases": ["I Foster"] },
-  { "id": "p-p-gordon", "name": "P Gordon", "teamId": "chinley", "startHCP": 21, "HCP": 21, "captain": false, "aliases": ["P Gordon"] },
-  { "id": "p-j-heath", "name": "J Heath", "teamId": "chinley", "startHCP": 14, "HCP": 14, "captain": false, "aliases": ["J Heath"] },
-  { "id": "p-i-holland", "name": "I Holland", "teamId": "chinley", "startHCP": 0, "HCP": 0, "captain": true, "aliases": ["I Holland"] },
-  { "id": "p-s-lund", "name": "S Lund", "teamId": "chinley", "startHCP": -14, "HCP": -7, "captain": false, "aliases": ["S Lund"] },
-  { "id": "p-d-rowland", "name": "D Rowland", "teamId": "chinley", "startHCP": -7, "HCP": -7, "captain": false, "aliases": ["D Rowland"] },
-  { "id": "p-d-thomas", "name": "D Thomas", "teamId": "chinley", "startHCP": 14, "HCP": 0, "captain": false, "aliases": ["D Thomas", "Darren Thomas"] },
-  { "id": "p-g-walker", "name": "G Walker", "teamId": "chinley", "startHCP": -7, "HCP": -7, "captain": false, "aliases": ["G Walker"] },
+  {
+    "id": "p-l-benstead",
+    "name": "L Benstead",
+    "teamId": "chinley",
+    "startHCP": 14,
+    "HCP": 14,
+    "captain": false,
+    "aliases": ["L Benstead", "L. Benstead", "LBenstead", "L Benst ead"]
+  },
+  {
+    "id": "p-a-carr",
+    "name": "A Carr",
+    "teamId": "chinley",
+    "startHCP": 14,
+    "HCP": 14,
+    "captain": false,
+    "aliases": ["A Carr", "A. Carr", "ACarr"]
+  },
+  {
+    "id": "p-l-carr",
+    "name": "L Carr",
+    "teamId": "chinley",
+    "startHCP": -14,
+    "HCP": -14,
+    "captain": false,
+    "aliases": ["L Carr", "L. Carr", "LCarr"]
+  },
+  {
+    "id": "p-m-chetwood",
+    "name": "M Chetwood",
+    "teamId": "chinley",
+    "startHCP": 7,
+    "HCP": 7,
+    "captain": false,
+    "aliases": ["M Chetwood", "M. Chetwood", "MChetwood", "M Chetwod"]
+  },
+  {
+    "id": "p-b-doherty",
+    "name": "B Doherty",
+    "teamId": "chinley",
+    "startHCP": 7,
+    "HCP": 0,
+    "captain": false,
+    "aliases": ["B Doherty", "Billy Doherty", "B. Doherty", "BDoherty", "Bill Doherty"]
+  },
+  {
+    "id": "p-dan-fell",
+    "name": "Dan Fell",
+    "teamId": "chinley",
+    "startHCP": 14,
+    "HCP": 14,
+    "captain": false,
+    "aliases": ["D Fell", "Dan Fell", "D. Fell", "DFell"]
+  },
+  {
+    "id": "p-i-foster",
+    "name": "I Foster",
+    "teamId": "chinley",
+    "startHCP": 14,
+    "HCP": 14,
+    "captain": false,
+    "aliases": ["I Foster", "I. Foster", "IFoster"]
+  },
+  {
+    "id": "p-p-gordon",
+    "name": "P Gordon",
+    "teamId": "chinley",
+    "startHCP": 21,
+    "HCP": 21,
+    "captain": false,
+    "aliases": ["P Gordon", "P. Gordon", "PGordon"]
+  },
+  {
+    "id": "p-j-heath",
+    "name": "J Heath",
+    "teamId": "chinley",
+    "startHCP": 14,
+    "HCP": 14,
+    "captain": false,
+    "aliases": ["J Heath", "J. Heath", "JHeath"]
+  },
+  {
+    "id": "p-i-holland",
+    "name": "I Holland",
+    "teamId": "chinley",
+    "startHCP": 0,
+    "HCP": 0,
+    "captain": true,
+    "aliases": ["I Holland", "I. Holland", "IHolland"]
+  },
+  {
+    "id": "p-s-lund",
+    "name": "S Lund",
+    "teamId": "chinley",
+    "startHCP": -14,
+    "HCP": -7,
+    "captain": false,
+    "aliases": ["S Lund", "S. Lund", "SLund"]
+  },
+  {
+    "id": "p-d-rowland",
+    "name": "D Rowland",
+    "teamId": "chinley",
+    "startHCP": -7,
+    "HCP": -7,
+    "captain": false,
+    "aliases": ["D Rowland", "D. Rowland", "DRowland"]
+  },
+  {
+    "id": "p-d-thomas",
+    "name": "D Thomas",
+    "teamId": "chinley",
+    "startHCP": 14,
+    "HCP": 0,
+    "captain": false,
+    "aliases": ["D Thomas", "Darren Thomas", "D. Thomas", "DThomas"]
+  },
+  {
+    "id": "p-g-walker",
+    "name": "G Walker",
+    "teamId": "chinley",
+    "startHCP": -7,
+    "HCP": -7,
+    "captain": false,
+    "aliases": ["G Walker", "G. Walker", "GWalker"]
+  },
 
-  { "id": "p-simon-buckley", "name": "Simon Buckley", "teamId": "alexashton", "startHCP": -14, "HCP": -21, "captain": false, "aliases": ["S Buckley"] },
-  { "id": "p-p-bunting", "name": "P Bunting", "teamId": "alexashton", "startHCP": 21, "HCP": 21, "captain": false, "aliases": ["P Bunting"] },
-  { "id": "p-nigel-cave", "name": "Nigel Cave", "teamId": "alexashton", "startHCP": 14, "HCP": 14, "captain": false, "aliases": ["N Cave", "Nigel Cave"] },
-  { "id": "p-t-dransfield", "name": "T Dransfield", "teamId": "alexashton", "startHCP": 28, "HCP": 28, "captain": false, "aliases": ["T Dransfield"] },
-  { "id": "p-d-etches", "name": "D Etches", "teamId": "alexashton", "startHCP": 21, "HCP": 21, "captain": false, "aliases": ["D Etches"] },
-  { "id": "p-a-garbett", "name": "A Garbett", "teamId": "alexashton", "startHCP": 14, "HCP": 14, "captain": false, "aliases": ["A Garbett"] },
-  { "id": "p-lance-hall", "name": "Lance Hall", "teamId": "alexashton", "startHCP": -28, "HCP": -28, "captain": false, "aliases": ["L Hall"] },
-  { "id": "p-m-hammond", "name": "M Hammond", "teamId": "alexashton", "startHCP": 14, "HCP": 14, "captain": false, "aliases": ["M Hammond"] },
-  { "id": "p-adam-harrison", "name": "Adam Harrison", "teamId": "alexashton", "startHCP": 7, "HCP": 7, "captain": false, "aliases": ["A Harrison", "Adam Harrison"] },
-  { "id": "p-d-harrop", "name": "D Harrop", "teamId": "alexashton", "startHCP": 21, "HCP": 21, "captain": false, "aliases": ["D Harrop"] },
-  { "id": "p-p-leigh", "name": "P Leigh", "teamId": "alexashton", "startHCP": 28, "HCP": 35, "captain": true, "aliases": ["P Leigh"] },
-  { "id": "p-b-pregnall", "name": "B Pregnall", "teamId": "alexashton", "startHCP": 21, "HCP": 7, "captain": false, "aliases": ["B Pregnall"] },
-  { "id": "p-paul-rayson", "name": "Paul Rayson", "teamId": "alexashton", "startHCP": 0, "HCP": 0, "captain": false, "aliases": ["P Rayson"] },
-  { "id": "p-c-patel", "name": "C Patel", "teamId": "alexashton", "startHCP": 21, "HCP": 28, "captain": false, "aliases": ["C Patel"] },
-  { "id": "p-d-shields", "name": "D Shields", "teamId": "alexashton", "startHCP": -28, "HCP": -28, "captain": false, "aliases": ["D Shields"] },
-  { "id": "p-aaron-squire", "name": "Aaron Squire", "teamId": "alexashton", "startHCP": 21, "HCP": 21, "captain": false, "aliases": ["A Squire"] },
-  { "id": "p-m-sigley", "name": "M Sigley", "teamId": "alexashton", "startHCP": 7, "HCP": 7, "captain": false, "aliases": ["M Sigley"] },
-  { "id": "p-k-mistry", "name": "K Mistry", "teamId": "alexashton", "startHCP": 21, "HCP": 28, "captain": false, "aliases": ["K Mistry"] },
+  {
+    "id": "p-simon-buckley",
+    "name": "Simon Buckley",
+    "teamId": "alexashton",
+    "startHCP": -14,
+    "HCP": -21,
+    "captain": false,
+    "aliases": ["S Buckley", "Simon Buckley", "S. Buckley", "SBuckley"]
+  },
+  {
+    "id": "p-p-bunting",
+    "name": "P Bunting",
+    "teamId": "alexashton",
+    "startHCP": 21,
+    "HCP": 21,
+    "captain": false,
+    "aliases": ["P Bunting", "P. Bunting", "PBunting"]
+  },
+  {
+    "id": "p-nigel-cave",
+    "name": "Nigel Cave",
+    "teamId": "alexashton",
+    "startHCP": 14,
+    "HCP": 14,
+    "captain": false,
+    "aliases": ["N Cave", "Nigel Cave", "N. Cave", "NCave"]
+  },
+  {
+    "id": "p-t-dransfield",
+    "name": "T Dransfield",
+    "teamId": "alexashton",
+    "startHCP": 28,
+    "HCP": 28,
+    "captain": false,
+    "aliases": ["T Dransfield", "T. Dransfield", "TDransfield"]
+  },
+  {
+    "id": "p-d-etches",
+    "name": "D Etches",
+    "teamId": "alexashton",
+    "startHCP": 21,
+    "HCP": 21,
+    "captain": false,
+    "aliases": ["D Etches", "D. Etches", "DEtches"]
+  },
+  {
+    "id": "p-a-garbett",
+    "name": "A Garbett",
+    "teamId": "alexashton",
+    "startHCP": 14,
+    "HCP": 14,
+    "captain": false,
+    "aliases": ["A Garbett", "A. Garbett", "AGarbett"]
+  },
+  {
+    "id": "p-lance-hall",
+    "name": "Lance Hall",
+    "teamId": "alexashton",
+    "startHCP": -28,
+    "HCP": -28,
+    "captain": false,
+    "aliases": ["L Hall", "Lance Hall", "L. Hall", "LHall"]
+  },
+  {
+    "id": "p-m-hammond",
+    "name": "M Hammond",
+    "teamId": "alexashton",
+    "startHCP": 14,
+    "HCP": 14,
+    "captain": false,
+    "aliases": ["M Hammond", "M. Hammond", "MHammond"]
+  },
+  {
+    "id": "p-adam-harrison",
+    "name": "Adam Harrison",
+    "teamId": "alexashton",
+    "startHCP": 7,
+    "HCP": 7,
+    "captain": false,
+    "aliases": ["A Harrison", "Adam Harrison", "A. Harrison", "AHarrison"]
+  },
+  {
+    "id": "p-d-harrop",
+    "name": "D Harrop",
+    "teamId": "alexashton",
+    "startHCP": 21,
+    "HCP": 21,
+    "captain": false,
+    "aliases": ["D Harrop", "D. Harrop", "DHarrop"]
+  },
+  {
+    "id": "p-p-leigh",
+    "name": "P Leigh",
+    "teamId": "alexashton",
+    "startHCP": 28,
+    "HCP": 35,
+    "captain": true,
+    "aliases": ["P Leigh", "P. Leigh", "PLeigh"]
+  },
+  {
+    "id": "p-b-pregnall",
+    "name": "B Pregnall",
+    "teamId": "alexashton",
+    "startHCP": 21,
+    "HCP": 7,
+    "captain": false,
+    "aliases": ["B Pregnall", "B. Pregnall", "BPregnall", "B Pregnal"]
+  },
+  {
+    "id": "p-paul-rayson",
+    "name": "Paul Rayson",
+    "teamId": "alexashton",
+    "startHCP": 0,
+    "HCP": 0,
+    "captain": false,
+    "aliases": ["P Rayson", "Paul Rayson", "P. Rayson", "PRayson"]
+  },
+  {
+    "id": "p-c-patel",
+    "name": "C Patel",
+    "teamId": "alexashton",
+    "startHCP": 21,
+    "HCP": 28,
+    "captain": false,
+    "aliases": ["C Patel", "C. Patel", "CPatel"]
+  },
+  {
+    "id": "p-d-shields",
+    "name": "D Shields",
+    "teamId": "alexashton",
+    "startHCP": -28,
+    "HCP": -28,
+    "captain": false,
+    "aliases": ["D Shields", "D. Shields", "DShields"]
+  },
+  {
+    "id": "p-aaron-squire",
+    "name": "Aaron Squire",
+    "teamId": "alexashton",
+    "startHCP": 21,
+    "HCP": 21,
+    "captain": false,
+    "aliases": ["A Squire", "Aaron Squire", "A. Squire", "ASquire"]
+  },
+  {
+    "id": "p-m-sigley",
+    "name": "M Sigley",
+    "teamId": "alexashton",
+    "startHCP": 7,
+    "HCP": 7,
+    "captain": false,
+    "aliases": ["M Sigley", "M. Sigley", "MSigley"]
+  },
+  {
+    "id": "p-k-mistry",
+    "name": "K Mistry",
+    "teamId": "alexashton",
+    "startHCP": 21,
+    "HCP": 28,
+    "captain": false,
+    "aliases": ["K Mistry", "K. Mistry", "KMistry"]
+  },
 
-  { "id": "p-chris-joy", "name": "Chris Joy", "teamId": "tintwistle2", "startHCP": 14, "HCP": 21, "captain": false, "aliases": ["C Joy"] }
+  {
+    "id": "p-chris-joy",
+    "name": "Chris Joy",
+    "teamId": "tintwistle2",
+    "startHCP": 14,
+    "HCP": 21,
+    "captain": false,
+    "aliases": ["C Joy", "Chris Joy", "C. Joy", "CJoy"]
+  }
 ]
