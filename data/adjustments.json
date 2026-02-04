@@ -1,0 +1,23 @@
+[
+  {
+    "id": "penalty-2026-02-04-no-show-meeting",
+    "date": "2026-02-04",
+    "teamId": "AlexAshton",
+    "points": -2,
+    "reason": "Didn’t attend league meeting"
+  }
+  {
+    "id": "penalty-2026-02-04-no-show-meeting",
+    "date": "2026-02-04",
+    "teamId": "Hayfield-2",
+    "points": -2,
+    "reason": "Didn’t attend league meeting"
+  }
+  {
+    "id": "penalty-2026-02-04-no-show-meeting",
+    "date": "2026-02-04",
+    "teamId": "Tintwhistle-2",
+    "points": -2,
+    "reason": "Didn’t attend league meeting"
+  }
+]
