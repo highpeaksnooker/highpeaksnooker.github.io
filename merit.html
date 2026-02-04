@@ -338,17 +338,69 @@
     if (Array.isArray(m.frames) && m.frames.some(fr => fr.winner==='home' || fr.winner==='away')) return true;
     return false;
   }
-  function escapeHtml(s=''){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
-  function toBreakList(x){
-    if (!x) return [];
-    const arr = Array.isArray(x) ? x : (typeof x === 'number' ? [x] : []);
-    return arr.filter(n=>typeof n==='number');
-  }
+  function escapeHtml(s=''){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
   function formatDate(d){
     if(!d) return '';
     const dt = new Date(d);
     if (isNaN(dt)) return d;
     return dt.toLocaleDateString('en-GB',{weekday:'short', day:'2-digit', month:'short', year:'numeric'});
+  }
+
+  /* =========================
+     BREAKS — SUPPORT ALL FORMATS
+     ========================= */
+
+  // Turn any value into a numeric list (keeps only finite numbers > 0)
+  function asNumberList(v){
+    if (v == null) return [];
+    if (typeof v === 'number') return Number.isFinite(v) && v > 0 ? [v] : [];
+    if (Array.isArray(v)) return v.filter(n => typeof n === 'number' && Number.isFinite(n) && n > 0);
+    return [];
+  }
+
+  // Extract breaks for a given side ("home" or "away") from whatever structure is present
+  function getBreaksForSide(frame, side){
+    if (!frame) return [];
+    const other = side === 'home' ? 'away' : 'home';
+
+    // 1) Preferred nested structure: frame.breaks.home / frame.breaks.away
+    if (frame.breaks && typeof frame.breaks === 'object' && !Array.isArray(frame.breaks)) {
+      // breaks: {home:[..], away:[..]} OR breaks:{home:28, away:26}
+      if (side in frame.breaks) return asNumberList(frame.breaks[side]);
+
+      // sometimes keys are capitalised
+      const cap = side[0].toUpperCase() + side.slice(1);
+      if (cap in frame.breaks) return asNumberList(frame.breaks[cap]);
+    }
+
+    // 2) Legacy direct keys on frame: homeBreaks / awayBreaks
+    const k1 = side + 'Breaks';
+    if (k1 in frame) return asNumberList(frame[k1]);
+
+    // 3) Legacy single break keys: homeBreak / awayBreak
+    const k2 = side + 'Break';
+    if (k2 in frame) return asNumberList(frame[k2]);
+
+    // 4) Other common variants: breaksHome / breaksAway
+    const k3 = 'breaks' + (side === 'home' ? 'Home' : 'Away');
+    if (k3 in frame) return asNumberList(frame[k3]);
+
+    // 5) Single generic break fields (only usable if we can confidently attribute)
+    // If frame has "break" or "breaks" as number/array without side,
+    // DO NOT guess which player it belongs to. Only attribute if frame explicitly says so.
+    // (We keep this conservative to avoid mis-crediting.)
+    // If you later add "breakSide":"home" or similar, we can use it.
+    if ('breakSide' in frame && (frame.breakSide === side)) {
+      if ('break' in frame) return asNumberList(frame.break);
+      if (Array.isArray(frame.breaks) || typeof frame.breaks === 'number') return asNumberList(frame.breaks);
+    }
+
+    return [];
+  }
+
+  // Extract all breaks (both sides) — used for "High" calculations if needed
+  function getAllBreaks(frame){
+    return [...getBreaksForSide(frame,'home'), ...getBreaksForSide(frame,'away')];
   }
 
   /* === Weeks & fixtures timeline === */
@@ -394,21 +446,31 @@
     const row = P[pid];
     if (!row) return;
 
+    // Result tracking (W/L). If winner is unknown, do nothing.
     if (row.perDate[date] !== 'na'){
       const win = frame.winner === 'home' ? isHome : frame.winner === 'away' ? !isHome : null;
       if (win === true){ row.perDate[date] = 'W'; row.totals.played++; row.totals.won++; }
       else if (win === false){ row.perDate[date] = 'L'; row.totals.played++; row.totals.lost++; }
     }
 
-    const mine = isHome ? frame?.breaks?.home : frame?.breaks?.away;
-    const plus25 = toBreakList(mine).filter(n=>n>=25);
+    // Break tracking (supports all formats)
+    const side = isHome ? 'home' : 'away';
+    const myBreaks = getBreaksForSide(frame, side);       // all breaks (>=1)
+    const plus25   = myBreaks.filter(n=>n>=25);
+
+    if (myBreaks.length){
+      // High break should consider ALL breaks, not only 25+
+      const myHigh = Math.max(...myBreaks);
+      row.totals.high = Math.max(row.totals.high, myHigh);
+      breaksByPlayer[pid].list.push(...myBreaks);
+      breaksByPlayer[pid].high = Math.max(breaksByPlayer[pid].high, myHigh);
+    }
+
     if (plus25.length){
       row.totals.break25 += plus25.length;
-      row.totals.high = Math.max(row.totals.high, ...plus25);
-      breaksByPlayer[pid].list.push(...plus25);
-      breaksByPlayer[pid].high = Math.max(breaksByPlayer[pid].high, ...plus25);
     }
   }
+
   completedMatches.forEach(m=>{
     if (!Array.isArray(m.frames)) return;
     m.frames.forEach(fr=>{
@@ -586,7 +648,6 @@
 
   const storedTeam = localStorage.getItem('playersTeamFilter');
   const startTeam  = (storedTeam && teamById[storedTeam]) ? storedTeam : '__all__';
-  // Activate default tab button
   (function setTabActive(containerId, teamId){
     const tabs = document.getElementById(containerId);
     const btn = [...tabs.children].find(b=>b.dataset.teamId===teamId) || tabs.firstChild;
@@ -708,26 +769,35 @@
   function renderBreaks(){
     const body = document.getElementById('breaksBody');
     body.innerHTML = '';
-    const seriesHigh = Math.max(0, ...Object.values(breaksByPlayer).map(b => b.high || 0));
+
+    const seriesHigh2 = Math.max(0, ...Object.values(breaksByPlayer).map(b => b.high || 0));
+
     const rows = Object.entries(breaksByPlayer)
       .map(([pid,info])=>{
-        const list = [...info.list].sort((a,b)=>b-a);
-        return { pid, name:info.name, team:info.teamName, count:list.length, high:list[0]||0, list };
+        const list = [...info.list].filter(n=>Number.isFinite(n) && n>0).sort((a,b)=>b-a);
+        const count25 = list.filter(n=>n>=25).length;
+        return { pid, name:info.name, team:info.teamName, count25, high:list[0]||0, list };
       })
-      .filter(r=>r.count>0)
-      .sort((a,b)=> (b.high-a.high)||(b.count-a.count)||a.name.localeCompare(b.name));
+      .filter(r=>r.list.length>0)
+      .sort((a,b)=> (b.high-a.high)||(b.count25-a.count25)||a.name.localeCompare(b.name));
 
     rows.forEach(r=>{
-      const isHigh = r.high === seriesHigh && seriesHigh>0;
+      const isHigh = r.high === seriesHigh2 && seriesHigh2>0;
       const tr=document.createElement('tr');
       tr.innerHTML = `
         <td>${escapeHtml(r.name)}${isHigh ? ' <span class="star" aria-hidden="true">⭐</span>' : ''}</td>
         <td>${escapeHtml(r.team)}</td>
-        <td>${r.count}</td>
+        <td>${r.count25}</td>
         <td>${r.high}${isHigh ? ' ⭐' : ''}</td>
         <td>${r.list.join(' · ')}</td>`;
       body.appendChild(tr);
     });
+
+    if (!rows.length){
+      const tr=document.createElement('tr');
+      tr.innerHTML = `<td colspan="5" style="color:#64748b">No breaks recorded yet.</td>`;
+      body.appendChild(tr);
+    }
   }
   renderBreaks();
 
@@ -760,11 +830,9 @@
   renderHandicaps();
 
   /* === Player Detail View === */
-  function listBreaks(b){
-    if(!b) return '';
-    const arr = Array.isArray(b) ? b : (typeof b==='number' ? [b] : []);
-    const plus = arr.filter(n=>typeof n==='number' && n>=0);
-    return plus.join(' · ');
+  function listBreaksForSide(frame, side){
+    const arr = getBreaksForSide(frame, side);
+    return arr.length ? arr.join(' · ') : '';
   }
 
   function showPlayerDetail(playerId){
@@ -806,7 +874,7 @@
         const youWon = fr.winner === (youAreHome ? 'home' : 'away');
         const result = youWon ? 'W' : 'L';
 
-        const myBreaks = youAreHome ? fr?.breaks?.home : fr?.breaks?.away;
+        const myBreaksStr = listBreaksForSide(fr, youAreHome ? 'home' : 'away');
 
         rows.push({
           date: m.date,
@@ -816,7 +884,7 @@
           oppTeam,
           score: hasPts ? `${yourPts}–${oppPts}` : '—',
           result,
-          breaks: listBreaks(myBreaks)
+          breaks: myBreaksStr
         });
       }
     }
