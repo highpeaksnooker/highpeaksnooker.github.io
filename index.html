@@ -164,7 +164,8 @@
             <th title="Frames For">FF</th>
             <th title="Frames Against">FA</th>
             <th title="Frame Difference">FD</th>
-            <th title="Points">Pts</th>
+            <th title="Adjustments (penalties/bonuses)">Adj</th>
+            <th title="Points (incl. adjustments)">Pts</th>
           </tr>
         </thead>
         <tbody id="leagueBody"></tbody>
@@ -236,14 +237,15 @@
     }
   </script>
 
-  <!-- League table (no Draws) -->
+  <!-- League table (no Draws) + Adjustments -->
   <script>
     (async function () {
       try {
-        const [teams,matches,travellers]=await Promise.all([
+        const [teams,matches,travellers,adjustments] = await Promise.all([
           fetch('data/teams.json',{cache:'no-store'}).then(r=>r.json()),
           fetch('data/matches.json',{cache:'no-store'}).then(r=>r.json()).catch(()=>[]),
-          fetch('data/travellers.json',{cache:'no-store'}).then(r=>r.json()).catch(()=>({}))
+          fetch('data/travellers.json',{cache:'no-store'}).then(r=>r.json()).catch(()=>({})),
+          fetch('data/adjustments.json',{cache:'no-store'}).then(r=>r.json()).catch(()=>[])
         ]);
 
         const initialHolder=travellers.initialHolder||'tintwistle1';
@@ -253,9 +255,10 @@
         // Table model WITHOUT draws
         const table={};
         for(const t of teams){
-          table[t.id]={teamId:t.id,name:t.name,P:0,W:0,L:0,FF:0,FA:0,FD:0,Pts:0};
+          table[t.id]={teamId:t.id,name:t.name,P:0,W:0,L:0,FF:0,FA:0,FD:0,Adj:0,Pts:0};
         }
 
+        // Core match scoring (unchanged)
         for(const m of matches){
           const h=table[m.homeTeamId],a=table[m.awayTeamId];
           if(!h||!a) continue;
@@ -284,10 +287,32 @@
           }
         }
 
-        // Frame difference
-        for(const t of Object.values(table)) t.FD=t.FF-t.FA;
+        // Apply adjustments (penalties/bonuses) to points only
+        const usedIds = new Set();
+        if (Array.isArray(adjustments)){
+          for (const adj of adjustments){
+            if(!adj || typeof adj.teamId !== 'string') continue;
+            if (usedIds.has(adj.id)) continue; // ignore duplicate IDs safely
+            usedIds.add(adj.id);
 
-        // Sort by Points, then FD, then FF, then Team name
+            const teamId = adj.teamId;
+            const pts = Number(adj.points);
+            if(!Number.isFinite(pts)) continue;
+
+            const row = table[teamId];
+            if(!row) continue; // unknown teamId -> ignored
+
+            row.Adj += pts;
+          }
+        }
+
+        // Frame difference + final points incl. adjustments
+        for(const t of Object.values(table)){
+          t.FD = t.FF - t.FA;
+          t.Pts = t.Pts + (t.Adj || 0);
+        }
+
+        // Sort by Points (incl adj), then FD, then FF, then Team name
         const rows=Object.values(table).sort(
           (x,y)=> (y.Pts-x.Pts)||(y.FD-x.FD)||(y.FF-x.FF)||x.name.localeCompare(y.name)
         );
@@ -297,6 +322,9 @@
         body.innerHTML='';
         rows.forEach((t,i)=>{
           const isHolder=(t.teamId===holderId);
+          const adjTxt = (t.Adj||0);
+          const adjDisplay = adjTxt === 0 ? '0' : (adjTxt > 0 ? `+${adjTxt}` : `${adjTxt}`);
+
           const tr=document.createElement('tr');
           tr.innerHTML=`
             <td>${i+1}</td>
@@ -304,7 +332,9 @@
               ${isHolder?'<span class="travellers-badge" title="Travellers’ Prize">T</span>':''}
             </td>
             <td>${t.P}</td><td>${t.W}</td><td>${t.L}</td>
-            <td>${t.FF}</td><td>${t.FA}</td><td>${t.FD}</td><td>${t.Pts}</td>`;
+            <td>${t.FF}</td><td>${t.FA}</td><td>${t.FD}</td>
+            <td title="Adjustments">${adjDisplay}</td>
+            <td>${t.Pts}</td>`;
           body.appendChild(tr);
         });
 
