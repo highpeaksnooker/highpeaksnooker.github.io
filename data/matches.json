@@ -4030,15 +4030,15 @@
     "date": "2026-02-04",
     "homeTeamId": "marple",
     "awayTeamId": "chinley",
-    "homeFrames": 5,
-    "awayFrames": 0,
+    "homeFrames": 4,
+    "awayFrames": 1,
     "frames": [
       {
         "homePlayerId": "p-d-burrows",
         "awayPlayerId": "p-d-thomas",
         "homePoints": 41,
         "awayPoints": 70,
-        "winner": "home"
+        "winner": "away"
       },
       {
         "homePlayerId": "p-ryan-ritchie",
@@ -4123,8 +4123,8 @@
     "date": "2026-02-04",
     "homeTeamId": "alexashton",
     "awayTeamId": "whaley-1",
-    "homeFrames": 1,
-    "awayFrames": 4,
+    "homeFrames": 0,
+    "awayFrames": 5,
     "frames": [
       {
         "homePlayerId": "p-k-mistry",
@@ -4161,7 +4161,7 @@
         "awayPlayerId": "p-dan-golpin",
         "homePoints": 36,
         "awayPoints": 77,
-        "winner": "home",
+        "winner": "away",
         "breaks": { "away": [26, 25] }
       }
     ]
