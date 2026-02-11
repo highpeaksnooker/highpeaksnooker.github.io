@@ -4165,6 +4165,52 @@
         "breaks": { "away": [26, 25] }
       }
     ]
-  }
+  },
+
+  {
+  "id": "m-2026-02-11-tintwistle2-v-hayfield-2",
+  "date": "2026-02-11",
+  "homeTeamId": "tintwistle2",
+  "awayTeamId": "hayfield-2",
+  "homeFrames": 2,
+  "awayFrames": 3,
+  "frames": [
+    {
+      "homePlayerId": "p-dan-corbally",
+      "awayPlayerId": "p-dean-taylor",
+      "homeScore": 66,
+      "awayScore": 34,
+      "winner": "home"
+    },
+    {
+      "homePlayerId": "p-p-lunt",
+      "awayPlayerId": "p-d-bloomfield",
+      "homeScore": 33,
+      "awayScore": 80,
+      "winner": "away"
+    },
+    {
+      "homePlayerId": "p-k-oliver",
+      "awayPlayerId": "p-d-hayes",
+      "homeScore": 46,
+      "awayScore": 52,
+      "winner": "away"
+    },
+    {
+      "homePlayerId": "p-chris-joy",
+      "awayPlayerId": "p-b-buckley",
+      "homeScore": 48,
+      "awayScore": 17,
+      "winner": "home"
+    },
+    {
+      "homePlayerId": "p-danny-harrison",
+      "awayPlayerId": "p-mark-enright",
+      "homeScore": 30,
+      "awayScore": 43,
+      "winner": "away"
+    }
+  ]
+}
 ]
 
