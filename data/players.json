@@ -509,6 +509,26 @@
   },
   
   {
+  "id": "p-p-lunt",
+  "name": "P Lunt",
+  "teamId": "tintwistle2",
+  "startHCP": 14,
+  "HCP": 14,
+  "captain": false,
+  "aliases": ["P Lunt", "P. Lunt", "PLunt"]
+  },
+  
+  {
+  "id": "p-k-oliver",
+  "name": "K Oliver",
+  "teamId": "tintwistle2",
+  "startHCP": 14,
+  "HCP": 14,
+  "captain": false,
+  "aliases": ["K Oliver", "K. Oliver", "KOliver"]
+},
+  
+  {
   "id": "p-nat-small",
   "name": "Nat Small",
   "teamId": "tintwistle2",
@@ -997,6 +1017,15 @@
     "HCP": 7,
     "captain": false,
     "aliases": ["G Edge", "Geoff Edge", "Jeff Edge", "G. Edge", "GEdge"]
+  },
+  {
+  "id": "p-b-buckley",
+  "name": "B Buckley",
+  "teamId": "hayfield-2",
+  "startHCP": 28,
+  "HCP": 28,
+  "captain": false,
+  "aliases": ["B Buckley", "B. Buckley", "BBuckley"]
   },
   {
     "id": "p-mark-enright",
