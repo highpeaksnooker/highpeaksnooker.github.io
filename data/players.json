@@ -272,15 +272,6 @@
   "aliases": ["L Davies", "L. Davies", "LDavies"]
   },
   {
-  "id": "p-c-walker",
-  "name": "C Walker",
-  "teamId": "whaley-2",
-  "startHCP": 14,
-  "HCP": 14,
-  "captain": false,
-  "aliases": ["C Walker", "C. Walker", "CWalker"]
- },
-  {
     "id": "p-f-lee",
     "name": "F Lee",
     "teamId": "whaley-2",
@@ -314,7 +305,7 @@
     "startHCP": 7,
     "HCP": 7,
     "captain": false,
-    "aliases": ["B Walker", "B. Walker", "BWalker"]
+    "aliases": ["B Walker", "B. Walker", "BWalker", "Carl Walker", "C Walker"]
   },
   {
     "id": "p-p-walker",
@@ -323,7 +314,7 @@
     "startHCP": 7,
     "HCP": 14,
     "captain": false,
-    "aliases": ["P Walker", "P. Walker", "PWalker"]
+    "aliases": ["P Walker", "P. Walker", "PWalker","D Walker"]
   },
 
   {
