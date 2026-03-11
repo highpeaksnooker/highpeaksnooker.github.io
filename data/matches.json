@@ -4668,6 +4668,234 @@
         "winner": "home"
       }
     ]
-  }
+  },
+{
+  "id": "m-2026-02-25-denton-lib-v-whaley-1",
+  "date": "2026-02-25",
+  "homeTeamId": "denton-lib",
+  "awayTeamId": "whaley-1",
+  "homeFrames": 3,
+  "awayFrames": 2,
+  "frames": [
+    {
+      "homePlayerId": "p-s-mistry",
+      "awayPlayerId": "p-adam-rogers",
+      "homePoints": 64,
+      "awayPoints": 72,
+      "winner": "away",
+      "breaks": { "away": [25] }
+    },
+    {
+      "homePlayerId": "p-c-bailey",
+      "awayPlayerId": "p-dan-golpin",
+      "homePoints": 67,
+      "awayPoints": 63,
+      "winner": "home"
+    },
+    {
+      "homePlayerId": "p-r-green",
+      "awayPlayerId": "p-rob-larkin",
+      "homePoints": 79,
+      "awayPoints": 66,
+      "winner": "home"
+    },
+    {
+      "homePlayerId": "p-m-derbyshire",
+      "awayPlayerId": "p-g-carpenter",
+      "homePoints": 64,
+      "awayPoints": 52,
+      "winner": "home"
+    },
+    {
+      "homePlayerId": "p-eric-kwan",
+      "awayPlayerId": "p-jack-scowen",
+      "homePoints": 39,
+      "awayPoints": 86,
+      "winner": "away"
+    }
+  ]
+},
+{
+  "id": "m-2026-02-25-marple-v-alexashton",
+  "date": "2026-02-25",
+  "homeTeamId": "marple",
+  "awayTeamId": "alexashton",
+  "homeFrames": 3,
+  "awayFrames": 2,
+  "frames": [
+    {
+      "homePlayerId": "p-gareth-ritchie",
+      "awayPlayerId": "p-a-garbett",
+      "homePoints": 57,
+      "awayPoints": 47,
+      "winner": "home"
+    },
+    {
+      "homePlayerId": "p-ryan-ritchie",
+      "awayPlayerId": "p-p-bunting",
+      "homePoints": 49,
+      "awayPoints": 52,
+      "winner": "away"
+    },
+    {
+      "homePlayerId": "p-g-gaskell",
+      "awayPlayerId": "p-nigel-cave",
+      "homePoints": 63,
+      "awayPoints": 49,
+      "winner": "home"
+    },
+    {
+      "homePlayerId": "p-geoff-flavell",
+      "awayPlayerId": "p-c-patel",
+      "homePoints": 92,
+      "awayPoints": 95,
+      "winner": "away"
+    },
+    {
+      "homePlayerId": "p-glynn-evans",
+      "awayPlayerId": "p-b-pregnall",
+      "homePoints": 54,
+      "awayPoints": 24,
+      "winner": "home"
+    }
+  ]
+},
+{
+  "id": "m-2026-02-25-hayfield-2-v-tintwistle1",
+  "date": "2026-02-25",
+  "homeTeamId": "hayfield-2",
+  "awayTeamId": "tintwistle1",
+  "homeFrames": 2,
+  "awayFrames": 3,
+  "frames": [
+    {
+      "homePlayerId": "p-paul-glover",
+      "awayPlayerId": "p-elliot-spencer",
+      "homePoints": 36,
+      "awayPoints": 68,
+      "winner": "away"
+    },
+    {
+      "homePlayerId": "p-d-hayes",
+      "awayPlayerId": "p-n-wilson",
+      "homePoints": 76,
+      "awayPoints": 63,
+      "winner": "home"
+    },
+    {
+      "homePlayerId": "p-b-buckley",
+      "awayPlayerId": "p-s-crook",
+      "homePoints": 76,
+      "awayPoints": 84,
+      "winner": "away"
+    },
+    {
+      "homePlayerId": "p-fletcher-glover",
+      "awayPlayerId": "p-a-lawton",
+      "homePoints": 59,
+      "awayPoints": 72,
+      "winner": "away"
+    },
+    {
+      "homePlayerId": "p-mark-enright",
+      "awayPlayerId": "p-c-heyes",
+      "homePoints": 101,
+      "awayPoints": 35,
+      "winner": "home"
+    }
+  ]
+},
+{
+  "id": "m-2026-02-25-tintwistle2-v-chinley",
+  "date": "2026-02-25",
+  "homeTeamId": "tintwistle2",
+  "awayTeamId": "chinley",
+  "homeFrames": 2,
+  "awayFrames": 3,
+  "frames": [
+    {
+      "homePlayerId": "p-k-hardman",
+      "awayPlayerId": "p-b-doherty",
+      "homePoints": 64,
+      "awayPoints": 41,
+      "winner": "home"
+    },
+    {
+      "homePlayerId": "p-nick-small",
+      "awayPlayerId": "p-d-thomas",
+      "homePoints": 45,
+      "awayPoints": 96,
+      "winner": "away",
+      "breaks": { "away": [44] }
+    },
+    {
+      "homePlayerId": "p-p-lunt",
+      "awayPlayerId": "p-i-holland",
+      "homePoints": 53,
+      "awayPoints": 66,
+      "winner": "away"
+    },
+    {
+      "homePlayerId": "p-k-oliver",
+      "awayPlayerId": "p-d-rowland",
+      "homePoints": 53,
+      "awayPoints": 97,
+      "winner": "away",
+      "breaks": { "away": [27] }
+    },
+    {
+      "homePlayerId": "p-chris-joy",
+      "awayPlayerId": "p-l-carr",
+      "homePoints": 71,
+      "awayPoints": 30,
+      "winner": "home"
+    }
+  ]
+},
+{
+  "id": "m-2026-02-25-whaley-2-v-hayfield-1",
+  "date": "2026-02-25",
+  "homeTeamId": "whaley-2",
+  "awayTeamId": "hayfield-1",
+  "homeFrames": 1,
+  "awayFrames": 4,
+  "frames": [
+    {
+      "homePlayerId": "p-b-walker",
+      "awayPlayerId": "p-a-barnes",
+      "homePoints": 35,
+      "awayPoints": 62,
+      "winner": "away"
+    },
+    {
+      "homePlayerId": "p-p-walker",
+      "awayPlayerId": "p-sam-lomas",
+      "homePoints": 41,
+      "awayPoints": 54,
+      "winner": "away"
+    },
+    {
+      "homePlayerId": "p-s-tuppen",
+      "awayPlayerId": "p-andy-brooks",
+      "homePoints": 60,
+      "awayPoints": 68,
+      "winner": "away"
+    },
+    {
+      "homePlayerId": "p-f-lee",
+      "awayPlayerId": "p-scott-lomas",
+      "homePoints": 70,
+      "awayPoints": 34,
+      "winner": "home"
+    },
+    {
+      "homePlayerId": "p-s-renshaw",
+      "awayPlayerId": "p-p-lomas",
+      "homePoints": 36,
+      "awayPoints": 62,
+      "winner": "away"
+    }
+  ]
+}
 ]
 
