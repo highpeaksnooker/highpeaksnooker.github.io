@@ -4262,8 +4262,8 @@
     "date": "2026-02-11",
     "homeTeamId": "denton-lib",
     "awayTeamId": "hayfield-1",
-    "homeFrames": 3,
-    "awayFrames": 2,
+    "homeFrames": 2,
+    "awayFrames": 3,
     "frames": [
       {
         "homePlayerId": "p-s-mistry",
