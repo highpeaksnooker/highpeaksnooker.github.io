@@ -263,6 +263,24 @@
     "aliases": ["L Jones", "Lee Jones", "L. Jones", "LJones"]
   },
   {
+  "id": "p-l-davies",
+  "name": "L Davies",
+  "teamId": "whaley-2",
+  "startHCP": 14,
+  "HCP": 14,
+  "captain": false,
+  "aliases": ["L Davies", "L. Davies", "LDavies"]
+  },
+  {
+  "id": "p-c-walker",
+  "name": "C Walker",
+  "teamId": "whaley-2",
+  "startHCP": 14,
+  "HCP": 14,
+  "captain": false,
+  "aliases": ["C Walker", "C. Walker", "CWalker"]
+ },
+  {
     "id": "p-f-lee",
     "name": "F Lee",
     "teamId": "whaley-2",
