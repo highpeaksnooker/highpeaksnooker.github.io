@@ -1,0 +1,599 @@
+{
+  "season": "2026-27",
+  "draw_version": "2026-11-15-confirmed-1",
+  "general_notes": [
+    "Results are recorded after league confirmation; passing a deadline does not automatically decide a winner.",
+    "Play using the handicap applicable on the day of the match."
+  ],
+  "competitions": [
+    {
+      "id": "handicap-singles",
+      "title": "Handicap Singles",
+      "format": "Singles",
+      "slots": [
+        "handicap-singles-01",
+        "handicap-singles-02",
+        "handicap-singles-03",
+        "handicap-singles-04",
+        "handicap-singles-05",
+        "handicap-singles-06",
+        "handicap-singles-07",
+        "handicap-singles-08",
+        "handicap-singles-09",
+        "handicap-singles-10",
+        "handicap-singles-11",
+        "handicap-singles-12",
+        "handicap-singles-13",
+        "handicap-singles-14",
+        "handicap-singles-15",
+        "handicap-singles-16",
+        "handicap-singles-17",
+        "handicap-singles-18",
+        "handicap-singles-19",
+        "handicap-singles-20",
+        "handicap-singles-21",
+        "handicap-singles-22",
+        "handicap-singles-23",
+        "handicap-singles-24",
+        "handicap-singles-25",
+        "handicap-singles-26",
+        "handicap-singles-27",
+        "handicap-singles-28",
+        "handicap-singles-29",
+        "handicap-singles-30",
+        "handicap-singles-31",
+        "handicap-singles-32"
+      ],
+      "entries": {
+        "handicap-singles-01": {
+          "id": "handicap-singles-01",
+          "name": "Chris Lee"
+        },
+        "handicap-singles-02": {
+          "id": "handicap-singles-02",
+          "name": "M Derbyshire"
+        },
+        "handicap-singles-03": {
+          "id": "handicap-singles-03",
+          "name": "Eric Kwan"
+        },
+        "handicap-singles-04": {
+          "id": "handicap-singles-04",
+          "name": "P Irving"
+        },
+        "handicap-singles-05": {
+          "id": "handicap-singles-05",
+          "name": "Chris Joy"
+        },
+        "handicap-singles-06": {
+          "id": "handicap-singles-06",
+          "name": "S Mistry"
+        },
+        "handicap-singles-07": {
+          "id": "handicap-singles-07",
+          "name": "Mark Enright"
+        },
+        "handicap-singles-08": {
+          "id": "handicap-singles-08",
+          "name": "Les Carr"
+        },
+        "handicap-singles-09": {
+          "id": "handicap-singles-09",
+          "name": "Dan Corbally"
+        },
+        "handicap-singles-10": {
+          "id": "handicap-singles-10",
+          "name": "D Rowland"
+        },
+        "handicap-singles-11": {
+          "id": "handicap-singles-11",
+          "name": "Dan Heyes"
+        },
+        "handicap-singles-12": {
+          "id": "handicap-singles-12",
+          "name": "B Doherty"
+        },
+        "handicap-singles-13": {
+          "id": "handicap-singles-13",
+          "name": "Duncan Evans"
+        },
+        "handicap-singles-14": {
+          "id": "handicap-singles-14",
+          "name": "Carin Crossland"
+        },
+        "handicap-singles-15": {
+          "id": "handicap-singles-15",
+          "name": "D Thomas"
+        },
+        "handicap-singles-16": {
+          "id": "handicap-singles-16",
+          "name": "A Barnes"
+        },
+        "handicap-singles-17": {
+          "id": "handicap-singles-17",
+          "name": "K Mistry"
+        },
+        "handicap-singles-18": {
+          "id": "handicap-singles-18",
+          "name": "Paul Smith"
+        },
+        "handicap-singles-19": {
+          "id": "handicap-singles-19",
+          "name": "Joe Brennan"
+        },
+        "handicap-singles-20": {
+          "id": "handicap-singles-20",
+          "name": "Greg Gaskell"
+        },
+        "handicap-singles-21": {
+          "id": "handicap-singles-21",
+          "name": "R Chandarana"
+        },
+        "handicap-singles-22": {
+          "id": "handicap-singles-22",
+          "name": "Nick Small"
+        },
+        "handicap-singles-23": {
+          "id": "handicap-singles-23",
+          "name": "Sam Lomas"
+        },
+        "handicap-singles-24": {
+          "id": "handicap-singles-24",
+          "name": "Scott Lomas"
+        },
+        "handicap-singles-25": {
+          "id": "handicap-singles-25",
+          "name": "B Monaghan"
+        },
+        "handicap-singles-26": {
+          "id": "handicap-singles-26",
+          "name": "Tony Lawton"
+        },
+        "handicap-singles-27": {
+          "id": "handicap-singles-27",
+          "name": "Ryan Ritchie"
+        },
+        "handicap-singles-28": {
+          "id": "handicap-singles-28",
+          "name": "G Davis"
+        },
+        "handicap-singles-29": {
+          "id": "handicap-singles-29",
+          "name": "Adam Rogers"
+        },
+        "handicap-singles-30": {
+          "id": "handicap-singles-30",
+          "name": "Pete Lomas"
+        },
+        "handicap-singles-31": {
+          "id": "handicap-singles-31",
+          "name": "Stuart Crook"
+        },
+        "handicap-singles-32": {
+          "id": "handicap-singles-32",
+          "name": "Dan Golpin"
+        }
+      },
+      "deadlines": [
+        "2026-12-08",
+        "2027-01-12",
+        "2027-02-16",
+        "2027-03-07",
+        null
+      ],
+      "notes": [
+        "Best of three frames."
+      ],
+      "confirmed_results": [
+        {
+          "competition_id": "handicap-singles",
+          "round": 1,
+          "slot": 14,
+          "winner_id": "handicap-singles-27"
+        },
+        {
+          "competition_id": "handicap-singles",
+          "round": 1,
+          "slot": 15,
+          "winner_id": "handicap-singles-29"
+        }
+      ]
+    },
+    {
+      "id": "sonya-lee",
+      "title": "Sonya Lee",
+      "format": "Singles",
+      "slots": [
+        "sonya-lee-01",
+        null,
+        "sonya-lee-03",
+        null,
+        "sonya-lee-05",
+        null,
+        "sonya-lee-07",
+        null,
+        "sonya-lee-09",
+        null,
+        "sonya-lee-11",
+        null,
+        "sonya-lee-13",
+        null,
+        "sonya-lee-15",
+        null,
+        "sonya-lee-17",
+        null,
+        "sonya-lee-19",
+        null,
+        "sonya-lee-21",
+        null,
+        "sonya-lee-23",
+        null,
+        "sonya-lee-25",
+        null,
+        "sonya-lee-27",
+        "sonya-lee-28",
+        "sonya-lee-29",
+        "sonya-lee-30",
+        "sonya-lee-31",
+        "sonya-lee-32"
+      ],
+      "entries": {
+        "sonya-lee-01": {
+          "id": "sonya-lee-01",
+          "name": "Adam Rogers"
+        },
+        "sonya-lee-03": {
+          "id": "sonya-lee-03",
+          "name": "Chris Lee"
+        },
+        "sonya-lee-05": {
+          "id": "sonya-lee-05",
+          "name": "P Irving"
+        },
+        "sonya-lee-07": {
+          "id": "sonya-lee-07",
+          "name": "Joe Brennan"
+        },
+        "sonya-lee-09": {
+          "id": "sonya-lee-09",
+          "name": "A Barnes"
+        },
+        "sonya-lee-11": {
+          "id": "sonya-lee-11",
+          "name": "M Derbyshire"
+        },
+        "sonya-lee-13": {
+          "id": "sonya-lee-13",
+          "name": "D Thomas"
+        },
+        "sonya-lee-15": {
+          "id": "sonya-lee-15",
+          "name": "Geoff Flavell"
+        },
+        "sonya-lee-17": {
+          "id": "sonya-lee-17",
+          "name": "Duncan Evans"
+        },
+        "sonya-lee-19": {
+          "id": "sonya-lee-19",
+          "name": "Stuart Crook"
+        },
+        "sonya-lee-21": {
+          "id": "sonya-lee-21",
+          "name": "K Mistry"
+        },
+        "sonya-lee-23": {
+          "id": "sonya-lee-23",
+          "name": "Paul Smith"
+        },
+        "sonya-lee-25": {
+          "id": "sonya-lee-25",
+          "name": "Eric Kwan"
+        },
+        "sonya-lee-27": {
+          "id": "sonya-lee-27",
+          "name": "R Chandarana"
+        },
+        "sonya-lee-28": {
+          "id": "sonya-lee-28",
+          "name": "Les Carr"
+        },
+        "sonya-lee-29": {
+          "id": "sonya-lee-29",
+          "name": "S Mistry"
+        },
+        "sonya-lee-30": {
+          "id": "sonya-lee-30",
+          "name": "Dan Golpin"
+        },
+        "sonya-lee-31": {
+          "id": "sonya-lee-31",
+          "name": "Dan Corbally"
+        },
+        "sonya-lee-32": {
+          "id": "sonya-lee-32",
+          "name": "D Rowland"
+        }
+      },
+      "deadlines": [
+        "2026-12-08",
+        "2027-01-12",
+        "2027-02-16",
+        "2027-03-07",
+        null
+      ],
+      "notes": [],
+      "confirmed_results": []
+    },
+    {
+      "id": "legends",
+      "title": "Legends",
+      "format": "Singles",
+      "slots": [
+        "legends-01",
+        null,
+        "legends-03",
+        null,
+        "legends-05",
+        null,
+        "legends-07",
+        null,
+        "legends-09",
+        null,
+        "legends-11",
+        null,
+        "legends-13",
+        null,
+        "legends-15",
+        null,
+        "legends-17",
+        null,
+        "legends-19",
+        null,
+        "legends-21",
+        null,
+        "legends-23",
+        null,
+        "legends-25",
+        null,
+        "legends-27",
+        null,
+        "legends-29",
+        "legends-30",
+        "legends-31",
+        "legends-32"
+      ],
+      "entries": {
+        "legends-01": {
+          "id": "legends-01",
+          "name": "A Garbett"
+        },
+        "legends-03": {
+          "id": "legends-03",
+          "name": "Chris Lee"
+        },
+        "legends-05": {
+          "id": "legends-05",
+          "name": "Mike Ingham"
+        },
+        "legends-07": {
+          "id": "legends-07",
+          "name": "Dean Taylor"
+        },
+        "legends-09": {
+          "id": "legends-09",
+          "name": "Les Carr"
+        },
+        "legends-11": {
+          "id": "legends-11",
+          "name": "Andy Brooks"
+        },
+        "legends-13": {
+          "id": "legends-13",
+          "name": "D Rowland"
+        },
+        "legends-15": {
+          "id": "legends-15",
+          "name": "Nick Wilbourne"
+        },
+        "legends-17": {
+          "id": "legends-17",
+          "name": "G Davis"
+        },
+        "legends-19": {
+          "id": "legends-19",
+          "name": "B Monaghan"
+        },
+        "legends-21": {
+          "id": "legends-21",
+          "name": "Carl Bailey"
+        },
+        "legends-23": {
+          "id": "legends-23",
+          "name": "Ian Holland"
+        },
+        "legends-25": {
+          "id": "legends-25",
+          "name": "S Mistry"
+        },
+        "legends-27": {
+          "id": "legends-27",
+          "name": "Paul Leigh"
+        },
+        "legends-29": {
+          "id": "legends-29",
+          "name": "B Doherty"
+        },
+        "legends-30": {
+          "id": "legends-30",
+          "name": "Nigel Cave"
+        },
+        "legends-31": {
+          "id": "legends-31",
+          "name": "Tony Lawton"
+        },
+        "legends-32": {
+          "id": "legends-32",
+          "name": "Mark Enright"
+        }
+      },
+      "deadlines": [
+        "2026-12-08",
+        "2027-01-12",
+        "2027-02-16",
+        "2027-03-07",
+        null
+      ],
+      "notes": [],
+      "confirmed_results": []
+    },
+    {
+      "id": "doubles",
+      "title": "Doubles",
+      "format": "Doubles",
+      "slots": [
+        "doubles-01",
+        null,
+        "doubles-03",
+        null,
+        "doubles-05",
+        null,
+        "doubles-07",
+        null,
+        "doubles-09",
+        null,
+        "doubles-11",
+        null,
+        "doubles-13",
+        null,
+        "doubles-15",
+        null,
+        "doubles-17",
+        "doubles-18",
+        "doubles-19",
+        "doubles-20",
+        "doubles-21",
+        "doubles-22",
+        "doubles-23",
+        "doubles-24",
+        "doubles-25",
+        "doubles-26",
+        "doubles-27",
+        "doubles-28",
+        "doubles-29",
+        "doubles-30",
+        "doubles-31",
+        "doubles-32"
+      ],
+      "entries": {
+        "doubles-01": {
+          "id": "doubles-01",
+          "name": "Joe Brennan / Stuart Crook"
+        },
+        "doubles-03": {
+          "id": "doubles-03",
+          "name": "Nick Small / Chris Joy"
+        },
+        "doubles-05": {
+          "id": "doubles-05",
+          "name": "Paul Smith / P Irving"
+        },
+        "doubles-07": {
+          "id": "doubles-07",
+          "name": "S Renshaw / Lee Jones"
+        },
+        "doubles-09": {
+          "id": "doubles-09",
+          "name": "Ryan Ritchie / Gareth Ritchie"
+        },
+        "doubles-11": {
+          "id": "doubles-11",
+          "name": "Andy Brooks / Mike Ingham"
+        },
+        "doubles-13": {
+          "id": "doubles-13",
+          "name": "Nick Wilbourne / D Burrows"
+        },
+        "doubles-15": {
+          "id": "doubles-15",
+          "name": "Geoff Flavell / Greg Gaskell"
+        },
+        "doubles-17": {
+          "id": "doubles-17",
+          "name": "S Mistry / R Chandarana"
+        },
+        "doubles-18": {
+          "id": "doubles-18",
+          "name": "Dan Heyes / Carin Crossland"
+        },
+        "doubles-19": {
+          "id": "doubles-19",
+          "name": "D Rowland / B Doherty"
+        },
+        "doubles-20": {
+          "id": "doubles-20",
+          "name": "Scott Lomas / Sam Lomas"
+        },
+        "doubles-21": {
+          "id": "doubles-21",
+          "name": "N Wilson / K Hardman"
+        },
+        "doubles-22": {
+          "id": "doubles-22",
+          "name": "Duncan Evans / Pete Lomas"
+        },
+        "doubles-23": {
+          "id": "doubles-23",
+          "name": "Jon Matthews / Dan Corbally"
+        },
+        "doubles-24": {
+          "id": "doubles-24",
+          "name": "K Mistry / Ritesh Jethwa"
+        },
+        "doubles-25": {
+          "id": "doubles-25",
+          "name": "Paul Leigh / Nigel Cave"
+        },
+        "doubles-26": {
+          "id": "doubles-26",
+          "name": "Paul Glover / Fletcher Glover"
+        },
+        "doubles-27": {
+          "id": "doubles-27",
+          "name": "Scott Barnard / Francis Lee"
+        },
+        "doubles-28": {
+          "id": "doubles-28",
+          "name": "Tony Lawton / G Davis"
+        },
+        "doubles-29": {
+          "id": "doubles-29",
+          "name": "A Garbett / Simon Buckley"
+        },
+        "doubles-30": {
+          "id": "doubles-30",
+          "name": "P Walker / B Walker"
+        },
+        "doubles-31": {
+          "id": "doubles-31",
+          "name": "Mark Enright / Dean Taylor"
+        },
+        "doubles-32": {
+          "id": "doubles-32",
+          "name": "Glynn Evans / Chris Lee"
+        }
+      },
+      "deadlines": [
+        "2026-12-08",
+        "2027-01-12",
+        "2027-02-16",
+        null,
+        null
+      ],
+      "notes": [
+        "Use handicaps applicable on the day of play."
+      ],
+      "confirmed_results": []
+    }
+  ]
+}

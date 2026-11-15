@@ -1,0 +1,171 @@
+/* Global styles */
+body {
+  font-family: system-ui, Arial, sans-serif;
+  margin: 0;
+  background: #f7f7f7;
+  color: #111;
+}
+
+header {
+  background: #222;
+  color: #fff;
+  padding: 1rem 1.25rem;
+  text-align: center;
+}
+
+/* Announcement banner (scrolling full text off-screen, looping) */
+#announcement-banner {
+  background: #fffae6;
+  color: #665c00;
+  font-weight: bold;
+  border-bottom: 1px solid #eee3b2;
+  overflow: hidden;
+  height: 2.2em;
+  position: relative;
+  display: none;
+}
+
+#announcement-inner {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+#announcement-text {
+  display: inline-block;
+  white-space: nowrap;
+  padding-left: 100%;
+  position: absolute;
+  animation: scrollBanner 20s linear infinite;
+  line-height: 2.2em;
+}
+
+@keyframes scrollBanner {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+/* Navigation bar */
+nav {
+  background: #444;
+  padding: 0.8rem;
+  text-align: center;
+  flex-wrap: wrap;
+}
+
+nav a {
+  color: #fff;
+  margin: 0 10px;
+  text-decoration: none;
+  font-weight: bold;
+  padding: 0.6em 0.8em;
+  display: inline-block;
+  border-radius: 5px;
+}
+
+nav a:hover {
+  background: #555;
+}
+
+nav a.active {
+  background: #22cc66;
+  color: #0b1b0f;
+  font-weight: bold;
+}
+
+/* Main layout */
+main {
+  max-width: 1000px;
+  margin: 1rem auto;
+  padding: 0 1rem 2rem;
+}
+
+/* Table styling */
+.table-wrap {
+  overflow-x: auto;
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 0.5rem;
+  margin-top: 1rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 700px;
+}
+
+thead th {
+  position: sticky;
+  top: 0;
+  background: #fafafa;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+  padding: 0.7rem;
+}
+
+tbody td {
+  padding: 0.6rem 0.7rem;
+  border-bottom: 1px solid #f1f1f1;
+  font-size: 0.95em;
+}
+
+/* Footer */
+footer {
+  background: #222;
+  color: #fff;
+  text-align: center;
+  padding: 1em;
+  margin-top: 2em;
+}
+
+/* Responsive tweaks (Option 2: clean horizontal wrap) */
+@media (max-width: 600px) {
+  nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  nav a {
+    flex: 1 1 30%;
+    min-width: 100px;
+    text-align: center;
+    margin: 5px;
+  }
+}
+
+/* Team colours (backgrounds only, always black text) */
+
+/* Tabs */
+.tab-btn[data-team-id="alexashton"]   { background:#228be6; }
+.tab-btn[data-team-id="hadfield"]     { background:#d6336c; }
+.tab-btn[data-team-id="hayfield-1"]   { background:#20c997; }
+.tab-btn[data-team-id="hayfield-2"]   { background:#9c36b5; }
+.tab-btn[data-team-id="tintwistle1"]  { background:#fab005; }
+.tab-btn[data-team-id="tintwistle2"]  { background:#fd7e14; }
+.tab-btn[data-team-id="whaley-1"]     { background:#2f9e44; }
+.tab-btn[data-team-id="whaley-2"]     { background:#e67700; }
+.tab-btn[data-team-id="chinley"]      { background:#be4bdb; }
+.tab-btn[data-team-id="marple"]       { background:#15aabf; }
+.tab-btn[data-team-id="denton-lib"]   { background:#868e96; }
+
+/* Force black text on all tab buttons */
+.tabs .tab-btn { color:#000 !important; }
+
+/* Table rows */
+tr[data-team-id="alexashton"]   { background:#228be6; color:#000; }
+tr[data-team-id="hadfield"]     { background:#d6336c; color:#000; }
+tr[data-team-id="hayfield-1"]   { background:#20c997; color:#000; }
+tr[data-team-id="hayfield-2"]   { background:#9c36b5; color:#000; }
+tr[data-team-id="tintwistle1"]  { background:#fab005; color:#000; }
+tr[data-team-id="tintwistle2"]  { background:#fd7e14; color:#000; }
+tr[data-team-id="whaley-1"]     { background:#2f9e44; color:#000; }
+tr[data-team-id="whaley-2"]     { background:#e67700; color:#000; }
+tr[data-team-id="chinley"]      { background:#be4bdb; color:#000; }
+tr[data-team-id="marple"]       { background:#15aabf; color:#000; }
+tr[data-team-id="denton-lib"]   { background:#868e96; color:#000; }

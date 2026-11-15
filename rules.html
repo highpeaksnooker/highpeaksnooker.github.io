@@ -7,7 +7,7 @@
   <link rel="icon" type="image/png" href="/logo.PNG" sizes="192x192">
   <link rel="apple-touch-icon" href="/logo.PNG">
   <link rel="preload" as="image" href="/logo.PNG">
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="/style.css" />
 
   <style>
     :root{
@@ -118,7 +118,7 @@
   <!-- Crest banner -->
   <header class="logo-header" role="banner">
     <div class="logo-banner">
-      <img src="logo.PNG?v=16" alt="High Peak &amp; Marple Snooker League crest">
+      <img src="/logo.PNG?v=16" alt="High Peak &amp; Marple Snooker League crest">
     </div>
   </header>
 
@@ -134,14 +134,15 @@
     <div class="menu-inner">
       <button class="menu-toggle" id="menuToggle" aria-expanded="false" aria-controls="siteNav">☰ Menu</button>
       <nav id="siteNav" class="site-nav" hidden>
-        <a href="index.html">Home</a>
-        <a href="fixtures.html">Fixtures</a>
-        <a href="results.html">Results</a>
-        <a href="merit.html">Merit</a>
-        <a href="venues.html">Venues</a>
-        <a href="rules.html" class="active">Rules</a>
-        <a href="history.html">Honours List</a>
-        <a href="archive.html">Archive</a>
+        <a href="/index.html">Home</a>
+        <a href="/fixtures.html">Fixtures</a>
+        <a href="/results.html">Results</a><a href="/knockouts.html">Knockouts</a>
+        <a href="/merit.html">Merit</a>
+        <a href="/venues.html">Venues</a>
+        <a href="/rules.html" class="active">Rules</a>
+        <a href="/history.html">Honours List</a>
+        <a href="/captain.html">Captain login</a>
+<a href="/archive.html">Archive</a>
       </nav>
     </div>
   </div>
@@ -150,7 +151,7 @@
     <h2>League Rules</h2>
 
     <!-- PDF tile showing page 1 as an image (rendered by PDF.js) -->
-    <a id="pdfTile" href="pdfs/LeagueRules.pdf" class="pdf-card" aria-label="Open League Rules PDF">
+    <a id="pdfTile" href="/pdfs/LeagueRules.pdf" class="pdf-card" aria-label="Open League Rules PDF">
       <div class="thumb-wrap">
         <canvas id="pdfThumbCanvas" width="900" height="1200" aria-label="League Rules first page preview"></canvas>
         <div id="thumbFallback" class="thumb-fallback" hidden>
@@ -182,7 +183,7 @@
           <button id="nextBtn" title="Next page">Next →</button>
           <button id="zoomOutBtn" title="Zoom out">−</button>
           <button id="zoomInBtn" title="Zoom in">+</button>
-          <a id="openNewTab" href="pdfs/LeagueRules.pdf" target="_blank" rel="noopener" style="color:#9ae6b4;font-weight:700;text-decoration:none">Open in new tab</a>
+          <a id="openNewTab" href="/pdfs/LeagueRules.pdf" target="_blank" rel="noopener" style="color:#9ae6b4;font-weight:700;text-decoration:none">Open in new tab</a>
           <button class="modal-close" id="closeBtn" aria-label="Close">✕</button>
         </div>
       </div>

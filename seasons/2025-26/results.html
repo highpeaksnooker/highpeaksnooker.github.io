@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Results — High Peak & Marple Snooker League</title>
+  <link rel="icon" type="image/png" href="/logo.PNG" sizes="192x192">
+  <link rel="apple-touch-icon" href="/logo.PNG">
+  <link rel="preload" as="image" href="/logo.PNG">
+  <link rel="stylesheet" href="style.css" />
+
+  <style>
+    :root{
+      --brand-green:#002b19;
+      --banner-height:140px;
+      --page-max:1100px;
+      --accent:#19d36b;
+      --bar-dark:#1f1f1f;
+      --bar-border:#2a2a2a;
+      --overlay-bg:rgba(15,17,22,.85);
+    }
+
+    html,body{margin:0}
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#f7f8fb;color:#0b1220}
+    .container{max-width:var(--page-max);margin:0 auto;padding:0 12px}
+
+    /* Crest banner (match other pages) */
+    header.logo-header{
+      background:var(--brand-green);
+      box-shadow:0 2px 10px rgba(0,0,0,.25);
+      height:var(--banner-height);
+      display:flex;align-items:center;justify-content:center;
+    }
+    .logo-banner{height:100%;display:flex;align-items:center;justify-content:center}
+    .logo-banner img{height:100%;width:auto;object-fit:contain;display:block;filter:drop-shadow(0 0 6px rgba(0,0,0,.4))}
+
+    /* Announcement bar */
+    #announcement-banner{
+      position:sticky;top:0;z-index:100;display:none;background:var(--bar-dark);color:#fff;
+      font-weight:600;font-size:.85rem;padding:.35rem 0;border-top:1px solid rgba(255,255,255,.06);
+      border-bottom:1px solid var(--bar-border)
+    }
+    #announcement-inner{max-width:var(--page-max);margin:0 auto;padding:0 12px;text-align:center}
+
+    /* Menu bar */
+    .menu-bar{background:var(--bar-dark);padding:8px 0 10px;position:relative;z-index:110;border-bottom:1px solid var(--bar-border)}
+    .menu-inner{max-width:var(--page-max);margin:0 auto;padding:0 12px;position:relative}
+    .menu-toggle{
+      width:100%;background:var(--bar-dark);color:#fff;padding:10px 12px;border:1px solid var(--bar-border);
+      border-radius:10px;font-weight:800;font-size:1rem;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,.25) inset
+    }
+    .menu-toggle:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+    nav.site-nav{
+      position:absolute;left:12px;right:12px;top:calc(100% + 6px);background:var(--overlay-bg);backdrop-filter:blur(6px);
+      border:1px solid rgba(255,255,255,.08);border-radius:10px;box-shadow:0 18px 36px rgba(0,0,0,.45);padding:6px;z-index:120
+    }
+    [hidden]{display:none!important}
+    nav.site-nav a{
+      display:block;color:#e5e7eb;text-decoration:none;font-weight:700;padding:10px 10px;border-radius:8px
+    }
+    nav.site-nav a:hover{background:rgba(255,255,255,.1)}
+    nav.site-nav a.active{background:var(--accent);color:#0b1b0f}
+
+    /* Page */
+    main.container{background:#fff;padding:1rem 12px 1.5rem;border-radius:10px;margin-top:10px;box-shadow:0 1px 2px rgba(0,0,0,.06)}
+    h2{margin:.25rem 0 .5rem 0}
+
+    /* Week sections */
+    .week{margin:18px 0 22px}
+    .week h3{margin:0 0 8px;color:#0b1220;font-size:1.35rem}
+    .week .rule{height:3px;background:var(--accent);border-radius:2px;margin:8px 0 10px}
+
+    /* Table styling */
+    .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:8px;box-shadow:0 1px 2px rgba(0,0,0,.06);background:#fff}
+    table.match-table{width:100%;border-collapse:collapse}
+    table.match-table th,table.match-table td{padding:.6rem .75rem;border-bottom:1px solid #e9e9e9;text-align:left}
+    table.match-table thead th{background:#eef1f5;color:#0f172a;font-weight:700;font-size:.95rem}
+    table.match-table tbody tr:nth-child(even){background:#fafafa}
+    table.match-table tbody tr:hover{background:#f1f7ff}
+
+    /* Clickable rows */
+    .result-row{cursor:pointer}
+    .result-row .chev{font-weight:900;opacity:.65}
+    .result-row[aria-expanded="true"] .chev{transform:rotate(90deg)}
+    .result-row:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+
+    /* Drawer cell */
+    .details-row td{background:#0b121a0d}
+    .details-card{
+      margin:.5rem 0;border:1px solid #e5e7eb;border-radius:10px;padding:.75rem;background:#fff;
+      box-shadow:0 1px 2px rgba(0,0,0,.04)
+    }
+    .details-header{
+      display:flex;flex-wrap:wrap;gap:.5rem 1rem;align-items:baseline;margin:0 0 .5rem
+    }
+    .badge{display:inline-block;background:#eef7f0;border:1px solid #bde7c7;color:#0b3a1d;border-radius:999px;padding:.15rem .5rem;font-weight:700;font-size:.8rem}
+    .frames{margin:.25rem 0 0;padding:0;list-style:none}
+    .frames li{padding:.4rem 0;border-top:1px dashed #e6e6e6}
+    .frames li:first-child{border-top:none}
+    .muted{color:#5f6b7a}
+
+    footer{text-align:center;padding:1.5rem 1rem;color:#777}
+
+    @media (max-width:480px){
+      :root{--banner-height:110px}
+      .menu-toggle{font-size:.95rem;padding:9px 11px}
+      table.match-table th,table.match-table td{padding:.55rem .6rem}
+    }
+  </style>
+</head>
+<body><p style="padding:12px;background:#fff4cd;text-align:center">Archived 2025–26 season · incomplete historical records · <a href="../../index.html">Current season</a></p>
+
+  <!-- Crest banner -->
+  <header class="logo-header" role="banner">
+    <div class="logo-banner">
+      <img src="../../logo.PNG?v=16" alt="High Peak &amp; Marple Snooker League crest">
+    </div>
+  </header>
+
+  <!-- Announcement bar -->
+  <div id="announcement-banner" role="status" aria-live="polite">
+    <div id="announcement-inner" class="container">
+      <span id="announcement-text"></span>
+    </div>
+  </div>
+
+  <!-- Menu bar -->
+  <div class="menu-bar">
+    <div class="menu-inner">
+      <button class="menu-toggle" id="menuToggle" aria-expanded="false" aria-controls="siteNav">☰ Menu</button>
+      <nav id="siteNav" class="site-nav" hidden>
+        <a href="index.html">Home</a>
+        <a href="fixtures.html">Fixtures</a>
+        <a href="results.html" class="active">Results</a>
+        <a href="merit.html">Merit</a>
+        <a href="../../venues.html">Venues</a>
+        <a href="../../rules.html">Rules</a>
+        <a href="../../history.html">Honours List</a>
+        <a href="../../archive.html">Archive</a>
+      </nav>
+    </div>
+  </div>
+
+  <main class="container">
+    <h2>Match Results</h2>
+    <div id="results"></div>
+  </main>
+
+  <footer>&copy; 2025 High Peak &amp; Marple Snooker League</footer>
+
+  <!-- Menu logic -->
+  <script>
+    (function(){
+      const btn=document.getElementById('menuToggle');
+      const nav=document.getElementById('siteNav');
+      function closeNav(){nav.hidden=true;btn.setAttribute('aria-expanded','false')}
+      btn.addEventListener('click',()=>{const ex=btn.getAttribute('aria-expanded')==='true';btn.setAttribute('aria-expanded',String(!ex));nav.hidden=ex});
+      document.addEventListener('click',(e)=>{if(!nav.hidden&&!nav.contains(e.target)&&e.target!==btn&&!btn.contains(e.target)){closeNav()}});
+      document.addEventListener('keydown',(e)=>{if(e.key==='Escape')closeNav()});
+    })();
+  </script>
+
+  <!-- Announcement -->
+  <script>
+    fetch('data/announcement.json',{cache:'no-store'})
+      .then(r=>r.json())
+      .then(d=>{
+        if(d&&d.message&&d.message.trim()){
+          document.getElementById('announcement-text').textContent=d.message.trim();
+          document.getElementById('announcement-banner').style.display='block';
+        }
+      })
+      .catch(()=>{});
+  </script>
+
+  <!-- Results with expandable match details (from matches.json) -->
+  <script>
+    (async function(){
+      try{
+        const [teams, players, matches] = await Promise.all([
+          fetch('data/teams.json',   {cache:'no-store'}).then(r=>r.json()),
+          fetch('data/players.json', {cache:'no-store'}).then(r=>r.json()).catch(()=>[]),
+          fetch('data/matches.json', {cache:'no-store'}).then(r=>r.json()),
+        ]);
+
+        const teamById = Object.fromEntries(teams.map(t => [t.id, t.name]));
+        const playerById = Object.fromEntries((players||[]).map(p => [p.id, p.name]));
+
+        // filter out postponed/void
+        const clean = matches.filter(m => m.status!=='postponed' && m.status!=='void');
+
+        function frameCounts(m){
+          if (typeof m.homeFrames==='number' && typeof m.awayFrames==='number'){
+            return {home:m.homeFrames, away:m.awayFrames};
+          }
+          let home=0, away=0;
+          if (Array.isArray(m.frames)){
+            for (const fr of m.frames){
+              if (fr.winner==='home') home++;
+              else if (fr.winner==='away') away++;
+            }
+          }
+          return {home,away};
+        }
+        function withBonus(m){
+          const {home,away} = frameCounts(m);
+          let H=home, A=away, homeBonus=0, awayBonus=0, bonusNote='';
+          if (H > A){ H += 2; homeBonus=2; bonusNote = 'Home win bonus +2'; }
+          else if (A > H){ A += 3; awayBonus=3; bonusNote = 'Away win bonus +3'; }
+          return {home:H, away:A, homeBonus, awayBonus, bonusNote};
+        }
+        const fmtDate = d => new Date(d).toLocaleDateString('en-GB',{weekday:'short', day:'2-digit', month:'short', year:'numeric'});
+
+        // group by date
+        const byDate = new Map();
+        for (const m of clean){
+          const key = m.date;
+          if (!byDate.has(key)) byDate.set(key, []);
+          byDate.get(key).push(m);
+        }
+        const dates = Array.from(byDate.keys()).sort((a,b)=> new Date(b) - new Date(a));
+
+        const host = document.getElementById('results');
+        host.innerHTML = '';
+
+        // Build sections
+        for (const d of dates){
+          const section = document.createElement('section');
+          section.className = 'week';
+          section.innerHTML = `
+            <h3>${fmtDate(d)}</h3>
+            <div class="rule"></div>
+            <div class="table-wrap">
+              <table class="match-table" aria-label="Results for ${fmtDate(d)}">
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th>Home</th>
+                    <th>Away</th>
+                    <th>Total (incl. bonus)</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>`;
+          const tbody = section.querySelector('tbody');
+
+          for (const m of byDate.get(d)){
+            const totals = withBonus(m);
+            const homeName = teamById[m.homeTeamId] || m.homeTeamId || '—';
+            const awayName = teamById[m.awayTeamId] || m.awayTeamId || '—';
+            const rowId = `row-${m.id}`;
+
+            // clickable summary row
+            const tr = document.createElement('tr');
+            tr.className = 'result-row';
+            tr.tabIndex = 0;
+            tr.setAttribute('aria-expanded','false');
+            tr.dataset.matchId = m.id;
+            tr.id = rowId;
+            tr.innerHTML = `
+              <td class="chev" aria-hidden="true">▸</td>
+              <td>${homeName}</td>
+              <td>${awayName}</td>
+              <td>${totals.home} - ${totals.away}</td>
+            `;
+            tbody.appendChild(tr);
+
+            // hidden details row
+            const dtr = document.createElement('tr');
+            dtr.className = 'details-row';
+            dtr.hidden = true;
+            const dtd = document.createElement('td');
+            dtd.colSpan = 4;
+            dtd.appendChild(buildDetailsCard(m, homeName, awayName, totals, playerById));
+            dtr.appendChild(dtd);
+            tbody.appendChild(dtr);
+          }
+
+          host.appendChild(section);
+        }
+
+        // Build the details card DOM
+        function buildDetailsCard(m, homeName, awayName, totals, playerById){
+          const card = document.createElement('div');
+          card.className = 'details-card';
+
+          const header = document.createElement('div');
+          header.className = 'details-header';
+
+          const scoreTxt = document.createElement('div');
+          scoreTxt.innerHTML = `<strong>Match result:</strong> ${homeName} ${totals.home}–${totals.away} ${awayName}`;
+          header.appendChild(scoreTxt);
+
+          if (totals.homeBonus || totals.awayBonus){
+            const badge = document.createElement('span');
+            badge.className = 'badge';
+            badge.textContent = totals.bonusNote;
+            header.appendChild(badge);
+          }
+
+          const when = document.createElement('div');
+          when.className = 'muted';
+          when.textContent = new Date(m.date).toLocaleDateString('en-GB',{weekday:'long', day:'2-digit', month:'long', year:'numeric'});
+          header.appendChild(when);
+
+          card.appendChild(header);
+
+          // Frames list
+          const ul = document.createElement('ul');
+          ul.className = 'frames';
+          (m.frames||[]).forEach((fr, i) => {
+            const li = document.createElement('li');
+
+            const hp = playerById[fr.homePlayerId] || fr.homePlayerId || 'Home Player';
+            const ap = playerById[fr.awayPlayerId] || fr.awayPlayerId || 'Away Player';
+            const hs = (typeof fr.homePoints==='number') ? fr.homePoints : '–';
+            const as = (typeof fr.awayPoints==='number') ? fr.awayPoints : '–';
+
+            // winner text in the requested style
+            let line = `Frame ${i+1} – `;
+            if (fr.winner === 'home') {
+              line += `${hp} beat ${ap} ${hs}-${as}`;
+            } else if (fr.winner === 'away') {
+              line += `${ap} beat ${hp} ${as}-${hs}`;
+            } else {
+              line += `${hp} vs ${ap} ${hs}-${as}`;
+            }
+
+            // breaks: accept number | array | object {home|away}
+            const br = fr.breaks;
+            const parts = [];
+            if (br){
+              const pushBreaks = (whoLabel, val) => {
+                if (Array.isArray(val)) {
+                  val.forEach(n => parts.push(`${whoLabel} break ${n}`));
+                } else if (typeof val === 'number') {
+                  parts.push(`${whoLabel} break ${val}`);
+                }
+              };
+              if (typeof br === 'number' || Array.isArray(br)) {
+                pushBreaks(fr.winner==='home' ? hp : (fr.winner==='away' ? ap : hp), br);
+              } else if (typeof br === 'object') {
+                if ('home' in br) pushBreaks(hp, br.home);
+                if ('away' in br) pushBreaks(ap, br.away);
+              }
+            }
+            if (parts.length) line += ` (${parts.join(', ')})`;
+
+            li.textContent = line;
+            ul.appendChild(li);
+          });
+
+          card.appendChild(ul);
+          return card;
+        }
+
+        // interaction: open/close details
+        document.addEventListener('click', (e)=>{
+          const row = e.target.closest('.result-row');
+          if (!row) return;
+          toggleRow(row);
+        });
+        document.addEventListener('keydown', (e)=>{
+          if ((e.key==='Enter' || e.key===' ') && e.target.classList.contains('result-row')){
+            e.preventDefault();
+            toggleRow(e.target);
+          }
+        });
+
+        function toggleRow(row){
+          const expanded = row.getAttribute('aria-expanded')==='true';
+          // close any open row in the same tbody
+          const tbody = row.parentElement;
+          tbody.querySelectorAll('.result-row[aria-expanded="true"]').forEach(r=>{
+            r.setAttribute('aria-expanded','false');
+            const next = r.nextElementSibling;
+            if (next && next.classList.contains('details-row')) next.hidden = true;
+          });
+          // open current if it was closed
+          if (!expanded){
+            row.setAttribute('aria-expanded','true');
+            const next = row.nextElementSibling;
+            if (next && next.classList.contains('details-row')) next.hidden = false;
+            // scroll into view (nice on mobile)
+            row.scrollIntoView({block:'nearest', behavior:'smooth'});
+            // update hash so you can deep-link
+            history.replaceState(null,'',`#match=${encodeURIComponent(row.dataset.matchId)}`);
+          } else {
+            history.replaceState(null,'',location.pathname + location.search);
+          }
+        }
+
+        // deep-link open: #match=<id>
+        const m = location.hash.match(/match=([^&]+)/);
+        if (m){
+          const target = document.getElementById(`row-${decodeURIComponent(m[1])}`);
+          if (target) toggleRow(target);
+        }
+
+      }catch(e){
+        console.warn('Results load failed:', e);
+        document.getElementById('results').textContent = 'There was a problem loading the results.';
+      }
+    })();
+  </script>
+</body>
+</html>
