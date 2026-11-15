@@ -45,7 +45,7 @@ function render() {
     <p><small>Scroll across to see later rounds. Deadlines do not automatically decide a winner.</small></p>
     <div class="ko-bracket" tabindex="0" aria-label="${esc(c.title)} bracket, scroll horizontally">${rounds.map((ties, i) => `<section class="ko-round" aria-labelledby="ko-round-${i}"><h3 id="ko-round-${i}">${roundNames[i]}</h3><p class="ko-deadline">${c.deadlines[i] ? 'Play by ' + date(c.deadlines[i]) : 'Deadline to confirm'}</p><div class="ko-ties">${ties.map(t => `<article class="ko-tie"><p class="ko-match-label">Match ${t.slot}</p><ul>${entrant(t.home,t.homeResolved,t)}${entrant(t.away,t.awayResolved,t)}</ul>${isAdmin && connected && t.editable ? `<form data-round="${t.round}" data-slot="${t.slot}" data-revision="${t.revision}"><label>Confirmed winner<select name="winner" required><option value="">Choose winner…</option>${[t.home,t.away].map(id => `<option value="${esc(id)}" ${t.winner === id ? 'selected' : ''}>${esc(c.entries[id].name)}</option>`).join('')}</select></label><label>Result note<input name="note" required minlength="5" maxlength="300" placeholder="Confirmed by captain / result card"></label><button ${saving ? 'disabled' : ''}>${t.winner ? 'Update winner' : 'Record winner'}</button></form>` : ''}</article>`).join('')}</div></section>`).join('')}</div>
     ${rounds.at(-1)[0].winner ? `<p class="notice success"><strong>Champion: ${esc(c.entries[rounds.at(-1)[0].winner].name)}</strong></p>` : ''}</section>
-    <p class="section-gap">${esc(data.general_notes[1])}</p><p><a href="/admin.html">Administration</a></p>`;
+    <p class="section-gap">${esc(data.general_notes[1])}</p>`;
 }
 main.addEventListener('change', e => {
   if (e.target.id !== 'competition-select') return;
