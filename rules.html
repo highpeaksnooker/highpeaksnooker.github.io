@@ -1,157 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Rules — High Peak & Marple Snooker League</title>
-  <link rel="icon" type="image/png" href="/logo.PNG" sizes="192x192">
-  <link rel="apple-touch-icon" href="/logo.PNG">
-  <link rel="preload" as="image" href="/logo.PNG">
-  <link rel="stylesheet" href="/style.css" />
-
-  <style>
-    :root{
-      --brand-green:#002b19;
-      --banner-height:140px;
-      --page-max:1100px;
-      --accent:#19d36b;
-      --bar-dark:#1f1f1f;
-      --bar-border:#2a2a2a;
-      --overlay-bg:rgba(15,17,22,.85);
-    }
-
-    html,body{margin:0}
-    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#f7f8fb;color:#0b1220}
-    .container{max-width:var(--page-max);margin:0 auto;padding:0 12px}
-
-    /* Crest banner */
-    header.logo-header{
-      background:var(--brand-green);
-      box-shadow:0 2px 10px rgba(0,0,0,.25);
-      height:var(--banner-height);
-      display:flex;align-items:center;justify-content:center;
-    }
-    .logo-banner{height:100%;display:flex;align-items:center;justify-content:center}
-    .logo-banner img{height:100%;width:auto;object-fit:contain;display:block;filter:drop-shadow(0 0 6px rgba(0,0,0,.4))}
-
-    /* Announcement */
-    #announcement-banner{
-      position:sticky;top:0;z-index:100;display:none;background:var(--bar-dark);color:#fff;
-      font-weight:600;font-size:.85rem;padding:.35rem 0;border-top:1px solid rgba(255,255,255,.06);
-      border-bottom:1px solid var(--bar-border)
-    }
-    #announcement-inner{max-width:var(--page-max);margin:0 auto;padding:0 12px;text-align:center}
-
-    /* Menu bar */
-    .menu-bar{background:var(--bar-dark);padding:8px 0 10px;position:relative;z-index:110;border-bottom:1px solid var(--bar-border)}
-    .menu-inner{max-width:var(--page-max);margin:0 auto;padding:0 12px;position:relative}
-    .menu-toggle{
-      width:100%;background:var(--bar-dark);color:#fff;padding:10px 12px;border:1px solid var(--bar-border);
-      border-radius:10px;font-weight:800;font-size:1rem;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,.25) inset
-    }
-    .menu-toggle:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
-    nav.site-nav{
-      position:absolute;left:12px;right:12px;top:calc(100% + 6px);background:var(--overlay-bg);backdrop-filter:blur(6px);
-      border:1px solid rgba(255,255,255,.08);border-radius:10px;box-shadow:0 18px 36px rgba(0,0,0,.45);padding:6px;z-index:120
-    }
-    [hidden]{display:none!important}
-    nav.site-nav a{
-      display:block;color:#e5e7eb;text-decoration:none;font-weight:700;padding:10px 10px;border-radius:8px
-    }
-    nav.site-nav a:hover{background:rgba(255,255,255,.1)}
-    nav.site-nav a.active{background:var(--accent);color:#0b1b0f}
-
-    /* Page content */
-    main.container{background:#fff;padding:1rem 12px 1.5rem;border-radius:10px;margin-top:10px;box-shadow:0 1px 2px rgba(0,0,0,.06)}
-    h2{margin:.25rem 0 1rem 0}
-    .card{background:#fff;border:1px solid #e6e6e6;border-radius:12px;padding:12px;margin-bottom:14px}
-    footer{text-align:center;padding:1.5rem 1rem;color:#777}
-
-    /* PDF tile (thumbnail of page 1) */
-    .pdf-card{
-      display:block;position:relative;border:1px solid #e6e6e6;border-radius:12px;overflow:hidden;
-      background:#fafafa;box-shadow:0 1px 2px rgba(0,0,0,.04);text-decoration:none;color:inherit
-    }
-    .thumb-wrap{position:relative;background:#f1f5f9}
-    #pdfThumbCanvas{display:block;width:100%;height:auto;aspect-ratio:3/4}
-    .pdf-meta{
-      display:flex;align-items:center;justify-content:space-between;gap:10px;
-      padding:10px 12px;font-weight:600
-    }
-    .pdf-badge{
-      font-size:.8rem;background:var(--accent);color:#072814;padding:4px 8px;border-radius:999px
-    }
-    .pdf-note{margin:.5rem 0 0 0;color:#555;font-size:.9rem}
-
-    /* Modal viewer */
-    .modal{position:fixed;inset:0;background:rgba(0,0,0,.8);display:none;align-items:center;justify-content:center;padding:10px;z-index:1300}
-    .modal.open{display:flex}
-    .viewer{
-      width:min(1100px,96vw);height:min(92vh,1200px);background:#0b0b0b;border-radius:12px;display:flex;flex-direction:column;overflow:hidden
-    }
-    .viewer-header{
-      display:flex;align-items:center;gap:8px;justify-content:space-between;background:#111;color:#fff;padding:8px 10px
-    }
-    .controls{display:flex;align-items:center;gap:8px}
-    .controls button{
-      background:#fff;border:1px solid #d8d8d8;border-radius:8px;padding:6px 10px;font-weight:800;cursor:pointer;color:#111
-    }
-    .controls .page-btn{padding:6px 9px}
-    .controls .page-btn[aria-current="true"]{background:var(--accent);color:#072814;border-color:#0a7b42}
-    .viewer-body{flex:1;display:flex;align-items:center;justify-content:center;background:#222}
-    #viewCanvas{max-width:100%;max-height:100%;background:#fff;border-radius:4px}
-    .viewer-footer{display:flex;justify-content:space-between;align-items:center;color:#ddd;background:#111;padding:6px 10px;font-size:.9rem}
-    .modal-close{background:#fff;border:none;border-radius:8px;padding:6px 10px;font-weight:800;cursor:pointer;color:#111}
-
-    /* Fallback tile if PDF.js fails */
-    .thumb-fallback{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
-    .thumb-fallback svg{width:40%;max-width:260px;height:auto;opacity:.6}
-
-    @media (max-width:480px){
-      :root{--banner-height:110px}
-      .menu-toggle{font-size:.95rem;padding:9px 11px}
-    }
-  </style>
-</head>
-<body>
-
-  <!-- Crest banner -->
-  <header class="logo-header" role="banner">
-    <div class="logo-banner">
-      <img src="/logo.PNG?v=16" alt="High Peak &amp; Marple Snooker League crest">
-    </div>
-  </header>
-
-  <!-- Announcement bar -->
-  <div id="announcement-banner" role="status" aria-live="polite">
-    <div id="announcement-inner" class="container">
-      <span id="announcement-text"></span>
-    </div>
-  </div>
-
-  <!-- Menu bar -->
-  <div class="menu-bar">
-    <div class="menu-inner">
-      <button class="menu-toggle" id="menuToggle" aria-expanded="false" aria-controls="siteNav">☰ Menu</button>
-      <nav id="siteNav" class="site-nav" hidden>
-        <a href="/index.html">Home</a>
-        <a href="/fixtures.html">Fixtures</a>
-        <a href="/results.html">Results</a><a href="/knockouts.html">Knockouts</a>
-        <a href="/merit.html">Merit</a>
-        <a href="/venues.html">Venues</a>
-        <a href="/rules.html" class="active">Rules</a>
-        <a href="/history.html">Honours List</a>
-        <a href="/captain.html">Captain login</a>
-<a href="/archive.html">Archive</a>
-      </nav>
-    </div>
-  </div>
-
-  <main class="container">
-    <h2>League Rules</h2>
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="High Peak & Marple Snooker League — fixtures, approved results and player rankings for 2026–27."><title>League rules · High Peak & Marple Snooker League</title><link rel="icon" href="/logo.PNG"><link rel="stylesheet" href="/assets/league.css"><link rel="stylesheet" href="/assets/content-pages.css"></head>
+<body><a class="screen-reader" href="#main">Skip to content</a><header class="masthead"><div class="brand"><a href="/index.html" aria-label="League home"><img src="/logo.PNG" alt="League crest" width="78" height="78"></a><div><p>Established competition · Local clubs</p><strong>High Peak & Marple<br>Snooker League</strong></div><span class="season-chip">2026–27 season</span></div></header><nav class="site-nav" aria-label="Main navigation"><div class="nav-inner"><a href="/index.html">League table</a><a href="/fixtures.html">Fixtures</a><a href="/results.html">Results</a><a href="/knockouts.html">Knockouts</a><a href="/merit.html">Players & merit</a><a href="/venues.html">Venues</a><a href="/rules.html" aria-current="page">Rules</a><a href="/history.html">History</a><a href="/archive.html">Archive</a><a href="/admin.html">Administration</a><a href="/captain.html">Captain login</a></div></nav>
+<main id="main" tabindex="-1"><div class="heading"><div><p class="eyebrow">High Peak &amp; Marple</p><h1>League rules</h1><p class="intro">Read the league rules, with page navigation and zoom in the PDF viewer.</p></div></div>
+    
 
     <!-- PDF tile showing page 1 as an image (rendered by PDF.js) -->
-    <a id="pdfTile" href="/pdfs/LeagueRules.pdf" class="pdf-card" aria-label="Open League Rules PDF">
+    <a id="pdfTile" href="/pdfs/LeagueRules.pdf" class="pdf-card card" aria-label="Open League Rules PDF">
       <div class="thumb-wrap">
         <canvas id="pdfThumbCanvas" width="900" height="1200" aria-label="League Rules first page preview"></canvas>
         <div id="thumbFallback" class="thumb-fallback" hidden>
@@ -170,10 +24,7 @@
       </div>
     </a>
     <p class="pdf-note">Tap the image to open the rules and switch between pages 1–4.</p>
-  </main>
-
-  <!-- Modal PDF viewer with page buttons (1–4) + zoom -->
-  <div id="pdfModal" class="modal" role="dialog" aria-modal="true" aria-label="League Rules PDF viewer">
+  </main><footer class="footer"><span>High Peak & Marple Snooker League · 2026–27</span><span><a href="/seasons/2025-26/index.html">2025–26 archive</a> · <a href="/admin.html">Administration</a></span></footer><div id="pdfModal" class="modal" role="dialog" aria-modal="true" aria-label="League Rules PDF viewer">
     <div class="viewer">
       <div class="viewer-header">
         <strong>League Rules (PDF)</strong>
@@ -183,7 +34,7 @@
           <button id="nextBtn" title="Next page">Next →</button>
           <button id="zoomOutBtn" title="Zoom out">−</button>
           <button id="zoomInBtn" title="Zoom in">+</button>
-          <a id="openNewTab" href="/pdfs/LeagueRules.pdf" target="_blank" rel="noopener" style="color:#9ae6b4;font-weight:700;text-decoration:none">Open in new tab</a>
+          <a id="openNewTab" href="/pdfs/LeagueRules.pdf" target="_blank" rel="noopener">Open in new tab</a>
           <button class="modal-close" id="closeBtn" aria-label="Close">✕</button>
         </div>
       </div>
@@ -197,34 +48,6 @@
     </div>
   </div>
 
-  <footer>&copy; 2025 High Peak &amp; Marple Snooker League</footer>
-
-  <!-- Menu logic -->
-  <script>
-    (function(){
-      const btn=document.getElementById('menuToggle');
-      const nav=document.getElementById('siteNav');
-      function closeNav(){nav.hidden=true;btn.setAttribute('aria-expanded','false')}
-      btn.addEventListener('click',()=>{const ex=btn.getAttribute('aria-expanded')==='true';btn.setAttribute('aria-expanded',String(!ex));nav.hidden=ex});
-      document.addEventListener('click',(e)=>{if(!nav.hidden&&!nav.contains(e.target)&&e.target!==btn&&!btn.contains(e.target)){closeNav()}});
-      document.addEventListener('keydown',(e)=>{if(e.key==='Escape')closeNav()});
-    })();
-  </script>
-
-  <!-- Announcement -->
-  <script>
-    fetch('data/announcement.json',{cache:'no-store'})
-      .then(r=>r.json())
-      .then(d=>{
-        if(d&&d.message&&d.message.trim()){
-          document.getElementById('announcement-text').textContent=d.message.trim();
-          document.getElementById('announcement-banner').style.display='block';
-        }
-      })
-      .catch(()=>{});
-  </script>
-
-  <!-- PDF.js (CDN) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script>
     // Set worker source (needed by PDF.js)
@@ -236,7 +59,7 @@
   <!-- PDF thumbnail + modal viewer logic -->
   <script>
     (function(){
-      const PDF_URL = 'pdfs/LeagueRules.pdf';
+      const PDF_URL = '/pdfs/LeagueRules.pdf';
 
       // Elements
       const thumbCanvas = document.getElementById('pdfThumbCanvas');
@@ -280,7 +103,7 @@
           await page.render({ canvasContext: thumbCanvas.getContext('2d'), viewport: vp }).promise;
         }catch(err){
           console.warn('PDF thumb render failed:', err);
-          thumbFallback.hidden = false;
+          thumbFallback.hidden = false; thumbCanvas.hidden = true;
         }
       }
 
@@ -335,16 +158,18 @@
 
       function openModal(){
         modal.classList.add('open');
+        closeBtn.focus();
         if (pdfDoc){
           renderPage(currentPage);
         }
       }
       function closeModal(){
         modal.classList.remove('open');
+        tile.focus();
       }
 
       // ---------- Events ----------
-      tile.addEventListener('click', (e)=>{ e.preventDefault(); openModal(); });
+      tile.addEventListener('click', (e)=>{ if (pdfDoc) { e.preventDefault(); openModal(); } });
       closeBtn.addEventListener('click', closeModal);
       modal.addEventListener('click', (e)=>{ if(e.target === modal) closeModal(); });
       document.addEventListener('keydown', (e)=>{ if(e.key==='Escape' && modal.classList.contains('open')) closeModal(); });
@@ -378,11 +203,10 @@
 
       // ---------- Go! ----------
       if (window['pdfjsLib']){
-        renderThumb().then(()=>{ /* thumb shown */ }).catch(()=>{ thumbFallback.hidden = false; });
+        renderThumb().then(()=>{ /* thumb shown */ }).catch(()=>{ thumbFallback.hidden = false; thumbCanvas.hidden = true; });
       }else{
-        thumbFallback.hidden = false;
+        thumbFallback.hidden = false; thumbCanvas.hidden = true;
       }
     })();
   </script>
-</body>
-</html>
+</body></html>
