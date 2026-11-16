@@ -19,8 +19,7 @@ let state,
   recovery = ["invite", "recovery"].includes(authLinkType),
   tableMode = "official";
 let filterTeam = "",
-  filterRound = "",
-  showCompleted = false;
+  filterRound = "";
 const h = (value) =>
   String(value ?? "").replace(
     /[&<>"']/g,
@@ -146,15 +145,10 @@ function lineupsPublic(m) {
 }
 function renderFixtures() {
   const games = filtered(state.matches).filter(
-    (m) => showCompleted || m.status !== "approved",
+    (m) => m.status !== "approved",
   );
   return (
-    heading(
-      "Fixtures.",
-      "Your season, round by round. Rearranged matches stay within their original tranche.",
-    ) +
     filters() +
-    `<label><input type="checkbox" id="completed-toggle" ${showCompleted ? "checked" : ""}>Include approved matches</label>` +
     (games.length
       ? games.map(publicCard).join("")
       : empty(
@@ -470,10 +464,6 @@ main.addEventListener("change", (e) => {
   }
   if (e.target.id === "round-filter") {
     filterRound = e.target.value;
-    render();
-  }
-  if (e.target.id === "completed-toggle") {
-    showCompleted = e.target.checked;
     render();
   }
 });
