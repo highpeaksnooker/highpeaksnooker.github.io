@@ -67,7 +67,7 @@ function toast(message, error = false) {
   }, 9000);
 }
 function heading(title, description, extra = "") {
-  return `<div class="heading"><div><div class="eyebrow">2026–27 season</div><h1>${title}</h1><p class="intro">${description}</p></div>${extra}</div>`;
+  return `<div class="heading"><div><div class="eyebrow">2026–27 season</div><h1>${title}</h1>${description ? `<p class="intro">${description}</p>` : ""}</div>${extra}</div>`;
 }
 function empty(title, text) {
   return `<div class="empty"><strong>${title}</strong>${text}</div>`;
@@ -185,7 +185,7 @@ function renderMerit() {
   return (
     heading(
       "Players & merit.",
-      "Every approved league frame contributes. Knockout matches and unplayed walkovers do not count towards merit.",
+      "",
     ) +
     `<div class="toolbar"><label>Team<select id="team-filter">${teamOptions(filterTeam, "All teams")}</select></label><button type="button" class="secondary" data-export="players">Download roster CSV</button></div><section class="card"><h2>Individual merit</h2>${rows.length ? `<div class="table-scroll"><table><thead><tr>${["Pos", "Player", "Team", "P", "W", "L", "±", "25+", "High"].map((x) => `<th>${x}</th>`).join("")}</tr></thead><tbody>${rows.map((p) => `<tr><td>${p.position}${p.tied ? " =" : ""}</td><td><a href="player.html?player=${encodeURIComponent(p.id)}">${h(p.name)}</a></td><td>${h(teamName(p.team_id))}</td>${[p.played, p.won, p.lost, p.diff, p.breaks25, p.high].map((n) => `<td>${n}</td>`).join("")}</tr>`).join("")}</tbody></table></div>` : empty("The season starts here.", "Rankings will appear when match results are approved.")}<p><small>Tie-breaks: wins, win difference, highest break of at least 25, number of 25+ breaks, most matches played, then a playoff.</small></p></section><section class="card"><h2>Registered players & handicaps</h2>${!state.season.ready ? '<p class="warning-text">Proposed carry-forward roster — awaiting administrator verification.</p>' : ""}<div class="table-scroll"><table><thead><tr><th>Player</th><th>Team</th><th>Starting HCP</th><th>Current HCP</th><th>Review</th></tr></thead><tbody>${state.players
       .filter((p) => !filterTeam || p.team_id === filterTeam)
