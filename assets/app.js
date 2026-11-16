@@ -1,4 +1,4 @@
-import { scorecardLocked, liveScoreMatches, amendmentChanges } from "./scorecards.js";
+import { scorecardLocked, liveScoreMatches, amendmentChanges, agreedBreaks } from "./scorecards.js?v=break-agreement-20261116";
 import { nextCaptainFixture } from "./captain-fixture.js";
 import { breakTableRows } from "./break-table.js";
 import { homeAwayTotals } from "./standings-columns.js";
@@ -167,13 +167,17 @@ function renderLiveScores() {
   const matches = liveScoreMatches(filtered(state.matches));
   return `<div class="live-heading"><h1>Live Scores</h1><span class="badge live">Auto-updating · agreed frames only</span></div>${filters()}${matches.length ? matches.map(liveScoreCard).join("") : '<section class="card empty"><strong>No matches live yet.</strong><p>Pairings appear when both captains submit their teams.</p></section>'}`;
 }
+function liveBreakLabel(frame, side) {
+  const breaks = agreedBreaks(frame, side);
+  return breaks.length ? `<small class="live-breaks">${breaks.length === 1 ? "Break" : "Breaks"}: ${breaks.join(", ")}</small>` : "";
+}
 function liveScoreCard(match) {
   const totals = frameTotals(match);
   const pairing = slot => {
     const home = match.lineups.find(lineup => lineup.team_id === match.home_id).player_ids[slot - 1];
     const away = match.lineups.find(lineup => lineup.team_id === match.away_id).player_ids[slot - 1];
     const frame = match.frames.find(frame => frame.slot === slot && frame.accepted);
-    return `<div class="live-frame"><span class="live-slot" aria-label="Frame ${slot}">${slot}</span><span class="live-player ${frame?.winner === "home" ? "live-frame-winner" : ""}">${h(playerName(home))}</span><span class="live-frame-score" aria-label="${frame ? frame.is_walkover ? 'Awarded frame' : `Agreed score ${frame.home_points} to ${frame.away_points}` : 'Frame not yet agreed'}">${frame ? frame.is_walkover ? "Awarded" : `${frame.home_points}–${frame.away_points}` : "—"}</span><span class="live-player live-away ${frame?.winner === "away" ? "live-frame-winner" : ""}">${h(playerName(away))}</span></div>`;
+    return `<div class="live-frame"><span class="live-slot" aria-label="Frame ${slot}">${slot}</span><span class="live-player ${frame?.winner === "home" ? "live-frame-winner" : ""}">${h(playerName(home))}${liveBreakLabel(frame, "home")}</span><span class="live-frame-score" aria-label="${frame ? frame.is_walkover ? 'Awarded frame' : `Agreed score ${frame.home_points} to ${frame.away_points}` : 'Frame not yet agreed'}">${frame ? frame.is_walkover ? "Awarded" : `${frame.home_points}–${frame.away_points}` : "—"}</span><span class="live-player live-away ${frame?.winner === "away" ? "live-frame-winner" : ""}">${h(playerName(away))}${liveBreakLabel(frame, "away")}</span></div>`;
   };
   return `<section class="card live-scorecard" aria-label="${h(teamName(match.home_id))} versus ${h(teamName(match.away_id))}"><div class="live-match-meta"><span>Round ${match.round} · ${date(match.date)}</span><span class="badge ${scorecardLocked(match) ? "" : "live"}">${scorecardLocked(match) ? "Confirmed · awaiting approval" : "In progress"}</span></div><div class="live-scoreline"><h2>${h(teamName(match.home_id))}<small>Home</small></h2><strong class="score" aria-label="Match score ${totals.home} to ${totals.away}">${totals.home}–${totals.away}</strong><h2>${h(teamName(match.away_id))}<small>Away</small></h2></div><div class="live-pairings">${Array.from({length:5}, (_, index) => pairing(index + 1)).join("")}</div><p class="live-agreed-count">${match.frames.filter(frame => frame.accepted).length} of 5 frames agreed</p></section>`;
 }
@@ -282,36 +286,19 @@ function lineupForm(m, t) {
     "",
   )}<button ${!state.season.ready ? "disabled" : ""}>Submit & lock team</button></form>`;
 }
+function frameEditor(m, slot, f, hp, ap) {
+  return `<form data-action="frame" data-match="${m.id}" data-revision="${m.revision}" data-slot="${slot}"><fieldset ${f && state.scorecard_workflow !== 1 ? 'disabled title="Score corrections need the administrator’s scorecard update."' : ""}><div class="form-grid"><label>${h(playerName(hp))} · HCP ${handicapAt(state.players.find(player => player.id === hp), state.handicaps, m.round)}<input type="number" name="home" required min="0" max="1000" value="${f?.home_points ?? ""}" inputmode="numeric"></label><label>${h(playerName(ap))} · HCP ${handicapAt(state.players.find(player => player.id === ap), state.handicaps, m.round)}<input type="number" name="away" required min="0" max="1000" value="${f?.away_points ?? ""}" inputmode="numeric"></label><label>Home breaks<input name="homeBreaks" value="${h(f?.home_breaks.join(", ") || "")}" placeholder="e.g. 25, 32" inputmode="numeric"></label><label>Away breaks<input name="awayBreaks" value="${h(f?.away_breaks.join(", ") || "")}" placeholder="e.g. 28" inputmode="numeric"></label></div><p><small>Enter final scores including the handicap, and any breaks.</small></p>${admin() ? `<label>Record on behalf of<select name="team" required>${options(state.teams.filter(team => [m.home_id, m.away_id].includes(team.id)), "id", "name", f?.submitted_by || m.home_id)}</select></label>` : ""}<button>${f ? "Save amendment" : "Save frame"}</button></fieldset></form>`;
+}
 function frameForm(m, slot) {
-  const f = m.frames.find((f) => f.slot === slot);
+  const f = m.frames.find(frame => frame.slot === slot);
   if (f?.is_walkover) return `<div class="frame"><h3>Frame ${slot}: awarded to ${h(playerName(f.winner === "home" ? f.home_player : f.away_player))}</h3><p>Counts as a merit win and handicap appearance. No opponent or numerical score was recorded.</p></div>`;
-  const hp = m.lineups.find((l) => l.team_id === m.home_id).player_ids[
-    slot - 1
-  ];
-  const ap = m.lineups.find((l) => l.team_id === m.away_id).player_ids[
-    slot - 1
-  ];
-  return `<div class="frame"><div class="frame-title"><h3>Frame ${slot}: ${h(playerName(hp))} v ${h(playerName(ap))}</h3>${f ? `<span class="badge ${f.accepted ? "" : "pending"}">${f.accepted ? "Agreed by both captains" : "Awaiting opposing captain"}</span>` : ""}</div>
- ${f && !f.accepted ? `<p><small>Entered by ${h(teamName(f.submitted_by))}. Pending scores are visible only to these captains and administrators.</small></p>` : ""}
- <form data-action="frame" data-match="${m.id}" data-revision="${m.revision}" data-slot="${slot}"><fieldset ${f && state.scorecard_workflow !== 1 ? 'disabled title="Score corrections need the administrator’s scorecard update."' : ""}><div class="form-grid"><label>${h(playerName(hp))} · HCP ${handicapAt(
-   state.players.find((p) => p.id === hp),
-   state.handicaps,
-   m.round,
- )}<input type="number" name="home" required min="0" max="1000" value="${f?.home_points ?? ""}" inputmode="numeric"></label><label>${h(playerName(ap))} · HCP ${handicapAt(
-   state.players.find((p) => p.id === ap),
-   state.handicaps,
-   m.round,
- )}<input type="number" name="away" required min="0" max="1000" value="${f?.away_points ?? ""}" inputmode="numeric"></label><label>Home breaks<input name="homeBreaks" value="${h(f?.home_breaks.join(", ") || "")}" placeholder="e.g. 25, 32" inputmode="numeric"></label><label>Away breaks<input name="awayBreaks" value="${h(f?.away_breaks.join(", ") || "")}" placeholder="e.g. 28" inputmode="numeric"></label></div><p><small>Enter final scores including the handicap. The higher score determines the winner.</small></p>${
-   admin()
-     ? `<label>Record on behalf of<select name="team" required>${options(
-         state.teams.filter((t) => [m.home_id, m.away_id].includes(t.id)),
-         "id",
-         "name",
-         m.home_id,
-       )}</select></label>`
-     : ""
- }<button>${f ? "Save & accept correction" : "Save & accept frame"}</button></fieldset></form>
- ${f && !f.accepted && (admin() || f.submitted_by !== ownTeam()) ? `<form data-action="accept-frame" data-match="${m.id}" data-revision="${m.revision}" data-slot="${slot}" class="section-gap">${admin() ? `<input type="hidden" name="team" value="${f.submitted_by === m.home_id ? m.away_id : m.home_id}"><p><small>Historical entry: record the opposing captain’s agreement only after checking the original scorecard.</small></p>` : ""}<button class="secondary">Accept frame ${slot}</button></form>` : ""}</div>`;
+  const hp = m.lineups.find(lineup => lineup.team_id === m.home_id).player_ids[slot - 1];
+  const ap = m.lineups.find(lineup => lineup.team_id === m.away_id).player_ids[slot - 1];
+  const title = `<div class="frame-title"><h3>Frame ${slot}: ${h(playerName(hp))} v ${h(playerName(ap))}</h3>${f ? `<span class="badge ${f.accepted ? "" : "pending"}">${f.accepted ? "Agreed by both captains" : "Awaiting opposing captain"}</span>` : ""}</div>`;
+  if (!f) return `<div class="frame">${title}${frameEditor(m, slot, null, hp, ap)}</div>`;
+  const review = `<div class="frame-score-review"><div><strong>${h(playerName(hp))}</strong><span>${f.home_points}</span><small>Breaks: ${h(f.home_breaks.join(", ") || "None")}</small></div><div><strong>${h(playerName(ap))}</strong><span>${f.away_points}</span><small>Breaks: ${h(f.away_breaks.join(", ") || "None")}</small></div></div>`;
+  const agree = !f.accepted && (admin() || f.submitted_by !== ownTeam()) ? `<form data-action="accept-frame" data-match="${m.id}" data-revision="${m.revision}" data-slot="${slot}" class="frame-agree">${admin() ? `<input type="hidden" name="team" value="${f.submitted_by === m.home_id ? m.away_id : m.home_id}">` : ""}<p><small>Save your agreement with both the frame score and recorded breaks.</small></p><button>Save &amp; agree</button></form>` : "";
+  return `<div class="frame">${title}${review}${!f.accepted ? `<p><small>Saved by ${h(teamName(f.submitted_by))}. Awaiting the other captain’s agreement.</small></p>` : ""}${agree}<details class="frame-edit"><summary>Amend score or breaks</summary>${frameEditor(m, slot, f, hp, ap)}</details></div>`;
 }
 function substitutionForm(m) {
   return `<details class="section-gap"><summary>Request a substitution</summary><form data-action="substitute" data-match="${m.id}" data-revision="${m.revision}"><label>Team<select name="team" required>${options(
@@ -594,7 +581,7 @@ main.addEventListener("submit", async (e) => {
         });
         break;
       case "frame": {
-        successMessage = "Frame saved. The opposing captain must accept this version.";
+        successMessage = "Score and breaks saved. The other captain must review and save their agreement.";
         const home = number(data, "home"),
           away = number(data, "away");
         if (home === away)
@@ -614,7 +601,7 @@ main.addEventListener("submit", async (e) => {
         break;
       }
       case "accept-frame":
-        successMessage = "Frame agreed by both captains. Live Scores has been updated.";
+        successMessage = "Score and breaks agreed by both captains. Live Scores has been updated.";
         await rpc("accept_frame", {
           ...base,
           p_slot: Number(form.dataset.slot),
@@ -723,6 +710,7 @@ main.addEventListener("submit", async (e) => {
     }
     dirty = false;
     await refresh(true);
+    if (action === "frame" && state.matches.find(match => match.id === base.p_match)?.frames.find(frame => frame.slot === Number(form.dataset.slot))?.accepted) successMessage = "Score and breaks agreed by both captains. Live Scores has been updated.";
     toast(successMessage);
   } catch (error) {
     toast(

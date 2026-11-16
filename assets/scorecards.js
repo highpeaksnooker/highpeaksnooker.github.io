@@ -12,3 +12,8 @@ export function amendmentChanges(amendment) {
   }
   return changes;
 }
+
+export function agreedBreaks(frame, side) {
+  if (!frame?.accepted || frame.is_walkover || !["home", "away"].includes(side)) return [];
+  return (frame[side + "_breaks"] || []).filter(value => Number.isInteger(value) && value >= 25 && value <= 147).sort((a, b) => b - a);
+}
