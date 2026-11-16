@@ -1,3 +1,4 @@
+import { travellersPrize } from "./travellers.js?v=20261116";
 import { upcomingFixtures, seasonHighestBreak, resultCardData } from "./league-features.js?v=20261116";
 import { showResultCard } from "./result-card.js?v=20261116";
 import { scorecardLocked, liveScoreMatches, amendmentChanges, agreedBreaks } from "./scorecards.js?v=break-agreement-20261116";
@@ -108,11 +109,17 @@ function fixtureBanner() {
   const items = hidden => matches.map(match => `<a href="fixtures.html?round=${match.round}&amp;team=${encodeURIComponent(match.home_id)}" ${hidden ? 'tabindex="-1"' : ''}>${h(teamName(match.home_id))} <span>v</span> ${h(teamName(match.away_id))}</a>`).join("");
   return `<section class="fixture-banner ${matches.length === 1 ? "is-single" : ""}" aria-label="Next fixtures" ${tickerPaused ? "data-paused" : ""}><div class="fixture-label"><strong>Next fixtures</strong><time datetime="${matches[0].date}">${date(matches[0].date)}</time></div><div class="fixture-window"><div class="fixture-track"><div class="fixture-set">${items(false)}</div><div class="fixture-set" aria-hidden="true">${items(true)}</div></div></div><button type="button" class="fixture-pause" data-ticker-pause aria-pressed="${tickerPaused}" aria-label="${tickerPaused ? "Resume" : "Pause"} fixture announcements">${tickerPaused ? "Play" : "Pause"}</button></section>`;
 }
+function travellersCard() {
+  const prize = travellersPrize(state.matches, {seasonId:state.season.id, teamCount:state.teams.length, lastRound:state.season.last_round});
+  if (!prize) return "";
+  const trophy = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M7 3h10v5a5 5 0 0 1-10 0V3ZM7 5H4v2a4 4 0 0 0 4 4m9-6h3v2a4 4 0 0 1-4 4M12 13v5m-4 3h8m-7-3h6v3H9z"/></svg>';
+  return `<section class="card travellers-card"><div class="eyebrow">${trophy}Travellers Prize</div><h2 class="section-gap">${h(teamName(prize.holder))}</h2><p class="muted">${prize.seasonComplete ? "Season winners" : "Current holders"} · ${h(state.season.name)}</p>${prize.blocked ? '<p class="muted">Awaiting confirmation of the prize journey.</p>' : ""}<details><summary>Prize journey</summary><ol class="travellers-journey">${prize.journey.map(step => `<li><strong>${h(teamName(step.holder))}</strong><small>${step.starting ? "Started the season as the previous holders" : `Round ${step.round} · ${date(step.date)}<br>${h(step.score)} against ${h(teamName(step.previous))}`}</small></li>`).join("")}</ol>${prize.nextFixture ? `<p class="travellers-next"><a href="fixtures.html?team=${encodeURIComponent(prize.holder)}&amp;round=${prize.nextFixture.round}">Next defence: ${h(teamName(prize.nextFixture.home_id))} v ${h(teamName(prize.nextFixture.away_id))} · ${date(prize.nextFixture.date)}</a></p>` : ""}</details></section>`;
+}
 function renderHome() {
   return (
     fixtureBanner() +
     ` <section class="card standings-card"><div class="toolbar"><h2 style="margin:0;margin-right:auto">League standings</h2><button type="button" data-view="official" ${tableMode === "official" ? "disabled" : ""}>Official</button><button type="button" class="secondary" data-view="provisional" ${tableMode === "provisional" ? "disabled" : ""}>Provisional</button></div>${leagueTable(state[tableMode])}<p class="muted"><small>Points → frame difference → frames won → head-to-head points → head-to-head frame difference. A remaining tie requires a playoff.</small></p></section>
- <div class="two-col"><section class="card"><div class="eyebrow">Match night</div><h2 class="section-gap">Every frame counts.</h2><p class="muted">Captains submit their teams, record completed frames and confirm the result together.</p><a href="captain.html">Open the captain area →</a></section><section class="card"><div class="eyebrow">Season guide</div><h2 class="section-gap">Three handicap reviews.</h2><p class="muted">Reviews follow rounds 5, 10 and 15. A win difference of +2 or more reduces a handicap by 7; −2 or below increases it by 7.</p><a href="merit.html">Players, handicaps & merit →</a></section></div>`
+ <div class="two-col">${travellersCard()}<section class="card"><div class="eyebrow">Season guide</div><h2 class="section-gap">Three handicap reviews.</h2><p class="muted">Reviews follow rounds 5, 10 and 15. A win difference of +2 or more reduces a handicap by 7; −2 or below increases it by 7.</p><a href="merit.html">Players, handicaps & merit →</a></section></div>`
   );
 }
 function filters() {
