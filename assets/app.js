@@ -1,3 +1,4 @@
+import { breakTableRows } from "./break-table.js";
 import { homeAwayTotals } from "./standings-columns.js";
 import {
   client,
@@ -172,6 +173,10 @@ function renderResults() {
           "No results have been entered for the new season.",
         ))
   );
+}
+function renderBreakTable() {
+  const rows = breakTableRows(state.matches, state.players);
+  return `<section class="card"><h1>Break Table</h1>${rows.length ? `<div class="table-scroll"><table><caption class="screen-reader">Players ranked by number of breaks of 25 and over</caption><thead><tr><th scope="col">Pos</th><th scope="col">Player</th><th scope="col">Team</th><th scope="col" title="Number of breaks of 25 and over">25+</th><th scope="col">Breaks</th></tr></thead><tbody>${rows.map(player => `<tr><td>${player.position}</td><td><a href="player.html?player=${encodeURIComponent(player.id)}">${h(player.name)}</a></td><td>${h(teamName(player.team_id))}</td><td class="points">${player.breaks.length}</td><td>${player.breaks.join(", ")}</td></tr>`).join("")}</tbody></table></div>` : '<p class="muted">No breaks of 25 or more recorded yet.</p>'}</section>`;
 }
 function renderMerit() {
   const rows = state.merit.filter(
@@ -415,6 +420,7 @@ function render() {
     "fixtures.html": renderFixtures,
     "results.html": renderResults,
     "merit.html": renderMerit,
+    "breaks.html": renderBreakTable,
     "player.html": renderPlayer,
     "captain.html": renderCaptain,
     "admin.html": renderAdmin,
