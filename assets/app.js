@@ -1,3 +1,4 @@
+import { homeAwayTotals } from "./standings-columns.js";
 import {
   client,
   configured,
@@ -88,7 +89,12 @@ function status(m) {
         : '<span class="badge">Scheduled</span>';
 }
 function leagueTable(rows) {
-  return `<div class="table-scroll"><table><caption class="screen-reader">${tableMode === "official" ? "Official" : "Provisional"} league table</caption><thead><tr>${["Pos", "Team", "P", "W", "L", "FF", "FA", "FD", "Adj", "Pts"].map((t) => `<th scope="col">${t}</th>`).join("")}</tr></thead><tbody>${rows.map((r) => `<tr><td class="rank">${r.position}</td><td class="team-name"><a href="merit.html?team=${encodeURIComponent(r.id)}">${h(r.name)}</a></td>${[r.played, r.won, r.lost, r.ff, r.fa, r.fd, r.adjustment].map((n) => `<td>${n}</td>`).join("")}<td class="points">${r.points}</td></tr>`).join("")}</tbody></table></div>`;
+  const splits = homeAwayTotals(state.matches, tableMode === "provisional");
+  const columns = [["Pos", "Position"], ["Team", "Team"], ["P", "Matches played"], ["Home", "Matches played at home"], ["Away", "Matches played away"], ["FrW (H)", "Frames won at home"], ["FrW (A)", "Frames won away"], ["Bonus", "Total bonus points"], ["Pts", "Total points"]];
+  return `<div class="table-scroll"><table><caption class="screen-reader">${tableMode === "official" ? "Official" : "Provisional"} league table</caption><thead><tr>${columns.map(([label, description]) => `<th scope="col" title="${description}" aria-label="${description}">${label}</th>`).join("")}</tr></thead><tbody>${rows.map(r => {
+    const split = splits.get(r.id) || { home: 0, away: 0, framesHome: 0, framesAway: 0, bonus: 0 };
+    return `<tr><td class="rank">${r.position}</td><td class="team-name"><a href="merit.html?team=${encodeURIComponent(r.id)}">${h(r.name)}</a></td>${[r.played, split.home, split.away, split.framesHome, split.framesAway, split.bonus].map(n => `<td>${n}</td>`).join("")}<td class="points"${r.adjustment ? ` title="Includes ${h(r.adjustment)} adjustment points"` : ""}>${r.points}</td></tr>`;
+  }).join("")}</tbody></table></div>`;
 }
 function renderHome() {
   return (
