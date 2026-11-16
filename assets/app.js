@@ -1,3 +1,4 @@
+import { scorecardLocked, liveScoreMatches, amendmentChanges } from "./scorecards.js";
 import { nextCaptainFixture } from "./captain-fixture.js";
 import { breakTableRows } from "./break-table.js";
 import { homeAwayTotals } from "./standings-columns.js";
@@ -20,6 +21,7 @@ let state,
   dirty = false,
   recovery = ["invite", "recovery"].includes(authLinkType),
   tableMode = "official";
+const notifiedAmendments = new Set();
 let filterTeam = "",
   filterRound = "";
 const h = (value) =>
@@ -161,6 +163,24 @@ function renderFixtures() {
         ))
   );
 }
+function renderLiveScores() {
+  const matches = liveScoreMatches(filtered(state.matches));
+  return `<div class="live-heading"><h1>Live Scores</h1><span class="badge live">Auto-updating · agreed frames only</span></div>${filters()}${matches.length ? matches.map(liveScoreCard).join("") : '<section class="card empty"><strong>No matches live yet.</strong><p>Pairings appear when both captains submit their teams.</p></section>'}`;
+}
+function liveScoreCard(match) {
+  const totals = frameTotals(match);
+  const pairing = slot => {
+    const home = match.lineups.find(lineup => lineup.team_id === match.home_id).player_ids[slot - 1];
+    const away = match.lineups.find(lineup => lineup.team_id === match.away_id).player_ids[slot - 1];
+    const frame = match.frames.find(frame => frame.slot === slot && frame.accepted);
+    return `<div class="live-frame"><span class="live-slot" aria-label="Frame ${slot}">${slot}</span><span class="live-player ${frame?.winner === "home" ? "live-frame-winner" : ""}">${h(playerName(home))}</span><span class="live-frame-score" aria-label="${frame ? frame.is_walkover ? 'Awarded frame' : `Agreed score ${frame.home_points} to ${frame.away_points}` : 'Frame not yet agreed'}">${frame ? frame.is_walkover ? "Awarded" : `${frame.home_points}–${frame.away_points}` : "—"}</span><span class="live-player live-away ${frame?.winner === "away" ? "live-frame-winner" : ""}">${h(playerName(away))}</span></div>`;
+  };
+  return `<section class="card live-scorecard" aria-label="${h(teamName(match.home_id))} versus ${h(teamName(match.away_id))}"><div class="live-match-meta"><span>Round ${match.round} · ${date(match.date)}</span><span class="badge ${scorecardLocked(match) ? "" : "live"}">${scorecardLocked(match) ? "Confirmed · awaiting approval" : "In progress"}</span></div><div class="live-scoreline"><h2>${h(teamName(match.home_id))}<small>Home</small></h2><strong class="score" aria-label="Match score ${totals.home} to ${totals.away}">${totals.home}–${totals.away}</strong><h2>${h(teamName(match.away_id))}<small>Away</small></h2></div><div class="live-pairings">${Array.from({length:5}, (_, index) => pairing(index + 1)).join("")}</div><p class="live-agreed-count">${match.frames.filter(frame => frame.accepted).length} of 5 frames agreed</p></section>`;
+}
+function amendmentNotices(match) {
+  if (!match.amendments?.length) return "";
+  return `<details class="scorecard-amendments" open><summary>Score amendments (${match.amendments.length})</summary>${match.amendments.map(amendment => `<aside class="notice amendment"><strong>Frame ${amendment.slot} amended by ${h(teamName(amendment.team_id))}</strong><ul>${amendmentChanges(amendment).map(change => `<li>${h(change)}</li>`).join("")}</ul><small>${h(new Date(amendment.created_at).toLocaleString("en-GB"))} · ${match.frames.find(frame => frame.slot === amendment.slot)?.accepted ? "Corrected frame accepted by both captains." : "The opposing captain must accept the corrected frame."} Previous full-scorecard confirmations were cleared.</small></aside>`).join("")}</details>`;
+}
 function renderResults() {
   const games = filtered(state.matches)
     .filter((m) => m.status !== "scheduled")
@@ -271,9 +291,9 @@ function frameForm(m, slot) {
   const ap = m.lineups.find((l) => l.team_id === m.away_id).player_ids[
     slot - 1
   ];
-  return `<div class="frame"><div class="frame-title"><h3>Frame ${slot}: ${h(playerName(hp))} v ${h(playerName(ap))}</h3>${f ? `<span class="badge ${f.accepted ? "" : "pending"}">${f.accepted ? "Accepted" : "Awaiting opposing captain"}</span>` : ""}</div>
+  return `<div class="frame"><div class="frame-title"><h3>Frame ${slot}: ${h(playerName(hp))} v ${h(playerName(ap))}</h3>${f ? `<span class="badge ${f.accepted ? "" : "pending"}">${f.accepted ? "Agreed by both captains" : "Awaiting opposing captain"}</span>` : ""}</div>
  ${f && !f.accepted ? `<p><small>Entered by ${h(teamName(f.submitted_by))}. Pending scores are visible only to these captains and administrators.</small></p>` : ""}
- <form data-action="frame" data-match="${m.id}" data-revision="${m.revision}" data-slot="${slot}"><div class="form-grid"><label>${h(playerName(hp))} · HCP ${handicapAt(
+ <form data-action="frame" data-match="${m.id}" data-revision="${m.revision}" data-slot="${slot}"><fieldset ${f && state.scorecard_workflow !== 1 ? 'disabled title="Score corrections need the administrator’s scorecard update."' : ""}><div class="form-grid"><label>${h(playerName(hp))} · HCP ${handicapAt(
    state.players.find((p) => p.id === hp),
    state.handicaps,
    m.round,
@@ -290,8 +310,8 @@ function frameForm(m, slot) {
          m.home_id,
        )}</select></label>`
      : ""
- }<button>${f ? "Save correction" : "Save completed frame"}</button></form>
- ${f && !f.accepted && (admin() || f.submitted_by !== ownTeam()) ? `<form data-action="accept-frame" data-match="${m.id}" data-revision="${m.revision}" data-slot="${slot}" class="section-gap">${admin() ? `<input type="hidden" name="team" value="${f.submitted_by === m.home_id ? m.away_id : m.home_id}"><p><small>Historical entry: record the opposing captain’s agreement only after checking the original scorecard.</small></p>` : ""}<button class="secondary">Approve frame ${slot}</button></form>` : ""}</div>`;
+ }<button>${f ? "Save & accept correction" : "Save & accept frame"}</button></fieldset></form>
+ ${f && !f.accepted && (admin() || f.submitted_by !== ownTeam()) ? `<form data-action="accept-frame" data-match="${m.id}" data-revision="${m.revision}" data-slot="${slot}" class="section-gap">${admin() ? `<input type="hidden" name="team" value="${f.submitted_by === m.home_id ? m.away_id : m.home_id}"><p><small>Historical entry: record the opposing captain’s agreement only after checking the original scorecard.</small></p>` : ""}<button class="secondary">Accept frame ${slot}</button></form>` : ""}</div>`;
 }
 function substitutionForm(m) {
   return `<details class="section-gap"><summary>Request a substitution</summary><form data-action="substitute" data-match="${m.id}" data-revision="${m.revision}"><label>Team<select name="team" required>${options(
@@ -308,10 +328,11 @@ function substitutionForm(m) {
 }
 function privateCard(m) {
   const totals = frameTotals(m);
-  return `<details class="match" id="match-${m.id}" ${!admin() || location.hash === "#" + m.id ? "open" : ""}><summary class="match-head"><div><strong>${h(teamName(m.home_id))} v ${h(teamName(m.away_id))}</strong><div class="match-meta">Round ${m.round} · ${date(m.date)}</div></div><div class="row">${status(m)}<span class="score">${totals.home}–${totals.away}</span></div></summary><div class="match-body">
+  const locked = scorecardLocked(m);
+  return `<details class="match" id="match-${m.id}" ${!admin() || location.hash === "#" + m.id ? "open" : ""}><summary class="match-head"><div><strong>${h(teamName(m.home_id))} v ${h(teamName(m.away_id))}</strong><div class="match-meta">Round ${m.round} · ${date(m.date)}</div></div><div class="row">${status(m)}<span class="score">${totals.home}–${totals.away}</span></div></summary><div class="match-body">${amendmentNotices(m)}
  ${
-   m.status === "approved"
-     ? `<p>Official result. This scorecard is locked.</p>${lineupsPublic(m)}${admin() ? `<form data-action="reopen" data-match="${m.id}"><label>Reason for reopening<input name="reason" required minlength="5"></label><button class="secondary">Reopen for correction</button></form>` : ""}`
+   locked
+     ? `<p>Full scorecard confirmed. This scorecard is locked.</p>${lineupsPublic(m)}${admin() ? `<form data-action="reopen" data-match="${m.id}"><label>Reason for reopening<input name="reason" required minlength="5"></label><button class="secondary">Reopen for correction</button></form>` : ""}`
      : `${
          m.awarded_to
            ? `<p>Match awarded to <strong>${h(teamName(m.awarded_to))}</strong>: ${h(m.award_reason)}. League points ${totals.points.join("–")}; no merit wins or losses.</p>`
@@ -326,7 +347,7 @@ function privateCard(m) {
    .filter((t) => (t === m.home_id ? !m.home_confirmed : !m.away_confirmed))
    .map(
      (t) =>
-       `<form data-action="confirm" data-match="${m.id}" data-revision="${m.revision}" data-team="${t}"><label><input type="checkbox" required>I confirm the full scorecard${admin() ? " on behalf of " + h(teamName(t)) : ""}.</label><button ${!totals.complete ? "disabled" : ""}>Confirm ${h(teamName(t))} result</button></form>`,
+       `<form data-action="confirm" data-match="${m.id}" data-revision="${m.revision}" data-team="${t}"><label><input type="checkbox" required>I confirm the full scorecard${admin() ? " on behalf of " + h(teamName(t)) : ""}.</label><button ${!totals.complete || (m.substitutions || []).length ? "disabled" : ""}>Confirm ${h(teamName(t))} result</button></form>`,
    )
    .join(
      "",
@@ -386,6 +407,7 @@ function renderAdmin() {
       "Approve results, manage registrations and review new players. Handicap reviews run automatically when every match in a tranche is approved.",
     ) +
     accountBar() +
+    (state.scorecard_workflow === 1 ? '<p class="badge">Scorecard amendment protection active</p>' : '<div class="notice">Scorecard amendment protection needs the database update installed in Supabase. Live Scores is already available.</div>') +
     '<section class="card"><h2>2025–26 season</h2><p>Archived website and incomplete records from the previous season.</p><a class="button secondary" href="/seasons/2025-26/index.html">View 2025–26 archive</a></section>' +
     `<section class="card"><h2>Season setup</h2><p>${state.season.ready ? "Roster confirmed. Captain selections are open." : "Check the carried-forward player list, starting handicaps and team assignments before opening captain selections."}</p>${state.players
       .filter((p) => p.roster_note)
@@ -416,6 +438,7 @@ function render() {
     "index.html": renderHome,
     "fixtures.html": renderFixtures,
     "results.html": renderResults,
+    "live.html": renderLiveScores,
     "merit.html": renderMerit,
     "breaks.html": renderBreakTable,
     "player.html": renderPlayer,
@@ -434,6 +457,15 @@ function render() {
 }
 async function refresh(force = false) {
   const next = await loadSnapshot();
+  if (state && page === "captain.html") {
+    const known = new Set(state.matches.flatMap(match => (match.amendments || []).map(amendment => amendment.id)));
+    for (const amendment of next.matches.flatMap(match => match.amendments || [])) {
+      if (!known.has(amendment.id) && !notifiedAmendments.has(amendment.id)) {
+        notifiedAmendments.add(amendment.id);
+        toast(`Frame ${amendment.slot} amended by ${teamName(amendment.team_id)}. Review the change before accepting the corrected frame.`);
+      }
+    }
+  }
   if (
     !force &&
     (dirty || document.activeElement?.matches("input,select,textarea"))
@@ -562,6 +594,7 @@ main.addEventListener("submit", async (e) => {
         });
         break;
       case "frame": {
+        successMessage = "Frame saved. The opposing captain must accept this version.";
         const home = number(data, "home"),
           away = number(data, "away");
         if (home === away)
@@ -581,6 +614,7 @@ main.addEventListener("submit", async (e) => {
         break;
       }
       case "accept-frame":
+        successMessage = "Frame agreed by both captains. Live Scores has been updated.";
         await rpc("accept_frame", {
           ...base,
           p_slot: Number(form.dataset.slot),
@@ -765,7 +799,7 @@ async function boot() {
             true,
           ),
         );
-    }, 20000);
+    }, ["live.html", "captain.html"].includes(page) ? 10000 : 20000);
   } catch (error) {
     main.innerHTML =
       heading("Unable to load the season.", "Please try again shortly.") +
