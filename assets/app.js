@@ -74,7 +74,7 @@ function empty(title, text) {
 }
 function commonNotice() {
   return !configured
-    ? '<div class="notice">The new season is being prepared. Live scores and captain access will become available when setup is complete. <a href="seasons/2025-26/index.html">View the archived season</a>.</div>'
+    ? '<div class="notice">The new season is being prepared. Live scores and captain access will become available when setup is complete.</div>'
     : !state.season?.ready
       ? '<div class="notice">Season setup is in progress. The starting roster and handicaps must be checked before team selections open.</div>'
       : "";
@@ -390,6 +390,7 @@ function renderAdmin() {
       "Approve results, manage registrations and review new players. Handicap reviews run automatically when every match in a tranche is approved.",
     ) +
     accountBar() +
+    '<section class="card"><h2>2025–26 season</h2><p>Archived website and incomplete records from the previous season.</p><a class="button secondary" href="/seasons/2025-26/index.html">View 2025–26 archive</a></section>' +
     `<section class="card"><h2>Season setup</h2><p>${state.season.ready ? "Roster confirmed. Captain selections are open." : "Check the carried-forward player list, starting handicaps and team assignments before opening captain selections."}</p>${state.players
       .filter((p) => p.roster_note)
       .map(
