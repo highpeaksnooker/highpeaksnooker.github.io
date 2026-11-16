@@ -170,10 +170,6 @@ function renderResults() {
     .filter((m) => m.status !== "scheduled")
     .sort((a, b) => b.round - a.round);
   return (
-    heading(
-      "On the scorecard.",
-      "Public scores appear after the opposing captain accepts each frame. A result becomes official after both captains confirm and the administrator approves it.",
-    ) +
     filters() +
     (games.length
       ? games.map(publicCard).join("")
