@@ -95,12 +95,16 @@ function status(m) {
         ? '<span class="badge live">In progress · provisional</span>'
         : '<span class="badge">Scheduled</span>';
 }
+function currentTravellersPrize() {
+  return travellersPrize(state.matches, {seasonId:state.season.id, teamCount:state.teams.length, lastRound:state.season.last_round});
+}
 function leagueTable(rows) {
+  const prizeHolder = currentTravellersPrize()?.holder;
   const splits = homeAwayTotals(state.matches, tableMode === "provisional");
   const columns = [["Pos", "Position"], ["Team", "Team"], ["P", "Matches played"], ["Home", "Matches played at home"], ["Away", "Matches played away"], ["FrW (H)", "Frames won at home"], ["FrW (A)", "Frames won away"], ["Bonus", "Total bonus points"], ["Pts", "Total points"]];
   return `<div class="table-scroll"><table class="league-table"><caption class="screen-reader">${tableMode === "official" ? "Official" : "Provisional"} league table</caption><thead><tr>${columns.map(([label, description]) => `<th scope="col" title="${description}" aria-label="${description}">${label}</th>`).join("")}</tr></thead><tbody>${rows.map(r => {
     const split = splits.get(r.id) || { home: 0, away: 0, framesHome: 0, framesAway: 0, bonus: 0 };
-    return `<tr><td class="rank">${r.position}</td><td class="team-name"><a href="merit.html?team=${encodeURIComponent(r.id)}">${h(r.name)}</a></td>${[r.played, split.home, split.away, split.framesHome, split.framesAway, split.bonus].map(n => `<td>${n}</td>`).join("")}<td class="points"${r.adjustment ? ` title="Includes ${h(r.adjustment)} adjustment points"` : ""}>${r.points}</td></tr>`;
+    return `<tr><td class="rank">${r.position}</td><td class="team-name"><span class="team-prize-label"><a href="merit.html?team=${encodeURIComponent(r.id)}">${h(r.name)}</a>${r.id === prizeHolder ? '<span class="travellers-marker" role="img" aria-label="Travellers Prize holders" title="Travellers Prize holders">T</span>' : ""}</span></td>${[r.played, split.home, split.away, split.framesHome, split.framesAway, split.bonus].map(n => `<td>${n}</td>`).join("")}<td class="points"${r.adjustment ? ` title="Includes ${h(r.adjustment)} adjustment points"` : ""}>${r.points}</td></tr>`;
   }).join("")}</tbody></table></div>`;
 }
 function fixtureBanner() {
@@ -110,7 +114,7 @@ function fixtureBanner() {
   return `<section class="fixture-banner ${matches.length === 1 ? "is-single" : ""}" aria-label="Next fixtures" ${tickerPaused ? "data-paused" : ""}><div class="fixture-label"><strong>Next fixtures</strong><time datetime="${matches[0].date}">${date(matches[0].date)}</time></div><div class="fixture-window"><div class="fixture-track"><div class="fixture-set">${items(false)}</div><div class="fixture-set" aria-hidden="true">${items(true)}</div></div></div><button type="button" class="fixture-pause" data-ticker-pause aria-pressed="${tickerPaused}" aria-label="${tickerPaused ? "Resume" : "Pause"} fixture announcements">${tickerPaused ? "Play" : "Pause"}</button></section>`;
 }
 function travellersCard() {
-  const prize = travellersPrize(state.matches, {seasonId:state.season.id, teamCount:state.teams.length, lastRound:state.season.last_round});
+  const prize = currentTravellersPrize();
   if (!prize) return "";
   const trophy = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M7 3h10v5a5 5 0 0 1-10 0V3ZM7 5H4v2a4 4 0 0 0 4 4m9-6h3v2a4 4 0 0 1-4 4M12 13v5m-4 3h8m-7-3h6v3H9z"/></svg>';
   return `<section class="card travellers-card"><div class="eyebrow">${trophy}Travellers Prize</div><h2 class="section-gap">${h(teamName(prize.holder))}</h2><p class="muted">${prize.seasonComplete ? "Season winners" : "Current holders"} · ${h(state.season.name)}</p>${prize.blocked ? '<p class="muted">Awaiting confirmation of the prize journey.</p>' : ""}<details><summary>Prize journey</summary><ol class="travellers-journey">${prize.journey.map(step => `<li><strong>${h(teamName(step.holder))}</strong><small>${step.starting ? "Started the season as the previous holders" : `Round ${step.round} · ${date(step.date)}<br>${h(step.score)} against ${h(teamName(step.previous))}`}</small></li>`).join("")}</ol>${prize.nextFixture ? `<p class="travellers-next"><a href="fixtures.html?team=${encodeURIComponent(prize.holder)}&amp;round=${prize.nextFixture.round}">Next defence: ${h(teamName(prize.nextFixture.home_id))} v ${h(teamName(prize.nextFixture.away_id))} · ${date(prize.nextFixture.date)}</a></p>` : ""}</details></section>`;
