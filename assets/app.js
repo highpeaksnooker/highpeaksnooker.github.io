@@ -1,3 +1,4 @@
+import { nextCaptainFixture } from "./captain-fixture.js";
 import { breakTableRows } from "./break-table.js";
 import { homeAwayTotals } from "./standings-columns.js";
 import {
@@ -307,7 +308,7 @@ function substitutionForm(m) {
 }
 function privateCard(m) {
   const totals = frameTotals(m);
-  return `<details class="match" id="match-${m.id}" ${location.hash === "#" + m.id ? "open" : ""}><summary class="match-head"><div><strong>${h(teamName(m.home_id))} v ${h(teamName(m.away_id))}</strong><div class="match-meta">Round ${m.round} · ${date(m.date)}</div></div><div class="row">${status(m)}<span class="score">${totals.home}–${totals.away}</span></div></summary><div class="match-body">
+  return `<details class="match" id="match-${m.id}" ${!admin() || location.hash === "#" + m.id ? "open" : ""}><summary class="match-head"><div><strong>${h(teamName(m.home_id))} v ${h(teamName(m.away_id))}</strong><div class="match-meta">Round ${m.round} · ${date(m.date)}</div></div><div class="row">${status(m)}<span class="score">${totals.home}–${totals.away}</span></div></summary><div class="match-body">
  ${
    m.status === "approved"
      ? `<p>Official result. This scorecard is locked.</p>${lineupsPublic(m)}${admin() ? `<form data-action="reopen" data-match="${m.id}"><label>Reason for reopening<input name="reason" required minlength="5"></label><button class="secondary">Reopen for correction</button></form>` : ""}`
@@ -356,20 +357,15 @@ function renderCaptain() {
         "You are signed in, but the administrator has not assigned your team or role yet.",
       ) + `<button data-logout>Sign out</button>`
     );
-  const games = state.matches.filter(
-    (m) => admin() || [m.home_id, m.away_id].includes(ownTeam()),
-  );
+  const games = admin() ? state.matches : nextCaptainFixture(state.matches, ownTeam());
   return (
-    heading(
-      "Ready for match night.",
-      "Select your team, enter completed frames and check the opposing captain’s entries. Scores are saved only when you receive confirmation.",
-    ) +
+    heading(admin() ? "Match management." : "Your next match.", "") +
     accountBar() +
     (games.length
       ? games.map(privateCard).join("")
       : empty(
-          "Your fixtures will appear here.",
-          "The administrator is preparing the new season schedule.",
+          "No matches awaiting entry.",
+          "Your next fixture will appear here when scheduled.",
         ))
   );
 }
