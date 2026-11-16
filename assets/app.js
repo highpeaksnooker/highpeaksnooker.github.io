@@ -1,3 +1,5 @@
+import { upcomingFixtures, seasonHighestBreak, resultCardData } from "./league-features.js?v=20261116";
+import { showResultCard } from "./result-card.js?v=20261116";
 import { scorecardLocked, liveScoreMatches, amendmentChanges, agreedBreaks } from "./scorecards.js?v=break-agreement-20261116";
 import { nextCaptainFixture } from "./captain-fixture.js";
 import { breakTableRows } from "./break-table.js";
@@ -22,6 +24,7 @@ let state,
   recovery = ["invite", "recovery"].includes(authLinkType),
   tableMode = "official";
 const notifiedAmendments = new Set();
+let tickerPaused = false;
 let filterTeam = "",
   filterRound = "";
 const h = (value) =>
@@ -99,8 +102,15 @@ function leagueTable(rows) {
     return `<tr><td class="rank">${r.position}</td><td class="team-name"><a href="merit.html?team=${encodeURIComponent(r.id)}">${h(r.name)}</a></td>${[r.played, split.home, split.away, split.framesHome, split.framesAway, split.bonus].map(n => `<td>${n}</td>`).join("")}<td class="points"${r.adjustment ? ` title="Includes ${h(r.adjustment)} adjustment points"` : ""}>${r.points}</td></tr>`;
   }).join("")}</tbody></table></div>`;
 }
+function fixtureBanner() {
+  const matches = upcomingFixtures(state.matches);
+  if (!matches.length) return "";
+  const items = hidden => matches.map(match => `<a href="fixtures.html?round=${match.round}&amp;team=${encodeURIComponent(match.home_id)}" ${hidden ? 'tabindex="-1"' : ''}>${h(teamName(match.home_id))} <span>v</span> ${h(teamName(match.away_id))}</a>`).join("");
+  return `<section class="fixture-banner ${matches.length === 1 ? "is-single" : ""}" aria-label="Next fixtures" ${tickerPaused ? "data-paused" : ""}><div class="fixture-label"><strong>Next fixtures</strong><time datetime="${matches[0].date}">${date(matches[0].date)}</time></div><div class="fixture-window"><div class="fixture-track"><div class="fixture-set">${items(false)}</div><div class="fixture-set" aria-hidden="true">${items(true)}</div></div></div><button type="button" class="fixture-pause" data-ticker-pause aria-pressed="${tickerPaused}" aria-label="${tickerPaused ? "Resume" : "Pause"} fixture announcements">${tickerPaused ? "Play" : "Pause"}</button></section>`;
+}
 function renderHome() {
   return (
+    fixtureBanner() +
     ` <section class="card standings-card"><div class="toolbar"><h2 style="margin:0;margin-right:auto">League standings</h2><button type="button" data-view="official" ${tableMode === "official" ? "disabled" : ""}>Official</button><button type="button" class="secondary" data-view="provisional" ${tableMode === "provisional" ? "disabled" : ""}>Provisional</button></div>${leagueTable(state[tableMode])}<p class="muted"><small>Points → frame difference → frames won → head-to-head points → head-to-head frame difference. A remaining tie requires a playoff.</small></p></section>
  <div class="two-col"><section class="card"><div class="eyebrow">Match night</div><h2 class="section-gap">Every frame counts.</h2><p class="muted">Captains submit their teams, record completed frames and confirm the result together.</p><a href="captain.html">Open the captain area →</a></section><section class="card"><div class="eyebrow">Season guide</div><h2 class="section-gap">Three handicap reviews.</h2><p class="muted">Reviews follow rounds 5, 10 and 15. A win difference of +2 or more reduces a handicap by 7; −2 or below increases it by 7.</p><a href="merit.html">Players, handicaps & merit →</a></section></div>`
   );
@@ -119,7 +129,7 @@ function publicCard(m) {
   const totals = frameTotals(m);
   return `<details class="match" id="match-${m.id}"><summary class="match-head"><div><strong>${h(teamName(m.home_id))} <span class="muted">v</span> ${h(teamName(m.away_id))}</strong><div class="match-meta">Round ${m.round} · ${date(m.date)}</div></div><div class="row">${status(m)}<span class="score">${totals.home}–${totals.away}</span></div></summary><div class="match-body">
  ${m.awarded_to ? `<p>Match awarded to ${h(teamName(m.awarded_to))}. League points: ${totals.points.join("–")}. No individual merit results.</p>` : `<p class="muted">Frames won shown above. League points ${totals.complete ? "including win bonus" : "so far"}: <strong>${totals.points.join("–")}</strong>.</p>`}
- ${lineupsPublic(m)}${m.frames
+ ${m.status === "approved" ? `<div class="result-share"><button class="secondary" type="button" data-share-result="${h(m.id)}">Share result</button></div>` : ""}${lineupsPublic(m)}${m.frames
    .filter((f) => f.accepted)
    .map(
      (f) =>
@@ -201,7 +211,8 @@ function renderResults() {
 }
 function renderBreakTable() {
   const rows = breakTableRows(state.matches, state.players);
-  return `<section class="card"><h1>Break Table</h1>${rows.length ? `<div class="table-scroll"><table><caption class="screen-reader">Players ranked by number of breaks of 25 and over</caption><thead><tr><th scope="col">Pos</th><th scope="col">Player</th><th scope="col">Team</th><th scope="col" title="Number of breaks of 25 and over">25+</th><th scope="col">Breaks</th></tr></thead><tbody>${rows.map(player => `<tr><td>${player.position}</td><td><a href="player.html?player=${encodeURIComponent(player.id)}">${h(player.name)}</a></td><td>${h(teamName(player.team_id))}</td><td class="points">${player.breaks.length}</td><td>${player.breaks.join(", ")}</td></tr>`).join("")}</tbody></table></div>` : '<p class="muted">No breaks of 25 or more recorded yet.</p>'}</section>`;
+  const highest = seasonHighestBreak(rows);
+  return `<section class="card"><h1>Break Table</h1>${rows.length ? `<div class="table-scroll"><table><caption class="screen-reader">Players ranked by number of breaks of 25 and over</caption><thead><tr><th scope="col">Pos</th><th scope="col">Player</th><th scope="col">Team</th><th scope="col" title="Number of breaks of 25 and over">25+</th><th scope="col">Breaks</th></tr></thead><tbody>${rows.map(player => `<tr><td>${player.position}</td><td><a href="player.html?player=${encodeURIComponent(player.id)}">${h(player.name)}</a></td><td>${h(teamName(player.team_id))}</td><td class="points">${player.breaks.length}</td><td>${player.breaks.map(value => value === highest ? `<strong class="season-high-break" title="Season’s highest break" aria-label="Season’s highest break: ${value}">${value}</strong>` : String(value)).join(", ")}</td></tr>`).join("")}</tbody></table></div>` : '<p class="muted">No breaks of 25 or more recorded yet.</p>'}</section>`;
 }
 function renderMerit() {
   const rows = state.merit.filter(
@@ -459,6 +470,7 @@ async function refresh(force = false) {
   ) {
     return;
   }
+  if (!force && state && JSON.stringify(next) === JSON.stringify(state)) return;
   state = next;
   render();
 }
@@ -493,6 +505,28 @@ main.addEventListener("click", async (e) => {
   const button = e.target.closest("button");
   if (!button) return;
   try {
+    if (button.hasAttribute("data-ticker-pause")) {
+      tickerPaused = !tickerPaused;
+      const banner = button.closest(".fixture-banner");
+      banner.toggleAttribute("data-paused", tickerPaused);
+      button.setAttribute("aria-pressed", String(tickerPaused));
+      button.setAttribute("aria-label", `${tickerPaused ? "Resume" : "Pause"} fixture announcements`);
+      button.textContent = tickerPaused ? "Play" : "Pause";
+      return;
+    }
+    if (button.dataset.shareResult) {
+      if (busy) return;
+      busy = true; button.disabled = true;
+      try {
+        const id = button.dataset.shareResult;
+        await refresh(true);
+        const match = state.matches.find(match => match.id === id);
+        const data = resultCardData(match, state.teams, state.players, state.season.name);
+        const trigger = [...main.querySelectorAll("[data-share-result]")].find(button => button.dataset.shareResult === id);
+        await showResultCard(data, trigger);
+      } finally { busy = false; if (button.isConnected) button.disabled = false; }
+      return;
+    }
     if (button.dataset.view) {
       tableMode = button.dataset.view;
       render();
@@ -762,6 +796,7 @@ window.addEventListener("beforeunload", (e) => {
 async function boot() {
   try {
     filterTeam = new URLSearchParams(location.search).get("team") || "";
+    filterRound = new URLSearchParams(location.search).get("round") || "";
     if (client) {
       const result = await client.auth.getSession();
       session = result.data.session;
