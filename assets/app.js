@@ -4,7 +4,7 @@ import { showResultCard } from "./result-card.js?v=20261116";
 import { scorecardLocked, liveScoreMatches, amendmentChanges, agreedBreaks } from "./scorecards.js?v=break-agreement-20261116";
 import { nextCaptainFixture } from "./captain-fixture.js";
 import { breakTableRows } from "./break-table.js";
-import { homeAwayTotals } from "./standings-columns.js";
+import { homeAwayTotals, rankStandings } from "./standings-columns.js?v=league-tiebreaks-20261118";
 import {
   client,
   configured,
@@ -103,6 +103,7 @@ function currentTravellersPrize() {
   return travellersPrize(state.matches, {seasonId:state.season.id, teamCount:state.teams.length, lastRound:state.season.last_round});
 }
 function leagueTable(rows) {
+  rows = rankStandings(rows, state.matches, tableMode === "provisional");
   const prizeHolder = currentTravellersPrize()?.holder;
   const splits = homeAwayTotals(state.matches, tableMode === "provisional");
   const columns = [["Pos", "Position"], ["Team", "Team"], ["P", "Matches played"], ["Home", "Matches played at home"], ["Away", "Matches played away"], ["FrW (H)", "Frames won at home"], ["FrW (A)", "Frames won away"], ["Bonus", "Total bonus points"], ["Pts", "Total points"]];
@@ -126,7 +127,7 @@ function travellersCard() {
 function renderHome() {
   return (
     fixtureBanner() +
-    ` <section class="card standings-card"><div class="toolbar"><h2 style="margin:0;margin-right:auto">League standings</h2><button type="button" data-view="official" ${tableMode === "official" ? "disabled" : ""}>Official</button><button type="button" class="secondary" data-view="provisional" ${tableMode === "provisional" ? "disabled" : ""}>Provisional</button></div>${leagueTable(state[tableMode])}<p class="muted"><small>Points → frame difference → frames won → head-to-head points → head-to-head frame difference. A remaining tie requires a playoff.</small></p></section>
+    ` <section class="card standings-card"><div class="toolbar"><h2 style="margin:0;margin-right:auto">League standings</h2><button type="button" data-view="official" ${tableMode === "official" ? "disabled" : ""}>Official</button><button type="button" class="secondary" data-view="provisional" ${tableMode === "provisional" ? "disabled" : ""}>Provisional</button></div>${leagueTable(state[tableMode])}<p class="muted"><small>Points → bonus points → frames won → head-to-head league points across completed home and away meetings. Teams still level share a position.</small></p></section>
  <div class="two-col">${travellersCard()}<section class="card"><div class="eyebrow">Season guide</div><h2 class="section-gap">Three handicap reviews.</h2><p class="muted">Reviews follow rounds 5, 10 and 15. A win difference of +2 or more reduces a handicap by 7; −2 or below increases it by 7.</p><a href="merit.html">Players, handicaps & merit →</a></section></div>`
   );
 }
