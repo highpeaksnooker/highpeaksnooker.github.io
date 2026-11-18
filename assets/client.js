@@ -55,3 +55,28 @@ export async function manageCaptainAccount(team, password) {
     );
   return data;
 }
+
+export async function captainPinStatus() {
+  if (!configured) return {ready:false,teams:[]};
+  const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),4000);
+  try {
+    const response=await fetch(config.supabaseUrl+'/functions/v1/captain-pin',{headers:{apikey:config.supabasePublishableKey},signal:controller.signal,cache:'no-store'});
+    if(!response.ok)return {ready:false,teams:[]};
+    const data=await response.json();
+    return {ready:data.ready===true,teams:Array.isArray(data.teams)?data.teams.filter(team=>typeof team==='string'):[]};
+  }catch{return {ready:false,teams:[]};}finally{clearTimeout(timeout);}
+}
+async function pinAction(action,team,pin) {
+  if(!client)throw new Error('Sign-in is not connected.');
+  const {data,error}=await client.functions.invoke('captain-pin',{body:{action,team,...(pin===undefined?{}:{pin})}});
+  if(error){let message='PIN sign-in is unavailable. Please try again.';if(error.context instanceof Response){const body=await error.context.json().catch(()=>null);if(typeof body?.error==='string')message=body.error;}throw new Error(message);}
+  if(data?.error)throw new Error(data.error);return data;
+}
+export async function signInCaptainPin(team,pin) {
+  if(!/^\d{4}$/.test(pin))throw new Error('Enter your four-digit team PIN.');
+  const data=await pinAction('login',team,pin);
+  if(!data?.session?.access_token||!data.session.refresh_token)throw new Error('Sign-in could not be confirmed.');
+  const result=await client.auth.setSession(data.session);if(result.error)throw result.error;return result;
+}
+export const setCaptainPin=(team,pin)=>pinAction('set',team,pin);
+export const unlockCaptainPin=team=>pinAction('unlock',team);

@@ -12,7 +12,8 @@ import {
   rpc,
   authLinkType,
   manageCaptainAccount,
-} from "./client.js";
+  captainPinStatus, signInCaptainPin, setCaptainPin, unlockCaptainPin,
+} from "./client.js?v=captain-pin-20261118";
 import { handicapAt, parseBreaks, frameTotals } from "./rules.js";
 import { loginEmail, captainUsername } from "./login-identities.js";
 import { pageFromPath } from "./routes.js";
@@ -25,6 +26,8 @@ let state,
   recovery = ["invite", "recovery"].includes(authLinkType),
   tableMode = "official";
 const notifiedAmendments = new Set();
+let pinStatus = {ready:false,teams:[]};
+let captainLoginTeam = "";
 let tickerPaused = false;
 let filterTeam = "",
   filterRound = "";
@@ -144,10 +147,13 @@ function publicCard(m) {
    .filter((f) => f.accepted)
    .map(
      (f) =>
-       `<div class="frame"><div class="frame-title"><span>Frame ${f.slot}: ${h(playerName(f.home_player))} v ${h(playerName(f.away_player))}</span><strong>${f.is_walkover ? "Awarded frame" : f.home_points+"–"+f.away_points}</strong></div><small>Winner: ${h(playerName(f.winner === "home" ? f.home_player : f.away_player))}${f.is_walkover ? " · Counts for merit and handicap appearances" : ""}${f.home_breaks.length ? " · Home breaks: " + h(f.home_breaks.join(", ")) : ""}${f.away_breaks.length ? " · Away breaks: " + h(f.away_breaks.join(", ")) : ""}</small></div>`,
+       `<div class="frame"><div class="frame-title"><span>Frame ${f.slot}: ${playerLink(f.home_player)} v ${playerLink(f.away_player)}</span><strong>${f.is_walkover ? "Awarded frame" : f.home_points+"–"+f.away_points}</strong></div><small>Winner: ${h(playerName(f.winner === "home" ? f.home_player : f.away_player))}${f.is_walkover ? " · Counts for merit and handicap appearances" : ""}${f.home_breaks.length ? " · Home breaks: " + h(f.home_breaks.join(", ")) : ""}${f.away_breaks.length ? " · Away breaks: " + h(f.away_breaks.join(", ")) : ""}</small></div>`,
    )
    .join("")}
  ${!m.frames.some((f) => f.accepted) && !m.awarded_to ? '<p class="muted">No mutually approved frames yet.</p>' : ""}</div></details>`;
+}
+function playerLink(id) {
+  return id ? `<a href="player.html?player=${encodeURIComponent(id)}">${h(playerName(id))}</a>` : "No player";
 }
 function lineupsPublic(m) {
   if (m.lineups.length !== 2) return "";
@@ -158,7 +164,7 @@ function lineupsPublic(m) {
           .find((l) => l.team_id === t)
           .player_ids.map(
             (id) =>
-              id === null ? '<li>No player</li>' : `<li>${h(playerName(id))} <small>(${handicapAt(
+              id === null ? '<li>No player</li>' : `<li>${playerLink(id)} <small>(${handicapAt(
                 state.players.find((p) => p.id === id),
                 state.handicaps,
                 m.round,
@@ -264,7 +270,7 @@ function renderPlayer() {
       h(teamName(p.team_id)) + ` · Current handicap ${p.current_hcp}`,
       '<a href="merit.html">← All players</a>',
     ) +
-    `<section class="card"><h2>Approved league frames</h2>${rows.length ? rows.map(({ m, f }) => `<div class="frame"><strong>Round ${m.round} · ${date(m.date)}</strong><p>${h(playerName(f.home_player))} ${f.home_points}–${f.away_points} ${h(playerName(f.away_player))}</p><small>Winner: ${h(playerName(f.winner === "home" ? f.home_player : f.away_player))}</small></div>`).join("") : empty("No approved appearances yet.", "Frame history will appear here.")}</section><section class="card"><h2>Handicap history</h2><p>Season starting handicap: ${p.initial_hcp}</p>${state.handicaps
+    `<section class="card"><h2>Approved league frames</h2>${rows.length ? rows.map(({ m, f }) => `<div class="frame"><strong>Round ${m.round} · ${date(m.date)}</strong><p>${h(playerName(f.home_player))} ${f.is_walkover ? "— awarded frame —" : f.home_points+"–"+f.away_points} ${h(playerName(f.away_player))}</p><small>Winner: ${h(playerName(f.winner === "home" ? f.home_player : f.away_player))}</small>${(f.home_player === id ? f.home_breaks : f.away_breaks).length ? `<p class="player-game-breaks"><strong>Breaks:</strong> ${h((f.home_player === id ? f.home_breaks : f.away_breaks).join(", "))}</p>` : ""}</div>`).join("") : empty("No approved appearances yet.", "Frame history will appear here.")}</section><section class="card"><h2>Handicap history</h2><p>Season starting handicap: ${p.initial_hcp}</p>${state.handicaps
       .filter((x) => x.player_id === id)
       .map(
         (x) =>
@@ -274,17 +280,13 @@ function renderPlayer() {
   );
 }
 function login() {
-  const administrator = page === "admin.html";
-  const recoveryOptions = administrator
-    ? `<details class="section-gap"><summary>Forgot your password?</summary><form data-action="reset"><label>Administrator email<input name="email" type="email" autocomplete="email" required></label><button class="secondary" ${!configured ? "disabled" : ""}>Send reset link</button></form></details>`
-    : `<details class="section-gap"><summary>Forgot your team password?</summary><p>Ask the league administrator to reset it. Your team does not need an email inbox.</p></details><p><a href="admin.html">Administrator sign in</a></p>`;
-  return (
-    heading(
-      page === "admin.html" ? "League administration." : "Your match night.",
-      "Sign in with the account assigned by the league administrator.",
-    ) +
-    `<section class="card login"><h2>Welcome back</h2><form data-action="login"><label>${administrator ? "Administrator email" : "Team username"}<input type="${administrator ? "email" : "text"}" name="identifier" required autocomplete="username" autocapitalize="none" spellcheck="false" ${administrator ? "" : 'placeholder="e.g. marple or hayfield1"'}></label><label>Password<input type="password" name="password" required autocomplete="current-password" minlength="8"></label><button ${!configured ? "disabled" : ""}>Sign in</button></form>${recoveryOptions}<p><small>Accounts are created by the league. There is no public registration. Sign out when using a shared device.</small></p></section>`
-  );
+  if (page === "admin.html") return heading("League administration.", "") + `<section class="card login"><h2>Administrator sign in</h2><form data-action="login"><label>Administrator email<input type="email" name="identifier" required autocomplete="username"></label><label>Password<input type="password" name="password" required autocomplete="current-password" minlength="8"></label><button ${!configured ? "disabled" : ""}>Sign in</button></form><details class="section-gap"><summary>Forgot your password?</summary><form data-action="reset"><label>Administrator email<input name="email" type="email" autocomplete="email" required></label><button class="secondary">Send reset link</button></form></details></section>`;
+  const usePin=pinStatus.ready && pinStatus.teams.includes(captainLoginTeam);
+  return heading("Captain sign in", "") + `<section class="card login"><h2>Your team</h2><form data-action="${usePin ? "captain-pin-login" : "login"}"><label>Team<select id="captain-login-team" name="team" required autocomplete="organization">${teamOptions(captainLoginTeam,"Choose your team")}</select></label>${usePin ? '<label>Four-digit PIN<input class="captain-pin-input" type="password" name="pin" required inputmode="numeric" pattern="[0-9]{4}" minlength="4" maxlength="4" autocomplete="current-password"></label>' : '<label>Team password<input type="password" name="password" required autocomplete="current-password" minlength="8"></label>'}<button ${!configured ? "disabled" : ""}>Sign in</button></form><details class="section-gap"><summary>Forgot your ${usePin ? "PIN" : "password"}?</summary><p>Ask the league administrator to reset your team’s ${usePin ? "PIN" : "password"}.</p></details></section>`;
+}
+function captainPinManagement() {
+  if(!pinStatus.ready)return '<details class="card"><summary>Four-digit team PINs</summary><p>PIN sign-in needs its one-time server setup. Existing team passwords still work.</p></details>';
+  return `<details class="card"><summary>Four-digit team PINs</summary><p>Set a team’s PIN to switch it from password sign-in. Captains choose their team and enter four digits.</p><form data-action="captain-pin-set"><label>Team<select id="captain-pin-team" name="team" required>${teamOptions()}</select></label><div class="form-grid"><label>New four-digit PIN<input type="password" name="pin" inputmode="numeric" pattern="[0-9]{4}" minlength="4" maxlength="4" required autocomplete="new-password"></label><label>Repeat PIN<input type="password" name="repeatPin" inputmode="numeric" pattern="[0-9]{4}" minlength="4" maxlength="4" required autocomplete="new-password"></label></div><p><small>Avoid repeated digits, 1234, 4321, 1212 and 2580.</small></p><label><input type="checkbox" required>This replaces the selected team’s existing login.</label><button>Save team PIN</button><button type="button" class="secondary" data-unlock-pin>Unlock sign-in attempts</button></form><p><small>Five failed attempts cause a 15-minute pause; ten cause a one-hour pause. After fifteen, an administrator must unlock or reset the PIN. PINs are never displayed or added to the activity log.</small></p></details>`;
 }
 function passwordForm() {
   return `<section class="card login"><h2>Set your password</h2><form data-action="password"><label>New password<input type="password" name="password" autocomplete="new-password" required minlength="12"></label><button>Save password</button></form></section>`;
@@ -416,6 +418,7 @@ function renderAdmin() {
       "Approve results, manage registrations and review new players. Handicap reviews run automatically when every match in a tranche is approved.",
     ) +
     accountBar() +
+    captainPinManagement() +
     (state.scorecard_workflow === 1 ? '<p class="badge">Scorecard amendment protection active</p>' : '<div class="notice">Scorecard amendment protection needs the database update installed in Supabase. Live Scores is already available.</div>') +
     '<section class="card"><h2>2025–26 season</h2><p>Archived website and incomplete records from the previous season.</p><a class="button secondary" href="/seasons/2025-26/index.html">View 2025–26 archive</a></section>' +
     `<section class="card"><h2>Season setup</h2><p>${state.season.ready ? "Roster confirmed. Captain selections are open." : "Check the carried-forward player list, starting handicaps and team assignments before opening captain selections."}</p>${state.players
@@ -427,7 +430,7 @@ function renderAdmin() {
         "",
       )}${!state.season.ready ? '<form data-action="ready"><label><input type="checkbox" required>I have checked all starting registrations and handicaps.</label><button>Confirm roster & open selections</button></form>' : ""}<div class="row section-gap"><button class="secondary" data-export="backup">Download league backup</button><button class="secondary" data-export="players">Download roster CSV</button></div></section>
  <section class="card"><h2>New-player reviews <span class="badge">${pending.length} pending</span></h2>${pending.length ? pending.map((n) => `<form data-action="review-player" data-player="${n.player_id}"><p>${h(n.message)} <small>${n.emailed_at ? "Email sent" : "Email awaiting delivery"}</small></p><div class="form-grid"><label>Reviewed handicap<input type="number" name="hcp" min="-28" max="35" required value="${state.players.find((p) => p.id === n.player_id)?.current_hcp ?? 14}"></label><label>Reason<input name="reason" required minlength="5"></label></div><button>Save manual review</button></form>`).join("") : '<p class="muted">No players currently need a manual review. New players are flagged after their third approved league appearance.</p>'}</section>
- <details class="card"><summary>Team logins & password resets</summary><p>Create a team login or replace its password. The captain signs in with the team username; no email inbox is needed.</p><form data-action="captain-account"><label>Team<select name="team" id="captain-account-team" required>${teamOptions()}</select></label><p>Username: <strong id="captain-account-username">Choose a team</strong></p><div class="form-grid"><label>New password<input type="password" name="newPassword" autocomplete="new-password" minlength="12" maxlength="128" required></label><label>Repeat new password<input type="password" name="repeatPassword" autocomplete="new-password" minlength="12" maxlength="128" required></label></div><label><input type="checkbox" required>I understand this will replace the password if the team account already exists.</label><button>Save team login</button></form><p><small>Share the username and password privately with the captain. Passwords are not displayed or stored in the league activity log.</small></p></details>
+ <details class="card"><summary>Team logins & password resets</summary><p>Create a team login or replace its password. The captain signs in with the team username; no email inbox is needed.</p><form data-action="captain-account"><label>Team<select name="team" id="captain-account-team" required>${options(state.teams.filter(team => !pinStatus.teams.includes(team.id)), "id", "name")}</select></label><p>Username: <strong id="captain-account-username">Choose a team</strong></p><div class="form-grid"><label>New password<input type="password" name="newPassword" autocomplete="new-password" minlength="12" maxlength="128" required></label><label>Repeat new password<input type="password" name="repeatPassword" autocomplete="new-password" minlength="12" maxlength="128" required></label></div><label><input type="checkbox" required>I understand this will replace the password if the team account already exists.</label><button>Save team login</button></form><p><small>Share the username and password privately with the captain. Passwords are not displayed or stored in the league activity log.</small></p></details>
  <details class="card"><summary>Add a fixture</summary><form data-action="fixture"><div class="form-grid"><label>Round<input type="number" name="round" min="1" max="18" required></label><label>Date<input name="date" type="date" required></label><label>Home team<select name="home" required>${teamOptions()}</select></label><label>Away team<select name="away" required>${teamOptions()}</select></label></div><button>Add fixture</button></form><p><small>Add the actual fixtures. Each team can play once per round. Enter earlier scorecards in round order so handicap reviews apply correctly.</small></p></details>
  <details class="card"><summary>Register a player</summary><form data-action="add-player"><div class="form-grid"><label>Full name<input name="name" required minlength="2" maxlength="120"></label><label>Team<select name="team" required>${teamOptions()}</select></label><label>Starting handicap<input type="number" name="hcp" min="-28" max="35" value="14" required></label></div><label><input type="checkbox" name="new" checked>New to the league — manual review after three appearances</label><button>Register player</button></form></details>
  <details class="card"><summary>Update a registration</summary><form data-action="registration"><label>Player<select name="player" id="registration-player" required>${options(state.players, "id", "name")}</select></label><label>Full name<input name="name" required minlength="2" maxlength="120"></label><label>Team<select name="team" required>${teamOptions()}</select></label><label><input type="checkbox" name="active" checked>Active this season</label><label><input type="checkbox" name="new">New to the league</label><button>Save registration</button></form><p><small>Registration details can be changed here before the player is selected for a match.</small></p></details>
@@ -489,6 +492,11 @@ main.addEventListener("input", (e) => {
   if (e.target.closest("form")) dirty = true;
 });
 main.addEventListener("change", (e) => {
+  if (e.target.id === "captain-login-team") {
+    captainLoginTeam = e.target.value;
+    try { window.localStorage.setItem("league-captain-team", captainLoginTeam); } catch {}
+    dirty = false; render(); return;
+  }
   if (e.target.id === "captain-account-team") {
     document.getElementById("captain-account-username").textContent =
       captainUsername(e.target.value) || "Choose a team";
@@ -516,6 +524,13 @@ main.addEventListener("click", async (e) => {
   const button = e.target.closest("button");
   if (!button) return;
   try {
+    if (button.hasAttribute("data-unlock-pin")) {
+      const team = button.closest("form").querySelector('[name="team"]').value;
+      if (!team) throw new Error("Choose a team first.");
+      button.disabled = true;
+      try { await unlockCaptainPin(team); toast("Team PIN sign-in unlocked."); } finally { button.disabled = false; }
+      return;
+    }
     if (button.hasAttribute("data-ticker-pause")) {
       tickerPaused = !tickerPaused;
       const banner = button.closest(".fixture-banner");
@@ -590,9 +605,22 @@ main.addEventListener("submit", async (e) => {
         successMessage = `Team login saved. Username: ${result.username}. Share the password privately with the captain.`;
         break;
       }
+      case "captain-pin-login": {
+        const result = await signInCaptainPin(get("team"), get("pin"));
+        session = result.data.session;
+        break;
+      }
+      case "captain-pin-set": {
+        if (get("pin") !== get("repeatPin")) throw new Error("The two PINs do not match.");
+        if (!/^\d{4}$/.test(get("pin"))) throw new Error("Enter exactly four digits.");
+        await setCaptainPin(get("team"), get("pin"));
+        pinStatus = await captainPinStatus();
+        successMessage = "Team PIN saved. Share it privately with the captain.";
+        break;
+      }
       case "login": {
         const result = await client.auth.signInWithPassword({
-          email: loginEmail(get("identifier")),
+          email: loginEmail(page === "admin.html" ? get("identifier") : captainUsername(get("team"))),
           password: get("password"),
         });
         if (result.error) throw result.error;
@@ -806,6 +834,10 @@ window.addEventListener("beforeunload", (e) => {
 });
 async function boot() {
   try {
+    if (["captain.html", "admin.html"].includes(page)) {
+      try { pinStatus = await captainPinStatus(); } catch {}
+      try { captainLoginTeam = window.localStorage.getItem("league-captain-team") || ""; } catch {}
+    }
     filterTeam = new URLSearchParams(location.search).get("team") || "";
     filterRound = new URLSearchParams(location.search).get("round") || "";
     if (client) {
