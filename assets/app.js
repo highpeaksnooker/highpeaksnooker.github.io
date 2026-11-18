@@ -31,6 +31,7 @@ let captainLoginTeam = "";
 let tickerPaused = false;
 let filterTeam = "",
   filterRound = "";
+let adminMatchStatus = "approval";
 const h = (value) =>
   String(value ?? "").replace(
     /[&<>"']/g,
@@ -298,7 +299,7 @@ function lineupForm(m, t) {
   const l = m.lineups.find((l) => l.team_id === t);
   if (l)
     return `<p class="badge">${h(teamName(t))}: lineup submitted and locked</p>`;
-  return `<form data-action="lineup" data-match="${m.id}" data-revision="${m.revision}" data-team="${t}"><h3>${h(teamName(t))}: select your five</h3><p><small>Playing order determines pairings. Your list stays hidden until both teams submit.</small></p>${Array.from(
+  return `<form data-action="lineup" data-match="${m.id}" data-revision="${m.revision}" data-team="${t}"><h3>${h(teamName(t))}: select your five</h3><p><small>Playing order determines pairings. ${admin() ? "Save each team’s playing order before entering scores." : "Your list stays hidden until both teams submit."}</small></p>${Array.from(
     { length: 5 },
     (_, i) =>
       `<label>Frame ${i + 1}<select name="player${i + 1}" required>${options(
@@ -311,18 +312,18 @@ function lineupForm(m, t) {
   )}<button ${!state.season.ready ? "disabled" : ""}>Submit & lock team</button></form>`;
 }
 function frameEditor(m, slot, f, hp, ap) {
-  return `<form data-action="frame" data-match="${m.id}" data-revision="${m.revision}" data-slot="${slot}"><fieldset ${f && state.scorecard_workflow !== 1 ? 'disabled title="Score corrections need the administrator’s scorecard update."' : ""}><div class="form-grid"><label>${h(playerName(hp))} · HCP ${handicapAt(state.players.find(player => player.id === hp), state.handicaps, m.round)}<input type="number" name="home" required min="0" max="1000" value="${f?.home_points ?? ""}" inputmode="numeric"></label><label>${h(playerName(ap))} · HCP ${handicapAt(state.players.find(player => player.id === ap), state.handicaps, m.round)}<input type="number" name="away" required min="0" max="1000" value="${f?.away_points ?? ""}" inputmode="numeric"></label><label>Home breaks<input name="homeBreaks" value="${h(f?.home_breaks.join(", ") || "")}" placeholder="e.g. 25, 32" inputmode="numeric"></label><label>Away breaks<input name="awayBreaks" value="${h(f?.away_breaks.join(", ") || "")}" placeholder="e.g. 28" inputmode="numeric"></label></div><p><small>Enter final scores including the handicap, and any breaks.</small></p>${admin() ? `<label>Record on behalf of<select name="team" required>${options(state.teams.filter(team => [m.home_id, m.away_id].includes(team.id)), "id", "name", f?.submitted_by || m.home_id)}</select></label>` : ""}<button>${f ? "Save amendment" : "Save frame"}</button></fieldset></form>`;
+  return `<form data-action="frame" data-match="${m.id}" data-revision="${m.revision}" data-slot="${slot}"><fieldset ${f && state.scorecard_workflow !== 1 ? 'disabled title="Score corrections need the administrator’s scorecard update."' : ""}><div class="form-grid"><label>${h(playerName(hp))} · HCP ${handicapAt(state.players.find(player => player.id === hp), state.handicaps, m.round)}<input type="text" name="home" required pattern="[0-9]{1,4}" maxlength="4" value="${f?.home_points ?? ""}" inputmode="numeric"></label><label>${h(playerName(ap))} · HCP ${handicapAt(state.players.find(player => player.id === ap), state.handicaps, m.round)}<input type="text" name="away" required pattern="[0-9]{1,4}" maxlength="4" value="${f?.away_points ?? ""}" inputmode="numeric"></label><label>Home breaks<input name="homeBreaks" value="${h(f?.home_breaks.join(", ") || "")}" placeholder="e.g. 25, 32" inputmode="numeric"></label><label>Away breaks<input name="awayBreaks" value="${h(f?.away_breaks.join(", ") || "")}" placeholder="e.g. 28" inputmode="numeric"></label></div><p><small>Enter final scores including the handicap, and any breaks.</small></p><button>${f ? "Save amendment" : "Save frame"}</button></fieldset></form>`;
 }
 function frameForm(m, slot) {
   const f = m.frames.find(frame => frame.slot === slot);
   if (f?.is_walkover) return `<div class="frame"><h3>Frame ${slot}: awarded to ${h(playerName(f.winner === "home" ? f.home_player : f.away_player))}</h3><p>Counts as a merit win and handicap appearance. No opponent or numerical score was recorded.</p></div>`;
   const hp = m.lineups.find(lineup => lineup.team_id === m.home_id).player_ids[slot - 1];
   const ap = m.lineups.find(lineup => lineup.team_id === m.away_id).player_ids[slot - 1];
-  const title = `<div class="frame-title"><h3>Frame ${slot}: ${h(playerName(hp))} v ${h(playerName(ap))}</h3>${f ? `<span class="badge ${f.accepted ? "" : "pending"}">${f.accepted ? "Agreed by both captains" : "Awaiting opposing captain"}</span>` : ""}</div>`;
+  const title = `<div class="frame-title"><h3>Frame ${slot}: ${h(playerName(hp))} v ${h(playerName(ap))}</h3>${f ? `<span class="badge ${f.accepted ? "" : "pending"}">${f.accepted ? "Verified" : "Awaiting agreement"}</span>` : ""}</div>`;
   if (!f) return `<div class="frame">${title}${frameEditor(m, slot, null, hp, ap)}</div>`;
   const review = `<div class="frame-score-review"><div><strong>${h(playerName(hp))}</strong><span>${f.home_points}</span><small>Breaks: ${h(f.home_breaks.join(", ") || "None")}</small></div><div><strong>${h(playerName(ap))}</strong><span>${f.away_points}</span><small>Breaks: ${h(f.away_breaks.join(", ") || "None")}</small></div></div>`;
-  const agree = !f.accepted && (admin() || f.submitted_by !== ownTeam()) ? `<form data-action="accept-frame" data-match="${m.id}" data-revision="${m.revision}" data-slot="${slot}" class="frame-agree">${admin() ? `<input type="hidden" name="team" value="${f.submitted_by === m.home_id ? m.away_id : m.home_id}">` : ""}<p><small>Save your agreement with both the frame score and recorded breaks.</small></p><button>Save &amp; agree</button></form>` : "";
-  return `<div class="frame">${title}${review}${!f.accepted ? `<p><small>Saved by ${h(teamName(f.submitted_by))}. Awaiting the other captain’s agreement.</small></p>` : ""}${agree}<details class="frame-edit"><summary>Amend score or breaks</summary>${frameEditor(m, slot, f, hp, ap)}</details></div>`;
+  const agree = !admin() && !f.accepted && f.submitted_by !== ownTeam() ? `<form data-action="accept-frame" data-match="${m.id}" data-revision="${m.revision}" data-slot="${slot}" class="frame-agree">${admin() ? `<input type="hidden" name="team" value="${f.submitted_by === m.home_id ? m.away_id : m.home_id}">` : ""}<p><small>Save your agreement with both the frame score and recorded breaks.</small></p><button>Save &amp; agree</button></form>` : "";
+  return `<div class="frame">${title}${review}${!f.accepted && !admin() ? `<p><small>Saved by ${h(teamName(f.submitted_by))}. Awaiting the other captain’s agreement.</small></p>` : ""}${agree}<details class="frame-edit"><summary>Amend score or breaks</summary>${frameEditor(m, slot, f, hp, ap)}</details></div>`;
 }
 function substitutionForm(m) {
   return `<details class="section-gap"><summary>Request a substitution</summary><form data-action="substitute" data-match="${m.id}" data-revision="${m.revision}"><label>Team<select name="team" required>${options(
@@ -347,11 +348,11 @@ function privateCard(m) {
      : `${
          m.awarded_to
            ? `<p>Match awarded to <strong>${h(teamName(m.awarded_to))}</strong>: ${h(m.award_reason)}. League points ${totals.points.join("–")}; no merit wins or losses.</p>`
-           : `${admin() ? `<div class="notice">Historical entry: record selections and captain agreements from the original scorecard. All administrator actions are recorded.</div>` : ""}${m.lineups.length === 2 ? lineupsPublic(m) : [...new Set(admin() ? [m.home_id, m.away_id] : [ownTeam()])].map((t) => lineupForm(m, t)).join("")}${m.lineups.length === 2 ? Array.from({ length: 5 }, (_, i) => frameForm(m, i + 1)).join("") : ""}${!admin() && m.lineups.length === 2 ? substitutionForm(m) : ""}`
+           : `${admin() ? `<div class="notice">Administrator entry: save each frame, then confirm and approve the complete match card.</div>` : ""}${m.lineups.length === 2 ? lineupsPublic(m) : [...new Set(admin() ? [m.home_id, m.away_id] : [ownTeam()])].map((t) => lineupForm(m, t)).join("")}${m.lineups.length === 2 ? Array.from({ length: 5 }, (_, i) => frameForm(m, i + 1)).join("") : ""}${!admin() && m.lineups.length === 2 ? substitutionForm(m) : ""}`
        }
  ${(m.substitutions || []).map((s) => `<div class="notice">Substitution request: ${h(teamName(s.team_id))}, frame ${s.slot} → ${h(playerName(s.player_id))}${s.proposed_by !== ownTeam() && !admin() ? `<form data-action="accept-substitution" data-match="${m.id}" data-revision="${m.revision}" data-substitution="${s.id}"><button>Approve substitution</button></form>` : ""}</div>`).join("")}
  ${(m.substitutions || []).map((s) => `<form data-action="cancel-substitution" data-match="${m.id}" data-revision="${m.revision}" data-substitution="${s.id}"><button class="secondary">${s.proposed_by === ownTeam() ? "Withdraw" : "Decline"} substitution request</button></form>`).join("")}
- <div class="card section-gap"><h3>Final match confirmation</h3><p>${h(teamName(m.home_id))}: ${m.home_confirmed ? "confirmed" : "awaiting confirmation"}<br>${h(teamName(m.away_id))}: ${m.away_confirmed ? "confirmed" : "awaiting confirmation"}</p>${(admin()
+ ${admin() ? adminFinalCard(m, totals) : `<div class="card section-gap"><h3>Final match confirmation</h3><p>${h(teamName(m.home_id))}: ${m.home_confirmed ? "confirmed" : "awaiting confirmation"}<br>${h(teamName(m.away_id))}: ${m.away_confirmed ? "confirmed" : "awaiting confirmation"}</p>${(admin()
    ? [m.home_id, m.away_id]
    : [ownTeam()]
  )
@@ -362,7 +363,7 @@ function privateCard(m) {
    )
    .join(
      "",
-   )}${admin() && m.home_confirmed && m.away_confirmed ? `<form data-action="approve" data-match="${m.id}" data-revision="${m.revision}"><button>Approve official result</button></form>` : ""}</div>
+   )}${admin() && m.home_confirmed && m.away_confirmed ? `<form data-action="approve" data-match="${m.id}" data-revision="${m.revision}"><button>Approve official result</button></form>` : ""}</div>`}
  ${
    admin()
      ? `<details><summary>Fixture date or walkover</summary><form data-action="reschedule" data-match="${m.id}"><label>Rearranged date<input name="date" type="date" required value="${m.date}"></label><label>Reason<input name="reason" required minlength="5"></label><p><small>The match must be played within its original tranche.</small></p><button class="secondary">Save date</button></form>${
@@ -401,6 +402,36 @@ function renderCaptain() {
         ))
   );
 }
+function adminFinalCard(m, totals) {
+  return `<div class="card section-gap"><h3>Confirm match card</h3><form data-action="admin-finalize" data-match="${m.id}" data-revision="${m.revision}"><label><input type="checkbox" required>I have checked the players, scores and breaks.</label><button ${!(m.awarded_to || m.frames.length===5) || m.substitutions?.length ? "disabled" : ""}>Confirm &amp; approve match card</button></form></div>`;
+}
+function adminScorecards() {
+  const matches=filtered(state.matches).filter(m => adminMatchStatus === "completed" ? m.status === "approved" : adminMatchStatus === "approval" ? m.status !== "approved" && m.home_confirmed && m.away_confirmed : m.status !== "approved" && !(m.home_confirmed && m.away_confirmed));
+  return `<section id="admin-scorecards"><h2>Match scorecards & approvals</h2><label>Show<select id="admin-status-filter">${[["approval","Needs approval"],["incomplete","Not completed"],["completed","Completed"]].map(([value,label])=>`<option value="${value}" ${adminMatchStatus===value ? "selected" : ""}>${label}</option>`).join("")}</select></label>${filters()}${matches.map(privateCard).join("") || '<p class="card">No matches in this view.</p>'}</section>`;
+}
+async function adminMatch(id) {
+  if (!admin()) throw new Error("Administrator access required.");
+  state = await loadSnapshot();
+  const match=state.matches.find(m=>m.id===id);
+  if (!match) throw new Error("Match not found. Refresh and retry.");
+  return match;
+}
+async function verifyAdminFrame(id, slot) {
+  const m=await adminMatch(id), f=m.frames.find(f=>f.slot===slot);
+  if (!f) throw new Error("Frame was not saved. Refresh and retry.");
+  if (!f.accepted) await rpc("accept_frame", {p_match:id,p_revision:m.revision,p_slot:slot,p_team:f.submitted_by===m.home_id ? m.away_id : m.home_id});
+}
+async function finalizeAdminCard(id) {
+  let m=await adminMatch(id);
+  if(m.status==="approved") return;
+  for(const f of m.frames) if(!f.accepted) await verifyAdminFrame(id,f.slot);
+  for(const side of ["home","away"]) {
+    m=await adminMatch(id);
+    if(!m[side+"_confirmed"]) await rpc("confirm_match",{p_match:id,p_revision:m.revision,p_team:m[side+"_id"]});
+  }
+  m=await adminMatch(id);
+  await rpc("approve_match",{p_match:id,p_revision:m.revision});
+}
 function renderAdmin() {
   if (!session) return login();
   if (recovery) return passwordForm();
@@ -418,6 +449,7 @@ function renderAdmin() {
       "Approve results, manage registrations and review new players. Handicap reviews run automatically when every match in a tranche is approved.",
     ) +
     accountBar() +
+    adminScorecards() +
     captainPinManagement() +
     (state.scorecard_workflow === 1 ? '<p class="badge">Scorecard amendment protection active</p>' : '<div class="notice">Scorecard amendment protection needs the database update installed in Supabase. Live Scores is already available.</div>') +
     '<section class="card"><h2>2025–26 season</h2><p>Archived website and incomplete records from the previous season.</p><a class="button secondary" href="/seasons/2025-26/index.html">View 2025–26 archive</a></section>' +
@@ -437,7 +469,7 @@ function renderAdmin() {
  <details class="card"><summary>Correct a starting handicap</summary><form data-action="initial-hcp"><label>Player<select name="player" required>${options(state.players, "id", "name")}</select></label><label>Starting handicap<input name="hcp" type="number" required min="-28" max="35"></label><button>Save starting handicap</button></form><p><small>Available only before this player is selected for a match.</small></p></details>
  <details class="card"><summary>Add a points adjustment</summary><form data-action="adjustment"><label>Team<select name="team" required>${teamOptions()}</select></label><label>Points (negative for a penalty)<input name="points" type="number" min="-100" max="100" required></label><label>Reason<input name="reason" required minlength="5"></label><button>Record adjustment</button></form></details>
  <section class="card"><h2>Handicap tranche reviews</h2>${[5, 10, 15].map((e) => `<p>Rounds ${e - 4}–${e}: <span class="badge ${state.reviews.some((r) => r.end_round === e) ? "" : "pending"}">${state.reviews.some((r) => r.end_round === e) ? "Completed · effective from round " + (e + 1) : "Waiting for all matches to be approved"}</span></p>`).join("")}<p><small>Rounds 16–18 do not produce a handicap change.</small></p></section>
- <h2>Match scorecards & approvals</h2>${filters()}${filtered(state.matches).map(privateCard).join("") || empty("No fixtures added yet.", "Add the season fixtures above, then enter your existing scorecards.")}
+
  <details class="card"><summary>Recent activity</summary>${state.audit.map((a) => `<p><strong>${h(a.action.replaceAll("_", " "))}</strong> · ${h(new Date(a.created_at).toLocaleString("en-GB"))}<br><small>Account ${h(a.actor || "system")} ${h(JSON.stringify(a.details))}</small></p>`).join("") || "<p>No activity recorded.</p>"}</details>`
   );
 }
@@ -492,6 +524,7 @@ main.addEventListener("input", (e) => {
   if (e.target.closest("form")) dirty = true;
 });
 main.addEventListener("change", (e) => {
+  if(e.target.id === "admin-status-filter") { adminMatchStatus=e.target.value; render(); return; }
   if (e.target.id === "captain-login-team") {
     captainLoginTeam = e.target.value;
     try { window.localStorage.setItem("league-captain-team", captainLoginTeam); } catch {}
@@ -657,6 +690,7 @@ main.addEventListener("submit", async (e) => {
         successMessage = "Score and breaks saved. The other captain must review and save their agreement.";
         const home = number(data, "home"),
           away = number(data, "away");
+        if (![home, away].every(n=>Number.isInteger(n) && n>=0 && n<=1000) || !/^[0-9]+$/.test(get("home")) || !/^[0-9]+$/.test(get("away"))) throw new Error("Enter whole-number scores between 0 and 1000.");
         if (home === away)
           throw new Error(
             "A completed snooker frame needs a winner. Enter the final score after any respotted black.",
@@ -669,10 +703,15 @@ main.addEventListener("submit", async (e) => {
           p_winner: home > away ? "home" : "away",
           p_home_breaks: parseBreaks(get("homeBreaks")),
           p_away_breaks: parseBreaks(get("awayBreaks")),
-          p_team: get("team") || null,
+          p_team: admin() ? state.matches.find(m=>m.id===base.p_match).home_id : null,
         });
+        if(admin()) { await verifyAdminFrame(base.p_match,Number(form.dataset.slot)); successMessage="Frame and breaks saved and verified by administrator."; }
         break;
       }
+      case "admin-finalize":
+        await finalizeAdminCard(base.p_match);
+        successMessage="Match card approved. Official results have been updated.";
+        break;
       case "accept-frame":
         successMessage = "Score and breaks agreed by both captains. Live Scores has been updated.";
         await rpc("accept_frame", {
@@ -783,7 +822,7 @@ main.addEventListener("submit", async (e) => {
     }
     dirty = false;
     await refresh(true);
-    if (action === "frame" && state.matches.find(match => match.id === base.p_match)?.frames.find(frame => frame.slot === Number(form.dataset.slot))?.accepted) successMessage = "Score and breaks agreed by both captains. Live Scores has been updated.";
+    if (!admin() && action === "frame" && state.matches.find(match => match.id === base.p_match)?.frames.find(frame => frame.slot === Number(form.dataset.slot))?.accepted) successMessage = "Score and breaks agreed by both captains. Live Scores has been updated.";
     toast(successMessage);
   } catch (error) {
     toast(
