@@ -3,7 +3,7 @@ import { upcomingFixtures, seasonHighestBreak, resultCardData } from "./league-f
 import { showResultCard } from "./result-card.js?v=20261116";
 import { scorecardLocked, liveScoreMatches, amendmentChanges, agreedBreaks } from "./scorecards.js?v=break-agreement-20261116";
 import { nextCaptainFixture } from "./captain-fixture.js";
-import { breakTableRows } from "./break-table.js";
+import { breakTableRows, rankMerit } from "./break-table.js?v=rankings-20261119";
 import { homeAwayTotals, rankStandings } from "./standings-columns.js?v=league-tiebreaks-20261118";
 import {
   client,
@@ -231,10 +231,10 @@ function renderResults() {
 function renderBreakTable() {
   const rows = breakTableRows(state.matches, state.players);
   const highest = seasonHighestBreak(rows);
-  return `<section class="card"><h1>Break Table</h1>${rows.length ? `<div class="table-scroll"><table><caption class="screen-reader">Players ranked by number of breaks of 25 and over</caption><thead><tr><th scope="col">Pos</th><th scope="col">Player</th><th scope="col">Team</th><th scope="col" title="Number of breaks of 25 and over">25+</th><th scope="col">Breaks</th></tr></thead><tbody>${rows.map(player => `<tr><td>${player.position}</td><td><a href="player.html?player=${encodeURIComponent(player.id)}">${h(player.name)}</a></td><td>${h(teamName(player.team_id))}</td><td class="points">${player.breaks.length}</td><td>${player.breaks.map(value => value === highest ? `<strong class="season-high-break" title="Season’s highest break" aria-label="Season’s highest break: ${value}">${value}</strong>` : String(value)).join(", ")}</td></tr>`).join("")}</tbody></table></div>` : '<p class="muted">No breaks of 25 or more recorded yet.</p>'}</section>`;
+  return `<section class="card"><h1>Break Table</h1>${rows.length ? `<div class="table-scroll"><table><caption class="screen-reader">Season’s highest break holders first, then players ranked by number of breaks of 25 and over</caption><thead><tr><th scope="col">Pos</th><th scope="col">Player</th><th scope="col">Team</th><th scope="col" title="Number of breaks of 25 and over">25+</th><th scope="col">Breaks</th></tr></thead><tbody>${rows.map(player => `<tr><td>${player.position}</td><td><a href="player.html?player=${encodeURIComponent(player.id)}">${h(player.name)}</a></td><td>${h(teamName(player.team_id))}</td><td class="points">${player.breaks.length}</td><td>${player.breaks.map(value => value === highest ? `<strong class="season-high-break" title="Season’s highest break" aria-label="Season’s highest break: ${value}">${value}</strong>` : String(value)).join(", ")}</td></tr>`).join("")}</tbody></table></div>` : '<p class="muted">No breaks of 25 or more recorded yet.</p>'}</section>`;
 }
 function renderMerit() {
-  const rows = state.merit.filter(
+  const rows = rankMerit(state.merit).filter(
     (p) => !filterTeam || p.team_id === filterTeam,
   );
   return (
@@ -242,7 +242,7 @@ function renderMerit() {
       "Players & merit.",
       "",
     ) +
-    `<div class="toolbar"><label>Team<select id="team-filter">${teamOptions(filterTeam, "All teams")}</select></label><button type="button" class="secondary" data-export="players">Download roster CSV</button></div><section class="card"><h2>Individual merit</h2>${rows.length ? `<div class="table-scroll"><table><thead><tr>${["Pos", "Player", "Team", "P", "W", "L", "±", "25+", "High"].map((x) => `<th>${x}</th>`).join("")}</tr></thead><tbody>${rows.map((p) => `<tr><td>${p.position}${p.tied ? " =" : ""}</td><td><a href="player.html?player=${encodeURIComponent(p.id)}">${h(p.name)}</a></td><td>${h(teamName(p.team_id))}</td>${[p.played, p.won, p.lost, p.diff, p.breaks25, p.high].map((n) => `<td>${n}</td>`).join("")}</tr>`).join("")}</tbody></table></div>` : empty("The season starts here.", "Rankings will appear when match results are approved.")}<p><small>Tie-breaks: wins, win difference, highest break of at least 25, number of 25+ breaks, most matches played, then a playoff.</small></p></section><section class="card"><h2>Registered players & handicaps</h2>${!state.season.ready ? '<p class="warning-text">Proposed carry-forward roster — awaiting administrator verification.</p>' : ""}<div class="table-scroll"><table><thead><tr><th>Player</th><th>Team</th><th>Starting HCP</th><th>Current HCP</th><th>Review</th></tr></thead><tbody>${state.players
+    `<div class="toolbar"><label>Team<select id="team-filter">${teamOptions(filterTeam, "All teams")}</select></label><button type="button" class="secondary" data-export="players">Download roster CSV</button></div><section class="card"><h2>Individual merit</h2>${rows.length ? `<div class="table-scroll"><table><thead><tr>${["Pos", "Player", "Team", "P", "W", "L", "±", "25+", "High"].map((x) => `<th>${x}</th>`).join("")}</tr></thead><tbody>${rows.map((p) => `<tr><td>${p.position}${p.tied ? " =" : ""}</td><td><a href="player.html?player=${encodeURIComponent(p.id)}">${h(p.name)}</a></td><td>${h(teamName(p.team_id))}</td>${[p.played, p.won, p.lost, p.diff, p.breaks25, p.high].map((n) => `<td>${n}</td>`).join("")}</tr>`).join("")}</tbody></table></div>` : empty("The season starts here.", "Rankings will appear when match results are approved.")}<p><small>Tie-breaks: wins → win difference → number of 25+ breaks → highest break. Players still level share a position.</small></p></section><section class="card"><h2>Registered players & handicaps</h2>${!state.season.ready ? '<p class="warning-text">Proposed carry-forward roster — awaiting administrator verification.</p>' : ""}<div class="table-scroll"><table><thead><tr><th>Player</th><th>Team</th><th>Starting HCP</th><th>Current HCP</th><th>Review</th></tr></thead><tbody>${state.players
       .filter((p) => !filterTeam || p.team_id === filterTeam)
       .map(
         (p) =>
