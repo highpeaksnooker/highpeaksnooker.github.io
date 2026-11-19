@@ -22,13 +22,26 @@ export async function rpc(name, params = {}) {
   if (error) throw new Error(error.message);
   return data;
 }
+export async function loadSeasonCatalog() {
+  if (!configured) return {installed:false};
+  try { const catalog=await rpc("season_catalog");if(catalog.active_season){try{window.localStorage.setItem("league-active-season",catalog.active_season);}catch{}}return catalog; } catch { return {installed:false}; }
+}
 export async function loadSnapshot() {
-  if (configured) return rpc("league_snapshot", { p_season: config.season });
-  const response = await fetch("/data/new-season.json");
-  if (!response.ok)
-    throw new Error(
-      "The season information could not be loaded. Please try again.",
-    );
+  if (configured) {
+    const lifecycle=await loadSeasonCatalog();
+    let lastSeason;try{lastSeason=window.localStorage.getItem("league-active-season");}catch{}
+    const snapshot=await rpc("league_snapshot", {p_season:lifecycle.active_season || lastSeason || config.season});
+    snapshot.lifecycle=lifecycle;
+    if(lifecycle.installed && snapshot.membership?.role === "admin") {
+      try {
+        snapshot.seasonClose=await rpc("season_close_preview",{p_season:snapshot.season.id});
+        snapshot.previousSeasonCloses=await Promise.all((lifecycle.archives||[]).map(season=>rpc("season_close_preview",{p_season:season.id})));
+      } catch { snapshot.seasonClose=null; }
+    }
+    return snapshot;
+  }
+  const response=await fetch("/data/new-season.json");
+  if(!response.ok)throw new Error("The season information could not be loaded. Please try again.");
   return response.json();
 }
 

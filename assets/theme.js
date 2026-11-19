@@ -45,3 +45,9 @@
   enhanceTables();
   if (main && window.MutationObserver) new window.MutationObserver(enhanceTables).observe(main, {childList:true, subtree:true});
 })();
+
+// Resolve the active season after the administrator opens a new one.
+import('./client.js?v=season-lifecycle-20261119').then(async ({loadSeasonCatalog})=>{
+ const catalog=await loadSeasonCatalog();
+ if(catalog.active_season)document.querySelectorAll('.season-chip').forEach(node=>node.textContent=catalog.active_season.replace('-','–')+' season');
+}).catch(()=>{});

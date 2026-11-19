@@ -1,3 +1,4 @@
+import { seasonClosePanel, handleSeasonAction } from "./season-admin.js?v=20261119";
 import { travellersPrize } from "./travellers.js?v=20261116";
 import { upcomingFixtures, seasonHighestBreak, resultCardData } from "./league-features.js?v=20261116";
 import { showResultCard } from "./result-card.js?v=20261116";
@@ -13,7 +14,7 @@ import {
   authLinkType,
   manageCaptainAccount,
   captainPinStatus, signInCaptainPin, setCaptainPin, unlockCaptainPin,
-} from "./client.js?v=captain-pin-20261118";
+} from "./client.js?v=season-lifecycle-20261119";
 import { handicapAt, parseBreaks, frameTotals } from "./rules.js";
 import { loginEmail, captainUsername } from "./login-identities.js";
 import { pageFromPath } from "./routes.js";
@@ -78,7 +79,7 @@ function toast(message, error = false) {
   }, 9000);
 }
 function heading(title, description, extra = "") {
-  return `<div class="heading"><div><div class="eyebrow">2026–27 season</div><h1>${title}</h1>${description ? `<p class="intro">${description}</p>` : ""}</div>${extra}</div>`;
+  return `<div class="heading"><div><div class="eyebrow">${h(state?.season?.name || "2026–27")} season</div><h1>${title}</h1>${description ? `<p class="intro">${description}</p>` : ""}</div>${extra}</div>`;
 }
 function empty(title, text) {
   return `<div class="empty"><strong>${title}</strong>${text}</div>`;
@@ -100,7 +101,7 @@ function status(m) {
         : '<span class="badge">Scheduled</span>';
 }
 function currentTravellersPrize() {
-  return travellersPrize(state.matches, {seasonId:state.season.id, teamCount:state.teams.length, lastRound:state.season.last_round});
+  return travellersPrize(state.matches, {seasonId:state.season.id, startingHolder:state.season.travellers_start || undefined, teamCount:state.teams.length, lastRound:state.season.last_round});
 }
 function leagueTable(rows) {
   rows = rankStandings(rows, state.matches, tableMode === "provisional");
@@ -188,7 +189,7 @@ function renderFixtures() {
           "Fixtures will appear here.",
           state.matches.length
             ? "No fixtures match your filters."
-            : "The administrator will add the 2026–27 schedule.",
+            : "The administrator will add the season schedule.",
         ))
   );
 }
@@ -451,6 +452,7 @@ function renderAdmin() {
     ) +
     accountBar() +
     adminScorecards() +
+    seasonClosePanel(state) +
     captainPinManagement() +
     (state.scorecard_workflow === 1 ? '<p class="badge">Scorecard amendment protection active</p>' : '<div class="notice">Scorecard amendment protection needs the database update installed in Supabase. Live Scores is already available.</div>') +
     '<section class="card"><h2>2025–26 season</h2><p>Archived website and incomplete records from the previous season.</p><a class="button secondary" href="/seasons/2025-26/index.html">View 2025–26 archive</a></section>' +
@@ -475,6 +477,7 @@ function renderAdmin() {
   );
 }
 function render() {
+  if(state?.season?.name) document.querySelectorAll(".season-chip").forEach(node=>node.textContent=state.season.name+" season");
   const open = [...document.querySelectorAll("details[id][open]")].map(
     (e) => e.id,
   );
@@ -629,6 +632,12 @@ main.addEventListener("submit", async (e) => {
   let successMessage = "Saved successfully.";
   try {
     switch (action) {
+      case "close-season":
+      case "archive-competitions":
+        if(!admin())throw new Error("Administrator access required.");
+        await handleSeasonAction(action,form,data,rpc);
+        successMessage=action === "close-season" ? "Season archived. The new season is open for roster checks and fixtures." : "Confirmed competition winners added to History.";
+        break;
       case "captain-account": {
         if (get("newPassword") !== get("repeatPassword"))
           throw new Error("The two passwords do not match.");

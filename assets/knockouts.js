@@ -1,8 +1,9 @@
-import { client, configured, rpc } from './client.js';
+import { client, configured, rpc, loadSeasonCatalog } from './client.js?v=season-lifecycle-20261119';
 import { buildBracket, roundNames } from './knockout-model.js';
 
 const main = document.querySelector('main');
 const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let catalog={installed:false}, season="2026-27";
 let data, records = [], revisions = {}, isAdmin = false, connected = false, saving = false;
 let selected = new URLSearchParams(location.search).get('competition') || 'handicap-singles';
 const date = s => new Date(s + 'T12:00:00').toLocaleDateString('en-GB', { day:'numeric',month:'short',year:'numeric' });
@@ -17,6 +18,7 @@ async function loadResults() {
   if (!configured) return;
   try {
     const result = await rpc('knockout_snapshot', { p_season: data.season });
+    if(catalog.installed && result.competitions.every(c=>Array.isArray(c.slots))) {data.competitions=result.competitions;data.draw_version=result.draw_version;}
     if (result.draw_version !== data.draw_version) throw new Error('The knockout draw is being updated. Refresh shortly.');
     records = result.results; revisions = Object.fromEntries(result.competitions.map(c => [c.id,c.revision])); isAdmin = result.is_admin; connected = true;
   } catch (error) {
@@ -29,6 +31,9 @@ async function loadResults() {
   }
 }
 function render() {
+  document.querySelectorAll(".season-chip").forEach(node=>node.textContent=(catalog.active_season||season).replace("-","–")+" season");
+  const seasonFilter=catalog.installed ? `<label>Season<select id="ko-season">${catalog.seasons.map(s=>`<option value="${s.id}" ${s.id===season ? "selected" : ""}>${esc(s.name)}${s.archived ? " · previous league season" : ""}</option>`).join("")}</select></label>` : "";
+  if(!data.competitions.length){main.innerHTML=`<h1>Knockout draws</h1>${seasonFilter}<p class="card">No draws have been published for this season.</p>`;return;}
   const c = data.competitions.find(c => c.id === selected) || data.competitions[0]; selected = c.id;
   const rounds = buildBracket(c, records);
   const entrant = (id, resolved, tie) => {
@@ -36,18 +41,19 @@ function render() {
     const state = id === tie.winner && id ? (tie.bye ? 'Through · bye' : 'Winner') : id === tie.loser && id ? 'Eliminated' : '';
     return `<li class="ko-entrant ${state === 'Winner' || state === 'Through · bye' ? 'ko-winner' : state === 'Eliminated' ? 'ko-loser' : ''}"><span>${esc(label)}</span>${state ? `<span class="badge">${state}</span>` : ''}</li>`;
   };
-  main.innerHTML = `<div class="heading"><div><div class="eyebrow">2026–27 season</div><h1>Knockout draws.</h1><p class="intro">Follow each competition from the opening draw to the final.</p></div></div>
-    <div class="ko-controls"><label for="competition-select">Competition<select id="competition-select">${data.competitions.map(x => `<option value="${x.id}" ${x.id === c.id ? 'selected' : ''}>${esc(x.title)}</option>`).join('')}</select></label><button class="secondary" id="ko-refresh">Refresh results</button></div>
+  main.innerHTML = `<div class="heading"><div><div class="eyebrow">${esc(season.replace("-","–"))} season</div><h1>Knockout draws.</h1><p class="intro">Follow each competition from the opening draw to the final.</p></div></div>
+    <div class="ko-controls">${seasonFilter}<label for="competition-select">Competition<select id="competition-select">${data.competitions.map(x => `<option value="${x.id}" ${x.id === c.id ? 'selected' : ''}>${esc(x.title)}</option>`).join('')}</select></label><button class="secondary" id="ko-refresh">Refresh results</button></div>
     <section aria-labelledby="draw-title"><h2 id="draw-title">${esc(c.title)}</h2><p>${Object.keys(c.entries).length} ${c.format === 'Doubles' ? 'pairs' : 'players'}</p>
     ${c.notes.map(n => `<p class="notice">${esc(n)}</p>`).join('')}
     ${!connected ? `<p class="notice">Confirmed draw shown. Live result updates are temporarily unavailable. Refresh to try again.</p>` : ''}
     ${isAdmin && connected ? '<p class="notice">Administrator: record confirmed winners below. Correcting an earlier result clears results later in that branch.</p>' : ''}
     <p><small>Scroll across to see later rounds. Deadlines do not automatically decide a winner.</small></p>
-    <div class="ko-bracket" tabindex="0" aria-label="${esc(c.title)} bracket, scroll horizontally">${rounds.map((ties, i) => `<section class="ko-round" aria-labelledby="ko-round-${i}"><h3 id="ko-round-${i}">${roundNames[i]}</h3><p class="ko-deadline">${c.deadlines[i] ? 'Play by ' + date(c.deadlines[i]) : 'Deadline to confirm'}</p><div class="ko-ties">${ties.map(t => `<article class="ko-tie"><p class="ko-match-label">Match ${t.slot}</p><ul>${entrant(t.home,t.homeResolved,t)}${entrant(t.away,t.awayResolved,t)}</ul>${isAdmin && connected && t.editable ? `<form data-round="${t.round}" data-slot="${t.slot}" data-revision="${t.revision}"><label>Confirmed winner<select name="winner" required><option value="">Choose winner…</option>${[t.home,t.away].map(id => `<option value="${esc(id)}" ${t.winner === id ? 'selected' : ''}>${esc(c.entries[id].name)}</option>`).join('')}</select></label><label>Result note<input name="note" required minlength="5" maxlength="300" placeholder="Confirmed by captain / result card"></label><button ${saving ? 'disabled' : ''}>${t.winner ? 'Update winner' : 'Record winner'}</button></form>` : ''}</article>`).join('')}</div></section>`).join('')}</div>
+    <div class="ko-bracket" tabindex="0" aria-label="${esc(c.title)} bracket, scroll horizontally">${rounds.map((ties, i) => `<section class="ko-round" aria-labelledby="ko-round-${i}"><h3 id="ko-round-${i}">${roundNames[i]}</h3><p class="ko-deadline">${c.deadlines[i] ? 'Play by ' + date(c.deadlines[i]) : 'Deadline to confirm'}</p><div class="ko-ties">${ties.map(t => `<article class="ko-tie"><p class="ko-match-label">Match ${t.slot}</p><ul>${entrant(t.home,t.homeResolved,t)}${entrant(t.away,t.awayResolved,t)}</ul>${isAdmin && connected && !c.archived && t.editable ? `<form data-round="${t.round}" data-slot="${t.slot}" data-revision="${t.revision}"><label>Confirmed winner<select name="winner" required><option value="">Choose winner…</option>${[t.home,t.away].map(id => `<option value="${esc(id)}" ${t.winner === id ? 'selected' : ''}>${esc(c.entries[id].name)}</option>`).join('')}</select></label><label>Result note<input name="note" required minlength="5" maxlength="300" placeholder="Confirmed by captain / result card"></label><button ${saving ? 'disabled' : ''}>${t.winner ? 'Update winner' : 'Record winner'}</button></form>` : ''}</article>`).join('')}</div></section>`).join('')}</div>
     ${rounds.at(-1)[0].winner ? `<p class="notice success"><strong>Champion: ${esc(c.entries[rounds.at(-1)[0].winner].name)}</strong></p>` : ''}</section>
     <p class="section-gap">${esc(data.general_notes[1])}</p>`;
 }
-main.addEventListener('change', e => {
+main.addEventListener('change', async e => {
+  if(e.target.id==='ko-season'){season=e.target.value;const url=new URL(location.href);url.searchParams.set('season',season);history.replaceState(null,'',url);await loadSeason();return;}
   if (e.target.id !== 'competition-select') return;
   selected = e.target.value;
   const url = new URL(location.href); url.searchParams.set('competition',selected); history.replaceState(null,'',url);
@@ -67,10 +73,18 @@ main.addEventListener('submit', async e => {
   } catch(error) { notice(error.message, true); }
   finally { saving = false; render(); }
 });
+async function loadSeason() {
+  if(season==='2026-27') {
+    const response=await fetch('/data/knockouts/2026-27.json',{cache:'no-store'});
+    if(!response.ok)throw new Error('The knockout draws could not be loaded. Refresh to try again.');
+    data=await response.json();
+  } else data={season,draw_version:null,competitions:[],general_notes:['','']};
+  await loadResults();render();
+}
 async function start() {
-  const response = await fetch('/data/knockouts/2026-27.json', {cache:'no-store'});
-  if (!response.ok) throw new Error('The knockout draws could not be loaded. Refresh to try again.');
-  data = await response.json(); await loadResults(); render();
+  try { catalog=await loadSeasonCatalog(); } catch {}
+  season=new URLSearchParams(location.search).get('season') || catalog.active_season || '2026-27';
+  await loadSeason();
   client?.auth.onAuthStateChange(() => { setTimeout(async () => { await loadResults(); render(); }, 0); });
 }
 start().catch(error => { main.textContent = error.message; });
